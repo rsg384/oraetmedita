@@ -2189,7 +2189,7 @@
         }
 
         // Função para carregar meditações personalizadas
-        function loadPersonalizedMeditations() {
+        async function loadPersonalizedMeditations() {
             const meditationsGrid = document.getElementById('my-meditations-grid');
             
             if (!meditationsGrid) {
@@ -2237,59 +2237,60 @@
                 console.log('👤 Usuário atual:', currentUser.name, 'ID:', userId);
                 console.log('🔍 Dados completos do usuário:', currentUser);
                 
-                // Carregar meditações do personalized_meditations
-                const personalizedData = localStorage.getItem('personalized_meditations');
-                
-                console.log('📊 Dados do personalized_meditations:', personalizedData);
-                
-                // Debug: mostrar todas as chaves do localStorage
-                console.log('🔍 Todas as chaves do localStorage:', Object.keys(localStorage));
-                console.log('🔍 Tamanho do personalized_meditations:', personalizedData ? personalizedData.length : 0);
-                
                 let allPersonalizedMeditations = [];
                 
-                // Processar meditações do personalized_meditations
-                if (personalizedData) {
+                // Tentar carregar meditações do Supabase primeiro
+                if (window.supabaseManager) {
                     try {
-                        const allMeditations = JSON.parse(personalizedData);
-                        console.log('📚 Todas as meditações carregadas:', allMeditations);
+                        console.log('📤 Buscando meditações do Supabase para o usuário:', userId);
+                        const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations(userId);
+                        console.log('📊 Meditações do Supabase:', supabaseMeditations);
                         
-                        console.log('🔍 Filtrando meditações...');
-                        console.log('🔍 Total de meditações no sistema:', allMeditations.length);
-                        console.log('🔍 UserId procurado:', userId);
-                        
-                        // Mostrar todas as meditações para debug
-                        allMeditations.forEach((med, index) => {
-                            console.log(`🔍 Meditação ${index + 1}:`, {
-                                title: med.title,
-                                userId: med.userId,
-                                type: med.type,
-                                matches: med.userId === userId && (med.type === 'simple' || !med.type)
-                            });
-                        });
-                        
-                        // Filtrar apenas meditações do usuário atual (sem filtro de tipo)
-                        allPersonalizedMeditations = allMeditations.filter(med => 
-                            med.userId === userId
-                        );
-                        console.log('📋 Meditações do usuário atual encontradas:', allPersonalizedMeditations.length);
-                        
-                        // Aplicar filtro de tópico se especificado na URL
-                        if (topicFilter) {
-                            console.log('🔍 Aplicando filtro de tópico:', topicFilter);
-                            const filteredMeditations = allPersonalizedMeditations.filter(med => {
-                                const medTopic = med.topic || med.category || '';
-                                const matches = medTopic.toLowerCase().includes(topicFilter.toLowerCase());
-                                console.log(`🔍 Meditação "${med.title}" - Tópico: "${medTopic}" - Match: ${matches}`);
-                                return matches;
-                            });
-                            allPersonalizedMeditations = filteredMeditations;
-                            console.log('📋 Meditações após filtro de tópico:', allPersonalizedMeditations.length);
+                        if (supabaseMeditations && supabaseMeditations.length > 0) {
+                            allPersonalizedMeditations = supabaseMeditations;
+                            console.log('✅ Meditações carregadas do Supabase:', allPersonalizedMeditations.length);
+                        } else {
+                            console.log('📭 Nenhuma meditação encontrada no Supabase para o usuário');
                         }
-                        
-                    } catch (error) {
-                        console.error('❌ Erro ao carregar personalized_meditations:', error);
+                    } catch (supabaseError) {
+                        console.error('❌ Erro ao buscar do Supabase:', supabaseError);
+                        console.log('🔄 Fallback para localStorage...');
                     }
+                }
+                
+                // Se não encontrou no Supabase, buscar no localStorage
+                if (allPersonalizedMeditations.length === 0) {
+                    console.log('🔄 Carregando meditações do localStorage...');
+                    const personalizedData = localStorage.getItem('personalized_meditations');
+                    
+                    if (personalizedData) {
+                        try {
+                            const allMeditations = JSON.parse(personalizedData);
+                            console.log('📚 Todas as meditações do localStorage:', allMeditations);
+                            
+                            // Filtrar apenas meditações do usuário atual
+                            allPersonalizedMeditations = allMeditations.filter(med => 
+                                med.userId === userId
+                            );
+                            console.log('📋 Meditações do usuário atual no localStorage:', allPersonalizedMeditations.length);
+                            
+                        } catch (error) {
+                            console.error('❌ Erro ao carregar do localStorage:', error);
+                        }
+                    }
+                }
+                
+                // Aplicar filtro de tópico se especificado na URL
+                if (topicFilter && allPersonalizedMeditations.length > 0) {
+                    console.log('🔍 Aplicando filtro de tópico:', topicFilter);
+                    const filteredMeditations = allPersonalizedMeditations.filter(med => {
+                        const medTopic = med.topic || med.category || '';
+                        const matches = medTopic.toLowerCase().includes(topicFilter.toLowerCase());
+                        console.log(`🔍 Meditação "${med.title}" - Tópico: "${medTopic}" - Match: ${matches}`);
+                        return matches;
+                    });
+                    allPersonalizedMeditations = filteredMeditations;
+                    console.log('📋 Meditações após filtro de tópico:', allPersonalizedMeditations.length);
                 }
 
                 console.log('📋 Total de meditações encontradas:', allPersonalizedMeditations.length);
