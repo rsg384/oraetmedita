@@ -3,7 +3,7 @@
     "key": "cmd+shift+d",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-      "text": "./cursor-deploy.sh\n"
+      "text": "./cursor-deploy-automatic.sh deploy\n"
     },
     "when": "terminalFocus"
   },
@@ -11,7 +11,7 @@
     "key": "cmd+shift+s",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-      "text": "./cursor-deploy.sh -s\n"
+      "text": "./cursor-deploy-automatic.sh status\n"
     },
     "when": "terminalFocus"
   },
@@ -19,7 +19,7 @@
     "key": "cmd+shift+c",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-      "text": "./cursor-deploy.sh -c\n"
+      "text": "./cursor-deploy-automatic.sh config\n"
     },
     "when": "terminalFocus"
   },
@@ -27,15 +27,14 @@
     "key": "cmd+shift+m",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-      "text": "./cursor-deploy.sh -m \""
-    },
-    "when": "terminalFocus"
+      "text": "./cursor-deploy-automatic.sh deploy\n"
+    }
   },
   {
     "key": "cmd+shift+h",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-      "text": "./cursor-deploy.sh -h\n"
+      "text": "./cursor-deploy-automatic.sh help\n"
     },
     "when": "terminalFocus"
   },

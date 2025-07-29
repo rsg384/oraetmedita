@@ -1,90 +1,61 @@
 {
-  "cursor.deploy.enabled": true,
   "cursor.deploy.repository": "https://github.com/rsg384/oraetmedita.git",
   "cursor.deploy.branch": "main",
-  "cursor.deploy.script": "./cursor-deploy.sh",
+  "cursor.deploy.script": "./cursor-deploy-automatic.sh",
   "cursor.deploy.autoCommit": true,
   "cursor.deploy.autoPush": true,
   "cursor.deploy.commitMessage": "📝 [AUTO] Deploy automático - {timestamp}",
-  "cursor.deploy.checkBeforeDeploy": true,
-  "cursor.deploy.notifications": true,
-  "cursor.deploy.backup": true,
-  "cursor.deploy.rollback": true,
-  "cursor.deploy.timeout": 30000,
-  "cursor.deploy.retries": 3,
-  "cursor.deploy.verbose": true,
-  "cursor.deploy.colors": true,
-  "cursor.deploy.logFile": ".cursor/deploy.log",
-  "cursor.deploy.ignoreFiles": [
-    ".DS_Store",
-    "node_modules/",
-    "*.log",
-    ".env",
-    "*.tmp"
-  ],
-  "cursor.deploy.requiredFiles": [
-    "index.html",
-    "dashboard.html",
-    "minhas-meditacoes.html",
-    "supabase-config.js",
-    "chatgpt-api.js",
-    "api-config.js"
-  ],
   "cursor.deploy.preDeployChecks": [
-    "git status",
-    "git diff --name-only",
-    "ls -la *.html",
-    "ls -la *.js"
+    "Verificar se todos os arquivos estão salvos",
+    "Verificar se não há erros no console",
+    "Testar funcionalidades principais"
   ],
   "cursor.deploy.postDeployChecks": [
-    "git log --oneline -1",
-    "git remote -v",
-    "git branch --show-current"
+    "Verificar se o push foi bem-sucedido",
+    "Testar funcionalidades após deploy",
+    "Verificar logs do Supabase"
   ],
   "cursor.deploy.errorHandling": {
-    "continueOnError": false,
-    "retryOnError": true,
+    "retryOnFailure": true,
     "maxRetries": 3,
-    "rollbackOnError": true
+    "notifyOnError": true
   },
   "cursor.deploy.notifications": {
-    "success": "✅ Deploy concluído com sucesso!",
-    "error": "❌ Erro no deploy",
-    "warning": "⚠️ Aviso no deploy",
-    "info": "ℹ️ Informação do deploy"
-  },
-  "cursor.deploy.templates": {
-    "commitMessage": "📝 [AUTO] Deploy automático - {timestamp}\n\n✨ Mudanças:\n- {changes}\n\n🛠️ Tecnologias:\n- HTML5, CSS3, JavaScript\n- Supabase (PostgreSQL)\n- OpenAI ChatGPT API\n\n👨‍💻 Autor: Rodrigo Silva Goes",
-    "errorMessage": "❌ Erro no deploy: {error}",
-    "successMessage": "✅ Deploy concluído: {repository}",
-    "warningMessage": "⚠️ Aviso: {warning}"
+    "onSuccess": "✅ Deploy concluído com sucesso!",
+    "onError": "❌ Erro no deploy. Verifique os logs.",
+    "onStart": "🚀 Iniciando deploy automático..."
   },
   "cursor.deploy.hooks": {
-    "preDeploy": "./cursor-deploy.sh -c",
-    "postDeploy": "./cursor-deploy.sh -s",
-    "onError": "echo 'Erro no deploy' && exit 1",
-    "onSuccess": "echo 'Deploy bem-sucedido'"
+    "preDeploy": "echo '🚀 Iniciando deploy...'",
+    "postDeploy": "echo '✅ Deploy concluído!'"
   },
   "cursor.deploy.environment": {
     "GIT_AUTHOR_NAME": "Rodrigo Silva Goes",
-    "GIT_AUTHOR_EMAIL": "rodrigo@oraetmedita.com",
-    "GIT_COMMITTER_NAME": "Rodrigo Silva Goes",
-    "GIT_COMMITTER_EMAIL": "rodrigo@oraetmedita.com"
+    "GIT_AUTHOR_EMAIL": "rodrigo@oraetmedita.com"
   },
-  "cursor.deploy.security": {
-    "checkSensitiveFiles": true,
-    "ignoreSensitivePatterns": [
-      "*.key",
-      "*.pem",
-      ".env*",
-      "config.json"
+  "cursor.deploy.filePatterns": {
+    "include": [
+      "*.html",
+      "*.js",
+      "*.css",
+      "*.json",
+      "*.md",
+      "*.sql"
     ],
-    "validateBeforeDeploy": true
+    "exclude": [
+      "node_modules/**",
+      ".git/**",
+      "*.log",
+      "*.tmp"
+    ]
   },
-  "cursor.deploy.monitoring": {
-    "logDeployments": true,
-    "trackPerformance": true,
-    "notifyOnCompletion": true,
-    "saveDeployHistory": true
+  "cursor.deploy.commitTypes": {
+    "feat": "📝 [FEAT]",
+    "fix": "🔧 [FIX]",
+    "docs": "📚 [DOCS]",
+    "style": "🎨 [STYLE]",
+    "perf": "⚡ [PERF]",
+    "test": "🧪 [TEST]",
+    "config": "🔧 [CONFIG]"
   }
 } 
