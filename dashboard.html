@@ -2391,16 +2391,11 @@
                 console.log('📊 Meditações personalizadas do usuário encontradas:', personalizedMeditations.length);
 
                 if (personalizedMeditations.length === 0) {
-                    myMeditationsGrid.innerHTML = `
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary); background: var(--background-card); border-radius: 16px; border: 1px solid var(--border-color);">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">📖</div>
-                            <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">Nenhuma meditação personalizada ainda</h3>
-                            <p style="margin-bottom: 1.5rem;">Crie suas primeiras meditações personalizadas usando nossa IA</p>
-                            <button onclick="window.location.href='minhas-meditacoes.html'" style="background: var(--primary-gradient); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">
-                                Criar Primeira Meditação
-                            </button>
-                        </div>
-                    `;
+                    // Ocultar seção quando não há meditações
+                    const myMeditationsSection = document.getElementById('my-meditations-section');
+                    if (myMeditationsSection) {
+                        myMeditationsSection.style.display = 'none';
+                    }
                     return;
                 }
 
@@ -2635,15 +2630,8 @@
                     
                     personalizedGrid.innerHTML = categoryCards;
                 } else {
-                    // Mostrar mensagem quando não há meditações
-                    personalizedSection.style.display = 'block';
-                    personalizedGrid.innerHTML = `
-                        <div class="empty-state" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
-                            <h4>Nenhuma meditação personalizada ainda</h4>
-                            <p>Digite um assunto na página inicial para criar suas primeiras meditações personalizadas</p>
-                        </div>
-                    `;
+                    // Ocultar seção quando não há meditações
+                    personalizedSection.style.display = 'none';
                 }
                 
             } catch (error) {
@@ -3697,15 +3685,8 @@
                     
                     personalizedGrid.innerHTML = categoryCards;
                 } else {
-                    // Mostrar mensagem quando não há meditações
-                    personalizedSection.style.display = 'block';
-                    personalizedGrid.innerHTML = `
-                        <div class="empty-state" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
-                            <h4>Nenhuma meditação personalizada ainda</h4>
-                            <p>Digite um assunto na página inicial para criar suas primeiras meditações personalizadas</p>
-                        </div>
-                    `;
+                    // Ocultar seção quando não há meditações
+                    personalizedSection.style.display = 'none';
                 }
                 
             } catch (error) {

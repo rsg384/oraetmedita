@@ -2305,27 +2305,15 @@
 
                 if (allPersonalizedMeditations.length === 0) {
                     console.log('📭 Nenhuma meditação encontrada, mostrando estado vazio');
-                    const emptyMessage = topicFilter 
+                    const emptyMessage = topicFilter
                         ? `Nenhuma meditação encontrada para o tópico "${topicFilter}"`
                         : 'Nenhuma meditação encontrada';
                     const emptyDescription = topicFilter
                         ? 'Tente criar uma nova meditação ou verificar outros tópicos'
                         : 'Crie sua primeira meditação personalizada para começar';
                     
-                    meditationsGrid.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📖</div>
-                            <div class="empty-state-title">${emptyMessage}</div>
-                            <div class="empty-state-description">${emptyDescription}</div>
-                            <a href="index.html" class="btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"/>
-                                    <line x1="5" y1="12" x2="19" y2="12"/>
-                                </svg>
-                                Criar Meditação
-                            </a>
-                        </div>
-                    `;
+                    // Ocultar grid quando não há meditações
+                    meditationsGrid.style.display = 'none';
                     return;
                 }
 
@@ -3191,6 +3179,7 @@
     
     <!-- Scripts para geração de meditações -->
     <script src="api-config.js"></script>
+    <script src="api-config-local.js"></script>
     <script src="chatgpt-api.js"></script>
     <script src="supabase-config.js"></script>
     
