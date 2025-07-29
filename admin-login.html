@@ -168,6 +168,31 @@
       display: none;
     }
 
+    .api-config-btn {
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .api-config-btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .api-config-btn:disabled {
+      background: #6b7280;
+      cursor: not-allowed;
+      transform: none;
+    }
+
 
 
     @media (max-width: 480px) {
@@ -226,8 +251,16 @@
     <div class="back-link">
       <a href="index.html">← Voltar à página inicial</a>
     </div>
+    
+    <div style="margin-top: 20px; text-align: center;">
+      <button type="button" class="api-config-btn" onclick="openApiConfig()">
+        🔧 Configurar API do ChatGPT
+      </button>
+    </div>
   </div>
 
+  <script src="supabase-config.js"></script>
+  <script src="sync-categories-supabase.js"></script>
   <script>
     // Credenciais de demonstração
     const ADMIN_CREDENTIALS = {
@@ -342,6 +375,12 @@
       errorMessage.style.display = 'none';
       successMessage.style.display = 'none';
     });
+
+    // Função para abrir configuração da API
+    function openApiConfig() {
+      // Abrir em nova aba
+      window.open('setup-api.html', '_blank');
+    }
   </script>
 </body>
 </html> 

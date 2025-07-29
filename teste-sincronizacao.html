@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔄 Teste de Sincronização - Ora et Medita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-section h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        
+        .success {
+            border-left: 4px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .error {
+            border-left: 4px solid #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+        
+        .warning {
+            border-left: 4px solid #ff9800;
+            background: rgba(255, 152, 0, 0.1);
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-card h4 {
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+        
+        .count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Teste de Sincronização</h1>
+        
+        <div class="test-section">
+            <h3>🔧 Inicialização</h3>
+            <button onclick="testInitialization()">🔧 Testar Inicialização</button>
+            <div id="init-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Status da Sincronização</h3>
+            <button onclick="checkSyncStatus()">📊 Verificar Status</button>
+            <div id="status-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>💾 Teste de Salvamento</h3>
+            <button onclick="testSaveMeditation()">💾 Salvar Meditação</button>
+            <div id="save-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📚 Teste de Carregamento</h3>
+            <button onclick="testLoadMeditations()">📚 Carregar Meditações</button>
+            <div id="load-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🗑️ Teste de Exclusão</h3>
+            <button onclick="testDeleteMeditation()">🗑️ Excluir Meditação</button>
+            <div id="delete-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔄 Sincronização Completa</h3>
+            <button onclick="testFullSync()">🔄 Sincronizar Tudo</button>
+            <div id="sync-test"></div>
+        </div>
+    </div>
+
+    <!-- Scripts necessários -->
+    <script src="supabase-config.js"></script>
+    <script src="sync-supabase-meditations.js"></script>
+    <script src="chatgpt-api.js"></script>
+    
+    <script>
+        let testMeditationId = null;
+        
+        function addLog(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            element.appendChild(div);
+        }
+        
+        function clearLog(elementId) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '';
+        }
+        
+        async function testInitialization() {
+            clearLog('init-test');
+            addLog('init-test', '🔧 Testando inicialização...', 'info');
+            
+            try {
+                if (window.meditationSyncManager) {
+                    await window.meditationSyncManager.initialize();
+                    addLog('init-test', '✅ MeditationSyncManager inicializado com sucesso', 'success');
+                    
+                    const user = window.meditationSyncManager.getCurrentUser();
+                    addLog('init-test', `👤 Usuário atual: ${user.name} (${user.id})`, 'success');
+                    
+                    if (window.meditationSyncManager.isInitialized) {
+                        addLog('init-test', '✅ Supabase disponível', 'success');
+                    } else {
+                        addLog('init-test', '⚠️ Supabase não disponível - usando apenas localStorage', 'warning');
+                    }
+                } else {
+                    addLog('init-test', '❌ MeditationSyncManager não encontrado', 'error');
+                }
+            } catch (error) {
+                addLog('init-test', `❌ Erro na inicialização: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkSyncStatus() {
+            clearLog('status-test');
+            addLog('status-test', '📊 Verificando status da sincronização...', 'info');
+            
+            try {
+                if (window.meditationSyncManager) {
+                    const status = await window.meditationSyncManager.checkSyncStatus();
+                    
+                    if (status) {
+                        const statusDiv = document.getElementById('status-test');
+                        statusDiv.innerHTML = `
+                            <div class="status-grid">
+                                <div class="status-card">
+                                    <h4>📱 localStorage</h4>
+                                    <div class="count">${status.localStorage.count}</div>
+                                    <small>Meditações locais</small>
+                                </div>
+                                <div class="status-card">
+                                    <h4>☁️ Supabase</h4>
+                                    <div class="count">${status.supabase.count}</div>
+                                    <small>Meditações na nuvem</small>
+                                </div>
+                            </div>
+                            <div class="result ${status.synced ? 'success' : 'warning'}">
+                                <strong>Sincronização:</strong> ${status.synced ? '✅ Sincronizado' : '⚠️ Não sincronizado'}
+                            </div>
+                            <div class="result ${status.supabaseAvailable ? 'success' : 'warning'}">
+                                <strong>Supabase:</strong> ${status.supabaseAvailable ? '✅ Disponível' : '⚠️ Não disponível'}
+                            </div>
+                        `;
+                    } else {
+                        addLog('status-test', '❌ Erro ao verificar status', 'error');
+                    }
+                } else {
+                    addLog('status-test', '❌ MeditationSyncManager não encontrado', 'error');
+                }
+            } catch (error) {
+                addLog('status-test', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testSaveMeditation() {
+            clearLog('save-test');
+            addLog('save-test', '💾 Testando salvamento de meditação...', 'info');
+            
+            try {
+                if (window.meditationSyncManager) {
+                    // Criar uma meditação de teste
+                    const testMeditation = {
+                        id: 'test-meditation-' + Date.now(),
+                        title: 'Meditação de Teste',
+                        topic: 'Amor de Deus',
+                        content: 'Esta é uma meditação de teste para verificar a sincronização.',
+                        duration: '15 min',
+                        status: 'completed',
+                        source: 'test',
+                        type: 'simple'
+                    };
+                    
+                    addLog('save-test', `📝 Salvando meditação: ${testMeditation.title}`, 'info');
+                    
+                    const success = await window.meditationSyncManager.saveMeditation(testMeditation);
+                    
+                    if (success) {
+                        testMeditationId = testMeditation.id;
+                        addLog('save-test', '✅ Meditação salva com sucesso', 'success');
+                        addLog('save-test', `🆔 ID da meditação: ${testMeditationId}`, 'success');
+                    } else {
+                        addLog('save-test', '❌ Erro ao salvar meditação', 'error');
+                    }
+                } else {
+                    addLog('save-test', '❌ MeditationSyncManager não encontrado', 'error');
+                }
+            } catch (error) {
+                addLog('save-test', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testLoadMeditations() {
+            clearLog('load-test');
+            addLog('load-test', '📚 Testando carregamento de meditações...', 'info');
+            
+            try {
+                if (window.meditationSyncManager) {
+                    const meditations = await window.meditationSyncManager.loadMeditations();
+                    
+                    addLog('load-test', `✅ ${meditations.length} meditações carregadas`, 'success');
+                    
+                    if (meditations.length > 0) {
+                        meditations.forEach((med, index) => {
+                            addLog('load-test', `${index + 1}. ${med.title} (${med.topic})`, 'info');
+                        });
+                    } else {
+                        addLog('load-test', '📭 Nenhuma meditação encontrada', 'warning');
+                    }
+                } else {
+                    addLog('load-test', '❌ MeditationSyncManager não encontrado', 'error');
+                }
+            } catch (error) {
+                addLog('load-test', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testDeleteMeditation() {
+            clearLog('delete-test');
+            addLog('delete-test', '🗑️ Testando exclusão de meditação...', 'info');
+            
+            try {
+                if (window.meditationSyncManager) {
+                    if (testMeditationId) {
+                        addLog('delete-test', `🗑️ Excluindo meditação: ${testMeditationId}`, 'info');
+                        
+                        const success = await window.meditationSyncManager.deleteMeditation(testMeditationId);
+                        
+                        if (success) {
+                            addLog('delete-test', '✅ Meditação excluída com sucesso', 'success');
+                            testMeditationId = null;
+                        } else {
+                            addLog('delete-test', '❌ Erro ao excluir meditação', 'error');
+                        }
+                    } else {
+                        addLog('delete-test', '⚠️ Nenhuma meditação de teste para excluir', 'warning');
+                        addLog('delete-test', '💡 Execute primeiro o teste de salvamento', 'info');
+                    }
+                } else {
+                    addLog('delete-test', '❌ MeditationSyncManager não encontrado', 'error');
+                }
+            } catch (error) {
+                addLog('delete-test', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testFullSync() {
+            clearLog('sync-test');
+            addLog('sync-test', '🔄 Testando sincronização completa...', 'info');
+            
+            try {
+                if (window.meditationSyncManager) {
+                    const success = await window.meditationSyncManager.syncAllMeditations();
+                    
+                    if (success) {
+                        addLog('sync-test', '✅ Sincronização completa realizada com sucesso', 'success');
+                    } else {
+                        addLog('sync-test', '⚠️ Sincronização não foi possível', 'warning');
+                    }
+                } else {
+                    addLog('sync-test', '❌ MeditationSyncManager não encontrado', 'error');
+                }
+            } catch (error) {
+                addLog('sync-test', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        // Inicializar quando a página carregar
+        window.addEventListener('load', function() {
+            addLog('init-test', '🚀 Página carregada, verificando componentes...', 'info');
+            
+            if (window.meditationSyncManager) {
+                addLog('init-test', '✅ MeditationSyncManager disponível', 'success');
+            } else {
+                addLog('init-test', '❌ MeditationSyncManager não disponível', 'error');
+            }
+            
+            if (window.supabaseManager) {
+                addLog('init-test', '✅ SupabaseManager disponível', 'success');
+            } else {
+                addLog('init-test', '⚠️ SupabaseManager não disponível', 'warning');
+            }
+        });
+    </script>
+</body>
+</html> 

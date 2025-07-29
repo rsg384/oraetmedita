@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Teste Detalhado da Chave API - Ora et Medita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-section h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        
+        .success {
+            border-left: 4px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .error {
+            border-left: 4px solid #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+        
+        .warning {
+            border-left: 4px solid #ff9800;
+            background: rgba(255, 152, 0, 0.1);
+        }
+        
+        .info {
+            border-left: 4px solid #2196F3;
+            background: rgba(33, 150, 243, 0.1);
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .key-display {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste Detalhado da Chave API</h1>
+        
+        <div class="test-section">
+            <h3>🔑 Verificação da Chave API</h3>
+            <button onclick="checkApiKey()">Verificar Chave API</button>
+            <div id="api-key-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📡 Teste Direto da API</h3>
+            <button onclick="testDirectApi()">Testar API Diretamente</button>
+            <div id="direct-api-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Teste com ChatGPTAPI</h3>
+            <button onclick="testChatGPTAPI()">Testar ChatGPTAPI</button>
+            <div id="chatgpt-api-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Teste de Geração</h3>
+            <button onclick="testGeneration()">Testar Geração de Meditação</button>
+            <div id="generation-result"></div>
+        </div>
+    </div>
+
+    <script src="chatgpt-api.js"></script>
+    <script>
+        let chatGPTAPI;
+
+        window.addEventListener('load', function() {
+            try {
+                chatGPTAPI = new ChatGPTAPI();
+                addLog('api-key-result', '✅ ChatGPTAPI inicializada.', 'success');
+            } catch (error) {
+                addLog('api-key-result', `❌ Erro ao inicializar ChatGPTAPI: ${error.message}`, 'error');
+            }
+        });
+
+        function addLog(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            element.appendChild(div);
+        }
+
+        function clearLog(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        async function checkApiKey() {
+            clearLog('api-key-result');
+            addLog('api-key-result', '🔍 Verificando chave da API...', 'info');
+            
+            if (!chatGPTAPI) {
+                addLog('api-key-result', '❌ ChatGPTAPI não inicializada.', 'error');
+                return;
+            }
+            
+            // Verificar chave hardcoded
+            const hardcodedKey = "sk-proj-..."; // ⚠️ Chave removida por segurança
+            addLog('api-key-result', `🔑 Chave hardcoded: ${hardcodedKey.substring(0, 20)}...${hardcodedKey.substring(hardcodedKey.length - 10)}`, 'info');
+            addLog('api-key-result', `🔑 Chave hardcoded válida: ${hardcodedKey.startsWith('sk-')}`, hardcodedKey.startsWith('sk-') ? 'success' : 'error');
+            
+            // Verificar localStorage
+            const storedKey = localStorage.getItem('openai_api_key');
+            addLog('api-key-result', `🔑 Chave localStorage: ${storedKey ? storedKey.substring(0, 20) + '...' + storedKey.substring(storedKey.length - 10) : 'NÃO ENCONTRADA'}`, 'info');
+            addLog('api-key-result', `🔑 Chave localStorage válida: ${storedKey && storedKey.startsWith('sk-')}`, storedKey && storedKey.startsWith('sk-') ? 'success' : 'warning');
+            
+            // Verificar chave obtida pelo método
+            const obtainedKey = chatGPTAPI.getApiKey();
+            addLog('api-key-result', `🔑 Chave obtida pelo método: ${obtainedKey.substring(0, 20)}...${obtainedKey.substring(obtainedKey.length - 10)}`, 'info');
+            addLog('api-key-result', `🔑 Chave obtida válida: ${obtainedKey.startsWith('sk-')}`, obtainedKey.startsWith('sk-') ? 'success' : 'error');
+            
+            // Verificar se a chave obtida é igual à hardcoded
+            const isSameAsHardcoded = obtainedKey === hardcodedKey;
+            addLog('api-key-result', `🔑 Chave obtida é igual à hardcoded: ${isSameAsHardcoded}`, isSameAsHardcoded ? 'success' : 'warning');
+        }
+
+        async function testDirectApi() {
+            clearLog('direct-api-result');
+            addLog('direct-api-result', '📡 Testando API diretamente...', 'info');
+            
+            const hardcodedKey = "sk-proj-..."; // ⚠️ Chave removida por segurança
+            
+            try {
+                addLog('direct-api-result', '🔑 Fazendo requisição direta com chave hardcoded...', 'info');
+                
+                const response = await fetch('https://api.openai.com/v1/models', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${hardcodedKey}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                addLog('direct-api-result', `📡 Status da resposta: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addLog('direct-api-result', `✅ API funcionando! Modelos disponíveis: ${data.data.length}`, 'success');
+                } else {
+                    const errorText = await response.text();
+                    addLog('direct-api-result', `❌ Erro da API: ${errorText}`, 'error');
+                }
+            } catch (error) {
+                addLog('direct-api-result', `❌ Erro na requisição: ${error.message}`, 'error');
+            }
+        }
+
+        async function testChatGPTAPI() {
+            clearLog('chatgpt-api-result');
+            addLog('chatgpt-api-result', '🧪 Testando ChatGPTAPI...', 'info');
+            
+            if (!chatGPTAPI) {
+                addLog('chatgpt-api-result', '❌ ChatGPTAPI não inicializada.', 'error');
+                return;
+            }
+            
+            try {
+                const result = await chatGPTAPI.checkAPIStatus();
+                addLog('chatgpt-api-result', `📡 Status da API: ${result.status}`, result.status === 'success' ? 'success' : 'error');
+                addLog('chatgpt-api-result', `📄 Mensagem: ${result.message}`, result.status === 'success' ? 'success' : 'error');
+            } catch (error) {
+                addLog('chatgpt-api-result', `❌ Erro no teste: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGeneration() {
+            clearLog('generation-result');
+            addLog('generation-result', '🧪 Testando geração de meditação...', 'info');
+            
+            if (!chatGPTAPI) {
+                addLog('generation-result', '❌ ChatGPTAPI não inicializada.', 'error');
+                return;
+            }
+            
+            try {
+                const result = await chatGPTAPI.generateMeditations('Paz Interior');
+                addLog('generation-result', '✅ Meditação gerada com sucesso!', 'success');
+                addLog('generation-result', `📝 Título: ${result.meditations[0].title}`, 'info');
+                addLog('generation-result', `📄 Conteúdo: ${result.meditations[0].content.substring(0, 100)}...`, 'info');
+            } catch (error) {
+                addLog('generation-result', `❌ Erro na geração: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

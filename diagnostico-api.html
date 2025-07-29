@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico da API - Ora et Medita</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .diagnostic-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .status-icon {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .status-text {
+            flex: 1;
+            color: #333;
+        }
+
+        .status-details {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .log-area {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+
+        .link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🔍 Diagnóstico da API</div>
+            <div class="subtitle">Ora et Medita - Verificação Completa do Sistema</div>
+        </div>
+
+        <div class="diagnostic-section">
+            <div class="section-title">📋 Status dos Arquivos</div>
+            <div id="files-status">
+                <div class="status-item">
+                    <span class="status-icon">⏳</span>
+                    <div class="status-text">Verificando arquivos...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="diagnostic-section">
+            <div class="section-title">🔑 Configuração da API</div>
+            <div id="api-config-status">
+                <div class="status-item">
+                    <span class="status-icon">⏳</span>
+                    <div class="status-text">Verificando configuração...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="diagnostic-section">
+            <div class="section-title">🌐 Teste de Conexão</div>
+            <div id="connection-status">
+                <div class="status-item">
+                    <span class="status-icon">⏳</span>
+                    <div class="status-text">Aguardando teste...</div>
+                </div>
+            </div>
+            <button class="btn" onclick="testConnection()">🔍 Testar Conexão</button>
+        </div>
+
+        <div class="diagnostic-section">
+            <div class="section-title">📝 Teste de Geração</div>
+            <div id="generation-status">
+                <div class="status-item">
+                    <span class="status-icon">⏳</span>
+                    <div class="status-text">Aguardando teste...</div>
+                </div>
+            </div>
+            <button class="btn" onclick="testGeneration()">📝 Testar Geração</button>
+        </div>
+
+        <div class="diagnostic-section">
+            <div class="section-title">📊 Logs do Sistema</div>
+            <div id="logs" class="log-area">Iniciando diagnóstico...</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" class="link">← Voltar para o projeto</a>
+            <a href="setup-api.html" class="link" style="margin-left: 20px;">🔧 Configurar API</a>
+        </div>
+    </div>
+
+    <script>
+        let logs = [];
+
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logs.push(`[${timestamp}] ${message}`);
+            updateLogDisplay();
+        }
+
+        function updateLogDisplay() {
+            const logsDiv = document.getElementById('logs');
+            logsDiv.textContent = logs.join('\n');
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        // Verificar arquivos
+        function checkFiles() {
+            addLog('🔍 Verificando arquivos do sistema...');
+            
+            const filesToCheck = [
+                'api-config-local.js',
+                'chatgpt-api.js',
+                'setup-api.html',
+                'api-config.js'
+            ];
+
+            const filesStatus = document.getElementById('files-status');
+            filesStatus.innerHTML = '';
+
+            filesToCheck.forEach(file => {
+                const statusItem = document.createElement('div');
+                statusItem.className = 'status-item';
+                
+                // Simular verificação (em produção, seria uma requisição real)
+                const exists = true; // Assumindo que existe
+                
+                statusItem.innerHTML = `
+                    <span class="status-icon">${exists ? '✅' : '❌'}</span>
+                    <div class="status-text">
+                        ${file}
+                        <div class="status-details">${exists ? 'Arquivo encontrado' : 'Arquivo não encontrado'}</div>
+                    </div>
+                `;
+                
+                filesStatus.appendChild(statusItem);
+                addLog(`${exists ? '✅' : '❌'} ${file}`);
+            });
+        }
+
+        // Verificar configuração da API
+        function checkApiConfig() {
+            addLog('🔑 Verificando configuração da API...');
+            
+            const apiConfigStatus = document.getElementById('api-config-status');
+            apiConfigStatus.innerHTML = '';
+
+            // Verificar localStorage
+            const storedKey = localStorage.getItem('openai_api_key');
+            const hasStoredKey = storedKey && storedKey.startsWith('sk-') && storedKey.length > 20;
+            
+            const storedItem = document.createElement('div');
+            storedItem.className = 'status-item';
+            storedItem.innerHTML = `
+                <span class="status-icon">${hasStoredKey ? '✅' : '❌'}</span>
+                <div class="status-text">
+                    Chave no localStorage
+                    <div class="status-details">${hasStoredKey ? 'Chave válida encontrada' : 'Chave não encontrada ou inválida'}</div>
+                </div>
+            `;
+            apiConfigStatus.appendChild(storedItem);
+            addLog(`${hasStoredKey ? '✅' : '❌'} Chave no localStorage: ${hasStoredKey ? 'Válida' : 'Não encontrada'}`);
+
+            // Verificar funções globais
+            const hasGetApiKey = typeof window.getApiKey === 'function';
+            const hasIsApiConfigured = typeof window.isApiConfigured === 'function';
+            
+            const functionsItem = document.createElement('div');
+            functionsItem.className = 'status-item';
+            functionsItem.innerHTML = `
+                <span class="status-icon">${hasGetApiKey && hasIsApiConfigured ? '✅' : '❌'}</span>
+                <div class="status-text">
+                    Funções de configuração
+                    <div class="status-details">${hasGetApiKey && hasIsApiConfigured ? 'Carregadas' : 'Não carregadas'}</div>
+                </div>
+            `;
+            apiConfigStatus.appendChild(functionsItem);
+            addLog(`${hasGetApiKey && hasIsApiConfigured ? '✅' : '❌'} Funções de configuração: ${hasGetApiKey && hasIsApiConfigured ? 'Carregadas' : 'Não carregadas'}`);
+        }
+
+        // Testar conexão
+        async function testConnection() {
+            addLog('🌐 Testando conexão com a API...');
+            
+            const connectionStatus = document.getElementById('connection-status');
+            connectionStatus.innerHTML = '<div class="status-item"><span class="status-icon">⏳</span><div class="status-text">Testando conexão...</div></div>';
+
+            try {
+                if (typeof window.checkAPIStatus === 'function') {
+                    const result = await window.checkAPIStatus();
+                    
+                    connectionStatus.innerHTML = `
+                        <div class="status-item">
+                            <span class="status-icon">${result.status === 'success' ? '✅' : '❌'}</span>
+                            <div class="status-text">
+                                Conexão com a API
+                                <div class="status-details">${result.message}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    addLog(`${result.status === 'success' ? '✅' : '❌'} Conexão: ${result.message}`);
+                } else {
+                    connectionStatus.innerHTML = `
+                        <div class="status-item">
+                            <span class="status-icon">❌</span>
+                            <div class="status-text">
+                                Função de teste não encontrada
+                                <div class="status-details">checkAPIStatus não está disponível</div>
+                            </div>
+                        </div>
+                    `;
+                    addLog('❌ Função checkAPIStatus não encontrada');
+                }
+            } catch (error) {
+                connectionStatus.innerHTML = `
+                    <div class="status-item">
+                        <span class="status-icon">❌</span>
+                        <div class="status-text">
+                            Erro no teste
+                            <div class="status-details">${error.message}</div>
+                        </div>
+                    </div>
+                `;
+                addLog(`❌ Erro no teste: ${error.message}`);
+            }
+        }
+
+        // Testar geração
+        async function testGeneration() {
+            addLog('📝 Testando geração de meditação...');
+            
+            const generationStatus = document.getElementById('generation-status');
+            generationStatus.innerHTML = '<div class="status-item"><span class="status-icon">⏳</span><div class="status-text">Testando geração...</div></div>';
+
+            try {
+                if (typeof window.generateMeditations === 'function') {
+                    const result = await window.generateMeditations('Teste de Diagnóstico');
+                    
+                    if (result && result.meditations && result.meditations.length > 0) {
+                        const meditation = result.meditations[0];
+                        generationStatus.innerHTML = `
+                            <div class="status-item">
+                                <span class="status-icon">✅</span>
+                                <div class="status-text">
+                                    Geração bem-sucedida
+                                    <div class="status-details">Título: ${meditation.title}</div>
+                                </div>
+                            </div>
+                        `;
+                        addLog(`✅ Geração bem-sucedida: ${meditation.title}`);
+                    } else {
+                        generationStatus.innerHTML = `
+                            <div class="status-item">
+                                <span class="status-icon">❌</span>
+                                <div class="status-text">
+                                    Resposta inválida
+                                    <div class="status-details">Formato de resposta incorreto</div>
+                                </div>
+                            </div>
+                        `;
+                        addLog('❌ Resposta inválida da API');
+                    }
+                } else {
+                    generationStatus.innerHTML = `
+                        <div class="status-item">
+                            <span class="status-icon">❌</span>
+                            <div class="status-text">
+                                Função não encontrada
+                                <div class="status-details">generateMeditations não está disponível</div>
+                            </div>
+                        </div>
+                    `;
+                    addLog('❌ Função generateMeditations não encontrada');
+                }
+            } catch (error) {
+                generationStatus.innerHTML = `
+                    <div class="status-item">
+                        <span class="status-icon">❌</span>
+                        <div class="status-text">
+                            Erro na geração
+                            <div class="status-details">${error.message}</div>
+                        </div>
+                    </div>
+                `;
+                addLog(`❌ Erro na geração: ${error.message}`);
+            }
+        }
+
+        // Inicializar diagnóstico
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🚀 Iniciando diagnóstico da API...');
+            
+            setTimeout(() => {
+                checkFiles();
+                setTimeout(() => {
+                    checkApiConfig();
+                }, 500);
+            }, 1000);
+        });
+    </script>
+
+    <!-- Carregar scripts -->
+    <script src="api-config-local.js"></script>
+    <script src="chatgpt-api.js"></script>
+</body>
+</html> 

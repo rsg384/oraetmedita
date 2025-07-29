@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Sincronização de Categorias - Ora et Medita</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0F0F23;
+            color: #FFFFFF;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #1A1A2E;
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            color: #7ee787;
+            margin-bottom: 10px;
+        }
+
+        .test-section {
+            background: #1A1A2E;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2A2A3E;
+        }
+
+        .test-section h2 {
+            color: #7ee787;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #7ee787, #4ade80);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(126, 231, 135, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .log-container {
+            background: #0F0F23;
+            border: 1px solid #2A2A3E;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .log-success {
+            background: rgba(126, 231, 135, 0.1);
+            color: #7ee787;
+        }
+
+        .log-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .log-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .log-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-connected {
+            background: #7ee787;
+        }
+
+        .status-disconnected {
+            background: #ef4444;
+        }
+
+        .status-connecting {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .category-card {
+            background: #2A2A3E;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #374151;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #7ee787;
+            margin-bottom: 5px;
+        }
+
+        .category-details {
+            font-size: 12px;
+            color: #A1A1AA;
+        }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #0F0F23;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Teste de Sincronização de Categorias</h1>
+            <p>Verificação completa da sincronização de categorias do Supabase com o aplicativo</p>
+        </div>
+
+        <!-- Status da Conexão -->
+        <div class="test-section">
+            <h2>
+                <span class="status-indicator" id="connectionStatus"></span>
+                Status da Conexão
+            </h2>
+            <button class="btn" onclick="checkConnection()">🔍 Verificar Conexão</button>
+            <button class="btn btn-info" onclick="checkSupabaseManager()">📋 Verificar SupabaseManager</button>
+            <div id="connectionLog" class="log-container"></div>
+        </div>
+
+        <!-- Sincronização de Categorias -->
+        <div class="test-section">
+            <h2>📖 Sincronização de Categorias</h2>
+            <button class="btn" onclick="testCategorySync()">🔄 Testar Sincronização</button>
+            <button class="btn btn-info" onclick="loadCategoriesFromSupabase()">📥 Carregar do Supabase</button>
+            <button class="btn btn-warning" onclick="refreshCategories()">🔄 Atualizar Categorias</button>
+            <div id="categorySyncLog" class="log-container"></div>
+        </div>
+
+        <!-- Categorias Atuais -->
+        <div class="test-section">
+            <h2>📋 Categorias Atuais</h2>
+            <button class="btn" onclick="displayCurrentCategories()">👁️ Mostrar Categorias</button>
+            <button class="btn btn-info" onclick="compareLocalVsSupabase()">⚖️ Comparar Local vs Supabase</button>
+            <div id="categoriesDisplay" class="categories-grid"></div>
+            <div id="categoriesLog" class="log-container"></div>
+        </div>
+
+        <!-- Teste de Páginas -->
+        <div class="test-section">
+            <h2>🌐 Teste de Páginas</h2>
+            <button class="btn" onclick="testDashboardSync()">📊 Testar Dashboard</button>
+            <button class="btn" onclick="testAdminPanelSync()">⚙️ Testar Admin Panel</button>
+            <button class="btn" onclick="testAllPagesSync()">🌍 Testar Todas as Páginas</button>
+            <div id="pagesTestLog" class="log-container"></div>
+        </div>
+
+        <!-- Eventos -->
+        <div class="test-section">
+            <h2>📡 Eventos de Sincronização</h2>
+            <button class="btn" onclick="listenToEvents()">👂 Ouvir Eventos</button>
+            <button class="btn btn-danger" onclick="stopListening()">🛑 Parar de Ouvir</button>
+            <div id="eventsLog" class="log-container"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="supabase-config.js"></script>
+    <script src="sync-categories-supabase.js"></script>
+    <script>
+        let eventListener = null;
+
+        function addLog(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            container.appendChild(logEntry);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateConnectionStatus(status) {
+            const indicator = document.getElementById('connectionStatus');
+            indicator.className = `status-indicator status-${status}`;
+        }
+
+        async function checkConnection() {
+            addLog('connectionLog', '🔄 Verificando conexão com Supabase...', 'info');
+            
+            try {
+                if (!window.supabaseManager) {
+                    addLog('connectionLog', '❌ SupabaseManager não encontrado', 'error');
+                    updateConnectionStatus('disconnected');
+                    return;
+                }
+
+                addLog('connectionLog', '✅ SupabaseManager encontrado', 'success');
+                
+                // Testar conexão fazendo uma requisição simples
+                const categories = await window.supabaseManager.getCategories();
+                addLog('connectionLog', `✅ Conexão estabelecida! ${categories.length} categorias encontradas`, 'success');
+                updateConnectionStatus('connected');
+                
+            } catch (error) {
+                addLog('connectionLog', `❌ Erro na conexão: ${error.message}`, 'error');
+                updateConnectionStatus('disconnected');
+            }
+        }
+
+        async function checkSupabaseManager() {
+            addLog('connectionLog', '🔍 Verificando SupabaseManager...', 'info');
+            
+            if (!window.supabaseManager) {
+                addLog('connectionLog', '❌ SupabaseManager não está disponível', 'error');
+                return;
+            }
+
+            addLog('connectionLog', '✅ SupabaseManager disponível', 'success');
+            addLog('connectionLog', `📋 Métodos disponíveis: ${Object.keys(window.supabaseManager).join(', ')}`, 'info');
+            
+            // Verificar métodos específicos
+            const methods = ['getCategories', 'createCategory', 'updateCategory', 'deleteCategory'];
+            methods.forEach(method => {
+                if (typeof window.supabaseManager[method] === 'function') {
+                    addLog('connectionLog', `✅ Método ${method} disponível`, 'success');
+                } else {
+                    addLog('connectionLog', `❌ Método ${method} não disponível`, 'error');
+                }
+            });
+        }
+
+        async function testCategorySync() {
+            addLog('categorySyncLog', '🔄 Testando sincronização de categorias...', 'info');
+            
+            try {
+                if (!window.categorySyncManager) {
+                    addLog('categorySyncLog', '❌ CategorySyncManager não encontrado', 'error');
+                    return;
+                }
+
+                addLog('categorySyncLog', '✅ CategorySyncManager encontrado', 'success');
+                
+                // Inicializar se necessário
+                await window.categorySyncManager.initialize();
+                addLog('categorySyncLog', '✅ CategorySyncManager inicializado', 'success');
+                
+                // Carregar categorias
+                const categories = await window.categorySyncManager.loadCategoriesFromSupabase();
+                addLog('categorySyncLog', `✅ ${categories.length} categorias carregadas do Supabase`, 'success');
+                
+                // Sincronizar com páginas
+                await window.categorySyncManager.syncCategoriesToPages();
+                addLog('categorySyncLog', '✅ Categorias sincronizadas com páginas', 'success');
+                
+                // Verificar localStorage
+                const localCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+                addLog('categorySyncLog', `📋 ${localCategories.length} categorias no localStorage`, 'info');
+                
+            } catch (error) {
+                addLog('categorySyncLog', `❌ Erro na sincronização: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadCategoriesFromSupabase() {
+            addLog('categorySyncLog', '📥 Carregando categorias do Supabase...', 'info');
+            
+            try {
+                if (!window.categorySyncManager) {
+                    addLog('categorySyncLog', '❌ CategorySyncManager não encontrado', 'error');
+                    return;
+                }
+
+                const categories = await window.categorySyncManager.loadCategoriesFromSupabase();
+                addLog('categorySyncLog', `✅ ${categories.length} categorias carregadas:`, 'success');
+                
+                categories.forEach(cat => {
+                    addLog('categorySyncLog', `  - ${cat.name} (ID: ${cat.id})`, 'info');
+                });
+                
+            } catch (error) {
+                addLog('categorySyncLog', `❌ Erro ao carregar categorias: ${error.message}`, 'error');
+            }
+        }
+
+        async function refreshCategories() {
+            addLog('categorySyncLog', '🔄 Forçando atualização de categorias...', 'info');
+            
+            try {
+                if (!window.categorySyncManager) {
+                    addLog('categorySyncLog', '❌ CategorySyncManager não encontrado', 'error');
+                    return;
+                }
+
+                const categories = await window.categorySyncManager.refreshCategories();
+                addLog('categorySyncLog', `✅ ${categories.length} categorias atualizadas`, 'success');
+                
+            } catch (error) {
+                addLog('categorySyncLog', `❌ Erro ao atualizar categorias: ${error.message}`, 'error');
+            }
+        }
+
+        function displayCurrentCategories() {
+            addLog('categoriesLog', '👁️ Exibindo categorias atuais...', 'info');
+            
+            const display = document.getElementById('categoriesDisplay');
+            display.innerHTML = '';
+            
+            if (!window.categorySyncManager) {
+                addLog('categoriesLog', '❌ CategorySyncManager não encontrado', 'error');
+                return;
+            }
+
+            const categories = window.categorySyncManager.getCategories();
+            addLog('categoriesLog', `📋 ${categories.length} categorias encontradas:`, 'info');
+            
+            categories.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.innerHTML = `
+                    <div class="category-name">${cat.icon} ${cat.name}</div>
+                    <div class="category-details">
+                        <div>ID: ${cat.id}</div>
+                        <div>Descrição: ${cat.description || 'N/A'}</div>
+                        <div>Cor: ${cat.color}</div>
+                        <div>Ativo: ${cat.is_active ? 'Sim' : 'Não'}</div>
+                        <div>Ordem: ${cat.sort_order}</div>
+                    </div>
+                `;
+                display.appendChild(card);
+                
+                addLog('categoriesLog', `  - ${cat.name} (${cat.id})`, 'info');
+            });
+        }
+
+        async function compareLocalVsSupabase() {
+            addLog('categoriesLog', '⚖️ Comparando categorias locais vs Supabase...', 'info');
+            
+            try {
+                // Categorias locais
+                const localCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+                addLog('categoriesLog', `📋 Categorias locais: ${localCategories.length}`, 'info');
+                
+                // Categorias do Supabase
+                if (window.supabaseManager) {
+                    const supabaseCategories = await window.supabaseManager.getCategories();
+                    addLog('categoriesLog', `📋 Categorias do Supabase: ${supabaseCategories.length}`, 'info');
+                    
+                    // Comparar
+                    const localNames = localCategories.map(c => c.name).sort();
+                    const supabaseNames = supabaseCategories.map(c => c.name).sort();
+                    
+                    if (JSON.stringify(localNames) === JSON.stringify(supabaseNames)) {
+                        addLog('categoriesLog', '✅ Categorias locais e do Supabase são idênticas', 'success');
+                    } else {
+                        addLog('categoriesLog', '⚠️ Diferenças encontradas entre local e Supabase', 'warning');
+                        addLog('categoriesLog', `Local: ${localNames.join(', ')}`, 'info');
+                        addLog('categoriesLog', `Supabase: ${supabaseNames.join(', ')}`, 'info');
+                    }
+                } else {
+                    addLog('categoriesLog', '❌ SupabaseManager não disponível para comparação', 'error');
+                }
+                
+            } catch (error) {
+                addLog('categoriesLog', `❌ Erro na comparação: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDashboardSync() {
+            addLog('pagesTestLog', '📊 Testando sincronização do Dashboard...', 'info');
+            
+            try {
+                if (typeof updateDashboardCategories === 'function') {
+                    const categories = window.categorySyncManager.getCategories();
+                    updateDashboardCategories(categories);
+                    addLog('pagesTestLog', '✅ Função updateDashboardCategories executada', 'success');
+                } else {
+                    addLog('pagesTestLog', '⚠️ Função updateDashboardCategories não encontrada', 'warning');
+                }
+                
+                if (typeof updateCategoryCards === 'function') {
+                    const categories = window.categorySyncManager.getCategories();
+                    updateCategoryCards(categories);
+                    addLog('pagesTestLog', '✅ Função updateCategoryCards executada', 'success');
+                } else {
+                    addLog('pagesTestLog', '⚠️ Função updateCategoryCards não encontrada', 'warning');
+                }
+                
+            } catch (error) {
+                addLog('pagesTestLog', `❌ Erro no teste do Dashboard: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAdminPanelSync() {
+            addLog('pagesTestLog', '⚙️ Testando sincronização do Admin Panel...', 'info');
+            
+            try {
+                if (typeof loadCategories === 'function') {
+                    loadCategories();
+                    addLog('pagesTestLog', '✅ Função loadCategories executada', 'success');
+                } else {
+                    addLog('pagesTestLog', '⚠️ Função loadCategories não encontrada', 'warning');
+                }
+                
+            } catch (error) {
+                addLog('pagesTestLog', `❌ Erro no teste do Admin Panel: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAllPagesSync() {
+            addLog('pagesTestLog', '🌍 Testando sincronização de todas as páginas...', 'info');
+            
+            try {
+                await window.categorySyncManager.syncCategoriesToPages();
+                addLog('pagesTestLog', '✅ Sincronização completa executada', 'success');
+                
+            } catch (error) {
+                addLog('pagesTestLog', `❌ Erro na sincronização completa: ${error.message}`, 'error');
+            }
+        }
+
+        function listenToEvents() {
+            addLog('eventsLog', '👂 Iniciando escuta de eventos...', 'info');
+            
+            if (eventListener) {
+                addLog('eventsLog', '⚠️ Event listener já ativo', 'warning');
+                return;
+            }
+            
+            eventListener = function(event) {
+                if (event.type === 'categoriesUpdated') {
+                    addLog('eventsLog', `📡 Evento categoriesUpdated recebido:`, 'success');
+                    addLog('eventsLog', `  - Categorias: ${event.detail.categories.length}`, 'info');
+                    addLog('eventsLog', `  - Timestamp: ${event.detail.timestamp}`, 'info');
+                    addLog('eventsLog', `  - Fonte: ${event.detail.source}`, 'info');
+                }
+            };
+            
+            document.addEventListener('categoriesUpdated', eventListener);
+            addLog('eventsLog', '✅ Event listener ativado para categoriesUpdated', 'success');
+        }
+
+        function stopListening() {
+            if (eventListener) {
+                document.removeEventListener('categoriesUpdated', eventListener);
+                eventListener = null;
+                addLog('eventsLog', '🛑 Event listener desativado', 'info');
+            } else {
+                addLog('eventsLog', '⚠️ Nenhum event listener ativo', 'warning');
+            }
+        }
+
+        // Inicialização automática
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('connectionLog', '🚀 Página carregada, iniciando testes...', 'info');
+            updateConnectionStatus('connecting');
+            
+            setTimeout(() => {
+                checkConnection();
+                testCategorySync();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

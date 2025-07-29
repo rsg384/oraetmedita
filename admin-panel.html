@@ -770,6 +770,9 @@
           <button class="btn btn-secondary" onclick="importData()" style="margin-right: 8px;">
             📥 Importar Dados
           </button>
+          <button class="btn btn-info" onclick="openApiConfig()" style="margin-right: 8px; background: #3b82f6; color: white; border: none;">
+            🔧 Configurar API
+          </button>
           <button class="btn btn-primary" onclick="openModal('meditation')" style="margin-right: 16px;">
             ✏️ Nova Meditação
           </button>
@@ -1542,6 +1545,11 @@
       localStorage.removeItem('adminEmail');
       localStorage.removeItem('adminLoginTime');
       window.location.href = 'admin-login.html';
+    }
+
+    // Abrir configuração da API
+    function openApiConfig() {
+      window.open('setup-api.html', '_blank');
     }
 
     // Navegação entre tabs
@@ -4421,5 +4429,6 @@
   
   <!-- Supabase Manager -->
   <script src="supabase-config.js"></script>
+  <script src="sync-categories-supabase.js"></script>
 </body>
 </html> 

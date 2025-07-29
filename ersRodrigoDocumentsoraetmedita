@@ -1,0 +1,5 @@
+[33mac8f390[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Adicionando pasta rules com regras de deploy para GitHub
+[33m13641a4[m 🔧 [FIX] Remover card 'Nenhuma meditação encontrada' do dashboard
+[33m15ffdda[m 🔧 [FIX] Sincronização com Supabase para carregamento de meditações
+[33m4e2ad56[m 🔧 [FIX] Adicionar api-config-local.js no dashboard para corrigir geração de meditações
+[33m1996e8f[m 🗑️ [FEAT] Remover cards empty-state das seções Minhas Meditações Geradas por IA

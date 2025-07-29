@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar API - Ora et Medita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover { background: #0056b3; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Verificação da API do ChatGPT</h1>
+        
+        <div id="status-container">
+            <div class="status info">Verificando configuração...</div>
+        </div>
+        
+        <button class="btn" onclick="checkApiStatus()">🔍 Verificar Status da API</button>
+        <button class="btn" onclick="testApiConnection()">🌐 Testar Conexão</button>
+        <button class="btn" onclick="testGeneration()">📝 Testar Geração</button>
+        <button class="btn" onclick="showLocalStorage()">💾 Ver localStorage</button>
+        
+        <h3>📊 Logs:</h3>
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        let logs = [];
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logs.push(`[${timestamp}] ${message}`);
+            document.getElementById('log').textContent = logs.join('\n');
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        function checkApiStatus() {
+            log('🔍 Verificando status da API...');
+            
+            // Verificar localStorage
+            const storedKey = localStorage.getItem('openai_api_key');
+            log(`Chave no localStorage: ${storedKey ? 'Encontrada' : 'Não encontrada'}`);
+            
+            if (storedKey) {
+                const maskedKey = storedKey.substring(0, 7) + '...' + storedKey.substring(storedKey.length - 4);
+                log(`Chave mascarada: ${maskedKey}`);
+            }
+            
+            // Verificar funções globais
+            const hasGetApiKey = typeof window.getApiKey === 'function';
+            const hasIsApiConfigured = typeof window.isApiConfigured === 'function';
+            const hasCheckAPIStatus = typeof window.checkAPIStatus === 'function';
+            const hasGenerateMeditations = typeof window.generateMeditations === 'function';
+            
+            log(`getApiKey disponível: ${hasGetApiKey}`);
+            log(`isApiConfigured disponível: ${hasIsApiConfigured}`);
+            log(`checkAPIStatus disponível: ${hasCheckAPIStatus}`);
+            log(`generateMeditations disponível: ${hasGenerateMeditations}`);
+            
+            if (hasGetApiKey && hasIsApiConfigured) {
+                try {
+                    const apiKey = window.getApiKey();
+                    const isConfigured = window.isApiConfigured();
+                    
+                    log(`API Key obtida: ${apiKey ? 'Sim' : 'Não'}`);
+                    log(`API Configurada: ${isConfigured}`);
+                    
+                    if (isConfigured) {
+                        updateStatus('✅ API configurada corretamente!', 'success');
+                    } else {
+                        updateStatus('❌ API não configurada', 'error');
+                    }
+                } catch (error) {
+                    log(`Erro ao verificar API: ${error.message}`);
+                    updateStatus('❌ Erro ao verificar API', 'error');
+                }
+            } else {
+                updateStatus('❌ Funções de API não encontradas', 'error');
+            }
+        }
+        
+        async function testApiConnection() {
+            log('🌐 Testando conexão com a API...');
+            
+            if (typeof window.checkAPIStatus === 'function') {
+                try {
+                    const result = await window.checkAPIStatus();
+                    log(`Resultado do teste: ${JSON.stringify(result)}`);
+                    
+                    if (result.status === 'success') {
+                        updateStatus('✅ Conexão com a API funcionando!', 'success');
+                    } else {
+                        updateStatus(`❌ Erro na API: ${result.message}`, 'error');
+                    }
+                } catch (error) {
+                    log(`Erro no teste: ${error.message}`);
+                    updateStatus(`❌ Erro no teste: ${error.message}`, 'error');
+                }
+            } else {
+                log('Função checkAPIStatus não encontrada');
+                updateStatus('❌ Função de teste não encontrada', 'error');
+            }
+        }
+        
+        async function testGeneration() {
+            log('📝 Testando geração de meditação...');
+            
+            if (typeof window.generateMeditations === 'function') {
+                try {
+                    const result = await window.generateMeditations('Amor de Deus');
+                    log(`Resultado da geração: ${JSON.stringify(result, null, 2)}`);
+                    
+                    if (result && result.meditations && result.meditations.length > 0) {
+                        updateStatus('✅ Meditação gerada com sucesso!', 'success');
+                    } else {
+                        updateStatus('❌ Erro na geração: Resposta inválida', 'error');
+                    }
+                } catch (error) {
+                    log(`Erro na geração: ${error.message}`);
+                    updateStatus(`❌ Erro na geração: ${error.message}`, 'error');
+                }
+            } else {
+                log('Função generateMeditations não encontrada');
+                updateStatus('❌ Função de geração não encontrada', 'error');
+            }
+        }
+        
+        function showLocalStorage() {
+            log('💾 Conteúdo do localStorage:');
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                if (key.includes('api') || key.includes('openai')) {
+                    const maskedValue = value ? value.substring(0, 10) + '...' : 'null';
+                    log(`${key}: ${maskedValue}`);
+                }
+            }
+        }
+        
+        // Verificação inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Página carregada');
+            setTimeout(checkApiStatus, 1000);
+        });
+    </script>
+    
+    <!-- Carregar scripts -->
+    <script src="api-config-local.js"></script>
+    <script src="chatgpt-api.js"></script>
+</body>
+</html> 

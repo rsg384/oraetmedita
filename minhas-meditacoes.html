@@ -1832,47 +1832,70 @@
                 </svg>
             `;
             
-
-            
             try {
+                // Aguardar um pouco para garantir que a API esteja inicializada
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
                 // Verificar se as funções necessárias estão disponíveis
                 console.log('🔍 Verificando se as funções necessárias estão disponíveis...');
                 console.log('checkAPIStatus disponível:', typeof checkAPIStatus);
                 console.log('generateMeditations disponível:', typeof generateMeditations);
                 console.log('chatGPTAPI disponível:', typeof chatGPTAPI);
+                console.log('window.chatGPTAPI disponível:', typeof window.chatGPTAPI);
                 
-                if (typeof checkAPIStatus !== 'function') {
-                    console.error('❌ checkAPIStatus não está disponível. Verificando chatGPTAPI...');
-                    if (typeof chatGPTAPI !== 'undefined' && typeof chatGPTAPI.checkAPIStatus === 'function') {
-                        console.log('✅ Usando chatGPTAPI.checkAPIStatus');
-                        window.checkAPIStatus = chatGPTAPI.checkAPIStatus.bind(chatGPTAPI);
-                    } else {
-                        throw new Error('Função checkAPIStatus não está disponível. Verifique se o arquivo chatgpt-api.js foi carregado corretamente.');
+                // Garantir que a API esteja inicializada
+                if (typeof window.chatGPTAPI === 'undefined') {
+                    console.log('🔄 Inicializando ChatGPTAPI...');
+                    
+                    // Verificar se a classe ChatGPTAPI está disponível
+                    if (typeof window.ChatGPTAPI === 'undefined') {
+                        throw new Error('Classe ChatGPTAPI não está disponível. Verifique se chatgpt-api.js foi carregado corretamente.');
                     }
-                }
-                
-                if (typeof generateMeditations !== 'function') {
-                    console.error('❌ generateMeditations não está disponível. Verificando chatGPTAPI...');
-                    if (typeof chatGPTAPI !== 'undefined' && typeof chatGPTAPI.generateMeditations === 'function') {
-                        console.log('✅ Usando chatGPTAPI.generateMeditations');
-                        window.generateMeditations = chatGPTAPI.generateMeditations.bind(chatGPTAPI);
-                    } else {
-                        throw new Error('Função generateMeditations não está disponível. Verifique se o arquivo chatgpt-api.js foi carregado corretamente.');
+                    
+                    window.chatGPTAPI = new window.ChatGPTAPI();
+                    
+                    // Criar funções globais se não existirem
+                    if (typeof window.checkAPIStatus === 'undefined') {
+                        window.checkAPIStatus = async function() {
+                            try {
+                                console.log('🔍 Função global checkAPIStatus chamada');
+                                const result = await window.chatGPTAPI.checkAPIStatus();
+                                console.log('✅ Status da API:', result);
+                                return result;
+                            } catch (error) {
+                                console.error('❌ Erro na função global checkAPIStatus:', error);
+                                throw error;
+                            }
+                        };
+                    }
+                    
+                    if (typeof window.generateMeditations === 'undefined') {
+                        window.generateMeditations = async function(topic) {
+                            try {
+                                console.log('🚀 Função global generateMeditations chamada para:', topic);
+                                const result = await window.chatGPTAPI.generateMeditations(topic);
+                                console.log('✅ Resultado da função global:', result);
+                                return result;
+                            } catch (error) {
+                                console.error('❌ Erro na função global generateMeditations:', error);
+                                throw error;
+                            }
+                        };
                     }
                 }
                 
                 // Verificar se a API está disponível
                 console.log('🔍 Verificando status da API...');
-                const apiStatus = await checkAPIStatus();
+                const apiStatus = await window.checkAPIStatus();
                 console.log('📊 Status da API:', apiStatus);
                 
                 if (!apiStatus.status || apiStatus.status !== 'success') {
-                    throw new Error('API do ChatGPT não está disponível');
+                    throw new Error(`API do ChatGPT não está disponível: ${apiStatus.message}`);
                 }
                 
                 // Gerar com ChatGPT usando as mesmas regras
                 console.log('🤖 Gerando meditação com ChatGPT para:', topic);
-                const result = await generateMeditations(topic);
+                const result = await window.generateMeditations(topic);
                 console.log('📄 Resultado da geração:', result);
                 
                 if (result && result.meditations && result.meditations.length > 0) {
@@ -1884,9 +1907,7 @@
                     
                     console.log('👤 Usuário atual na geração:', currentUser.name, 'ID:', userId);
                     
-                    // Salvar meditação personalizada no formato correto
-                    const existingPersonalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
-                    
+                    // Usar o novo sistema de sincronização para salvar a meditação
                     const meditation = result.meditations[0];
                     const meditationWithMeta = {
                         id: meditation.id,
@@ -1895,90 +1916,89 @@
                         content: meditation.content,
                         duration: meditation.duration || '15 min',
                         status: 'pending',
-                        createdAt: new Date().toISOString(),
-                        lastUpdated: new Date().toISOString(),
                         source: 'chatgpt',
-                        type: 'simple',
-                        userId: userId,
-                        userName: currentUser.name || 'Usuário'
+                        type: 'simple'
                     };
                     
-                    // Adicionar nova meditação ao array existente
-                    const updatedMeditations = existingPersonalized.concat([meditationWithMeta]);
-                    localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
-                    
-                    // Sincronizar com Supabase se disponível
-                    console.log('🔄 Verificando Supabase Manager...');
-                    if (window.supabaseManager) {
+                    console.log('💾 Salvando meditação via MeditationSyncManager...');
+                    if (window.meditationSyncManager) {
                         try {
-                            console.log('📤 Sincronizando meditação personalizada com Supabase...');
+                            const saveSuccess = await window.meditationSyncManager.saveMeditation(meditationWithMeta);
+                            if (saveSuccess) {
+                                console.log('✅ Meditação salva com sucesso via MeditationSyncManager');
+                            } else {
+                                console.log('⚠️ Erro ao salvar via MeditationSyncManager - usando método antigo');
+                                // Fallback para método antigo
+                                const existingPersonalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                                const meditationWithMetaOld = {
+                                    ...meditationWithMeta,
+                                    userId: userId,
+                                    userName: currentUser.name || 'Usuário',
+                                    createdAt: new Date().toISOString(),
+                                    lastUpdated: new Date().toISOString()
+                                };
+                                const updatedMeditations = existingPersonalized.concat([meditationWithMetaOld]);
+                                localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                            }
+                        } catch (syncError) {
+                            console.error('❌ Erro no MeditationSyncManager:', syncError);
+                            console.log('🔄 Fallback para método antigo...');
                             
-                            const supabaseMeditationData = {
-                                meditation_id: meditationWithMeta.id,
-                                title: meditationWithMeta.title,
-                                topic: meditationWithMeta.topic,
-                                content: meditationWithMeta.content,
-                                duration: meditationWithMeta.duration,
-                                status: meditationWithMeta.status,
-                                source: meditationWithMeta.source,
-                                type: meditationWithMeta.type,
-                                user_id: meditationWithMeta.userId,
-                                user_name: meditationWithMeta.userName,
-                                created_at: meditationWithMeta.createdAt,
-                                last_updated: meditationWithMeta.lastUpdated
+                            // Fallback para método antigo
+                            const existingPersonalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                            const meditationWithMetaOld = {
+                                ...meditationWithMeta,
+                                userId: userId,
+                                userName: currentUser.name || 'Usuário',
+                                createdAt: new Date().toISOString(),
+                                lastUpdated: new Date().toISOString()
                             };
-                            
-                            const supabaseResult = await window.supabaseManager.createPersonalizedMeditation(supabaseMeditationData);
-                            console.log('✅ Meditação personalizada sincronizada com Supabase:', supabaseResult);
-                            
-                        } catch (supabaseError) {
-                            console.error('⚠️ Erro ao sincronizar com Supabase:', supabaseError);
-                            console.log('ℹ️ Meditação salva apenas localmente');
+                            const updatedMeditations = existingPersonalized.concat([meditationWithMetaOld]);
+                            localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
                         }
                     } else {
-                        console.log('ℹ️ Supabase Manager não disponível - meditação salva apenas localmente');
+                        console.log('⚠️ MeditationSyncManager não disponível - usando método antigo');
+                        // Fallback para método antigo
+                        const existingPersonalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                        const meditationWithMetaOld = {
+                            ...meditationWithMeta,
+                            userId: userId,
+                            userName: currentUser.name || 'Usuário',
+                            createdAt: new Date().toISOString(),
+                            lastUpdated: new Date().toISOString()
+                        };
+                        const updatedMeditations = existingPersonalized.concat([meditationWithMetaOld]);
+                        localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
                     }
                     
-                    // Adicionar ao histórico de categorias
+                    // Adicionar ao histórico
                     addToPersonalizedHistory({
-                        category: 'Minhas Meditações',
-                        meditations: [meditationWithMeta],
-                        total: 1,
-                        createdAt: new Date().toISOString(),
+                        category: result.category,
                         userId: userId,
-                        userName: currentUser.name || 'Usuário'
+                        userName: currentUser.name || 'Usuário',
+                        meditations: [meditationWithMeta]
                     });
                     
-                    // Incrementar contador total de meditações geradas
-                    incrementTotalMeditations();
+                    // Mostrar notificação de sucesso
+                    showNotification('Meditação gerada com sucesso!', 'success');
                     
-                    // Limpar campo
-                    document.getElementById('meditation-topic').value = '';
+                    // Limpar campo de entrada
+                    topicInput.value = '';
                     
-                    // Reabilitar botão
-                    sendBtn.disabled = false;
-                    sendBtn.innerHTML = originalText;
-                    
-                    // Recarregar meditações
+                    // Recarregar meditações personalizadas
                     loadPersonalizedMeditations();
                     
-                    // Mostrar notificação de sucesso
-                    showNotification('Meditação gerada e adicionada à categoria "Minhas Meditações"!', 'success');
-                    
-                    console.log('✅ Meditação salva e página atualizada');
-                    
                 } else {
-                    throw new Error('Nenhuma meditação foi gerada');
+                    throw new Error('Falha ao gerar meditação: resultado vazio');
                 }
                 
             } catch (error) {
                 console.error('❌ Erro ao gerar meditação:', error);
-                
+                showNotification(`Erro ao gerar meditação: ${error.message}`, 'error');
+            } finally {
                 // Reabilitar botão
                 sendBtn.disabled = false;
                 sendBtn.innerHTML = originalText;
-                
-                alert(`Erro ao gerar meditação: ${error.message}`);
             }
         }
 
@@ -2239,43 +2259,98 @@
                 
                 let allPersonalizedMeditations = [];
                 
-                // Tentar carregar meditações do Supabase primeiro
-                if (window.supabaseManager) {
+                // Usar o novo sistema de sincronização para carregar meditações
+                if (window.meditationSyncManager) {
                     try {
-                        console.log('📤 Buscando meditações do Supabase para o usuário:', userId);
-                        const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations(userId);
-                        console.log('📊 Meditações do Supabase:', supabaseMeditations);
+                        console.log('🔄 Usando MeditationSyncManager para carregar meditações...');
+                        allPersonalizedMeditations = await window.meditationSyncManager.loadMeditations(userId);
+                        console.log('✅ Meditações carregadas via MeditationSyncManager:', allPersonalizedMeditations.length);
+                    } catch (syncError) {
+                        console.error('❌ Erro no MeditationSyncManager:', syncError);
+                        console.log('🔄 Fallback para método antigo...');
                         
-                        if (supabaseMeditations && supabaseMeditations.length > 0) {
-                            allPersonalizedMeditations = supabaseMeditations;
-                            console.log('✅ Meditações carregadas do Supabase:', allPersonalizedMeditations.length);
-                        } else {
-                            console.log('📭 Nenhuma meditação encontrada no Supabase para o usuário');
+                        // Fallback para método antigo
+                        if (window.supabaseManager) {
+                            try {
+                                console.log('📤 Buscando meditações do Supabase para o usuário:', userId);
+                                const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations(userId);
+                                console.log('📊 Meditações do Supabase:', supabaseMeditations);
+                                
+                                if (supabaseMeditations && supabaseMeditations.length > 0) {
+                                    allPersonalizedMeditations = supabaseMeditations;
+                                    console.log('✅ Meditações carregadas do Supabase:', allPersonalizedMeditations.length);
+                                } else {
+                                    console.log('📭 Nenhuma meditação encontrada no Supabase para o usuário');
+                                }
+                            } catch (supabaseError) {
+                                console.error('❌ Erro ao buscar do Supabase:', supabaseError);
+                                console.log('🔄 Fallback para localStorage...');
+                            }
                         }
-                    } catch (supabaseError) {
-                        console.error('❌ Erro ao buscar do Supabase:', supabaseError);
-                        console.log('🔄 Fallback para localStorage...');
+                        
+                        // Se não encontrou no Supabase, buscar no localStorage
+                        if (allPersonalizedMeditations.length === 0) {
+                            console.log('🔄 Carregando meditações do localStorage...');
+                            const personalizedData = localStorage.getItem('personalized_meditations');
+                            
+                            if (personalizedData) {
+                                try {
+                                    const allMeditations = JSON.parse(personalizedData);
+                                    console.log('📚 Todas as meditações do localStorage:', allMeditations);
+                                    
+                                    // Filtrar apenas meditações do usuário atual
+                                    allPersonalizedMeditations = allMeditations.filter(med => 
+                                        med.userId === userId
+                                    );
+                                    console.log('📋 Meditações do usuário atual no localStorage:', allPersonalizedMeditations.length);
+                                    
+                                } catch (error) {
+                                    console.error('❌ Erro ao carregar do localStorage:', error);
+                                }
+                            }
+                        }
                     }
-                }
-                
-                // Se não encontrou no Supabase, buscar no localStorage
-                if (allPersonalizedMeditations.length === 0) {
-                    console.log('🔄 Carregando meditações do localStorage...');
-                    const personalizedData = localStorage.getItem('personalized_meditations');
+                } else {
+                    // Método antigo se MeditationSyncManager não estiver disponível
+                    console.log('⚠️ MeditationSyncManager não disponível - usando método antigo');
                     
-                    if (personalizedData) {
+                    if (window.supabaseManager) {
                         try {
-                            const allMeditations = JSON.parse(personalizedData);
-                            console.log('📚 Todas as meditações do localStorage:', allMeditations);
+                            console.log('📤 Buscando meditações do Supabase para o usuário:', userId);
+                            const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations(userId);
+                            console.log('📊 Meditações do Supabase:', supabaseMeditations);
                             
-                            // Filtrar apenas meditações do usuário atual
-                            allPersonalizedMeditations = allMeditations.filter(med => 
-                                med.userId === userId
-                            );
-                            console.log('📋 Meditações do usuário atual no localStorage:', allPersonalizedMeditations.length);
-                            
-                        } catch (error) {
-                            console.error('❌ Erro ao carregar do localStorage:', error);
+                            if (supabaseMeditations && supabaseMeditations.length > 0) {
+                                allPersonalizedMeditations = supabaseMeditations;
+                                console.log('✅ Meditações carregadas do Supabase:', allPersonalizedMeditations.length);
+                            } else {
+                                console.log('📭 Nenhuma meditação encontrada no Supabase para o usuário');
+                            }
+                        } catch (supabaseError) {
+                            console.error('❌ Erro ao buscar do Supabase:', supabaseError);
+                            console.log('🔄 Fallback para localStorage...');
+                        }
+                    }
+                    
+                    // Se não encontrou no Supabase, buscar no localStorage
+                    if (allPersonalizedMeditations.length === 0) {
+                        console.log('🔄 Carregando meditações do localStorage...');
+                        const personalizedData = localStorage.getItem('personalized_meditations');
+                        
+                        if (personalizedData) {
+                            try {
+                                const allMeditations = JSON.parse(personalizedData);
+                                console.log('📚 Todas as meditações do localStorage:', allMeditations);
+                                
+                                // Filtrar apenas meditações do usuário atual
+                                allPersonalizedMeditations = allMeditations.filter(med => 
+                                    med.userId === userId
+                                );
+                                console.log('📋 Meditações do usuário atual no localStorage:', allPersonalizedMeditations.length);
+                                
+                            } catch (error) {
+                                console.error('❌ Erro ao carregar do localStorage:', error);
+                            }
                         }
                     }
                 }
@@ -2488,61 +2563,17 @@
             }
         }
 
-        // Função para excluir meditação
+        // Função para excluir meditação usando o novo sistema de sincronização
         async function deleteMeditation(meditationId) {
             if (confirm('Tem certeza que deseja excluir esta meditação?')) {
                 try {
                     console.log('🗑️ Iniciando exclusão da meditação:', meditationId);
                     
-                    // Obter usuário atual
-                    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
-                    const userId = currentUser.id || 'anonymous';
-                    
-                    const personalizedData = localStorage.getItem('personalized_meditations');
-                    if (personalizedData) {
-                        const allMeditations = JSON.parse(personalizedData);
+                    // Usar o novo sistema de sincronização
+                    if (window.meditationSyncManager) {
+                        const success = await window.meditationSyncManager.deleteMeditation(meditationId);
                         
-                        // Verificar se a meditação existe antes de deletar
-                        const meditationToDelete = allMeditations.find(med => 
-                            med.id === meditationId && med.userId === userId
-                        );
-                        
-                        if (meditationToDelete) {
-                            console.log('📝 Meditação encontrada para exclusão:', meditationToDelete.title);
-                            
-                            // Sincronizar com Supabase se disponível
-                            console.log('🔄 Verificando Supabase Manager...');
-                            if (window.supabaseManager) {
-                                try {
-                                    console.log('📤 Excluindo meditação personalizada do Supabase...');
-                                    
-                                    // Buscar a meditação no Supabase pelo meditation_id
-                                    const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations();
-                                    const supabaseMeditation = supabaseMeditations.find(med => 
-                                        med.meditation_id === meditationId
-                                    );
-                                    
-                                    if (supabaseMeditation) {
-                                        console.log('🗑️ Excluindo do Supabase:', supabaseMeditation.id);
-                                        await window.supabaseManager.deletePersonalizedMeditation(supabaseMeditation.id);
-                                        console.log('✅ Meditação excluída do Supabase com sucesso');
-                                    } else {
-                                        console.log('⚠️ Meditação não encontrada no Supabase');
-                                    }
-                                } catch (supabaseError) {
-                                    console.error('⚠️ Erro ao excluir do Supabase:', supabaseError);
-                                    console.log('ℹ️ Meditação excluída apenas localmente');
-                                }
-                            } else {
-                                console.log('ℹ️ Supabase Manager não disponível - exclusão apenas local');
-                            }
-                            
-                            // Remover apenas a meditação do usuário atual
-                            const updatedMeditations = allMeditations.filter(med => 
-                                !(med.id === meditationId && med.userId === userId)
-                            );
-                            localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
-                            
+                        if (success) {
                             // Decrementar contador total
                             decrementTotalMeditations();
                             
@@ -2550,7 +2581,41 @@
                             loadPersonalizedMeditations();
                             alert('Meditação excluída com sucesso!');
                         } else {
-                            alert('Meditação não encontrada.');
+                            alert('Erro ao excluir meditação.');
+                        }
+                    } else {
+                        // Fallback para método antigo
+                        console.log('⚠️ MeditationSyncManager não disponível - usando método antigo');
+                        
+                        const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                        const userId = currentUser.id || 'anonymous';
+                        
+                        const personalizedData = localStorage.getItem('personalized_meditations');
+                        if (personalizedData) {
+                            const allMeditations = JSON.parse(personalizedData);
+                            
+                            const meditationToDelete = allMeditations.find(med => 
+                                med.id === meditationId && med.userId === userId
+                            );
+                            
+                            if (meditationToDelete) {
+                                console.log('📝 Meditação encontrada para exclusão:', meditationToDelete.title);
+                                
+                                // Remover apenas a meditação do usuário atual
+                                const updatedMeditations = allMeditations.filter(med => 
+                                    !(med.id === meditationId && med.userId === userId)
+                                );
+                                localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                                
+                                // Decrementar contador total
+                                decrementTotalMeditations();
+                                
+                                // Recarregar a página
+                                loadPersonalizedMeditations();
+                                alert('Meditação excluída com sucesso!');
+                            } else {
+                                alert('Meditação não encontrada.');
+                            }
                         }
                     }
                 } catch (error) {
@@ -3182,7 +3247,9 @@
     <script src="api-config.js"></script>
     <script src="api-config-local.js"></script>
     <script src="chatgpt-api.js"></script>
-    <script src="supabase-config.js"></script>
+            <script src="supabase-config.js"></script>
+        <script src="sync-categories-supabase.js"></script>
+    <script src="sync-supabase-meditations.js"></script>
     
     <script src="force-user-update.js"></script>
     <script src="immediate-user-update.js"></script>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Teste de Sincronização de Meditações - Ora et Medita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-section h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        
+        .success {
+            border-left: 4px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .error {
+            border-left: 4px solid #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+        
+        .warning {
+            border-left: 4px solid #ff9800;
+            background: rgba(255, 152, 0, 0.1);
+        }
+        
+        .info {
+            border-left: 4px solid #2196F3;
+            background: rgba(33, 150, 243, 0.1);
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .meditation-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .meditation-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .meditation-card p {
+            color: #ccc;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste de Sincronização de Meditações</h1>
+        
+        <div class="test-section">
+            <h3>🔧 Inicialização</h3>
+            <button onclick="testInitialization()">Testar Inicialização</button>
+            <div id="initialization-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Status da Sincronização</h3>
+            <button onclick="testSyncStatus()">Verificar Status</button>
+            <div id="sync-status-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>💾 Salvar Meditação de Teste</h3>
+            <button onclick="testSaveMeditation()">Salvar Meditação</button>
+            <div id="save-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📚 Carregar Meditações</h3>
+            <button onclick="testLoadMeditations()">Carregar Meditações</button>
+            <div id="load-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔄 Sincronização Completa</h3>
+            <button onclick="testFullSync()">Sincronizar Tudo</button>
+            <div id="full-sync-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🗑️ Excluir Meditação</h3>
+            <button onclick="testDeleteMeditation()">Excluir Última Meditação</button>
+            <div id="delete-result"></div>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script src="sync-supabase-meditations.js"></script>
+    <script>
+        let lastCreatedMeditationId = null;
+
+        function addLog(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            element.appendChild(div);
+        }
+
+        function clearLog(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        async function testInitialization() {
+            clearLog('initialization-result');
+            addLog('initialization-result', '🔄 Testando inicialização...', 'info');
+            
+            try {
+                const result = await window.meditationSyncManager.initialize();
+                if (result) {
+                    addLog('initialization-result', '✅ MeditationSyncManager inicializado com sucesso', 'success');
+                    addLog('initialization-result', `📊 Supabase disponível: ${window.meditationSyncManager.isInitialized}`, 'info');
+                } else {
+                    addLog('initialization-result', '⚠️ MeditationSyncManager inicializado mas Supabase não disponível', 'warning');
+                }
+            } catch (error) {
+                addLog('initialization-result', `❌ Erro na inicialização: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSyncStatus() {
+            clearLog('sync-status-result');
+            addLog('sync-status-result', '📊 Verificando status da sincronização...', 'info');
+            
+            try {
+                const status = await window.meditationSyncManager.checkSyncStatus();
+                if (status) {
+                    addLog('sync-status-result', `📊 Status da sincronização:`, 'info');
+                    addLog('sync-status-result', `📱 Local: ${status.localCount} meditações`, 'info');
+                    addLog('sync-status-result', `☁️ Supabase: ${status.supabaseCount} meditações`, 'info');
+                    addLog('sync-status-result', `🔗 Supabase disponível: ${status.supabaseAvailable}`, 'info');
+                    
+                    if (status.localMeditations.length > 0) {
+                        addLog('sync-status-result', '📋 Meditações locais:', 'info');
+                        status.localMeditations.forEach((med, index) => {
+                            addLog('sync-status-result', `  ${index + 1}. ${med.title} (${med.id})`, 'info');
+                        });
+                    }
+                } else {
+                    addLog('sync-status-result', '❌ Erro ao verificar status', 'error');
+                }
+            } catch (error) {
+                addLog('sync-status-result', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSaveMeditation() {
+            clearLog('save-result');
+            addLog('save-result', '💾 Salvando meditação de teste...', 'info');
+            
+            try {
+                const testMeditation = {
+                    id: 'test-meditation-' + Date.now(),
+                    title: 'Meditação de Teste - ' + new Date().toLocaleString(),
+                    topic: 'Teste de Sincronização',
+                    content: 'Esta é uma meditação de teste para verificar a sincronização com o Supabase.',
+                    duration: '10 min',
+                    status: 'completed',
+                    source: 'test',
+                    type: 'simple'
+                };
+                
+                const result = await window.meditationSyncManager.saveMeditation(testMeditation);
+                if (result) {
+                    addLog('save-result', '✅ Meditação salva com sucesso', 'success');
+                    addLog('save-result', `📝 Título: ${testMeditation.title}`, 'info');
+                    addLog('save-result', `🆔 ID: ${testMeditation.id}`, 'info');
+                    lastCreatedMeditationId = testMeditation.id;
+                } else {
+                    addLog('save-result', '❌ Erro ao salvar meditação', 'error');
+                }
+            } catch (error) {
+                addLog('save-result', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLoadMeditations() {
+            clearLog('load-result');
+            addLog('load-result', '📚 Carregando meditações...', 'info');
+            
+            try {
+                const meditations = await window.meditationSyncManager.loadMeditations();
+                addLog('load-result', `✅ ${meditations.length} meditações carregadas`, 'success');
+                
+                if (meditations.length > 0) {
+                    meditations.forEach((med, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'meditation-card';
+                        card.innerHTML = `
+                            <h4>${med.title}</h4>
+                            <p><strong>ID:</strong> ${med.id}</p>
+                            <p><strong>Tópico:</strong> ${med.topic}</p>
+                            <p><strong>Duração:</strong> ${med.duration}</p>
+                            <p><strong>Status:</strong> ${med.status}</p>
+                            <p><strong>Criado:</strong> ${new Date(med.createdAt).toLocaleString()}</p>
+                        `;
+                        document.getElementById('load-result').appendChild(card);
+                    });
+                } else {
+                    addLog('load-result', '📭 Nenhuma meditação encontrada', 'warning');
+                }
+            } catch (error) {
+                addLog('load-result', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFullSync() {
+            clearLog('full-sync-result');
+            addLog('full-sync-result', '🔄 Iniciando sincronização completa...', 'info');
+            
+            try {
+                const result = await window.meditationSyncManager.syncAllMeditations();
+                if (result) {
+                    addLog('full-sync-result', '✅ Sincronização completa realizada com sucesso', 'success');
+                } else {
+                    addLog('full-sync-result', '⚠️ Sincronização parcial ou falhou', 'warning');
+                }
+            } catch (error) {
+                addLog('full-sync-result', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDeleteMeditation() {
+            clearLog('delete-result');
+            
+            if (!lastCreatedMeditationId) {
+                addLog('delete-result', '⚠️ Nenhuma meditação de teste criada. Crie uma primeiro.', 'warning');
+                return;
+            }
+            
+            addLog('delete-result', `🗑️ Excluindo meditação: ${lastCreatedMeditationId}`, 'info');
+            
+            try {
+                const result = await window.meditationSyncManager.deleteMeditation(lastCreatedMeditationId);
+                if (result) {
+                    addLog('delete-result', '✅ Meditação excluída com sucesso', 'success');
+                    lastCreatedMeditationId = null;
+                } else {
+                    addLog('delete-result', '❌ Erro ao excluir meditação', 'error');
+                }
+            } catch (error) {
+                addLog('delete-result', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        // Teste automático ao carregar
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                testInitialization();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

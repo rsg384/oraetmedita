@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Teste Rápido da API - Ora et Medita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-section h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        
+        .success {
+            border-left: 4px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .error {
+            border-left: 4px solid #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+        
+        .warning {
+            border-left: 4px solid #ff9800;
+            background: rgba(255, 152, 0, 0.1);
+        }
+        
+        .info {
+            border-left: 4px solid #2196F3;
+            background: rgba(33, 150, 243, 0.1);
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Teste Rápido da API</h1>
+        
+        <div class="test-section">
+            <h3>🔍 Status da API</h3>
+            <button onclick="testApiStatus()">Verificar Status</button>
+            <div id="api-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📝 Gerar Meditação</h3>
+            <button onclick="testGeneration()">Gerar Meditação</button>
+            <div id="generation-result"></div>
+        </div>
+    </div>
+
+    <script src="chatgpt-api.js"></script>
+    <script>
+        function addLog(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            element.appendChild(div);
+        }
+
+        function clearLog(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        async function testApiStatus() {
+            clearLog('api-status');
+            addLog('api-status', '🔍 Verificando status da API...', 'info');
+            
+            try {
+                const result = await checkAPIStatus();
+                if (result.status === 'success') {
+                    addLog('api-status', `✅ API Status: ${result.message}`, 'success');
+                } else {
+                    addLog('api-status', `❌ API Status: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                addLog('api-status', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGeneration() {
+            clearLog('generation-result');
+            addLog('generation-result', '📝 Gerando meditação...', 'info');
+            
+            try {
+                const result = await generateMeditations('Paz Interior');
+                if (result && result.meditations && result.meditations.length > 0) {
+                    addLog('generation-result', '✅ Meditação gerada com sucesso!', 'success');
+                    addLog('generation-result', `📝 Título: ${result.meditations[0].title}`, 'info');
+                    addLog('generation-result', `📄 Conteúdo: ${result.meditations[0].content.substring(0, 100)}...`, 'info');
+                } else {
+                    addLog('generation-result', '❌ Falha ao gerar meditação.', 'error');
+                }
+            } catch (error) {
+                addLog('generation-result', `❌ Erro na geração: ${error.message}`, 'error');
+            }
+        }
+
+        // Teste automático ao carregar
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                testApiStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 
