@@ -104,21 +104,12 @@ function renderDashboardMeditationCards() {
     grid.innerHTML = '';
     
     if (meditations.length === 0) {
-        console.log('📭 Nenhuma meditação encontrada, mostrando estado vazio');
-        grid.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">📖</div>
-                <div class="empty-state-title">Nenhuma meditação encontrada</div>
-                <div class="empty-state-description">Crie sua primeira meditação personalizada para começar</div>
-                <a href="minhas-meditacoes.html" class="btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
-                    Criar Meditação
-                </a>
-            </div>
-        `;
+        console.log('📭 Nenhuma meditação encontrada, ocultando seção');
+        // Ocultar a seção quando não há meditações
+        const myMeditationsSection = document.getElementById('my-meditations-section');
+        if (myMeditationsSection) {
+            myMeditationsSection.style.display = 'none';
+        }
         return;
     }
     
