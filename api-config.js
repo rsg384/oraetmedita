@@ -2,7 +2,7 @@
 const API_CONFIG = {
     // Configuração da API OpenAI
     OPENAI: {
-        API_KEY: "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",
+        API_KEY: "YOUR_OPENAI_API_KEY_HERE",
         BASE_URL: 'https://api.openai.com/v1',
         MODEL: 'gpt-4o-mini',
         MAX_TOKENS: 4000,
