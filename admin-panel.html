@@ -1,0 +1,4425 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Painel Administrativo - Ora et Medita v2.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #101223;
+      color: #f5f6fa;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #2a2d3e;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #7ee787;
+    }
+
+    .admin-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .admin-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 16px;
+    }
+
+    .admin-actions .btn {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      white-space: nowrap;
+    }
+
+    .admin-avatar {
+      width: 40px;
+      height: 40px;
+      background: #7ee787;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #101223;
+    }
+
+    .admin-details {
+      text-align: right;
+    }
+
+    .admin-name {
+      font-weight: 600;
+      color: #f5f6fa;
+    }
+
+    .admin-email {
+      font-size: 0.9rem;
+      color: #a3a8c9;
+    }
+
+    .logout-btn {
+      background: #dc2626;
+      color: #fef2f2;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #b91c1c;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #2a2d3e;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      color: #a3a8c9;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .tab.active {
+      color: #7ee787;
+      border-bottom-color: #7ee787;
+    }
+
+    .tab:hover {
+      color: #f5f6fa;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .content-header h2 {
+      color: #7ee787;
+      font-size: 1.5rem;
+    }
+
+    .add-btn {
+      background: #7ee787;
+      color: #101223;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background: #4ade80;
+      transform: translateY(-1px);
+    }
+
+    .data-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .data-card {
+      background: #181a2a;
+      border: 1px solid #2a2d3e;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .data-card:hover {
+      border-color: #7ee787;
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #f5f6fa;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .edit-btn {
+      background: #3b82f6;
+      color: #fef2f2;
+    }
+
+    .edit-btn:hover {
+      background: #2563eb;
+    }
+
+    .delete-btn {
+      background: #dc2626;
+      color: #fef2f2;
+    }
+
+    .delete-btn:hover {
+      background: #b91c1c;
+    }
+
+    .card-content {
+      color: #a3a8c9;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .card-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 0.8rem;
+    }
+
+    .stat {
+      color: #7ee787;
+    }
+
+    /* Badges para status de plano */
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-success {
+      background: #10B981;
+      color: white;
+    }
+
+    .badge-warning {
+      background: #F59E0B;
+      color: white;
+    }
+
+    .badge-secondary {
+      background: #6B7280;
+      color: white;
+    }
+
+    .badge-danger {
+      background: #EF4444;
+      color: white;
+    }
+
+    /* Badges para status de plano */
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-success {
+      background: #10B981;
+      color: white;
+    }
+
+    .badge-warning {
+      background: #F59E0B;
+      color: white;
+    }
+
+    .badge-secondary {
+      background: #6B7280;
+      color: white;
+    }
+
+    .badge-danger {
+      background: #EF4444;
+      color: white;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #181a2a;
+      border: 1px solid #2a2d3e;
+      border-radius: 16px;
+      padding: 32px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    /* Modal em tela cheia */
+    .fullscreen-modal {
+      background: #101223;
+    }
+
+    .fullscreen-content {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      border-radius: 0;
+      transform: none;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .fullscreen-header {
+      background: #181a2a;
+      padding: 20px 32px;
+      border-bottom: 1px solid #2a2d3e;
+      margin-bottom: 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .fullscreen-header .modal-title {
+      flex: 1;
+      text-align: center;
+      margin: 0 16px;
+    }
+
+    .back-btn {
+      background: #23243a;
+      color: #f5f6fa;
+      border: 1px solid #3a3b5a;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn:hover {
+      background: #3a3b5a;
+      color: #7ee787;
+    }
+
+    .back-btn span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .fullscreen-form {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .fullscreen-form .form-group {
+      margin-bottom: 0;
+    }
+
+    .fullscreen-form .text-editor-container textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .fullscreen-form .form-actions {
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid #2a2d3e;
+      background: #181a2a;
+      position: sticky;
+      bottom: 0;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #7ee787;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #a3a8c9;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .close-btn:hover {
+      color: #f5f6fa;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #f5f6fa;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      background: #23243a;
+      border: 1px solid #3a3b5a;
+      border-radius: 8px;
+      color: #f5f6fa;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #7ee787;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #7ee787;
+      color: #101223;
+    }
+
+    .btn-primary:hover {
+      background: #4ade80;
+    }
+
+    .btn-secondary {
+      background: #23243a;
+      color: #f5f6fa;
+      border: 1px solid #3a3b5a;
+    }
+
+    .btn-secondary:hover {
+      background: #3a3b5a;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: #fef2f2;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .modal-body {
+      margin-bottom: 24px;
+    }
+
+    .modal-body p {
+      color: #a3a8c9;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .import-options {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin: 20px 0;
+    }
+
+    .import-option {
+      background: #181a2a;
+      border: 1px solid #2a2d3e;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .import-option:hover {
+      border-color: #7ee787;
+      background: #1a1c2e;
+    }
+
+    .import-option h4 {
+      color: #f5f6fa;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .import-option p {
+      color: #a3a8c9;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: #a3a8c9;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+      color: #f5f6fa;
+      margin-bottom: 8px;
+    }
+
+    .meditation-details {
+      background: #23243a;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .meditation-details p {
+      margin: 8px 0;
+    }
+
+    .meditation-content h4 {
+      color: #7ee787;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      
+      .admin-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .admin-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+
+      .admin-actions .btn {
+        width: 100%;
+        margin-right: 0 !important;
+      }
+    }
+
+    /* Estilos para o Editor de Texto */
+    .text-editor-container {
+      border: 1px solid #2a2d3e;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #181a2a;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      gap: 4px;
+      padding: 8px;
+      background: #2a2d3e;
+      border-bottom: 1px solid #2a2d3e;
+    }
+
+    .toolbar-btn {
+      background: #3a3d4e;
+      color: #f5f6fa;
+      border: 1px solid #4a4d5e;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    .toolbar-btn:hover {
+      background: #4a4d5e;
+      border-color: #7ee787;
+    }
+
+    .toolbar-btn:active {
+      background: #5a5d6e;
+      transform: translateY(1px);
+    }
+
+    .toolbar-separator {
+      width: 1px;
+      background: #3a3b5a;
+      margin: 0 4px;
+    }
+
+    .font-selector {
+      background: #2a2d3e;
+      border: 1px solid #3a3b5a;
+      border-radius: 4px;
+      color: #e6e6e6;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      min-width: 120px;
+    }
+
+    .font-selector:hover {
+      background: #3a3b5a;
+      border-color: #5a5d6e;
+    }
+
+    .font-selector:focus {
+      outline: none;
+      border-color: #7ee787;
+      box-shadow: 0 0 0 2px rgba(126, 231, 135, 0.2);
+    }
+
+    .font-size-selector {
+      background: #2a2d3e;
+      border: 1px solid #3a3b5a;
+      border-radius: 4px;
+      color: #e6e6e6;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      min-width: 80px;
+    }
+    .font-size-selector:hover {
+      background: #3a3b5a;
+      border-color: #5a5d6e;
+    }
+    .font-size-selector:focus {
+      outline: none;
+      border-color: #7ee787;
+      box-shadow: 0 0 0 2px rgba(126, 231, 135, 0.2);
+    }
+
+    .text-editor-container textarea {
+      border: none;
+      background: #181a2a;
+      color: #f5f6fa;
+      padding: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .text-editor-container textarea:focus {
+      outline: none;
+      background: #1a1c2a;
+    }
+
+    .text-editor-container textarea::placeholder {
+      color: #6a6d7e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔧 Painel Administrativo</h1>
+      <div class="admin-info">
+        <div class="admin-actions">
+          <button class="btn btn-success" onclick="exportCompleteData()" style="margin-right: 8px; background: #10B981; color: white; border: none;">
+            📤 Backup Completo
+          </button>
+          <button class="btn btn-info" onclick="importCompleteData()" style="margin-right: 8px; background: #06B6D4; color: white; border: none;">
+            📥 Restaurar Backup
+          </button>
+          <button class="btn btn-warning" onclick="autoBackup()" style="margin-right: 8px; background: #F59E0B; color: white; border: none;">
+            🔄 Backup Auto
+          </button>
+          <button class="btn btn-secondary" onclick="exportData()" style="margin-right: 8px;">
+            📤 Exportar Dados
+          </button>
+          <button class="btn btn-secondary" onclick="importData()" style="margin-right: 8px;">
+            📥 Importar Dados
+          </button>
+          <button class="btn btn-primary" onclick="openModal('meditation')" style="margin-right: 16px;">
+            ✏️ Nova Meditação
+          </button>
+        </div>
+        <div class="admin-details">
+          <div class="admin-name" id="admin-name">Administrador</div>
+          <div class="admin-email" id="admin-email">admin@oraetmedita.com</div>
+        </div>
+        <div class="admin-avatar" id="admin-avatar">A</div>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('categories')">📚 Categorias</button>
+      <button class="tab" onclick="showTab('meditations')">📖 Meditações</button>
+      <button class="tab" onclick="showTab('personalized')">✨ Personalizadas</button>
+      <button class="tab" onclick="showTab('schedules')">📅 Agendamentos</button>
+                                                  <button class="tab" onclick="showTab('users')">📊 Estatísticas</button>
+                      <button class="tab" onclick="showTab('user-management')">👥 Usuários</button>
+                      <button class="tab" onclick="showTab('content')">✏️ Conteúdo</button>
+    </div>
+
+    <!-- Tab Categorias -->
+    <div id="categories-tab" class="tab-content active">
+      <div class="content-header">
+        <h2>Gerenciar Categorias</h2>
+        <button class="add-btn" onclick="openModal('category')">+ Nova Categoria</button>
+      </div>
+      <div class="data-grid" id="categories-grid">
+        <!-- Categorias serão carregadas aqui -->
+      </div>
+    </div>
+
+    <!-- Tab Meditações -->
+    <div id="meditations-tab" class="tab-content">
+      <div class="content-header">
+        <h2>Gerenciar Meditações</h2>
+        <button class="add-btn" onclick="openModal('meditation')">+ Nova Meditação</button>
+      </div>
+      <div class="data-grid" id="meditations-grid">
+        <!-- Meditações serão carregadas aqui -->
+      </div>
+    </div>
+
+    <!-- Tab Meditações Personalizadas -->
+    <div id="personalized-tab" class="tab-content">
+      <div class="content-header">
+        <h2>Meditações Personalizadas (ChatGPT)</h2>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="exportPersonalizedData()" style="margin-right: 8px;">
+            📤 Exportar Personalizadas
+          </button>
+          <button class="btn btn-info" onclick="importPersonalizedData()" style="margin-right: 8px;">
+            📥 Importar Personalizadas
+          </button>
+          <button class="btn btn-danger" onclick="clearPersonalizedData()" style="margin-right: 8px;">
+            🗑️ Limpar Todas
+          </button>
+        </div>
+      </div>
+      <div class="data-grid" id="personalized-grid">
+        <!-- Meditações personalizadas serão carregadas aqui -->
+      </div>
+    </div>
+
+    <!-- Tab Agendamentos -->
+    <div id="schedules-tab" class="tab-content">
+      <div class="content-header">
+        <h2>Gerenciar Agendamentos</h2>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="exportSchedulesData()" style="margin-right: 8px;">
+            📤 Exportar Agendamentos
+          </button>
+          <button class="btn btn-info" onclick="importSchedulesData()" style="margin-right: 8px;">
+            📥 Importar Agendamentos
+          </button>
+          <button class="btn btn-danger" onclick="clearSchedulesData()" style="margin-right: 8px;">
+            🗑️ Limpar Todos
+          </button>
+        </div>
+      </div>
+      <div class="data-grid" id="schedules-grid">
+        <!-- Agendamentos serão carregados aqui -->
+      </div>
+    </div>
+
+                        <!-- Tab Estatísticas -->
+                    <div id="users-tab" class="tab-content">
+                      <div class="content-header">
+                        <h2>Estatísticas do Dashboard</h2>
+                                <div class="header-actions">
+                          <button class="btn btn-secondary" onclick="exportUsersData()" style="margin-right: 8px;">
+                            📤 Exportar Estatísticas
+                          </button>
+                          <button class="btn btn-info" onclick="importUsersData()" style="margin-right: 8px;">
+                            📥 Importar Estatísticas
+                          </button>
+                          <button class="btn btn-primary" onclick="refreshStats()" style="margin-right: 8px;">
+                            🔄 Atualizar
+                          </button>
+                        </div>
+      </div>
+      <div class="data-grid" id="users-grid">
+        <!-- Estatísticas de usuários serão carregadas aqui -->
+      </div>
+    </div>
+
+    <!-- Tab Gerenciamento de Usuários -->
+    <div id="user-management-tab" class="tab-content">
+      <div class="content-header">
+        <h2>Gerenciamento de Usuários</h2>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="exportUsersManagementData()" style="margin-right: 8px;">
+            📤 Exportar Usuários
+          </button>
+          <button class="btn btn-info" onclick="importUsersManagementData()" style="margin-right: 8px;">
+            📥 Importar Usuários
+          </button>
+          <button class="btn btn-primary" onclick="refreshUsersList()" style="margin-right: 8px;">
+            🔄 Atualizar
+          </button>
+          <button class="btn btn-success" onclick="showAddUserModal()" style="margin-right: 8px;">
+            ➕ Adicionar Usuário
+          </button>
+        </div>
+      </div>
+      <div class="data-grid" id="users-management-grid">
+        <!-- Lista de usuários será carregada aqui -->
+      </div>
+    </div>
+
+    <!-- Tab Conteúdo -->
+    <div id="content-tab" class="tab-content">
+      <div class="content-header">
+        <h2>Editar Conteúdo das Meditações</h2>
+      </div>
+      <div class="data-grid" id="content-grid">
+        <!-- Conteúdo será carregado aqui -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Categoria -->
+  <div id="category-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="category-modal-title">Nova Categoria</h3>
+        <button class="close-btn" onclick="closeModal('category')">&times;</button>
+      </div>
+      <form id="category-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category-name">Nome da Categoria</label>
+            <input type="text" id="category-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="category-icon">Ícone</label>
+            <input type="text" id="category-icon" name="icon" placeholder="🌟">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="category-description">Descrição</label>
+          <textarea id="category-description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category-color">Cor</label>
+            <input type="color" id="category-color" name="color" value="#7ee787">
+          </div>
+          <div class="form-group">
+            <label for="category-status">Status</label>
+            <select id="category-status" name="status">
+              <option value="active">Ativa</option>
+              <option value="inactive">Inativa</option>
+              <option value="preview">Prévia</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('category')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para Editar Estatísticas do Usuário -->
+  <div id="user-stats-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="user-stats-modal-title">Editar Estatísticas do Usuário</h3>
+        <button class="close-btn" onclick="closeModal('user-stats')">&times;</button>
+      </div>
+      <form id="user-stats-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="user-name">Nome do Usuário</label>
+            <input type="text" id="user-name" name="name" readonly>
+          </div>
+          <div class="form-group">
+            <label for="user-email">Email</label>
+            <input type="email" id="user-email" name="email" readonly>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="user-consecutive-days">Dias Consecutivos</label>
+            <input type="number" id="user-consecutive-days" name="consecutiveDays" min="0">
+          </div>
+          <div class="form-group">
+            <label for="user-completed-meditations">Meditações Completadas</label>
+            <input type="number" id="user-completed-meditations" name="completedMeditations" min="0">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="user-total-time">Tempo Total (ex: 8h 30min)</label>
+            <input type="text" id="user-total-time" name="totalTime" placeholder="0h 0min">
+          </div>
+          <div class="form-group">
+            <label for="user-total-meditations">Total de Meditações</label>
+            <input type="number" id="user-total-meditations" name="totalMeditations" min="0">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="user-in-progress">Meditações em Andamento</label>
+            <input type="number" id="user-in-progress" name="inProgressMeditations" min="0">
+          </div>
+          <div class="form-group">
+            <label for="user-last-login">Último Login</label>
+            <input type="text" id="user-last-login" name="lastLogin" readonly>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('user-stats')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar Estatísticas</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para Meditação -->
+  <div id="meditation-modal" class="modal fullscreen-modal">
+    <div class="modal-content fullscreen-content">
+      <div class="modal-header fullscreen-header">
+        <button class="back-btn" onclick="closeModal('meditation')" title="Voltar ao painel">
+          <span>←</span> Voltar
+        </button>
+        <h3 class="modal-title" id="meditation-modal-title">Nova Meditação</h3>
+        <button class="close-btn" onclick="closeModal('meditation')" title="Fechar">&times;</button>
+      </div>
+      <form id="meditation-form" class="fullscreen-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="meditation-title">Título</label>
+            <input type="text" id="meditation-title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="meditation-category">Categoria</label>
+            <select id="meditation-category" name="categoryId" required>
+              <!-- Opções serão carregadas dinamicamente -->
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="meditation-duration">Duração (minutos)</label>
+            <input type="number" id="meditation-duration" name="duration" min="1" max="60" value="12">
+          </div>
+          <div class="form-group">
+            <label for="meditation-status">Status</label>
+            <select id="meditation-status" name="status">
+              <option value="available">Disponível</option>
+              <option value="locked">Bloqueada</option>
+              <option value="preview">Prévia</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="meditation-type">Tipo de Acesso</label>
+            <select id="meditation-type" name="type" required>
+              <option value="free">Free (7 dias de acesso)</option>
+              <option value="premium">Premium (Acesso ilimitado)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="meditation-icon">Ícone</label>
+            <input type="text" id="meditation-icon" name="icon" placeholder="📖" value="📖">
+          </div>
+        </div>
+        
+        <!-- Campos da Lectio Divina -->
+        <div class="form-group">
+          <label for="meditation-reading">📖 Leitura (Lectio)</label>
+          <div class="text-editor-container">
+            <div class="editor-toolbar">
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-reading', 'bold')" title="Negrito (Ctrl+B)">B</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-reading', 'italic')" title="Itálico (Ctrl+I)">I</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-reading', 'underline')" title="Sublinhado (Ctrl+U)">U</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-reading', 'strikethrough')" title="Tachado">~~</button>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-reading', 'left')" title="Alinhar à esquerda">⫷</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-reading', 'center')" title="Centralizar">⫸</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-reading', 'right')" title="Alinhar à direita">⫹</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-reading', 'justify')" title="Justificar texto">⫺</button>
+              <div class="toolbar-separator"></div>
+              <select class="font-selector" onchange="setFontFamily('meditation-reading', this.value)" title="Selecionar fonte">
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+                <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                <option value="'Lucida Sans Unicode', sans-serif">Lucida Sans</option>
+                <option value="'Palatino Linotype', serif">Palatino</option>
+                <option value="'Garamond', serif">Garamond</option>
+                <option value="'Bookman Old Style', serif">Bookman</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <select class="font-size-selector" onchange="setFontSize('meditation-reading', this.value)" title="Tamanho da fonte">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+                <option value="28px">28px</option>
+                <option value="32px">32px</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="insertLineBreak('meditation-reading')" title="Quebra de linha (Ctrl+Enter)">↵</button>
+              <button type="button" class="toolbar-btn" onclick="insertParagraph('meditation-reading')" title="Novo parágrafo (Enter)">¶</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-reading', 'bullet')" title="Lista com marcadores">•</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-reading', 'number')" title="Lista numerada">1.</button>
+            </div>
+            <textarea id="meditation-reading" name="reading" rows="6" placeholder="Insira o texto bíblico ou passagem para leitura...&#10;&#10;Use Ctrl+Enter para quebra de linha&#10;Use Enter para novo parágrafo"></textarea>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="meditation-meditation">🤔 Meditação (Meditatio)</label>
+          <div class="text-editor-container">
+            <div class="editor-toolbar">
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-meditation', 'bold')" title="Negrito (Ctrl+B)">B</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-meditation', 'italic')" title="Itálico (Ctrl+I)">I</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-meditation', 'underline')" title="Sublinhado (Ctrl+U)">U</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-meditation', 'strikethrough')" title="Tachado">~~</button>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-meditation', 'left')" title="Alinhar à esquerda">⫷</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-meditation', 'center')" title="Centralizar">⫸</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-meditation', 'right')" title="Alinhar à direita">⫹</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-meditation', 'justify')" title="Justificar texto">⫺</button>
+              <div class="toolbar-separator"></div>
+              <select class="font-selector" onchange="setFontFamily('meditation-meditation', this.value)" title="Selecionar fonte">
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+                <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                <option value="'Lucida Sans Unicode', sans-serif">Lucida Sans</option>
+                <option value="'Palatino Linotype', serif">Palatino</option>
+                <option value="'Garamond', serif">Garamond</option>
+                <option value="'Bookman Old Style', serif">Bookman</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <select class="font-size-selector" onchange="setFontSize('meditation-meditation', this.value)" title="Tamanho da fonte">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+                <option value="28px">28px</option>
+                <option value="32px">32px</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="insertLineBreak('meditation-meditation')" title="Quebra de linha (Ctrl+Enter)">↵</button>
+              <button type="button" class="toolbar-btn" onclick="insertParagraph('meditation-meditation')" title="Novo parágrafo (Enter)">¶</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-meditation', 'bullet')" title="Lista com marcadores">•</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-meditation', 'number')" title="Lista numerada">1.</button>
+            </div>
+            <textarea id="meditation-meditation" name="meditation" rows="6" placeholder="Insira as reflexões e perguntas para meditação...&#10;&#10;Use Ctrl+Enter para quebra de linha&#10;Use Enter para novo parágrafo"></textarea>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="meditation-prayer">🙏 Oração (Oratio)</label>
+          <div class="text-editor-container">
+            <div class="editor-toolbar">
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-prayer', 'bold')" title="Negrito (Ctrl+B)">B</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-prayer', 'italic')" title="Itálico (Ctrl+I)">I</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-prayer', 'underline')" title="Sublinhado (Ctrl+U)">U</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-prayer', 'strikethrough')" title="Tachado">~~</button>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-prayer', 'left')" title="Alinhar à esquerda">⫷</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-prayer', 'center')" title="Centralizar">⫸</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-prayer', 'right')" title="Alinhar à direita">⫹</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-prayer', 'justify')" title="Justificar texto">⫺</button>
+              <div class="toolbar-separator"></div>
+              <select class="font-selector" onchange="setFontFamily('meditation-prayer', this.value)" title="Selecionar fonte">
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+                <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                <option value="'Lucida Sans Unicode', sans-serif">Lucida Sans</option>
+                <option value="'Palatino Linotype', serif">Palatino</option>
+                <option value="'Garamond', serif">Garamond</option>
+                <option value="'Bookman Old Style', serif">Bookman</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <select class="font-size-selector" onchange="setFontSize('meditation-prayer', this.value)" title="Tamanho da fonte">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+                <option value="28px">28px</option>
+                <option value="32px">32px</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="insertLineBreak('meditation-prayer')" title="Quebra de linha (Ctrl+Enter)">↵</button>
+              <button type="button" class="toolbar-btn" onclick="insertParagraph('meditation-prayer')" title="Novo parágrafo (Enter)">¶</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-prayer', 'bullet')" title="Lista com marcadores">•</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-prayer', 'number')" title="Lista numerada">1.</button>
+            </div>
+            <textarea id="meditation-prayer" name="prayer" rows="6" placeholder="Insira as orientações para oração...&#10;&#10;Use Ctrl+Enter para quebra de linha&#10;Use Enter para novo parágrafo"></textarea>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="meditation-contemplation">✨ Contemplação (Contemplatio)</label>
+          <div class="text-editor-container">
+            <div class="editor-toolbar">
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-contemplation', 'bold')" title="Negrito (Ctrl+B)">B</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-contemplation', 'italic')" title="Itálico (Ctrl+I)">I</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-contemplation', 'underline')" title="Sublinhado (Ctrl+U)">U</button>
+              <button type="button" class="toolbar-btn" onclick="formatText('meditation-contemplation', 'strikethrough')" title="Tachado">~~</button>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-contemplation', 'left')" title="Alinhar à esquerda">⫷</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-contemplation', 'center')" title="Centralizar">⫸</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-contemplation', 'right')" title="Alinhar à direita">⫹</button>
+              <button type="button" class="toolbar-btn" onclick="setTextAlign('meditation-contemplation', 'justify')" title="Justificar texto">⫺</button>
+              <div class="toolbar-separator"></div>
+              <select class="font-selector" onchange="setFontFamily('meditation-contemplation', this.value)" title="Selecionar fonte">
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+                <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                <option value="'Lucida Sans Unicode', sans-serif">Lucida Sans</option>
+                <option value="'Palatino Linotype', serif">Palatino</option>
+                <option value="'Garamond', serif">Garamond</option>
+                <option value="'Bookman Old Style', serif">Bookman</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <select class="font-size-selector" onchange="setFontSize('meditation-contemplation', this.value)" title="Tamanho da fonte">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+                <option value="28px">28px</option>
+                <option value="32px">32px</option>
+              </select>
+              <div class="toolbar-separator"></div>
+              <button type="button" class="toolbar-btn" onclick="insertLineBreak('meditation-contemplation')" title="Quebra de linha (Ctrl+Enter)">↵</button>
+              <button type="button" class="toolbar-btn" onclick="insertParagraph('meditation-contemplation')" title="Novo parágrafo (Enter)">¶</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-contemplation', 'bullet')" title="Lista com marcadores">•</button>
+              <button type="button" class="toolbar-btn" onclick="insertList('meditation-contemplation', 'number')" title="Lista numerada">1.</button>
+            </div>
+            <textarea id="meditation-contemplation" name="contemplation" rows="6" placeholder="Insira as orientações para contemplação...&#10;&#10;Use Ctrl+Enter para quebra de linha&#10;Use Enter para novo parágrafo"></textarea>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('meditation')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação de Exclusão -->
+  <div id="delete-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirmar Exclusão</h3>
+        <button class="close-btn" onclick="closeModal('delete')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.</p>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('delete')">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirm-delete-btn">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Importar Dados -->
+  <div id="import-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">📥 Importar Dados</h3>
+        <button class="close-btn" onclick="closeImportModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>⚠️ Atenção:</strong> Importar dados irá substituir todos os dados atuais. Faça backup antes de continuar.</p>
+        
+        <div class="import-options">
+          <div class="import-option">
+            <h4>📁 Importar Arquivo JSON</h4>
+            <div class="form-group">
+              <label for="import-file">Selecione o arquivo JSON:</label>
+              <input type="file" id="import-file" accept=".json" onchange="handleFileSelect(event)">
+            </div>
+          </div>
+          
+          <div class="import-option">
+            <h4>📋 Importar Dados de Exemplo</h4>
+            <p>Carregar categorias e meditações pré-definidas para teste.</p>
+            <button type="button" class="btn btn-secondary" onclick="importExampleData()">
+              📋 Carregar Dados de Exemplo
+            </button>
+          </div>
+        </div>
+        
+        <div id="import-preview" style="display: none;">
+          <h4>📋 Prévia dos Dados:</h4>
+          <div id="import-summary"></div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeImportModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="confirm-import-btn" onclick="confirmImport()" disabled>Confirmar Importação</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Funções do Editor de Texto
+    function formatText(textareaId, format) {
+      const textarea = document.getElementById(textareaId);
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      
+      let formattedText = '';
+      switch(format) {
+        case 'bold':
+          formattedText = `**${selectedText}**`;
+          break;
+        case 'italic':
+          formattedText = `*${selectedText}*`;
+          break;
+        case 'underline':
+          formattedText = `__${selectedText}__`;
+          break;
+        case 'strikethrough':
+          formattedText = `~~${selectedText}~~`;
+          break;
+        default:
+          formattedText = selectedText;
+      }
+      
+      textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + 2, start + 2 + selectedText.length);
+    }
+
+    function insertLineBreak(textareaId) {
+      const textarea = document.getElementById(textareaId);
+      const cursorPos = textarea.selectionStart;
+      const textBefore = textarea.value.substring(0, cursorPos);
+      const textAfter = textarea.value.substring(cursorPos);
+      
+      textarea.value = textBefore + '\n' + textAfter;
+      textarea.focus();
+      textarea.setSelectionRange(cursorPos + 1, cursorPos + 1);
+    }
+
+    function insertParagraph(textareaId) {
+      const textarea = document.getElementById(textareaId);
+      const cursorPos = textarea.selectionStart;
+      const textBefore = textarea.value.substring(0, cursorPos);
+      const textAfter = textarea.value.substring(cursorPos);
+      
+      textarea.value = textBefore + '\n\n' + textAfter;
+      textarea.focus();
+      textarea.setSelectionRange(cursorPos + 2, cursorPos + 2);
+    }
+
+    function insertList(textareaId, type) {
+      const textarea = document.getElementById(textareaId);
+      const cursorPos = textarea.selectionStart;
+      const textBefore = textarea.value.substring(0, cursorPos);
+      const textAfter = textarea.value.substring(cursorPos);
+      
+      let listItem = '';
+      if (type === 'bullet') {
+        listItem = '\n• Item da lista';
+      } else if (type === 'number') {
+        listItem = '\n1. Item da lista';
+      }
+      
+      textarea.value = textBefore + listItem + textAfter;
+      textarea.focus();
+      textarea.setSelectionRange(cursorPos + listItem.length - 12, cursorPos + listItem.length - 1);
+    }
+
+    function setTextAlign(textareaId, align) {
+      const textarea = document.getElementById(textareaId);
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      
+      let alignTag = '';
+      switch(align) {
+        case 'left':
+          alignTag = `[align=left]${selectedText}[/align]`;
+          break;
+        case 'center':
+          alignTag = `[align=center]${selectedText}[/align]`;
+          break;
+        case 'right':
+          alignTag = `[align=right]${selectedText}[/align]`;
+          break;
+        case 'justify':
+          alignTag = `[align=justify]${selectedText}[/align]`;
+          break;
+        default:
+          alignTag = selectedText;
+      }
+      
+      textarea.value = textarea.value.substring(0, start) + alignTag + textarea.value.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + 2, start + 2 + selectedText.length);
+    }
+
+    function setFontFamily(textareaId, fontFamily) {
+      const textarea = document.getElementById(textareaId);
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      
+      const fontTag = `[font=${fontFamily}]${selectedText}[/font]`;
+      
+      textarea.value = textarea.value.substring(0, start) + fontTag + textarea.value.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + 2, start + 2 + selectedText.length);
+    }
+
+    function setFontSize(textareaId, fontSize) {
+      const textarea = document.getElementById(textareaId);
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      
+      const sizeTag = `[size=${fontSize}]${selectedText}[/size]`;
+      
+      textarea.value = textarea.value.substring(0, start) + sizeTag + textarea.value.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + 2, start + 2 + selectedText.length);
+    }
+
+    // Função para converter texto com formatação para HTML
+    function formatTextToHTML(text) {
+      if (!text) return '';
+      
+      return text
+        .replace(/\n\n/g, '</p><p>') // Quebras de parágrafo
+        .replace(/\n/g, '<br>') // Quebras de linha
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negrito
+        .replace(/\*(.*?)\*/g, '<em>$1</em>') // Itálico
+        .replace(/__(.*?)__/g, '<u>$1</u>') // Sublinhado
+        .replace(/~~(.*?)~~/g, '<del>$1</del>') // Tachado
+        .replace(/\[align=left\](.*?)\[\/align\]/g, '<div style="text-align: left;">$1</div>') // Alinhamento à esquerda
+        .replace(/\[align=center\](.*?)\[\/align\]/g, '<div style="text-align: center;">$1</div>') // Alinhamento centralizado
+        .replace(/\[align=right\](.*?)\[\/align\]/g, '<div style="text-align: right;">$1</div>') // Alinhamento à direita
+        .replace(/\[align=justify\](.*?)\[\/align\]/g, '<div style="text-align: justify;">$1</div>') // Alinhamento justificado
+        .replace(/\[font=(.*?)\](.*?)\[\/font\]/g, '<span style="font-family: $1;">$2</span>') // Família da fonte
+        .replace(/\[size=(.*?)\](.*?)\[\/size\]/g, '<span style="font-size: $1;">$2</span>') // Tamanho da fonte
+        .replace(/^/, '<p>') // Início do primeiro parágrafo
+        .replace(/$/, '</p>') // Fim do último parágrafo
+        .replace(/<p><\/p>/g, '<br>'); // Parágrafos vazios viram quebras
+    }
+
+    // Função para converter HTML de volta para texto simples
+    function formatHTMLToText(html) {
+      if (!html) return '';
+      
+      return html
+        .replace(/<p>/g, '') // Remove tags de parágrafo
+        .replace(/<\/p>/g, '\n\n') // Converte fechamento de parágrafo em quebra dupla
+        .replace(/<br\s*\/?>/g, '\n') // Converte <br> em quebra de linha
+        .replace(/<strong>(.*?)<\/strong>/g, '**$1**') // Converte <strong> em **
+        .replace(/<em>(.*?)<\/em>/g, '*$1*') // Converte <em> em *
+        .replace(/<u>(.*?)<\/u>/g, '__$1__') // Converte <u> em __
+        .replace(/<del>(.*?)<\/del>/g, '~~$1~~') // Converte <del> em ~~
+        .replace(/<div[^>]*style="[^"]*text-align:\s*left[^"]*"[^>]*>(.*?)<\/div>/g, '[align=left]$1[/align]') // Converte alinhamento à esquerda
+        .replace(/<div[^>]*style="[^"]*text-align:\s*center[^"]*"[^>]*>(.*?)<\/div>/g, '[align=center]$1[/align]') // Converte alinhamento centralizado
+        .replace(/<div[^>]*style="[^"]*text-align:\s*right[^"]*"[^>]*>(.*?)<\/div>/g, '[align=right]$1[/align]') // Converte alinhamento à direita
+        .replace(/<div[^>]*style="[^"]*text-align:\s*justify[^"]*"[^>]*>(.*?)<\/div>/g, '[align=justify]$1[/align]') // Converte alinhamento justificado
+        .replace(/<span[^>]*style="[^"]*font-family:\s*([^;"]*)[^"]*"[^>]*>(.*?)<\/span>/g, '[font=$1]$2[/font]') // Converte família da fonte
+        .replace(/<span[^>]*style="[^"]*font-size:\s*([^;"]*)[^"]*"[^>]*>(.*?)<\/span>/g, '[size=$1]$2[/size]') // Converte tamanho da fonte
+        .replace(/&nbsp;/g, ' ') // Converte espaços não-quebráveis
+        .trim(); // Remove espaços extras
+    }
+
+    // Adicionar event listeners para atalhos de teclado
+    function setupTextEditorShortcuts() {
+      const textareas = ['meditation-reading', 'meditation-meditation', 'meditation-prayer', 'meditation-contemplation'];
+      
+      textareas.forEach(id => {
+        const textarea = document.getElementById(id);
+        if (textarea) {
+          textarea.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+              e.preventDefault();
+              insertLineBreak(id);
+            } else if (e.ctrlKey && e.key === 'b') {
+              e.preventDefault();
+              formatText(id, 'bold');
+            } else if (e.ctrlKey && e.key === 'i') {
+              e.preventDefault();
+              formatText(id, 'italic');
+            } else if (e.ctrlKey && e.key === 'u') {
+              e.preventDefault();
+              formatText(id, 'underline');
+            }
+          });
+        }
+      });
+    }
+
+    // Verificar se é admin
+    function checkAdminAccess() {
+      const isAdmin = localStorage.getItem('isAdmin') === 'true';
+      if (!isAdmin) {
+        alert('Acesso negado. Faça login como administrador.');
+        window.location.href = 'admin-login.html';
+        return false;
+      }
+      return true;
+    }
+
+    // Carregar dados do admin
+    function loadAdminData() {
+      const adminEmail = localStorage.getItem('adminEmail') || 'admin@oraetmedita.com';
+      const adminName = adminEmail.split('@')[0];
+      
+      document.getElementById('admin-name').textContent = adminName.charAt(0).toUpperCase() + adminName.slice(1);
+      document.getElementById('admin-email').textContent = adminEmail;
+      document.getElementById('admin-avatar').textContent = adminName.charAt(0).toUpperCase();
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('isAdmin');
+      localStorage.removeItem('adminEmail');
+      localStorage.removeItem('adminLoginTime');
+      window.location.href = 'admin-login.html';
+    }
+
+    // Navegação entre tabs
+    function showTab(tabName) {
+      // Esconder todas as tabs
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      // Remover classe active de todos os tabs
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      // Mostrar aba selecionada
+      document.getElementById(tabName + '-tab').classList.add('active');
+      
+      // Adicionar classe active ao tab clicado
+      event.target.classList.add('active');
+      
+      // Carregar dados específicos da aba
+      if (tabName === 'personalized') {
+        loadPersonalizedMeditations();
+      } else if (tabName === 'schedules') {
+        loadSchedulesData();
+      } else if (tabName === 'users') {
+        loadUsersData();
+      } else if (tabName === 'user-management') {
+        loadUsersManagementData();
+      }
+    }
+
+    // Carregar dados da tab
+    function loadTabData(tabName) {
+      switch(tabName) {
+        case 'categories':
+          loadCategories();
+          break;
+        case 'meditations':
+          loadMeditations();
+          break;
+        case 'content':
+          loadContent();
+          break;
+      }
+    }
+
+    // Carregar categorias
+    function loadCategories() {
+      const categories = JSON.parse(localStorage.getItem('categories')) || [];
+      const grid = document.getElementById('categories-grid');
+      
+      grid.innerHTML = categories.map(category => `
+        <div class="data-card">
+          <div class="card-header">
+            <div class="card-title">${category.icon} ${category.name}</div>
+            <div class="card-actions">
+              <button class="action-btn edit-btn" onclick="editCategory('${category.id}')">Editar</button>
+              <button class="action-btn delete-btn" onclick="deleteCategory('${category.id}')">Excluir</button>
+            </div>
+          </div>
+          <div class="card-content">${category.description}</div>
+          <div class="card-stats">
+            <span class="stat">Total: ${category.total || 0}</span>
+            <span class="stat">Concluídas: ${category.completed || 0}</span>
+            <span class="stat">Status: ${category.status}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Carregar meditações
+    function loadMeditations() {
+      const meditations = JSON.parse(localStorage.getItem('meditations')) || [];
+      const categories = JSON.parse(localStorage.getItem('categories')) || [];
+      const grid = document.getElementById('meditations-grid');
+      
+      grid.innerHTML = meditations.map(meditation => {
+        // Encontrar o nome da categoria
+        const category = categories.find(c => c.id === meditation.categoryId);
+        const categoryName = category ? category.name : 'Categoria não encontrada';
+        
+        return `
+          <div class="data-card">
+            <div class="card-header">
+              <div class="card-title">📖 ${meditation.title}</div>
+              <div class="card-actions">
+                <button class="action-btn edit-btn" onclick="editMeditation('${meditation.id}')">Editar</button>
+                <button class="action-btn delete-btn" onclick="deleteMeditation('${meditation.id}')">Excluir</button>
+              </div>
+            </div>
+
+            <div class="card-stats">
+              <span class="stat">Categoria: ${categoryName}</span>
+              <span class="stat">Duração: ${meditation.duration || 0} min</span>
+              <span class="stat">Status: ${meditation.status || 'available'}</span>
+              <span class="stat">Tipo: ${meditation.type === 'premium' ? '💎 Premium' : '🆓 Free'}</span>
+              <span class="stat">Lectio: ${meditation.reading ? '✅' : '❌'} | ${meditation.meditation ? '✅' : '❌'} | ${meditation.prayer ? '✅' : '❌'} | ${meditation.contemplation ? '✅' : '❌'}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Carregar conteúdo
+    function loadContent() {
+      const grid = document.getElementById('content-grid');
+      
+      grid.innerHTML = `
+        <div class="data-card">
+          <div class="card-header">
+            <div class="card-title">📝 Editor de Conteúdo</div>
+          </div>
+          <div class="card-content">
+            Selecione uma meditação para editar seu conteúdo da Lectio Divina.
+          </div>
+          <div class="card-actions">
+            <button class="action-btn edit-btn" onclick="openContentEditor()">Abrir Editor</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Abrir modal
+    function openModal(type) {
+      document.getElementById(type + '-modal').style.display = 'block';
+      
+      if (type === 'meditation') {
+        loadCategoryOptions();
+        
+        // Limpar formulário se não estiver editando
+        const form = document.getElementById('meditation-form');
+        if (!form.dataset.editing) {
+          form.reset();
+          document.getElementById('meditation-modal-title').textContent = 'Nova Meditação';
+        }
+      }
+    }
+
+    // Fechar modal
+    function closeModal(type) {
+      document.getElementById(type + '-modal').style.display = 'none';
+      const form = document.getElementById(type + '-form');
+      form.reset();
+      
+      // Limpar dados de edição
+      if (type === 'meditation') {
+        form.removeAttribute('data-editing');
+        document.getElementById('meditation-modal-title').textContent = 'Nova Meditação';
+      } else if (type === 'category') {
+        form.removeAttribute('data-editing');
+        document.getElementById('category-modal-title').textContent = 'Nova Categoria';
+      }
+    }
+
+    // Carregar opções de categoria
+    function loadCategoryOptions() {
+      const categories = JSON.parse(localStorage.getItem('categories')) || [];
+      const select = document.getElementById('meditation-category');
+      
+      if (categories.length === 0) {
+        select.innerHTML = '<option value="">Nenhuma categoria disponível</option>';
+        showNotification('Crie uma categoria primeiro!', 'warning');
+        return;
+      }
+      
+      select.innerHTML = '<option value="">Selecione uma categoria</option>' + 
+        categories.map(category => 
+          `<option value="${category.id}">${category.icon} ${category.name}</option>`
+        ).join('');
+    }
+
+    // Editar categoria
+    function editCategory(id) {
+      const categories = JSON.parse(localStorage.getItem('categories')) || [];
+      const category = categories.find(c => c.id === id);
+      
+      if (category) {
+        document.getElementById('category-modal-title').textContent = 'Editar Categoria';
+        document.getElementById('category-name').value = category.name;
+        document.getElementById('category-icon').value = category.icon;
+        document.getElementById('category-description').value = category.description;
+        document.getElementById('category-color').value = category.color;
+        document.getElementById('category-status').value = category.status;
+        
+        document.getElementById('category-form').dataset.editing = id;
+        openModal('category');
+      }
+    }
+
+    // Editar meditação
+    function editMeditation(id) {
+      const meditations = JSON.parse(localStorage.getItem('meditations')) || [];
+      const meditation = meditations.find(m => m.id === id);
+      
+      if (meditation) {
+        console.log('🔍 Meditação encontrada para edição:', meditation);
+        
+        // Carregar opções de categoria primeiro
+        loadCategoryOptions();
+        
+        // Aguardar um momento para garantir que as opções foram carregadas
+        setTimeout(() => {
+          document.getElementById('meditation-modal-title').textContent = 'Editar Meditação';
+          document.getElementById('meditation-title').value = meditation.title || '';
+          document.getElementById('meditation-category').value = meditation.categoryId || '';
+          document.getElementById('meditation-duration').value = meditation.duration || '12';
+          document.getElementById('meditation-status').value = meditation.status || 'available';
+          document.getElementById('meditation-type').value = meditation.type || 'free';
+          document.getElementById('meditation-icon').value = meditation.icon || '📖';
+          
+          // Usar campos corretos (lectio, meditatio, oratio, contemplatio)
+          document.getElementById('meditation-reading').value = formatHTMLToText(meditation.lectio || meditation.reading || '');
+          document.getElementById('meditation-meditation').value = formatHTMLToText(meditation.meditatio || meditation.meditation || '');
+          document.getElementById('meditation-prayer').value = formatHTMLToText(meditation.oratio || meditation.prayer || '');
+          document.getElementById('meditation-contemplation').value = formatHTMLToText(meditation.contemplatio || meditation.contemplation || '');
+          
+          document.getElementById('meditation-form').dataset.editing = id;
+          openModal('meditation');
+          
+          console.log('✅ Modal de edição aberto com sucesso');
+        }, 100);
+      } else {
+        console.error('❌ Meditação não encontrada com ID:', id);
+        showNotification('Meditação não encontrada!', 'error');
+      }
+    }
+
+    // Excluir categoria
+    async function deleteCategory(id) {
+      const categories = JSON.parse(localStorage.getItem('categories')) || [];
+      const categoryToDelete = categories.find(c => c.id === id);
+      
+      if (!categoryToDelete) {
+        showNotification('Categoria não encontrada!', 'error');
+        return;
+      }
+      
+      // Confirmar exclusão
+      if (!confirm(`Tem certeza que deseja excluir a categoria "${categoryToDelete.name}"?`)) {
+        return;
+      }
+      
+      try {
+        // Sincronizar com Supabase se disponível
+        if (window.supabaseManager) {
+          try {
+            console.log('🔄 Sincronizando exclusão de categoria com Supabase...');
+            console.log('📝 Categoria a ser excluída:', categoryToDelete);
+            
+            // Se o ID é um UUID do Supabase, deletar diretamente
+            if (id.includes('-') && id.length === 36) {
+              // É um UUID do Supabase
+              await window.supabaseManager.deleteCategory(id);
+              console.log('✅ Categoria excluída do Supabase com sucesso');
+            } else {
+              // É um ID local, tentar encontrar no Supabase pelo nome
+              console.log('🔍 Buscando categoria no Supabase pelo nome...');
+              const supabaseCategories = await window.supabaseManager.getCategories();
+              const supabaseCategory = supabaseCategories.find(cat => 
+                cat.name === categoryToDelete.name
+              );
+              
+              if (supabaseCategory) {
+                await window.supabaseManager.deleteCategory(supabaseCategory.id);
+                console.log('✅ Categoria encontrada e excluída do Supabase');
+              } else {
+                console.log('⚠️ Categoria não encontrada no Supabase, excluindo apenas localmente');
+              }
+            }
+          } catch (supabaseError) {
+            console.error('⚠️ Erro ao sincronizar exclusão com Supabase:', supabaseError);
+            console.log('ℹ️ Categoria excluída apenas localmente');
+          }
+        } else {
+          console.log('ℹ️ Supabase Manager não disponível - categoria excluída apenas localmente');
+        }
+        
+        // Excluir localmente
+        const filtered = categories.filter(c => c.id !== id);
+        localStorage.setItem('categories', JSON.stringify(filtered));
+        
+        // Recarregar lista
+        loadCategories();
+        
+        // Mostrar notificação de sucesso
+        showNotification('Categoria excluída com sucesso!', 'success');
+        
+      } catch (error) {
+        console.error('❌ Erro ao excluir categoria:', error);
+        showNotification('Erro ao excluir categoria!', 'error');
+      }
+    }
+
+    // Excluir meditação
+    async function deleteMeditation(id) {
+      const meditations = JSON.parse(localStorage.getItem('meditations')) || [];
+      const meditationToDelete = meditations.find(m => m.id === id);
+      
+      if (!meditationToDelete) {
+        showNotification('Meditação não encontrada!', 'error');
+        return;
+      }
+      
+      // Confirmar exclusão
+      if (!confirm(`Tem certeza que deseja excluir a meditação "${meditationToDelete.title}"?`)) {
+        return;
+      }
+      
+      try {
+        // Sincronizar com Supabase se disponível
+        if (window.supabaseManager) {
+          try {
+            console.log('🔄 Sincronizando exclusão de meditação com Supabase...');
+            console.log('📝 Meditação a ser excluída:', meditationToDelete);
+            
+            // Se o ID é um UUID do Supabase, deletar diretamente
+            if (id.includes('-') && id.length === 36) {
+              // É um UUID do Supabase
+              await window.supabaseManager.deleteMeditation(id);
+              console.log('✅ Meditação excluída do Supabase com sucesso');
+            } else {
+              // É um ID local, tentar encontrar no Supabase pelo título
+              console.log('🔍 Buscando meditação no Supabase pelo título...');
+              const supabaseMeditations = await window.supabaseManager.getMeditations();
+              const supabaseMeditation = supabaseMeditations.find(med => 
+                med.title === meditationToDelete.title
+              );
+              
+              if (supabaseMeditation) {
+                await window.supabaseManager.deleteMeditation(supabaseMeditation.id);
+                console.log('✅ Meditação encontrada e excluída do Supabase');
+              } else {
+                console.log('⚠️ Meditação não encontrada no Supabase, excluindo apenas localmente');
+              }
+            }
+          } catch (supabaseError) {
+            console.error('⚠️ Erro ao sincronizar exclusão com Supabase:', supabaseError);
+            console.log('ℹ️ Meditação excluída apenas localmente');
+          }
+        } else {
+          console.log('ℹ️ Supabase Manager não disponível - meditação excluída apenas localmente');
+        }
+        
+        // Excluir localmente
+        const filtered = meditations.filter(m => m.id !== id);
+        localStorage.setItem('meditations', JSON.stringify(filtered));
+        
+        // Recarregar lista
+        loadMeditations();
+        
+        // Mostrar notificação de sucesso
+        showNotification('Meditação excluída com sucesso!', 'success');
+        
+      } catch (error) {
+        console.error('❌ Erro ao excluir meditação:', error);
+        showNotification('Erro ao excluir meditação!', 'error');
+      }
+    }
+
+    // Abrir editor de conteúdo
+    function openContentEditor() {
+      alert('Editor de conteúdo será implementado em breve!');
+    }
+
+
+
+    // Função para mostrar notificações
+    function showNotification(message, type = 'info') {
+      // Criar elemento de notificação
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.textContent = message;
+      
+      // Estilos da notificação
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        max-width: 300px;
+      `;
+      
+      // Cores baseadas no tipo
+      switch(type) {
+        case 'success':
+          notification.style.background = '#10B981';
+          break;
+        case 'error':
+          notification.style.background = '#EF4444';
+          break;
+        case 'warning':
+          notification.style.background = '#F59E0B';
+          break;
+        default:
+          notification.style.background = '#3B82F6';
+      }
+      
+      // Adicionar ao DOM
+      document.body.appendChild(notification);
+      
+      // Remover após 3 segundos
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    // Adicionar estilos CSS para animações
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Event listener para formulário de estatísticas do usuário
+        const userStatsForm = document.getElementById('user-stats-form');
+        if (userStatsForm) {
+            userStatsForm.addEventListener('submit', saveUserStats);
+        }
+      if (!checkAdminAccess()) return;
+      
+      loadAdminData();
+      loadCategories();
+      loadMeditations(); // Carregar meditações também na inicialização
+      setupTextEditorShortcuts(); // Configurar atalhos do editor de texto
+
+      // Form submit handlers
+      document.getElementById('category-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        console.log('🔄 Formulário de categoria submetido');
+        
+        const formData = new FormData(this);
+        const editingId = this.dataset.editing;
+        
+        console.log('📝 Editing ID:', editingId);
+        console.log('📝 FormData entries:');
+        for (let [key, value] of formData.entries()) {
+          console.log(`  ${key}: ${value}`);
+        }
+        
+        const categoryData = {
+          name: formData.get('name'),
+          icon: formData.get('icon'),
+          description: formData.get('description'),
+          color: formData.get('color'),
+          status: formData.get('status')
+        };
+        
+        console.log('📝 Category Data:', categoryData);
+
+        const categories = JSON.parse(localStorage.getItem('categories')) || [];
+        
+        if (editingId) {
+          console.log('✏️ Modo de edição detectado');
+          // Atualizar
+          const index = categories.findIndex(c => c.id === editingId);
+          console.log('📝 Índice encontrado:', index);
+          if (index !== -1) {
+            const originalCategory = categories[index];
+            categories[index] = { ...categories[index], ...categoryData };
+            
+            // Sincronizar com Supabase se disponível
+                    console.log('🔍 Verificando Supabase Manager...');
+        console.log('📝 window.supabaseManager:', window.supabaseManager);
+        console.log('📝 typeof window.supabaseManager:', typeof window.supabaseManager);
+        console.log('📝 window.supabaseManager.updateCategory:', typeof window.supabaseManager?.updateCategory);
+        if (window.supabaseManager) {
+              try {
+                console.log('🔄 Sincronizando edição de categoria com Supabase...');
+                console.log('📝 Categoria original:', originalCategory);
+                console.log('📝 Categoria atualizada:', categories[index]);
+                
+                // Se o ID é um UUID do Supabase, atualizar diretamente
+                if (editingId.includes('-') && editingId.length === 36) {
+                  // É um UUID do Supabase
+                  const supabaseCategoryData = {
+                    name: categoryData.name,
+                    description: categoryData.description,
+                    icon: categoryData.icon || '',
+                    color: categoryData.color || '#7ee787',
+                    is_active: categoryData.status === 'active',
+                    sort_order: index
+                  };
+                  
+                  await window.supabaseManager.updateCategory(editingId, supabaseCategoryData);
+                  console.log('✅ Categoria atualizada no Supabase com sucesso');
+                } else {
+                  // É um ID local, tentar encontrar no Supabase pelo nome original
+                  console.log('🔍 Buscando categoria no Supabase pelo nome original...');
+                  const supabaseCategories = await window.supabaseManager.getCategories();
+                  const supabaseCategory = supabaseCategories.find(cat => 
+                    cat.name === originalCategory.name
+                  );
+                  
+                  if (supabaseCategory) {
+                    const supabaseCategoryData = {
+                      name: categoryData.name,
+                      description: categoryData.description,
+                      icon: categoryData.icon || '',
+                      color: categoryData.color || '#7ee787',
+                      is_active: categoryData.status === 'active',
+                      sort_order: index
+                    };
+                    
+                    await window.supabaseManager.updateCategory(supabaseCategory.id, supabaseCategoryData);
+                    console.log('✅ Categoria encontrada e atualizada no Supabase');
+                  } else {
+                    console.log('⚠️ Categoria não encontrada no Supabase, atualizando apenas localmente');
+                  }
+                }
+              } catch (supabaseError) {
+                console.error('⚠️ Erro ao sincronizar edição com Supabase:', supabaseError);
+                console.log('ℹ️ Categoria atualizada apenas localmente');
+              }
+            } else {
+              console.log('ℹ️ Supabase Manager não disponível - categoria atualizada apenas localmente');
+            }
+          }
+        } else {
+          // Criar nova
+          const newCategory = {
+            id: 'cat_' + Date.now(),
+            ...categoryData,
+            total: 0,
+            completed: 0,
+            inProgress: 0,
+            locked: 0
+          };
+          categories.push(newCategory);
+          
+          // Sincronizar com Supabase se disponível
+          if (window.supabaseManager) {
+            try {
+              console.log('🔄 Sincronizando categoria com Supabase...');
+              const supabaseCategory = {
+                name: newCategory.name,
+                description: newCategory.description,
+                icon: newCategory.icon || '',
+                color: newCategory.color || '#7ee787',
+                is_active: true,
+                sort_order: categories.length
+              };
+              
+              const createdCategory = await window.supabaseManager.createCategory(supabaseCategory);
+              console.log('✅ Categoria criada no Supabase:', createdCategory);
+              
+              // Atualizar o ID local com o ID do Supabase
+              if (createdCategory && createdCategory[0]) {
+                newCategory.id = createdCategory[0].id;
+                localStorage.setItem('categories', JSON.stringify(categories));
+                console.log('🔄 ID da categoria atualizado com ID do Supabase:', newCategory.id);
+              }
+            } catch (supabaseError) {
+              console.error('⚠️ Erro ao sincronizar categoria com Supabase:', supabaseError);
+              console.log('ℹ️ Categoria salva apenas localmente');
+            }
+          } else {
+            console.log('ℹ️ Supabase Manager não disponível - categoria salva apenas localmente');
+          }
+        }
+
+        localStorage.setItem('categories', JSON.stringify(categories));
+        
+        // Notificar dashboard para atualização imediata
+        if (window.refreshDashboardData) {
+            window.refreshDashboardData();
+        }
+        
+        loadCategories();
+        closeModal('category');
+        this.removeAttribute('data-editing');
+        document.getElementById('category-modal-title').textContent = 'Nova Categoria';
+      });
+
+      document.getElementById('meditation-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        console.log('🔄 Formulário de meditação submetido');
+        
+        const formData = new FormData(this);
+        const editingId = this.dataset.editing;
+        
+        console.log('📝 Editing ID:', editingId);
+        console.log('📝 FormData entries:');
+        for (let [key, value] of formData.entries()) {
+          console.log(`  ${key}: ${value}`);
+        }
+        
+
+        
+        // Validação dos campos obrigatórios
+        const title = formData.get('title').trim();
+        const categoryId = formData.get('categoryId');
+        
+        if (!title) {
+          showNotification('O título é obrigatório!', 'error');
+          return;
+        }
+        
+        if (!categoryId) {
+          showNotification('Selecione uma categoria!', 'error');
+          return;
+        }
+        
+        // Capturar todos os campos do formulário e processar formatação
+        const meditationData = {
+          title: formData.get('title') || '',
+          categoryId: formData.get('categoryId') || '',
+          duration: formData.get('duration') || '12',
+          status: formData.get('status') || 'available',
+          type: formData.get('type') || 'free',
+          icon: formData.get('icon') || '📖',
+          // Usar nomes corretos dos campos (lectio, meditatio, oratio, contemplatio)
+          lectio: formatTextToHTML(formData.get('reading') || ''),
+          meditatio: formatTextToHTML(formData.get('meditation') || ''),
+          oratio: formatTextToHTML(formData.get('prayer') || ''),
+          contemplatio: formatTextToHTML(formData.get('contemplation') || ''),
+          // Manter compatibilidade com nomes antigos
+          reading: formatTextToHTML(formData.get('reading') || ''),
+          meditation: formatTextToHTML(formData.get('meditation') || ''),
+          prayer: formatTextToHTML(formData.get('prayer') || ''),
+          contemplation: formatTextToHTML(formData.get('contemplation') || '')
+        };
+        
+
+
+        const meditations = JSON.parse(localStorage.getItem('meditations')) || [];
+        
+        if (editingId) {
+          console.log('✏️ Modo de edição de meditação detectado');
+          // Atualizar
+          const index = meditations.findIndex(m => m.id === editingId);
+          console.log('📝 Índice da meditação encontrado:', index);
+          if (index !== -1) {
+            const originalMeditation = meditations[index];
+            meditations[index] = { 
+              ...meditations[index], 
+              ...meditationData,
+              updatedAt: new Date().toISOString()
+            };
+            
+            // Sincronizar com Supabase se disponível
+            console.log('🔍 Verificando Supabase Manager para meditação...');
+            console.log('📝 window.supabaseManager:', window.supabaseManager);
+            console.log('📝 typeof window.supabaseManager:', typeof window.supabaseManager);
+            console.log('📝 window.supabaseManager.updateMeditation:', typeof window.supabaseManager?.updateMeditation);
+            if (window.supabaseManager) {
+              try {
+                console.log('🔄 Sincronizando edição de meditação com Supabase...');
+                console.log('📝 Meditação original:', originalMeditation);
+                console.log('📝 Meditação atualizada:', meditations[index]);
+                
+                // Se o ID é um UUID do Supabase, atualizar diretamente
+                if (editingId.includes('-') && editingId.length === 36) {
+                  // É um UUID do Supabase
+                  const supabaseMeditationData = {
+                    title: meditationData.title,
+                    content: meditationData.meditation || meditationData.meditatio || '',
+                    duration_minutes: parseInt(meditationData.duration) || 12,
+                    difficulty_level: 'beginner',
+                    status: meditationData.status || 'active'
+                  };
+                  
+                  await window.supabaseManager.updateMeditation(editingId, supabaseMeditationData);
+                  console.log('✅ Meditação atualizada no Supabase com sucesso');
+                } else {
+                  // É um ID local, tentar encontrar no Supabase pelo título original
+                  console.log('🔍 Buscando meditação no Supabase pelo título original...');
+                  const supabaseMeditations = await window.supabaseManager.getMeditations();
+                  const supabaseMeditation = supabaseMeditations.find(med => 
+                    med.title === originalMeditation.title
+                  );
+                  
+                  if (supabaseMeditation) {
+                    const supabaseMeditationData = {
+                      title: meditationData.title,
+                      content: meditationData.meditation || meditationData.meditatio || '',
+                      duration_minutes: parseInt(meditationData.duration) || 12,
+                      difficulty_level: 'beginner',
+                      status: meditationData.status || 'active'
+                    };
+                    
+                    await window.supabaseManager.updateMeditation(supabaseMeditation.id, supabaseMeditationData);
+                    console.log('✅ Meditação encontrada e atualizada no Supabase');
+                  } else {
+                    console.log('⚠️ Meditação não encontrada no Supabase, atualizando apenas localmente');
+                  }
+                }
+              } catch (supabaseError) {
+                console.error('⚠️ Erro ao sincronizar edição com Supabase:', supabaseError);
+                console.log('ℹ️ Meditação atualizada apenas localmente');
+              }
+            } else {
+              console.log('ℹ️ Supabase Manager não disponível - meditação atualizada apenas localmente');
+            }
+          }
+        } else {
+          // Criar nova
+          const newMeditation = {
+            id: 'med_' + Date.now(),
+            ...meditationData,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            total: 0,
+            completed: 0,
+            inProgress: 0,
+            locked: 0
+          };
+          meditations.push(newMeditation);
+          
+          // Sincronizar com Supabase se disponível
+          if (window.supabaseManager) {
+            try {
+              console.log('🔄 Sincronizando meditação com Supabase...');
+              
+              // Buscar o UUID da categoria no Supabase baseado no nome
+              let supabaseCategoryId = null;
+              try {
+                const categories = await window.supabaseManager.getCategories();
+                const localCategory = categories.find(cat => cat.id === newMeditation.categoryId || cat.name === newMeditation.categoryId);
+                if (localCategory) {
+                  supabaseCategoryId = localCategory.id;
+                  console.log('✅ Categoria encontrada no Supabase:', localCategory.name, 'ID:', supabaseCategoryId);
+                } else {
+                  console.log('⚠️ Categoria não encontrada no Supabase, usando null');
+                }
+              } catch (categoryError) {
+                console.error('⚠️ Erro ao buscar categoria:', categoryError);
+              }
+              
+              const supabaseMeditation = {
+                title: newMeditation.title,
+                content: newMeditation.meditation || newMeditation.meditatio || '',
+                category_id: supabaseCategoryId,
+                duration_minutes: parseInt(newMeditation.duration) || 12,
+                difficulty_level: 'beginner',
+                status: newMeditation.status || 'active',
+                created_by: null // Será preenchido quando tivermos autenticação
+              };
+              
+              console.log('📝 Dados da meditação para Supabase:', supabaseMeditation);
+              
+              const createdMeditation = await window.supabaseManager.createMeditation(supabaseMeditation);
+              console.log('✅ Meditação criada no Supabase:', createdMeditation);
+              
+              // Atualizar o ID local com o ID do Supabase
+              if (createdMeditation && createdMeditation[0]) {
+                newMeditation.id = createdMeditation[0].id;
+                localStorage.setItem('meditations', JSON.stringify(meditations));
+                console.log('🔄 ID da meditação atualizado com ID do Supabase:', newMeditation.id);
+              }
+            } catch (supabaseError) {
+              console.error('⚠️ Erro ao sincronizar meditação com Supabase:', supabaseError);
+              console.log('ℹ️ Meditação salva apenas localmente');
+            }
+          } else {
+            console.log('ℹ️ Supabase Manager não disponível - meditação salva apenas localmente');
+          }
+        }
+
+        // Salvar no localStorage
+        localStorage.setItem('meditations', JSON.stringify(meditations));
+        
+        // Limpar cache para forçar atualização no dashboard
+        localStorage.removeItem('meditations_cache');
+        localStorage.removeItem('categories_cache');
+        
+        // Notificar dashboard para atualização imediata
+        if (window.refreshDashboardData) {
+            window.refreshDashboardData();
+        }
+        
+        // Recarregar a lista de meditações
+        loadMeditations();
+        
+        // Fechar modal e limpar formulário
+        closeModal('meditation');
+        this.removeAttribute('data-editing');
+        document.getElementById('meditation-modal-title').textContent = 'Nova Meditação';
+        
+        // Mostrar notificação de sucesso
+        showNotification(editingId ? 'Meditação atualizada com sucesso!' : 'Meditação criada com sucesso!', 'success');
+      });
+    });
+
+    // Fechar modal ao clicar fora
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+      }
+    };
+
+    // ===== FUNÇÕES DE EXPORTAR/IMPORTAR =====
+
+    // Exportar dados
+    function exportData() {
+      try {
+        const data = {
+          exportDate: new Date().toISOString(),
+          version: '1.0',
+          categories: JSON.parse(localStorage.getItem('categories')) || [],
+          meditations: JSON.parse(localStorage.getItem('meditations')) || [],
+          personalized_meditations: JSON.parse(localStorage.getItem('personalized_meditations')) || [],
+          personalized_meditations_history: JSON.parse(localStorage.getItem('personalized_meditations_history')) || [],
+          userProgress: JSON.parse(localStorage.getItem('userProgress')) || {},
+          settings: JSON.parse(localStorage.getItem('settings')) || {},
+          // NOVOS CAMPOS: Agendamentos e Estatísticas de Usuários
+          user_schedules: JSON.parse(localStorage.getItem('user_schedules')) || [],
+          user_meditation_stats: JSON.parse(localStorage.getItem('user_meditation_stats')) || {},
+          current_user: JSON.parse(localStorage.getItem('current_user')) || null
+        };
+
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `oraetmedita_backup_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        showNotification('✅ Dados exportados com sucesso! Incluindo meditações personalizadas, agendamentos e estatísticas do dashboard.', 'success');
+      } catch (error) {
+        console.error('Erro ao exportar dados:', error);
+        showNotification('❌ Erro ao exportar dados!', 'error');
+      }
+    }
+
+    // Abrir modal de importação
+    function importData() {
+      document.getElementById('import-modal').style.display = 'block';
+      document.getElementById('import-file').value = '';
+      document.getElementById('import-preview').style.display = 'none';
+      document.getElementById('confirm-import-btn').disabled = true;
+    }
+
+    // Importar dados de exemplo
+    function importExampleData() {
+      const exampleData = {
+        "principios": {
+          name: "Princípios da Vida Sobrenatural",
+          icon: "📖",
+          description: "Meditações sobre os fundamentos da vida espiritual",
+          color: "linear-gradient(135deg, #7ee787, #4ade80)",
+          total: 1,
+          completed: 0,
+          inProgress: 0,
+          locked: 0,
+          meditations: [{
+            id: "1",
+            title: "Princípios da Vida Sobrenatural",
+            duration: "12 min",
+            status: "available",
+            reading: "Neste texto, Jesus se apresenta como a videira verdadeira e nos convida a permanecer nele. A palavra 'permanecer' aparece várias vezes, indicando a importância de uma relação contínua e profunda com Cristo. Observe como Jesus enfatiza que sem ele nada podemos fazer, mostrando nossa dependência total de sua graça.",
+            meditation: "Reflita sobre o que significa 'permanecer em Cristo' na sua vida diária. Como você pode cultivar essa relação mais profunda? Que frutos você tem produzido? Há áreas da sua vida onde você sente que não está 'permanecendo' em Cristo? O que isso significa para sua oração, seus relacionamentos, seu trabalho?",
+            prayer: "Senhor Jesus, videira verdadeira, eu quero permanecer em ti. Ajuda-me a reconhecer minha dependência total de tua graça. Que eu possa dar frutos que glorifiquem o Pai. Purifica-me, como o agricultor limpa os ramos, para que eu possa produzir mais frutos ainda. Ensina-me a permanecer em tua palavra e em tua presença.",
+            contemplation: "Permaneça em silêncio na presença de Jesus, a videira verdadeira. Sinta-se como um ramo conectado à fonte da vida. Deixe que o amor de Deus flua através de você. Simplesmente esteja na presença de quem é a vida, a verdade e o caminho."
+          }]
+        },
+        "mariologia": {
+          name: "A Humildade de Maria",
+          icon: "💝",
+          description: "Meditações sobre a vida e virtudes de Maria",
+          color: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+          total: 1,
+          completed: 0,
+          inProgress: 0,
+          locked: 0,
+          meditations: [{
+            id: "2",
+            title: "A Humildade de Maria",
+            duration: "15 min",
+            status: "available",
+            reading: "Maria recebe a visita do anjo Gabriel com uma mensagem extraordinária. Observe sua reação inicial de perturbação e reflexão. Ela faz uma pergunta honesta sobre como isso acontecerá, mas sua resposta final é de total disponibilidade: 'Eis aqui a serva do Senhor. Faça-se em mim segundo a tua palavra.'",
+            meditation: "Como você reage quando Deus te chama para algo que parece impossível ou que vai mudar completamente sua vida? Você tem a humildade de Maria para se colocar como 'serva do Senhor'? Que significa para você 'faça-se em mim segundo a tua palavra'? Como você pode cultivar essa disponibilidade total a Deus?",
+            prayer: "Maria, Mãe de Deus, ensina-me a humildade. Ajuda-me a dizer 'sim' a Deus como tu disseste. Que eu possa ser uma serva fiel do Senhor, disponível para sua vontade. Intercede por mim para que eu tenha a coragem de aceitar os planos de Deus para minha vida, mesmo quando não os entendo completamente.",
+            contemplation: "Contemple Maria em sua humildade e disponibilidade. Veja como ela se coloca totalmente nas mãos de Deus. Deixe que seu exemplo inspire você a confiar mais profundamente na providência divina. Permaneça em silêncio, permitindo que Deus fale ao seu coração."
+          }]
+        }
+      };
+      
+      // Salvar categorias no localStorage
+      localStorage.setItem('categories', JSON.stringify(exampleData));
+      
+      // Incluir meditações personalizadas geradas pelo ChatGPT
+      const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+      if (personalizedMeditations.length > 0) {
+        // Criar categoria para meditações personalizadas
+        const personalizedCategory = {
+          name: "Meditações Personalizadas",
+          icon: "✨",
+          description: "Meditações geradas personalizadamente para você",
+          color: "linear-gradient(135deg, #8b5cf6, #3b82f6)",
+          total: personalizedMeditations.length,
+          completed: 0,
+          inProgress: 0,
+          locked: 0,
+          meditations: personalizedMeditations.map(med => ({
+            id: med.id,
+            title: med.title,
+            duration: med.duration || '15 min',
+            status: 'available',
+            reading: med.content,
+            meditation: med.content,
+            prayer: med.content,
+            contemplation: med.content,
+            createdAt: med.createdAt,
+            source: 'chatgpt',
+            type: 'personalized'
+          }))
+        };
+        
+        // Adicionar à estrutura de dados
+        exampleData.personalized = personalizedCategory;
+        
+        // Atualizar localStorage com dados completos
+        localStorage.setItem('categories', JSON.stringify(exampleData));
+        
+        // Salvar também as meditações personalizadas separadamente
+        localStorage.setItem('personalized_meditations', JSON.stringify(personalizedMeditations));
+        
+        // Salvar histórico se existir
+        const personalizedHistory = JSON.parse(localStorage.getItem('personalized_meditations_history') || '[]');
+        if (personalizedHistory.length > 0) {
+          localStorage.setItem('personalized_meditations_history', JSON.stringify(personalizedHistory));
+        }
+      }
+      
+      // Recarregar os dados
+      loadCategories();
+      loadMeditations();
+      
+      // Fechar o modal de importação
+      closeImportModal();
+      
+      showNotification('✅ Dados de exemplo importados com sucesso! Incluindo meditações personalizadas.', 'success');
+    }
+
+    // Fechar modal de importação
+    function closeImportModal() {
+      document.getElementById('import-modal').style.display = 'none';
+    }
+
+    // Lidar com seleção de arquivo
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Validar estrutura do arquivo
+          if (!data.categories || !data.meditations) {
+            showNotification('❌ Arquivo inválido! Estrutura incorreta.', 'error');
+            return;
+          }
+
+          // Mostrar prévia
+          showImportPreview(data);
+          document.getElementById('confirm-import-btn').disabled = false;
+          
+        } catch (error) {
+          console.error('Erro ao ler arquivo:', error);
+          showNotification('❌ Erro ao ler arquivo! Verifique se é um JSON válido.', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Mostrar prévia dos dados
+    function showImportPreview(data) {
+      const preview = document.getElementById('import-preview');
+      const summary = document.getElementById('import-summary');
+      
+      const categoriesCount = data.categories.length;
+      const meditationsCount = data.meditations.length;
+      const personalizedCount = data.personalized_meditations ? data.personalized_meditations.length : 0;
+      const historyCount = data.personalized_meditations_history ? data.personalized_meditations_history.length : 0;
+      const schedulesCount = data.user_schedules ? data.user_schedules.length : 0;
+      const userStatsCount = data.user_meditation_stats ? Object.keys(data.user_meditation_stats).length : 0;
+      const currentUser = data.current_user ? 'Sim' : 'Não';
+      const exportDate = data.exportDate ? new Date(data.exportDate).toLocaleString('pt-BR') : 'Data desconhecida';
+      
+      summary.innerHTML = `
+        <div style="background: #23243a; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+          <p><strong>📅 Data de Exportação:</strong> ${exportDate}</p>
+          <p><strong>📚 Categorias:</strong> ${categoriesCount}</p>
+          <p><strong>📖 Meditações:</strong> ${meditationsCount}</p>
+          <p><strong>✨ Meditações Personalizadas:</strong> ${personalizedCount}</p>
+          <p><strong>📋 Histórico de Gerações:</strong> ${historyCount}</p>
+          <p><strong>📅 Agendamentos:</strong> ${schedulesCount}</p>
+          <p><strong>📊 Estatísticas do Dashboard:</strong> Disponível</p>
+          <p><strong>👤 Usuário Atual:</strong> ${currentUser}</p>
+          <p><strong>⚙️ Configurações:</strong> ${Object.keys(data.settings || {}).length}</p>
+          <p><strong>📊 Progresso:</strong> ${Object.keys(data.userProgress || {}).length} usuários</p>
+        </div>
+        <p style="color: #f59e0b;"><strong>⚠️ Importar irá substituir todos os dados atuais!</strong></p>
+      `;
+      
+      preview.style.display = 'block';
+    }
+
+    // Confirmar importação
+    function confirmImport() {
+      const file = document.getElementById('import-file').files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Importar dados básicos
+          localStorage.setItem('categories', JSON.stringify(data.categories || []));
+          localStorage.setItem('meditations', JSON.stringify(data.meditations || []));
+          localStorage.setItem('userProgress', JSON.stringify(data.userProgress || {}));
+          localStorage.setItem('settings', JSON.stringify(data.settings || {}));
+          
+          // Importar agendamentos se existirem no arquivo
+          if (data.user_schedules) {
+            localStorage.setItem('user_schedules', JSON.stringify(data.user_schedules));
+            console.log('✅ Agendamentos importados:', data.user_schedules.length);
+          }
+          
+          // Importar estatísticas de usuários se existirem no arquivo
+                  if (data.user_meditation_stats) {
+          localStorage.setItem('user_meditation_stats', JSON.stringify(data.user_meditation_stats));
+          console.log('✅ Estatísticas de usuários importadas (legado)');
+        }
+          
+          // Importar usuário atual se existir no arquivo
+          if (data.current_user) {
+            localStorage.setItem('current_user', JSON.stringify(data.current_user));
+            console.log('✅ Usuário atual importado');
+          }
+          
+          // Importar meditações personalizadas se existirem no arquivo
+          if (data.personalized_meditations) {
+            localStorage.setItem('personalized_meditations', JSON.stringify(data.personalized_meditations));
+            console.log('✅ Meditações personalizadas importadas:', data.personalized_meditations.length);
+          }
+          
+          // Importar histórico de meditações personalizadas se existir
+          if (data.personalized_meditations_history) {
+            localStorage.setItem('personalized_meditations_history', JSON.stringify(data.personalized_meditations_history));
+            console.log('✅ Histórico de meditações personalizadas importado');
+          }
+          
+          // Limpar cache
+          localStorage.removeItem('meditations_cache');
+          localStorage.removeItem('categories_cache');
+          
+          // Recarregar dados
+          loadCategories();
+          loadMeditations();
+          
+          // Fechar modal
+          closeImportModal();
+          
+          showNotification('✅ Dados importados com sucesso! Incluindo meditações personalizadas, agendamentos e estatísticas do dashboard.', 'success');
+          
+        } catch (error) {
+          console.error('Erro ao importar dados:', error);
+          showNotification('❌ Erro ao importar dados!', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ===== FUNÇÕES PARA MEDITAÇÕES PERSONALIZADAS =====
+
+    // Carregar meditações personalizadas
+    function loadPersonalizedMeditations() {
+      const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+      const grid = document.getElementById('personalized-grid');
+      
+      // Obter usuário atual logado
+      const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+      const currentUserId = currentUser ? currentUser.id : null;
+      const currentUserName = currentUser ? currentUser.name : 'Usuário Desconhecido';
+      
+      console.log('👤 Usuário atual:', currentUserName, 'ID:', currentUserId);
+      
+      // Filtrar meditações do usuário atual
+      const userMeditations = personalizedMeditations.filter(meditation => {
+        // Se não há userId na meditação, mostrar apenas se não há usuário logado (admin)
+        if (!meditation.userId) {
+          return !currentUserId;
+        }
+        // Mostrar apenas meditações do usuário atual
+        return meditation.userId === currentUserId;
+      });
+      
+      console.log('📊 Meditações encontradas:', userMeditations.length, 'de', personalizedMeditations.length, 'total');
+      
+      if (userMeditations.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">✨</div>
+            <h3>Nenhuma meditação personalizada encontrada</h3>
+            <p>${currentUserId ? `Você ainda não criou meditações personalizadas.` : 'As meditações geradas pelo ChatGPT aparecerão aqui quando forem criadas pelos usuários.'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      const html = userMeditations.map(meditation => `
+        <div class="data-card">
+          <div class="card-header">
+            <h3>${meditation.title}</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-secondary" onclick="viewPersonalizedMeditation('${meditation.id}')">
+                👁️ Ver
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="deletePersonalizedMeditation('${meditation.id}')">
+                🗑️
+              </button>
+            </div>
+          </div>
+          <div class="card-content">
+            <p><strong>Tópico:</strong> ${meditation.topic || 'N/A'}</p>
+            <p><strong>Duração:</strong> ${meditation.duration || '15 min'}</p>
+            <p><strong>Status:</strong> ${meditation.status || 'pending'}</p>
+            <p><strong>Criada em:</strong> ${meditation.createdAt ? new Date(meditation.createdAt).toLocaleString('pt-BR') : 'N/A'}</p>
+            <p><strong>Fonte:</strong> ${meditation.source || 'chatgpt'}</p>
+            <p><strong>Tipo:</strong> ${meditation.type || 'simple'}</p>
+            <p><strong>Usuário:</strong> <span style="color: var(--accent-blue); font-weight: 600;">${meditation.userName || currentUserName}</span></p>
+            <p><strong>ID do Usuário:</strong> <code style="background: #23243a; padding: 2px 6px; border-radius: 3px; font-size: 0.8em;">${meditation.userId || 'N/A'}</code></p>
+          </div>
+        </div>
+      `).join('');
+
+      grid.innerHTML = html;
+    }
+
+    // Visualizar meditação personalizada
+    function viewPersonalizedMeditation(id) {
+      const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+      const meditation = personalizedMeditations.find(m => m.id === id);
+      
+      if (!meditation) {
+        showNotification('❌ Meditação não encontrada!', 'error');
+        return;
+      }
+
+      // Obter usuário atual para comparação
+      const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+      const currentUserId = currentUser ? currentUser.id : null;
+      const currentUserName = currentUser ? currentUser.name : 'Usuário Desconhecido';
+
+      // Criar modal para visualizar
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'block';
+      modal.innerHTML = `
+        <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+          <div class="modal-header">
+            <h3 class="modal-title">${meditation.title}</h3>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="meditation-details">
+              <p><strong>Tópico:</strong> ${meditation.topic || 'N/A'}</p>
+              <p><strong>Duração:</strong> ${meditation.duration || '15 min'}</p>
+              <p><strong>Status:</strong> ${meditation.status || 'pending'}</p>
+              <p><strong>Criada em:</strong> ${meditation.createdAt ? new Date(meditation.createdAt).toLocaleString('pt-BR') : 'N/A'}</p>
+              <p><strong>Fonte:</strong> ${meditation.source || 'chatgpt'}</p>
+              <p><strong>Tipo:</strong> ${meditation.type || 'simple'}</p>
+              <p><strong>Usuário:</strong> <span style="color: var(--accent-blue); font-weight: 600;">${meditation.userName || currentUserName}</span></p>
+              <p><strong>ID do Usuário:</strong> <code style="background: #23243a; padding: 2px 6px; border-radius: 3px; font-size: 0.8em;">${meditation.userId || 'N/A'}</code></p>
+              ${meditation.userId === currentUserId ? '<p style="color: var(--accent-green); font-weight: 600;">✅ Esta é sua meditação</p>' : ''}
+            </div>
+            <div class="meditation-content">
+              <h4>Conteúdo da Meditação:</h4>
+              <div style="background: #23243a; padding: 16px; border-radius: 8px; margin: 16px 0; white-space: pre-wrap;">
+                ${meditation.content || 'Conteúdo não disponível'}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Deletar meditação personalizada
+    function deletePersonalizedMeditation(id) {
+      const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+      const meditation = personalizedMeditations.find(m => m.id === id);
+      
+      if (!meditation) {
+        showNotification('❌ Meditação não encontrada!', 'error');
+        return;
+      }
+
+      // Obter usuário atual
+      const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+      const currentUserId = currentUser ? currentUser.id : null;
+
+      // Verificar se o usuário pode deletar esta meditação
+      if (meditation.userId && meditation.userId !== currentUserId) {
+        showNotification('❌ Você só pode deletar suas próprias meditações!', 'error');
+        return;
+      }
+
+      if (!confirm('Tem certeza que deseja deletar esta meditação personalizada?')) {
+        return;
+      }
+
+      const updatedMeditations = personalizedMeditations.filter(m => m.id !== id);
+      
+      localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+      loadPersonalizedMeditations();
+      
+      showNotification('✅ Meditação personalizada deletada com sucesso!', 'success');
+    }
+
+    // Exportar apenas meditações personalizadas
+    function exportPersonalizedData() {
+      try {
+        const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+        const personalizedHistory = JSON.parse(localStorage.getItem('personalized_meditations_history') || '[]');
+        
+        const data = {
+          exportDate: new Date().toISOString(),
+          version: '1.0',
+          personalized_meditations: personalizedMeditations,
+          personalized_meditations_history: personalizedHistory
+        };
+
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `oraetmedita_personalized_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        showNotification('✅ Meditações personalizadas exportadas com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao exportar meditações personalizadas:', error);
+        showNotification('❌ Erro ao exportar meditações personalizadas!', 'error');
+      }
+    }
+
+    // Importar meditações personalizadas
+    function importPersonalizedData() {
+      try {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.style.display = 'none';
+        
+        input.addEventListener('change', async (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+          
+          try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            
+            // Validar estrutura do arquivo
+            if (!data.personalized_meditations) {
+              throw new Error('Arquivo inválido: não contém meditações personalizadas');
+            }
+            
+            if (!confirm(`Importar ${data.personalized_meditations.length} meditações personalizadas? Esta ação irá substituir os dados atuais.`)) {
+              return;
+            }
+            
+            // Importar dados
+            localStorage.setItem('personalized_meditations', JSON.stringify(data.personalized_meditations));
+            
+            if (data.personalized_meditations_history) {
+              localStorage.setItem('personalized_meditations_history', JSON.stringify(data.personalized_meditations_history));
+            }
+            
+            // Recarregar dados
+            loadPersonalizedMeditations();
+            
+            showNotification(`✅ ${data.personalized_meditations.length} meditações personalizadas importadas com sucesso!`, 'success');
+            
+          } catch (error) {
+            console.error('Erro ao importar meditações personalizadas:', error);
+            showNotification('❌ Erro ao importar meditações personalizadas: ' + error.message, 'error');
+          }
+          
+          // Limpar input
+          document.body.removeChild(input);
+        });
+        
+        document.body.appendChild(input);
+        input.click();
+        
+      } catch (error) {
+        console.error('Erro ao preparar importação:', error);
+        showNotification('❌ Erro ao preparar importação', 'error');
+      }
+    }
+
+    // Limpar todas as meditações personalizadas
+    function clearPersonalizedData() {
+      if (!confirm('Tem certeza que deseja limpar TODAS as meditações personalizadas? Esta ação não pode ser desfeita!')) {
+        return;
+      }
+
+      localStorage.removeItem('personalized_meditations');
+      localStorage.removeItem('personalized_meditations_history');
+      
+      loadPersonalizedMeditations();
+      
+      showNotification('✅ Todas as meditações personalizadas foram removidas!', 'success');
+    }
+
+    // ===== FUNÇÕES PARA AGENDAMENTOS =====
+
+    // Carregar agendamentos
+    function loadSchedulesData() {
+      const schedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+      const grid = document.getElementById('schedules-grid');
+      
+      if (schedules.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📅</div>
+            <h3>Nenhum agendamento encontrado</h3>
+            <p>Os agendamentos criados pelos usuários aparecerão aqui.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const html = schedules.map(schedule => `
+        <div class="data-card">
+          <div class="card-header">
+            <h3>${schedule.title}</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-secondary" onclick="viewSchedule('${schedule.id}')">
+                👁️ Ver
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="deleteSchedule('${schedule.id}')">
+                🗑️
+              </button>
+            </div>
+          </div>
+          <div class="card-content">
+            <p><strong>Data:</strong> ${schedule.date}</p>
+            <p><strong>Hora:</strong> ${schedule.time}</p>
+            <p><strong>Categoria:</strong> ${schedule.category}</p>
+            <p><strong>Duração:</strong> ${schedule.duration} min</p>
+            <p><strong>Status:</strong> ${schedule.status || 'agendado'}</p>
+            <p><strong>Criado em:</strong> ${schedule.createdAt ? new Date(schedule.createdAt).toLocaleString('pt-BR') : 'N/A'}</p>
+          </div>
+        </div>
+      `).join('');
+
+      grid.innerHTML = html;
+    }
+
+    // Visualizar agendamento
+    function viewSchedule(id) {
+      const schedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+      const schedule = schedules.find(s => s.id === parseInt(id));
+      
+      if (!schedule) {
+        showNotification('❌ Agendamento não encontrado!', 'error');
+        return;
+      }
+
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'block';
+      modal.innerHTML = `
+        <div class="modal-content" style="max-width: 600px;">
+          <div class="modal-header">
+            <h3>Detalhes do Agendamento</h3>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div style="background: #23243a; padding: 16px; border-radius: 8px;">
+              <p><strong>Título:</strong> ${schedule.title}</p>
+              <p><strong>Data:</strong> ${schedule.date}</p>
+              <p><strong>Hora:</strong> ${schedule.time}</p>
+              <p><strong>Categoria:</strong> ${schedule.category}</p>
+              <p><strong>Duração:</strong> ${schedule.duration} min</p>
+              <p><strong>Status:</strong> ${schedule.status || 'agendado'}</p>
+              <p><strong>Descrição:</strong> ${schedule.description || 'N/A'}</p>
+              <p><strong>Criado em:</strong> ${schedule.createdAt ? new Date(schedule.createdAt).toLocaleString('pt-BR') : 'N/A'}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Deletar agendamento
+    function deleteSchedule(id) {
+      if (!confirm('Tem certeza que deseja deletar este agendamento?')) {
+        return;
+      }
+
+      const schedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+      const updatedSchedules = schedules.filter(s => s.id !== parseInt(id));
+      
+      localStorage.setItem('user_schedules', JSON.stringify(updatedSchedules));
+      loadSchedulesData();
+      
+      showNotification('✅ Agendamento deletado com sucesso!', 'success');
+    }
+
+    // Exportar apenas agendamentos
+    function exportSchedulesData() {
+      try {
+        const schedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+        
+        const data = {
+          exportDate: new Date().toISOString(),
+          version: '1.0',
+          user_schedules: schedules
+        };
+
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `oraetmedita_schedules_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        showNotification('✅ Agendamentos exportados com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao exportar agendamentos:', error);
+        showNotification('❌ Erro ao exportar agendamentos!', 'error');
+      }
+    }
+
+    // Importar agendamentos
+    function importSchedulesData() {
+      try {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.style.display = 'none';
+        
+        input.addEventListener('change', async (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+          
+          try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            
+            // Validar estrutura do arquivo
+            if (!data.user_schedules) {
+              throw new Error('Arquivo inválido: não contém agendamentos');
+            }
+            
+            if (!confirm(`Importar ${data.user_schedules.length} agendamentos? Esta ação irá substituir os dados atuais.`)) {
+              return;
+            }
+            
+            // Importar dados
+            localStorage.setItem('user_schedules', JSON.stringify(data.user_schedules));
+            
+            // Recarregar dados
+            loadSchedulesData();
+            
+            showNotification(`✅ ${data.user_schedules.length} agendamentos importados com sucesso!`, 'success');
+            
+          } catch (error) {
+            console.error('Erro ao importar agendamentos:', error);
+            showNotification('❌ Erro ao importar agendamentos: ' + error.message, 'error');
+          }
+          
+          // Limpar input
+          document.body.removeChild(input);
+        });
+        
+        document.body.appendChild(input);
+        input.click();
+        
+      } catch (error) {
+        console.error('Erro ao preparar importação:', error);
+        showNotification('❌ Erro ao preparar importação', 'error');
+      }
+    }
+
+    // Limpar todos os agendamentos
+    function clearSchedulesData() {
+      if (!confirm('Tem certeza que deseja limpar TODOS os agendamentos? Esta ação não pode ser desfeita!')) {
+        return;
+      }
+
+      localStorage.removeItem('user_schedules');
+      loadSchedulesData();
+      
+      showNotification('✅ Todos os agendamentos foram removidos!', 'success');
+    }
+
+    // ===== FUNÇÕES PARA ESTATÍSTICAS =====
+
+    // Carregar estatísticas do dashboard
+    function loadUsersData() {
+      const grid = document.getElementById('users-grid');
+      
+      try {
+        // Carregar dados do dashboard
+        const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+        const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+        const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+        
+        // Calcular estatísticas reais (personalizadas + admin)
+        const personalizedCompleted = personalizedMeditations.filter(m => m.status === 'completed').length;
+        const adminCompleted = adminMeditations.filter(m => m.status === 'completed').length;
+        const totalCompleted = personalizedCompleted + adminCompleted;
+        
+        const personalizedInProgress = personalizedMeditations.filter(m => 
+          m.status !== 'completed' && m.lastViewed
+        ).length;
+        const adminInProgress = adminMeditations.filter(m => 
+          m.status !== 'completed' && m.lastViewed
+        ).length;
+        const totalInProgress = personalizedInProgress + adminInProgress;
+        
+        // Calcular tempo total (estimativa: 15 min por meditação)
+        const totalMinutes = totalCompleted * 15;
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        const timeText = hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
+        
+        // Calcular dias consecutivos (simplificado)
+        const consecutiveDays = Math.min(totalCompleted, 30); // Máximo 30 dias
+        
+        let html = '';
+
+        // Mostrar usuário atual se existir
+        if (currentUser) {
+          html += `
+            <div class="data-card">
+              <div class="card-header">
+                <h3>👤 Usuário Atual</h3>
+              </div>
+              <div class="card-content">
+                <p><strong>Nome:</strong> ${currentUser.name || 'N/A'}</p>
+                <p><strong>Email:</strong> ${currentUser.email || 'N/A'}</p>
+                <p><strong>Plano:</strong> ${currentUser.plan || 'free'}</p>
+                <p><strong>Registrado em:</strong> ${currentUser.createdAt ? new Date(currentUser.createdAt).toLocaleString('pt-BR') : 'N/A'}</p>
+              </div>
+            </div>
+          `;
+        }
+
+        // Mostrar estatísticas do dashboard
+        html += `
+          <div class="data-card">
+            <div class="card-header">
+              <h3>📊 Estatísticas do Dashboard</h3>
+            </div>
+            <div class="card-content">
+              <p><strong>Meditações Concluídas (Total):</strong> ${totalCompleted}</p>
+              <p><strong>• Personalizadas Concluídas:</strong> ${personalizedCompleted}</p>
+              <p><strong>• Admin Concluídas:</strong> ${adminCompleted}</p>
+              <p><strong>Meditações em Andamento (Total):</strong> ${totalInProgress}</p>
+              <p><strong>• Personalizadas em Andamento:</strong> ${personalizedInProgress}</p>
+              <p><strong>• Admin em Andamento:</strong> ${adminInProgress}</p>
+              <p><strong>Tempo Total Estimado:</strong> ${timeText}</p>
+              <p><strong>Dias Consecutivos:</strong> ${consecutiveDays}</p>
+              <p><strong>Última Atualização:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+            </div>
+          </div>
+        `;
+
+        // Mostrar detalhes por categoria
+        const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+        if (categories.length > 0) {
+          html += `
+            <div class="data-card">
+              <div class="card-header">
+                <h3>📈 Progresso por Categoria</h3>
+              </div>
+              <div class="card-content">
+          `;
+          
+          categories.forEach(category => {
+            const categoryMeditations = adminMeditations.filter(m => m.categoryId === category.id);
+            const categoryCompleted = categoryMeditations.filter(m => m.status === 'completed').length;
+            const categoryInProgress = categoryMeditations.filter(m => 
+              m.status !== 'completed' && m.lastViewed
+            ).length;
+            const categoryTotal = categoryMeditations.length;
+            
+            html += `
+              <p><strong>${category.name}:</strong> ${categoryCompleted} concluídas, ${categoryInProgress} em andamento (${categoryTotal} total)</p>
+            `;
+          });
+          
+          html += `
+              </div>
+            </div>
+          `;
+        }
+
+        grid.innerHTML = html;
+        
+        console.log('✅ Estatísticas do dashboard carregadas no painel admin:', {
+          totalCompleted,
+          totalInProgress,
+          timeText,
+          consecutiveDays
+        });
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar estatísticas:', error);
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <h3>Erro ao carregar estatísticas</h3>
+            <p>Não foi possível carregar as estatísticas do dashboard.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Exportar estatísticas do dashboard
+    function exportUsersData() {
+      try {
+        const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+        const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+        const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+        const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+        
+        // Calcular estatísticas
+        const personalizedCompleted = personalizedMeditations.filter(m => m.status === 'completed').length;
+        const adminCompleted = adminMeditations.filter(m => m.status === 'completed').length;
+        const totalCompleted = personalizedCompleted + adminCompleted;
+        
+        const personalizedInProgress = personalizedMeditations.filter(m => 
+          m.status !== 'completed' && m.lastViewed
+        ).length;
+        const adminInProgress = adminMeditations.filter(m => 
+          m.status !== 'completed' && m.lastViewed
+        ).length;
+        const totalInProgress = personalizedInProgress + adminInProgress;
+        
+        const totalMinutes = totalCompleted * 15;
+        const consecutiveDays = Math.min(totalCompleted, 30);
+        
+        const statsData = {
+          exportDate: new Date().toISOString(),
+          version: '1.0',
+          dashboardStats: {
+            totalCompleted,
+            personalizedCompleted,
+            adminCompleted,
+            totalInProgress,
+            personalizedInProgress,
+            adminInProgress,
+            totalMinutes,
+            consecutiveDays,
+            lastUpdated: new Date().toISOString()
+          },
+          current_user: currentUser,
+          categories: categories,
+          personalized_meditations: personalizedMeditations,
+          admin_meditations: adminMeditations
+        };
+
+        const dataStr = JSON.stringify(statsData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `oraetmedita_stats_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        showNotification('✅ Estatísticas do dashboard exportadas com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao exportar estatísticas:', error);
+        showNotification('❌ Erro ao exportar estatísticas!', 'error');
+      }
+    }
+
+    // Importar estatísticas do dashboard
+    function importUsersData() {
+      try {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.style.display = 'none';
+        
+        input.addEventListener('change', async (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+          
+          try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            
+            // Validar estrutura do arquivo
+            if (!data.dashboardStats) {
+              throw new Error('Arquivo inválido: não contém estatísticas do dashboard');
+            }
+            
+            if (!confirm('Importar estatísticas do dashboard? Esta ação irá substituir os dados atuais.')) {
+              return;
+            }
+            
+            // Importar dados
+            if (data.personalized_meditations) {
+              localStorage.setItem('personalized_meditations', JSON.stringify(data.personalized_meditations));
+            }
+            
+            if (data.admin_meditations) {
+              localStorage.setItem('meditations', JSON.stringify(data.admin_meditations));
+            }
+            
+            if (data.categories) {
+              localStorage.setItem('categories', JSON.stringify(data.categories));
+            }
+            
+            if (data.current_user) {
+              localStorage.setItem('current_user', JSON.stringify(data.current_user));
+            }
+            
+            // Recarregar dados
+            loadUsersData();
+            
+            showNotification('✅ Estatísticas do dashboard importadas com sucesso!', 'success');
+            
+          } catch (error) {
+            console.error('Erro ao importar estatísticas:', error);
+            showNotification('❌ Erro ao importar estatísticas: ' + error.message, 'error');
+          }
+          
+          // Limpar input
+          document.body.removeChild(input);
+        });
+        
+        document.body.appendChild(input);
+        input.click();
+        
+      } catch (error) {
+        console.error('Erro ao preparar importação:', error);
+        showNotification('❌ Erro ao preparar importação', 'error');
+      }
+    }
+
+    // Atualizar estatísticas
+    function refreshStats() {
+      loadUsersData();
+      showNotification('✅ Estatísticas atualizadas!', 'success');
+    }
+
+    // ===== FUNÇÕES PARA GERENCIAMENTO DE USUÁRIOS =====
+
+    // Função para gerenciar usuários (mesma do index.html)
+    async function manageUsers(newUserData) {
+      console.log('🔄 Função manageUsers chamada com:', newUserData);
+      
+      // Carregar usuários existentes
+      let existingUsers = [];
+      try {
+        const usersData = localStorage.getItem('users');
+        if (usersData) {
+          existingUsers = JSON.parse(usersData);
+          console.log('📋 Usuários carregados do localStorage:', existingUsers.length);
+        }
+      } catch (error) {
+        console.error('❌ Erro ao carregar usuários:', error);
+        existingUsers = [];
+      }
+      
+      // Verificar se o email já existe (case-insensitive)
+      const emailExists = existingUsers.some(user => 
+        user.email.toLowerCase() === newUserData.email.toLowerCase()
+      );
+      
+      if (emailExists) {
+        console.log('❌ Email já existe:', newUserData.email);
+        return { 
+          success: false, 
+          error: 'Este email já está cadastrado! Use um email diferente.',
+          emailExists: true 
+        };
+      }
+      
+      // SEMPRE criar um novo usuário com ID único
+      const timestamp = Date.now();
+      const randomId = Math.random().toString(36).substr(2, 9);
+      const uniqueId = `user_${timestamp}_${randomId}`;
+      
+      const newUser = {
+        ...newUserData,
+        id: uniqueId,
+        createdAt: new Date().toISOString(),
+        lastActivity: new Date().toISOString(),
+        userNumber: existingUsers.length + 1 // Número sequencial do usuário
+      };
+      
+      console.log('🆔 Criando novo usuário com ID:', uniqueId);
+      console.log('📊 Número do usuário:', newUser.userNumber);
+      
+      // Adicionar à lista de usuários
+      existingUsers.push(newUser);
+      
+      // Salvar array atualizado
+      try {
+        localStorage.setItem('users', JSON.stringify(existingUsers));
+        console.log('✅ Novo usuário adicionado com sucesso. Total:', existingUsers.length);
+        
+        // Sincronizar com Supabase se disponível
+        if (window.supabaseManager) {
+          try {
+            console.log('🔄 Sincronizando com Supabase...');
+            const supabaseUser = {
+              email: newUser.email,
+              name: newUser.name,
+              password_hash: 'admin-created', // Hash temporário
+              is_active: true
+            };
+            
+            const createdUser = await window.supabaseManager.createUser(supabaseUser);
+            console.log('✅ Usuário criado no Supabase:', createdUser);
+            
+            // Atualizar o ID local com o ID do Supabase
+            if (createdUser && createdUser[0]) {
+              newUser.id = createdUser[0].id;
+              localStorage.setItem('users', JSON.stringify(existingUsers));
+              console.log('🔄 ID atualizado com ID do Supabase:', newUser.id);
+            }
+          } catch (supabaseError) {
+            console.error('⚠️ Erro ao sincronizar com Supabase:', supabaseError);
+            console.log('ℹ️ Usuário salvo apenas localmente');
+          }
+        } else {
+          console.log('ℹ️ Supabase Manager não disponível - usuário salvo apenas localmente');
+        }
+        
+        // Verificar se foi salvo corretamente
+        const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        console.log('🔍 Verificação: usuários salvos:', savedUsers.length);
+        
+        return { success: true, userId: uniqueId, totalUsers: existingUsers.length };
+      } catch (error) {
+        console.error('❌ Erro ao salvar usuários:', error);
+        return { success: false, error: error.message };
+      }
+    }
+
+    // Migrar dados antigos de usuários para o novo formato
+    function migrateOldUserData() {
+      try {
+        console.log('🔄 Iniciando migração de dados antigos...');
+        
+        const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+        let allUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        console.log('📋 Dados encontrados:', {
+          userData: userData ? 'Presente' : 'Ausente',
+          currentUser: currentUser ? 'Presente' : 'Ausente',
+          allUsersCount: allUsers.length
+        });
+        
+        // Sempre verificar se há dados antigos que não estão no array
+        const migratedUsers = [...allUsers]; // Copiar usuários existentes
+        
+        // Adicionar userData se não estiver no array
+        if (userData && !migratedUsers.some(u => u.email === userData.email)) {
+          console.log('➕ Migrando userData:', userData.email);
+          migratedUsers.push({
+            id: 'user_' + Date.now(),
+            name: userData.name || 'Usuário',
+            email: userData.email || 'N/A',
+            planType: userData.planType || 'trial',
+            registrationDate: userData.registrationDate,
+            trialExpiry: userData.trialExpiry,
+            lastActivity: new Date().toISOString()
+          });
+        }
+        
+        // Adicionar currentUser se não estiver no array
+        if (currentUser && !migratedUsers.some(u => u.email === currentUser.email)) {
+          console.log('➕ Migrando currentUser:', currentUser.email);
+          migratedUsers.push({
+            id: 'user_' + (Date.now() + 1),
+            name: currentUser.name || 'Usuário Atual',
+            email: currentUser.email || 'N/A',
+            planType: currentUser.plan || 'free',
+            registrationDate: currentUser.createdAt,
+            lastActivity: new Date().toISOString()
+          });
+        }
+        
+        // Salvar apenas se houve mudanças
+        if (migratedUsers.length !== allUsers.length) {
+          localStorage.setItem('users', JSON.stringify(migratedUsers));
+          console.log('✅ Dados de usuários migrados:', migratedUsers.length, 'usuários');
+          return true;
+        } else {
+          console.log('ℹ️ Nenhuma migração necessária');
+          return false;
+        }
+      } catch (error) {
+        console.error('❌ Erro ao migrar dados de usuários:', error);
+        return false;
+      }
+    }
+
+    // Carregar dados de gerenciamento de usuários
+    function loadUsersManagementData() {
+      const grid = document.getElementById('users-management-grid');
+      
+      try {
+        console.log('🔄 Carregando dados de gerenciamento de usuários...');
+        
+        // Migrar dados antigos para o novo formato se necessário
+        const migrationResult = migrateOldUserData();
+        if (migrationResult) {
+          console.log('✅ Migração realizada com sucesso');
+        }
+        
+        // Coletar todos os dados de usuários do sistema
+        const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+        const userStats = JSON.parse(localStorage.getItem('user_meditation_stats') || '{}');
+        const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+        const userSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+        
+        console.log('📊 Dados coletados:', {
+          allUsersCount: allUsers.length,
+          userData: userData ? 'Presente' : 'Ausente',
+          currentUser: currentUser ? 'Presente' : 'Ausente',
+          personalizedMeditationsCount: personalizedMeditations.length,
+          userSchedulesCount: userSchedules.length
+        });
+        
+        // Criar lista de usuários
+        const users = [];
+        
+        // Adicionar todos os usuários do array 'users'
+        allUsers.forEach((user, index) => {
+          console.log(`👤 Processando usuário ${index + 1}:`, user.email);
+          users.push({
+            id: user.id || 'user_' + Date.now(),
+            name: user.name || 'Usuário',
+            email: user.email || 'N/A',
+            planType: user.planType || 'trial',
+            registrationDate: user.registrationDate,
+            trialExpiry: user.trialExpiry,
+            source: 'users_array',
+            lastActivity: user.lastActivity || new Date().toISOString()
+          });
+        });
+        
+        // Adicionar usuário do userData se não estiver no array (compatibilidade)
+        if (userData && !users.some(u => u.email === userData.email)) {
+          console.log('➕ Adicionando userData:', userData.email);
+          users.push({
+            id: 'user_data',
+            name: userData.name || 'Usuário',
+            email: userData.email || 'N/A',
+            planType: userData.planType || 'trial',
+            registrationDate: userData.registrationDate,
+            trialExpiry: userData.trialExpiry,
+            source: 'userData',
+            lastActivity: new Date().toISOString()
+          });
+        }
+        
+        // Adicionar usuário do current_user se não estiver no array (compatibilidade)
+        if (currentUser && !users.some(u => u.email === currentUser.email)) {
+          console.log('➕ Adicionando currentUser:', currentUser.email);
+          users.push({
+            id: 'current_user',
+            name: currentUser.name || 'Usuário Atual',
+            email: currentUser.email || 'N/A',
+            planType: currentUser.plan || 'free',
+            registrationDate: currentUser.createdAt,
+            source: 'current_user',
+            lastActivity: new Date().toISOString()
+          });
+        }
+        
+        console.log(`📋 Total de usuários processados: ${users.length}`);
+        
+        if (users.length === 0) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">👥</div>
+              <h3>Nenhum usuário encontrado</h3>
+              <p>Os usuários registrados aparecerão aqui quando houver dados.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+
+        users.forEach((user, index) => {
+          // Calcular estatísticas do usuário
+          const userPersonalizedMeditations = personalizedMeditations.filter(m => 
+            m.userEmail === user.email || m.userId === user.id
+          );
+          const completedMeditations = userPersonalizedMeditations.filter(m => m.status === 'completed').length;
+          const inProgressMeditations = userPersonalizedMeditations.filter(m => 
+            m.status !== 'completed' && m.lastViewed
+          ).length;
+          
+          // Obter estatísticas do admin se disponíveis
+          const adminUser = allUsers.find(u => u.id === user.id);
+          const userStats = adminUser?.stats || {
+            consecutiveDays: 0,
+            completedMeditations: completedMeditations,
+            totalTime: '0h 0min',
+            totalMeditations: userPersonalizedMeditations.length,
+            inProgressMeditations: inProgressMeditations
+          };
+          const userSchedulesCount = userSchedules.length;
+          
+          // Verificar status do plano
+          const isTrialExpired = user.trialExpiry && new Date(user.trialExpiry) < new Date();
+          const planStatus = isTrialExpired ? 'Expirado' : 
+                           user.planType === 'premium' ? 'Premium' : 
+                           user.planType === 'trial' ? 'Trial' : 'Free';
+          
+          html += `
+            <div class="data-card">
+              <div class="card-header">
+                <h3>👤 ${user.name} <span style="font-size: 0.8em; color: #7ee787;">#${user.userNumber || (index + 1)}</span></h3>
+                <div class="card-actions">
+                  <button class="btn btn-sm btn-secondary" onclick="viewUserDetails('${user.id}')">
+                    👁️ Ver Detalhes
+                  </button>
+                  <button class="btn btn-sm btn-warning" onclick="editUserStats('${user.id}')">
+                    📊 Estatísticas
+                  </button>
+                  <button class="btn btn-sm btn-primary" onclick="editUser('${user.id}')">
+                    ✏️ Editar
+                  </button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+              <div class="card-content">
+                <p><strong>ID Único:</strong> <code style="background: #1a1b2e; padding: 2px 6px; border-radius: 3px; font-size: 0.8em;">${user.id}</code></p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Plano:</strong> <span class="badge ${planStatus === 'Premium' ? 'badge-success' : planStatus === 'Trial' ? 'badge-warning' : 'badge-secondary'}">${planStatus}</span></p>
+                <p><strong>Data de Registro:</strong> ${user.registrationDate ? new Date(user.registrationDate).toLocaleString('pt-BR') : 'N/A'}</p>
+                ${user.trialExpiry ? `<p><strong>Expiração Trial:</strong> ${new Date(user.trialExpiry).toLocaleString('pt-BR')}</p>` : ''}
+                <p><strong>Meditações Concluídas:</strong> ${completedMeditations}</p>
+                <p><strong>Meditações em Andamento:</strong> ${inProgressMeditations}</p>
+                <p><strong>Agendamentos:</strong> ${userSchedulesCount}</p>
+                <p><strong>Fonte de Dados:</strong> ${user.source}</p>
+                <p><strong>Última Atividade:</strong> ${new Date(user.lastActivity).toLocaleString('pt-BR')}</p>
+              </div>
+            </div>
+          `;
+        });
+
+        grid.innerHTML = html;
+        
+        console.log('✅ Dados de gerenciamento de usuários carregados:', users.length, 'usuários');
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar dados de usuários:', error);
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <h3>Erro ao carregar usuários</h3>
+            <p>Não foi possível carregar os dados dos usuários.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Visualizar detalhes do usuário
+    function viewUserDetails(userId) {
+      const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+      const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+      const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+      const userSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+      
+      let user = null;
+      if (userId === 'user_data' && userData) {
+        user = userData;
+      } else if (userId === 'current_user' && currentUser) {
+        user = currentUser;
+      }
+      
+      if (!user) {
+        showNotification('❌ Usuário não encontrado!', 'error');
+        return;
+      }
+
+      // Filtrar dados específicos do usuário
+      const userPersonalizedMeditations = personalizedMeditations.filter(m => 
+        m.userEmail === user.email || m.userId === userId
+      );
+      const userSchedulesFiltered = userSchedules.filter(s => 
+        s.userId === userId || s.userEmail === user.email
+      );
+
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'block';
+      modal.innerHTML = `
+        <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+          <div class="modal-header">
+            <h3>Detalhes do Usuário: ${user.name || user.email}</h3>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div style="background: #23243a; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+              <h4>📋 Informações Básicas</h4>
+              <p><strong>Nome:</strong> ${user.name || 'N/A'}</p>
+              <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+              <p><strong>Plano:</strong> ${user.planType || user.plan || 'N/A'}</p>
+              <p><strong>Data de Registro:</strong> ${user.registrationDate || user.createdAt ? new Date(user.registrationDate || user.createdAt).toLocaleString('pt-BR') : 'N/A'}</p>
+              ${user.trialExpiry ? `<p><strong>Expiração Trial:</strong> ${new Date(user.trialExpiry).toLocaleString('pt-BR')}</p>` : ''}
+            </div>
+            
+            <div style="background: #23243a; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+              <h4>📊 Estatísticas</h4>
+              <p><strong>Meditações Personalizadas:</strong> ${userPersonalizedMeditations.length}</p>
+              <p><strong>Meditações Concluídas:</strong> ${userPersonalizedMeditations.filter(m => m.status === 'completed').length}</p>
+              <p><strong>Meditações em Andamento:</strong> ${userPersonalizedMeditations.filter(m => m.status !== 'completed' && m.lastViewed).length}</p>
+              <p><strong>Agendamentos:</strong> ${userSchedulesFiltered.length}</p>
+            </div>
+            
+            ${userPersonalizedMeditations.length > 0 ? `
+            <div style="background: #23243a; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+              <h4>📖 Meditações Personalizadas</h4>
+              ${userPersonalizedMeditations.map(meditation => `
+                <div style="border-bottom: 1px solid #3a3b5a; padding: 8px 0;">
+                  <p><strong>${meditation.title}</strong></p>
+                  <p style="font-size: 0.9rem; color: #a3a8c9;">Status: ${meditation.status || 'pending'}</p>
+                  ${meditation.lastViewed ? `<p style="font-size: 0.8rem; color: #7ee787;">Vista em: ${new Date(meditation.lastViewed).toLocaleString('pt-BR')}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+            
+            ${userSchedulesFiltered.length > 0 ? `
+            <div style="background: #23243a; padding: 16px; border-radius: 8px;">
+              <h4>📅 Agendamentos</h4>
+              ${userSchedulesFiltered.map(schedule => `
+                <div style="border-bottom: 1px solid #3a3b5a; padding: 8px 0;">
+                  <p><strong>${schedule.title || 'Agendamento'}</strong></p>
+                  <p style="font-size: 0.9rem; color: #a3a8c9;">${schedule.time} - ${schedule.category}</p>
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Editar usuário
+    function editUser(userId) {
+      const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+      const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+      
+      let user = null;
+      if (userId === 'user_data' && userData) {
+        user = userData;
+      } else if (userId === 'current_user' && currentUser) {
+        user = currentUser;
+      }
+      
+      if (!user) {
+        showNotification('❌ Usuário não encontrado!', 'error');
+        return;
+      }
+
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'block';
+      modal.innerHTML = `
+        <div class="modal-content" style="max-width: 600px;">
+          <div class="modal-header">
+            <h3>Editar Usuário: ${user.name || user.email}</h3>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="editUserForm">
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; color: #f5f6fa;">Nome:</label>
+                <input type="text" id="editUserName" value="${user.name || ''}" style="width: 100%; padding: 12px; border: 1px solid #3a3b5a; border-radius: 8px; background: #23243a; color: #f5f6fa;">
+              </div>
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; color: #f5f6fa;">Email:</label>
+                <input type="email" id="editUserEmail" value="${user.email || ''}" style="width: 100%; padding: 12px; border: 1px solid #3a3b5a; border-radius: 8px; background: #23243a; color: #f5f6fa;">
+              </div>
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; color: #f5f6fa;">Plano:</label>
+                <select id="editUserPlan" style="width: 100%; padding: 12px; border: 1px solid #3a3b5a; border-radius: 8px; background: #23243a; color: #f5f6fa;">
+                  <option value="trial" ${(user.planType || user.plan) === 'trial' ? 'selected' : ''}>Trial</option>
+                  <option value="premium" ${(user.planType || user.plan) === 'premium' ? 'selected' : ''}>Premium</option>
+                  <option value="free" ${(user.planType || user.plan) === 'free' ? 'selected' : ''}>Free</option>
+                </select>
+              </div>
+              <div style="display: flex; gap: 12px;">
+                <button type="button" onclick="saveUserEdit('${userId}')" class="btn btn-primary" style="flex: 1;">Salvar</button>
+                <button type="button" onclick="this.closest('.modal').remove()" class="btn btn-secondary" style="flex: 1;">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Salvar edição do usuário
+    function saveUserEdit(userId) {
+      const name = document.getElementById('editUserName').value;
+      const email = document.getElementById('editUserEmail').value;
+      const plan = document.getElementById('editUserPlan').value;
+      
+      if (!name || !email) {
+        showNotification('❌ Nome e email são obrigatórios!', 'error');
+        return;
+      }
+      
+      try {
+        if (userId === 'user_data') {
+          const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+          userData.name = name;
+          userData.email = email;
+          userData.planType = plan;
+          localStorage.setItem('userData', JSON.stringify(userData));
+        } else if (userId === 'current_user') {
+          const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+          currentUser.name = name;
+          currentUser.email = email;
+          currentUser.plan = plan;
+          localStorage.setItem('current_user', JSON.stringify(currentUser));
+        }
+        
+        document.querySelector('.modal').remove();
+        loadUsersManagementData();
+        showNotification('✅ Usuário atualizado com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao salvar usuário:', error);
+        showNotification('❌ Erro ao salvar usuário!', 'error');
+      }
+    }
+
+    // Função para editar estatísticas do usuário
+    function editUserStats(userId) {
+        try {
+            console.log('🔄 Editando estatísticas do usuário:', userId);
+            
+            // Carregar dados dos usuários
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.id === userId);
+            
+            if (!user) {
+                console.error('❌ Usuário não encontrado:', userId);
+                return;
+            }
+            
+            console.log('📊 Dados do usuário:', user);
+            
+            // Preencher formulário com dados atuais
+            document.getElementById('user-name').value = user.name || '';
+            document.getElementById('user-email').value = user.email || '';
+            document.getElementById('user-consecutive-days').value = user.stats?.consecutiveDays || 0;
+            document.getElementById('user-completed-meditations').value = user.stats?.completedMeditations || 0;
+            document.getElementById('user-total-time').value = user.stats?.totalTime || '0h 0min';
+            document.getElementById('user-total-meditations').value = user.stats?.totalMeditations || 0;
+            document.getElementById('user-in-progress').value = user.stats?.inProgressMeditations || 0;
+            document.getElementById('user-last-login').value = user.lastLogin ? new Date(user.lastLogin).toLocaleString('pt-BR') : 'Nunca';
+            
+            // Armazenar ID do usuário para salvar
+            window.currentEditingUserId = userId;
+            
+            // Abrir modal
+            openModal('user-stats');
+            
+        } catch (error) {
+            console.error('❌ Erro ao editar estatísticas do usuário:', error);
+        }
+    }
+
+    // Função para salvar estatísticas do usuário
+    function saveUserStats(event) {
+        event.preventDefault();
+        
+        try {
+            const userId = window.currentEditingUserId;
+            if (!userId) {
+                console.error('❌ ID do usuário não encontrado');
+                return;
+            }
+            
+            console.log('💾 Salvando estatísticas do usuário:', userId);
+            
+            // Obter dados do formulário
+            const formData = new FormData(event.target);
+            const stats = {
+                consecutiveDays: parseInt(formData.get('consecutiveDays')) || 0,
+                completedMeditations: parseInt(formData.get('completedMeditations')) || 0,
+                totalTime: formData.get('totalTime') || '0h 0min',
+                totalMeditations: parseInt(formData.get('totalMeditations')) || 0,
+                inProgressMeditations: parseInt(formData.get('inProgressMeditations')) || 0
+            };
+            
+            console.log('📊 Novas estatísticas:', stats);
+            
+            // Atualizar usuário no localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === userId);
+            
+            if (userIndex !== -1) {
+                users[userIndex].stats = stats;
+                users[userIndex].lastUpdated = new Date().toISOString();
+                
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                console.log('✅ Estatísticas salvas com sucesso');
+                showNotification('Estatísticas do usuário atualizadas com sucesso!', 'success');
+                
+                // Fechar modal e recarregar lista
+                closeModal('user-stats');
+                loadUsersManagementData();
+                
+            } else {
+                console.error('❌ Usuário não encontrado para atualização');
+                showNotification('Erro: Usuário não encontrado', 'error');
+            }
+            
+        } catch (error) {
+            console.error('❌ Erro ao salvar estatísticas:', error);
+            showNotification('Erro ao salvar estatísticas', 'error');
+        }
+    }
+
+    // Deletar usuário
+    function deleteUser(userId) {
+      if (!confirm('Tem certeza que deseja deletar este usuário? Esta ação não pode ser desfeita!')) {
+        return;
+      }
+      
+      try {
+        console.log('🗑️ Tentando deletar usuário com ID:', userId);
+        
+        // Carregar array de usuários
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        console.log('📋 Usuários antes da exclusão:', users.length);
+        
+        // Encontrar e remover o usuário do array
+        const userIndex = users.findIndex(user => user.id === userId);
+        
+        if (userIndex !== -1) {
+          const deletedUser = users[userIndex];
+          console.log('👤 Usuário encontrado:', deletedUser.name, deletedUser.email);
+          
+          // Remover do array
+          users.splice(userIndex, 1);
+          
+          // Salvar array atualizado
+          localStorage.setItem('users', JSON.stringify(users));
+          console.log('✅ Usuário removido do array. Total restante:', users.length);
+          
+          // Atualizar números sequenciais dos usuários restantes
+          users.forEach((user, index) => {
+            user.userNumber = index + 1;
+          });
+          
+          // Salvar novamente com números atualizados
+          localStorage.setItem('users', JSON.stringify(users));
+          console.log('🔄 Números sequenciais atualizados');
+          
+          showNotification(`✅ Usuário "${deletedUser.name}" deletado com sucesso!`, 'success');
+        } else {
+          console.log('❌ Usuário não encontrado no array');
+          
+          // Fallback para dados antigos
+          if (userId === 'user_data') {
+            localStorage.removeItem('userData');
+            console.log('🗑️ userData removido');
+          } else if (userId === 'current_user') {
+            localStorage.removeItem('current_user');
+            console.log('🗑️ current_user removido');
+          }
+          
+          showNotification('✅ Usuário deletado com sucesso!', 'success');
+        }
+        
+        // Recarregar dados
+        loadUsersManagementData();
+        
+      } catch (error) {
+        console.error('❌ Erro ao deletar usuário:', error);
+        showNotification('❌ Erro ao deletar usuário!', 'error');
+      }
+    }
+
+    // Adicionar novo usuário
+    function showAddUserModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'block';
+      modal.innerHTML = `
+        <div class="modal-content" style="max-width: 600px;">
+          <div class="modal-header">
+            <h3>Adicionar Novo Usuário</h3>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="addUserForm">
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; color: #f5f6fa;">Nome:</label>
+                <input type="text" id="newUserName" required style="width: 100%; padding: 12px; border: 1px solid #3a3b5a; border-radius: 8px; background: #23243a; color: #f5f6fa;">
+              </div>
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; color: #f5f6fa;">Email:</label>
+                <input type="email" id="newUserEmail" required style="width: 100%; padding: 12px; border: 1px solid #3a3b5a; border-radius: 8px; background: #23243a; color: #f5f6fa;">
+              </div>
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; color: #f5f6fa;">Plano:</label>
+                <select id="newUserPlan" style="width: 100%; padding: 12px; border: 1px solid #3a3b5a; border-radius: 8px; background: #23243a; color: #f5f6fa;">
+                  <option value="trial">Trial</option>
+                  <option value="premium">Premium</option>
+                  <option value="free">Free</option>
+                </select>
+              </div>
+              <div style="display: flex; gap: 12px;">
+                <button type="button" onclick="saveNewUser()" class="btn btn-primary" style="flex: 1;">Adicionar</button>
+                <button type="button" onclick="this.closest('.modal').remove()" class="btn btn-secondary" style="flex: 1;">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Salvar novo usuário
+    function saveNewUser() {
+      const name = document.getElementById('newUserName').value;
+      const email = document.getElementById('newUserEmail').value;
+      const plan = document.getElementById('newUserPlan').value;
+      
+      if (!name || !email) {
+        showNotification('❌ Nome e email são obrigatórios!', 'error');
+        return;
+      }
+      
+      // Verificar se o email já existe
+      try {
+        const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        const emailExists = existingUsers.some(user => user.email.toLowerCase() === email.toLowerCase());
+        
+        if (emailExists) {
+          showNotification('❌ Este email já está cadastrado! Use um email diferente.', 'error');
+          return;
+        }
+        
+        console.log('➕ Adicionando novo usuário via painel admin:', name, email);
+        
+        const newUserData = {
+          name: name,
+          email: email,
+          planType: plan,
+          registrationDate: new Date().toISOString(),
+          trialExpiry: plan === 'trial' ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() : null,
+          lastActivity: new Date().toISOString()
+        };
+        
+        // Usar a função centralizada para gerenciar usuários
+        const result = manageUsers(newUserData);
+        
+        if (result.success) {
+          console.log('✅ Usuário adicionado via painel admin:', result.userId);
+          document.querySelector('.modal').remove();
+          loadUsersManagementData();
+          showNotification(`✅ Usuário "${name}" adicionado com sucesso!`, 'success');
+        } else {
+          console.error('❌ Erro ao adicionar usuário via painel admin:', result.error);
+          showNotification('❌ Erro ao adicionar usuário!', 'error');
+        }
+      } catch (error) {
+        console.error('❌ Erro ao adicionar usuário:', error);
+        showNotification('❌ Erro ao adicionar usuário!', 'error');
+      }
+    }
+
+    // Exportar dados de gerenciamento de usuários
+    function exportUsersManagementData() {
+      try {
+        const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+        const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+        const userSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+        
+        const usersData = {
+          exportDate: new Date().toISOString(),
+          version: '1.0',
+          users: {
+            userData: userData,
+            currentUser: currentUser
+          },
+          userActivities: {
+            personalizedMeditations: personalizedMeditations,
+            userSchedules: userSchedules
+          }
+        };
+
+        const dataStr = JSON.stringify(usersData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `oraetmedita_users_management_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        showNotification('✅ Dados de gerenciamento de usuários exportados com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao exportar dados de usuários:', error);
+        showNotification('❌ Erro ao exportar dados de usuários!', 'error');
+      }
+    }
+
+    // Importar dados de gerenciamento de usuários
+    function importUsersManagementData() {
+      try {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.style.display = 'none';
+        
+        input.addEventListener('change', async (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+          
+          try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            
+            // Validar estrutura do arquivo
+            if (!data.users) {
+              throw new Error('Arquivo inválido: não contém dados de usuários');
+            }
+            
+            if (!confirm('Importar dados de gerenciamento de usuários? Esta ação irá substituir os dados atuais.')) {
+              return;
+            }
+            
+            // Importar dados
+            if (data.users.userData) {
+              localStorage.setItem('userData', JSON.stringify(data.users.userData));
+            }
+            
+            if (data.users.currentUser) {
+              localStorage.setItem('current_user', JSON.stringify(data.users.currentUser));
+            }
+            
+            if (data.userActivities) {
+              if (data.userActivities.personalizedMeditations) {
+                localStorage.setItem('personalized_meditations', JSON.stringify(data.userActivities.personalizedMeditations));
+              }
+              
+              if (data.userActivities.userSchedules) {
+                localStorage.setItem('user_schedules', JSON.stringify(data.userActivities.userSchedules));
+              }
+            }
+            
+            // Recarregar dados
+            loadUsersManagementData();
+            
+            showNotification('✅ Dados de gerenciamento de usuários importados com sucesso!', 'success');
+            
+          } catch (error) {
+            console.error('Erro ao importar dados de usuários:', error);
+            showNotification('❌ Erro ao importar dados de usuários: ' + error.message, 'error');
+          }
+          
+          // Limpar input
+          document.body.removeChild(input);
+        });
+        
+        document.body.appendChild(input);
+        input.click();
+        
+      } catch (error) {
+        console.error('Erro ao preparar importação:', error);
+        showNotification('❌ Erro ao preparar importação', 'error');
+      }
+    }
+
+    // Atualizar lista de usuários
+    function refreshUsersList() {
+      loadUsersManagementData();
+      showNotification('✅ Lista de usuários atualizada!', 'success');
+    }
+
+    // ... existing code ...
+
+    // Função para exportar dados completos para JSON unificado
+    function exportCompleteData() {
+        try {
+            console.log('📤 Iniciando exportação completa...');
+            
+            // Coletar todos os dados
+            const completeData = {
+                metadata: {
+                    version: "1.0",
+                    createdAt: new Date().toISOString(),
+                    description: "Backup completo do sistema Ora et Medita - Inclui meditações padrão, categorias, usuários, meditações personalizadas, agendamentos e estatísticas",
+                    totalUsers: 0,
+                    totalPersonalizedMeditations: 0,
+                    totalSchedules: 0
+                },
+                meditations: JSON.parse(localStorage.getItem('meditations') || '[]'),
+                categories: JSON.parse(localStorage.getItem('categories') || '[]'),
+                users: JSON.parse(localStorage.getItem('users') || '[]'),
+                personalizedMeditations: JSON.parse(localStorage.getItem('personalized_meditations') || '[]'),
+                schedules: JSON.parse(localStorage.getItem('user_schedules') || '[]'),
+                userMeditationStats: JSON.parse(localStorage.getItem('user_meditation_stats') || '{}'),
+                personalizedMeditationsHistory: JSON.parse(localStorage.getItem('personalized_meditations_history') || '[]'),
+                userSchedules: JSON.parse(localStorage.getItem('user_schedules') || '[]'),
+                activeSessions: JSON.parse(localStorage.getItem('active_sessions') || '[]'),
+                systemSettings: {
+                    version: "1.0",
+                    lastBackup: new Date().toISOString(),
+                    autoBackup: true,
+                    backupInterval: "daily",
+                    maxUsers: 1000,
+                    maxPersonalizedMeditations: 100,
+                    maxSchedules: 50
+                }
+            };
+            
+            // Atualizar metadados
+            completeData.metadata.totalUsers = completeData.users.length;
+            completeData.metadata.totalPersonalizedMeditations = completeData.personalizedMeditations.length;
+            completeData.metadata.totalSchedules = completeData.schedules.length;
+            
+            // Criar nome do arquivo com timestamp
+            const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '-');
+            const filename = `oraetmedita_backup_completo_${timestamp}.json`;
+            
+            // Converter para JSON e fazer download
+            const jsonString = JSON.stringify(completeData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            console.log('✅ Exportação completa realizada:', filename);
+            showNotification('Exportação completa realizada com sucesso!', 'success');
+            
+        } catch (error) {
+            console.error('❌ Erro na exportação completa:', error);
+            showNotification('Erro na exportação completa', 'error');
+        }
+    }
+
+    // Função para importar dados completos do JSON unificado
+    function importCompleteData() {
+        try {
+            console.log('📥 Iniciando importação completa...');
+            
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const completeData = JSON.parse(e.target.result);
+                            console.log('📋 Dados carregados:', completeData);
+                            
+                            // Validar estrutura do arquivo
+                            if (!completeData.metadata || !completeData.meditations) {
+                                throw new Error('Arquivo inválido: estrutura incorreta');
+                            }
+                            
+                            // Importar cada seção
+                            if (completeData.meditations) {
+                                localStorage.setItem('meditations', JSON.stringify(completeData.meditations));
+                                console.log('✅ Meditações importadas:', completeData.meditations.length);
+                            }
+                            
+                            if (completeData.categories) {
+                                localStorage.setItem('categories', JSON.stringify(completeData.categories));
+                                console.log('✅ Categorias importadas:', completeData.categories.length);
+                            }
+                            
+                            if (completeData.users) {
+                                localStorage.setItem('users', JSON.stringify(completeData.users));
+                                console.log('✅ Usuários importados:', completeData.users.length);
+                            }
+                            
+                            if (completeData.personalizedMeditations) {
+                                localStorage.setItem('personalized_meditations', JSON.stringify(completeData.personalizedMeditations));
+                                console.log('✅ Meditações personalizadas importadas:', completeData.personalizedMeditations.length);
+                            }
+                            
+                            if (completeData.schedules) {
+                                localStorage.setItem('user_schedules', JSON.stringify(completeData.schedules));
+                                console.log('✅ Agendamentos importados:', completeData.schedules.length);
+                            }
+                            
+                            if (completeData.userMeditationStats) {
+                                localStorage.setItem('user_meditation_stats', JSON.stringify(completeData.userMeditationStats));
+                                console.log('✅ Estatísticas importadas');
+                            }
+                            
+                            if (completeData.personalizedMeditationsHistory) {
+                                localStorage.setItem('personalized_meditations_history', JSON.stringify(completeData.personalizedMeditationsHistory));
+                                console.log('✅ Histórico de meditações importado:', completeData.personalizedMeditationsHistory.length);
+                            }
+                            
+                            if (completeData.userSchedules) {
+                                localStorage.setItem('user_schedules', JSON.stringify(completeData.userSchedules));
+                                console.log('✅ Agendamentos de usuários importados:', completeData.userSchedules.length);
+                            }
+                            
+                            if (completeData.activeSessions) {
+                                localStorage.setItem('active_sessions', JSON.stringify(completeData.activeSessions));
+                                console.log('✅ Sessões ativas importadas:', completeData.activeSessions.length);
+                            }
+                            
+                            // Recarregar dados na interface
+                            loadAllData();
+                            
+                            console.log('✅ Importação completa realizada com sucesso!');
+                            showNotification('Importação completa realizada com sucesso!', 'success');
+                            
+                        } catch (error) {
+                            console.error('❌ Erro ao processar arquivo:', error);
+                            showNotification('Erro ao processar arquivo: ' + error.message, 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+            
+        } catch (error) {
+            console.error('❌ Erro na importação completa:', error);
+            showNotification('Erro na importação completa', 'error');
+        }
+    }
+
+    // Função para fazer backup automático
+    function autoBackup() {
+        try {
+            console.log('🔄 Iniciando backup automático...');
+            
+            // Coletar dados atuais
+            const currentData = {
+                meditations: JSON.parse(localStorage.getItem('meditations') || '[]'),
+                categories: JSON.parse(localStorage.getItem('categories') || '[]'),
+                users: JSON.parse(localStorage.getItem('users') || '[]'),
+                personalizedMeditations: JSON.parse(localStorage.getItem('personalized_meditations') || '[]'),
+                schedules: JSON.parse(localStorage.getItem('user_schedules') || '[]'),
+                userMeditationStats: JSON.parse(localStorage.getItem('user_meditation_stats') || '{}'),
+                personalizedMeditationsHistory: JSON.parse(localStorage.getItem('personalized_meditations_history') || '[]'),
+                userSchedules: JSON.parse(localStorage.getItem('user_schedules') || '[]'),
+                activeSessions: JSON.parse(localStorage.getItem('active_sessions') || '[]')
+            };
+            
+            // Salvar backup no localStorage
+            localStorage.setItem('auto_backup_' + Date.now(), JSON.stringify(currentData));
+            
+            // Manter apenas os últimos 5 backups
+            const backupKeys = Object.keys(localStorage).filter(key => key.startsWith('auto_backup_'));
+            if (backupKeys.length > 5) {
+                backupKeys.sort().slice(0, -5).forEach(key => {
+                    localStorage.removeItem(key);
+                });
+            }
+            
+            console.log('✅ Backup automático realizado');
+            
+        } catch (error) {
+            console.error('❌ Erro no backup automático:', error);
+        }
+    }
+
+    // Função para restaurar backup automático
+    function restoreAutoBackup() {
+        try {
+            console.log('🔄 Restaurando backup automático...');
+            
+            const backupKeys = Object.keys(localStorage).filter(key => key.startsWith('auto_backup_'));
+            if (backupKeys.length === 0) {
+                showNotification('Nenhum backup automático encontrado', 'warning');
+                return;
+            }
+            
+            // Pegar o backup mais recente
+            const latestBackupKey = backupKeys.sort().pop();
+            const backupData = JSON.parse(localStorage.getItem(latestBackupKey));
+            
+            // Restaurar dados
+            if (backupData.meditations) localStorage.setItem('meditations', JSON.stringify(backupData.meditations));
+            if (backupData.categories) localStorage.setItem('categories', JSON.stringify(backupData.categories));
+            if (backupData.users) localStorage.setItem('users', JSON.stringify(backupData.users));
+            if (backupData.personalizedMeditations) localStorage.setItem('personalized_meditations', JSON.stringify(backupData.personalizedMeditations));
+            if (backupData.schedules) localStorage.setItem('user_schedules', JSON.stringify(backupData.schedules));
+            if (backupData.userMeditationStats) localStorage.setItem('user_meditation_stats', JSON.stringify(backupData.userMeditationStats));
+            if (backupData.personalizedMeditationsHistory) localStorage.setItem('personalized_meditations_history', JSON.stringify(backupData.personalizedMeditationsHistory));
+            if (backupData.userSchedules) localStorage.setItem('user_schedules', JSON.stringify(backupData.userSchedules));
+            if (backupData.activeSessions) localStorage.setItem('active_sessions', JSON.stringify(backupData.activeSessions));
+            
+            // Recarregar dados na interface
+            loadAllData();
+            
+            console.log('✅ Backup automático restaurado:', latestBackupKey);
+            showNotification('Backup automático restaurado com sucesso!', 'success');
+            
+        } catch (error) {
+            console.error('❌ Erro ao restaurar backup automático:', error);
+            showNotification('Erro ao restaurar backup automático', 'error');
+        }
+    }
+
+    // ... existing code ...
+  </script>
+  
+  <!-- Session Manager -->
+  <script src="session-manager.js"></script>
+  
+  <!-- Backup Manager -->
+  <script src="backup-manager.js"></script>
+  
+  <!-- Supabase Manager -->
+  <script src="supabase-config.js"></script>
+</body>
+</html> 

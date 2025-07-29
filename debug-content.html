@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Conteúdo das Meditações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .meditation-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .field {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-left: 4px solid #007bff;
+        }
+        .field-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .field-content {
+            color: #666;
+            font-style: italic;
+        }
+        .empty {
+            color: #999;
+            font-style: italic;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug - Conteúdo das Meditações</h1>
+        <p>Este arquivo ajuda a verificar o conteúdo das meditações no localStorage.</p>
+        
+        <button onclick="checkLocalStorage()">Verificar localStorage</button>
+        <button onclick="createTestMeditation()">Criar Meditação de Teste</button>
+        <button onclick="clearLocalStorage()">Limpar localStorage</button>
+        <button onclick="loadExampleData()">Carregar Dados de Exemplo</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function checkLocalStorage() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>📊 Verificação do localStorage</h2>';
+            
+            try {
+                // Verificar meditacao-atual
+                const meditacaoAtual = localStorage.getItem('meditacao-atual');
+                results.innerHTML += '<div class="container"><h3>📖 meditacao-atual</h3>';
+                if (meditacaoAtual) {
+                    const data = JSON.parse(meditacaoAtual);
+                    results.innerHTML += '<div class="success">✅ Dados encontrados</div>';
+                    results.innerHTML += '<div class="field"><div class="field-title">Título:</div><div class="field-content">' + (data.title || 'N/A') + '</div></div>';
+                    results.innerHTML += '<div class="field"><div class="field-title">Categoria:</div><div class="field-content">' + (data.category || 'N/A') + '</div></div>';
+                    results.innerHTML += '<div class="field"><div class="field-title">Lectio:</div><div class="field-content">' + (data.lectio ? data.lectio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                    results.innerHTML += '<div class="field"><div class="field-title">Meditatio:</div><div class="field-content">' + (data.meditatio ? data.meditatio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                    results.innerHTML += '<div class="field"><div class="field-title">Oratio:</div><div class="field-content">' + (data.oratio ? data.oratio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                    results.innerHTML += '<div class="field"><div class="field-title">Contemplatio:</div><div class="field-content">' + (data.contemplatio ? data.contemplatio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                } else {
+                    results.innerHTML += '<div class="error">❌ Nenhum dado encontrado</div>';
+                }
+                results.innerHTML += '</div>';
+                
+                // Verificar meditations (admin)
+                const meditations = localStorage.getItem('meditations');
+                results.innerHTML += '<div class="container"><h3>📚 meditations (admin)</h3>';
+                if (meditations) {
+                    const data = JSON.parse(meditations);
+                    results.innerHTML += '<div class="success">✅ ' + data.length + ' meditações encontradas</div>';
+                    
+                    data.forEach((meditation, index) => {
+                        results.innerHTML += '<div class="meditation-item">';
+                        results.innerHTML += '<h4>' + (index + 1) + '. ' + (meditation.title || 'Sem título') + '</h4>';
+                        results.innerHTML += '<div class="field"><div class="field-title">ID:</div><div class="field-content">' + (meditation.id || 'N/A') + '</div></div>';
+                        results.innerHTML += '<div class="field"><div class="field-title">Categoria:</div><div class="field-content">' + (meditation.category || 'N/A') + '</div></div>';
+                        results.innerHTML += '<div class="field"><div class="field-title">Lectio:</div><div class="field-content">' + (meditation.lectio ? meditation.lectio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                        results.innerHTML += '<div class="field"><div class="field-title">Meditatio:</div><div class="field-content">' + (meditation.meditatio ? meditation.meditatio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                        results.innerHTML += '<div class="field"><div class="field-title">Oratio:</div><div class="field-content">' + (meditation.oratio ? meditation.oratio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                        results.innerHTML += '<div class="field"><div class="field-title">Contemplatio:</div><div class="field-content">' + (meditation.contemplatio ? meditation.contemplatio.substring(0, 100) + '...' : '<span class="empty">Vazio</span>') + '</div></div>';
+                        results.innerHTML += '</div>';
+                    });
+                } else {
+                    results.innerHTML += '<div class="error">❌ Nenhuma meditação encontrada</div>';
+                }
+                results.innerHTML += '</div>';
+                
+                // Verificar categories
+                const categories = localStorage.getItem('categories');
+                results.innerHTML += '<div class="container"><h3>📂 categories</h3>';
+                if (categories) {
+                    const data = JSON.parse(categories);
+                    results.innerHTML += '<div class="success">✅ ' + data.length + ' categorias encontradas</div>';
+                    data.forEach(cat => {
+                        results.innerHTML += '<div class="field"><div class="field-title">' + cat.name + '</div><div class="field-content">ID: ' + cat.id + '</div></div>';
+                    });
+                } else {
+                    results.innerHTML += '<div class="error">❌ Nenhuma categoria encontrada</div>';
+                }
+                results.innerHTML += '</div>';
+                
+            } catch (error) {
+                results.innerHTML += '<div class="error">❌ Erro ao verificar localStorage: ' + error.message + '</div>';
+            }
+        }
+        
+        function createTestMeditation() {
+            const testMeditation = {
+                id: 'test_1',
+                title: 'Meditação de Teste - Salmo 1',
+                categoryId: 'cat_4',
+                category: 'Salmos',
+                duration: 15,
+                status: 'pending',
+                lectio: 'Bem-aventurado o homem que não anda segundo o conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda dos escarnecedores. Antes tem o seu prazer na lei do Senhor, e na sua lei medita de dia e de noite.',
+                meditatio: 'Reflita sobre o que significa "andar", "deter-se" e "assentar-se" na companhia dos ímpios. Como você pode cultivar o prazer na lei do Senhor? Que práticas te ajudam a meditar na palavra de Deus?',
+                oratio: 'Senhor, ensina-me a amar tua lei e a meditar nela constantemente. Que eu possa ser como a árvore plantada junto às correntes das águas, dando frutos no tempo certo. Ajuda-me a evitar os caminhos dos ímpios e a permanecer firme em tua palavra.',
+                contemplatio: 'Contemple a imagem da árvore frutífera plantada junto às águas, símbolo da vida espiritual abundante. Sinta-se enraizado na palavra de Deus, nutrido pela graça divina, e frutificando para a glória do Pai.'
+            };
+            
+            // Salvar como meditacao-atual
+            localStorage.setItem('meditacao-atual', JSON.stringify(testMeditation));
+            
+            // Adicionar às meditações admin
+            const existingMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            existingMeditations.push(testMeditation);
+            localStorage.setItem('meditations', JSON.stringify(existingMeditations));
+            
+            document.getElementById('results').innerHTML = '<div class="success">✅ Meditação de teste criada com sucesso!</div>';
+            checkLocalStorage();
+        }
+        
+        function clearLocalStorage() {
+            localStorage.removeItem('meditacao-atual');
+            localStorage.removeItem('meditations');
+            localStorage.removeItem('categories');
+            document.getElementById('results').innerHTML = '<div class="success">✅ localStorage limpo com sucesso!</div>';
+        }
+        
+        function loadExampleData() {
+            const exampleCategories = [
+                {
+                    id: 'cat_1',
+                    name: 'Princípios da Vida Sobrenatural',
+                    icon: '✨',
+                    description: 'Meditações sobre os fundamentos da vida espiritual'
+                },
+                {
+                    id: 'cat_2',
+                    name: 'Imitação de Cristo',
+                    icon: '✝️',
+                    description: 'Meditações baseadas na obra clássica de Tomás de Kempis'
+                },
+                {
+                    id: 'cat_3',
+                    name: 'Evangelho do Dia',
+                    icon: '📖',
+                    description: 'Meditações sobre passagens do Evangelho'
+                },
+                {
+                    id: 'cat_4',
+                    name: 'Salmos',
+                    icon: '🎵',
+                    description: 'Meditações sobre os Salmos da Bíblia Sagrada'
+                }
+            ];
+            
+            const exampleMeditations = [
+                {
+                    id: 'med_1',
+                    title: 'Salmo 1 - O Homem Bem-Aventurado',
+                    categoryId: 'cat_4',
+                    category: 'Salmos',
+                    duration: 15,
+                    status: 'pending',
+                    lectio: 'Bem-aventurado o homem que não anda segundo o conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda dos escarnecedores. Antes tem o seu prazer na lei do Senhor, e na sua lei medita de dia e de noite.',
+                    meditatio: 'Reflita sobre o que significa "andar", "deter-se" e "assentar-se" na companhia dos ímpios. Como você pode cultivar o prazer na lei do Senhor? Que práticas te ajudam a meditar na palavra de Deus?',
+                    oratio: 'Senhor, ensina-me a amar tua lei e a meditar nela constantemente. Que eu possa ser como a árvore plantada junto às correntes das águas, dando frutos no tempo certo. Ajuda-me a evitar os caminhos dos ímpios e a permanecer firme em tua palavra.',
+                    contemplatio: 'Contemple a imagem da árvore frutífera plantada junto às águas, símbolo da vida espiritual abundante. Sinta-se enraizado na palavra de Deus, nutrido pela graça divina, e frutificando para a glória do Pai.'
+                },
+                {
+                    id: 'med_2',
+                    title: 'A Vida Interior',
+                    categoryId: 'cat_1',
+                    category: 'Princípios da Vida Sobrenatural',
+                    duration: 15,
+                    status: 'pending',
+                    lectio: 'A vida interior é o fundamento de toda vida espiritual autêntica. É no silêncio do coração que Deus fala mais claramente.',
+                    meditatio: 'Como você pode cultivar sua vida interior? Que práticas te ajudam a crescer espiritualmente? Que distrações te impedem de ouvir a voz de Deus?',
+                    oratio: 'Senhor, ajuda-me a desenvolver uma vida interior rica e profunda. Ensina-me a encontrar-te no silêncio e a escutar tua voz suave.',
+                    contemplatio: 'Permaneça em silêncio na presença de Deus. Deixe que o amor divino envolva seu coração e mente.'
+                }
+            ];
+            
+            localStorage.setItem('categories', JSON.stringify(exampleCategories));
+            localStorage.setItem('meditations', JSON.stringify(exampleMeditations));
+            
+            document.getElementById('results').innerHTML = '<div class="success">✅ Dados de exemplo carregados com sucesso!</div>';
+            checkLocalStorage();
+        }
+        
+        // Verificar automaticamente ao carregar a página
+        window.onload = function() {
+            checkLocalStorage();
+        };
+    </script>
+</body>
+</html> 

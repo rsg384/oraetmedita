@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Tabela Categories</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #8b5cf6;
+            margin-bottom: 2rem;
+        }
+
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .test-section h3 {
+            color: #7ee787;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .result.success {
+            background: rgba(126, 231, 135, 0.1);
+            border: 1px solid rgba(126, 231, 135, 0.3);
+            color: #7ee787;
+        }
+
+        .result.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+
+        .category-description {
+            color: #a1a1aa;
+            font-size: 14px;
+            margin-top: 0.5rem;
+        }
+
+        .category-icon {
+            font-size: 24px;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📂 Teste - Tabela Categories</h1>
+        
+        <div class="test-section">
+            <h3>🔍 Teste de Conexão</h3>
+            <button class="btn" onclick="testCategoriesConnection()">
+                Testar Conexão Categories
+            </button>
+            <div id="connection-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 Listar Categorias</h3>
+            <button class="btn" onclick="listCategories()">
+                Listar Todas as Categorias
+            </button>
+            <div id="categories-list" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>➕ Criar Nova Categoria</h3>
+            <button class="btn" onclick="createTestCategory()">
+                Criar Categoria de Teste
+            </button>
+            <div id="create-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Estatísticas</h3>
+            <button class="btn" onclick="getCategoriesStats()">
+                Ver Estatísticas
+            </button>
+            <div id="stats-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        async function testCategoriesConnection() {
+            const resultDiv = document.getElementById('connection-result');
+            
+            try {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result';
+                resultDiv.textContent = '🔄 Testando conexão...';
+                
+                const categories = await window.supabaseManager.getCategories();
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Conexão funcionando! ${categories.length} categorias encontradas.`;
+                
+                console.log('✅ Categories connection working:', categories);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro: ${error.message}\n\nExecute o SQL create-categories-table.sql primeiro.`;
+                console.error('❌ Categories connection error:', error);
+            }
+        }
+
+        async function listCategories() {
+            const resultDiv = document.getElementById('categories-list');
+            
+            try {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result';
+                resultDiv.textContent = '🔄 Carregando categorias...';
+                
+                const categories = await window.supabaseManager.getCategories();
+                
+                if (categories && categories.length > 0) {
+                    let html = '<h4>📂 Categorias Encontradas:</h4>';
+                    
+                    categories.forEach(category => {
+                        html += `
+                            <div class="category-card">
+                                <div class="category-name">
+                                    <span class="category-icon">${category.icon || '📁'}</span>
+                                    ${category.name}
+                                </div>
+                                <div class="category-description">${category.description || 'Sem descrição'}</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 0.5rem;">
+                                    ID: ${category.id} | Cor: ${category.color} | Ordem: ${category.sort_order}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = 'Nenhuma categoria encontrada.';
+                }
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro ao listar categorias: ${error.message}`;
+            }
+        }
+
+        async function createTestCategory() {
+            const resultDiv = document.getElementById('create-result');
+            
+            try {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result';
+                resultDiv.textContent = '🔄 Criando categoria de teste...';
+                
+                const testCategory = {
+                    name: 'Categoria de Teste',
+                    description: 'Categoria criada para teste da API',
+                    icon: '🧪',
+                    color: '#ff6b6b',
+                    sort_order: 999
+                };
+                
+                const newCategory = await window.supabaseManager.createCategory(testCategory);
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Categoria criada com sucesso!\n\n${JSON.stringify(newCategory, null, 2)}`;
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro ao criar categoria: ${error.message}`;
+            }
+        }
+
+        async function getCategoriesStats() {
+            const resultDiv = document.getElementById('stats-result');
+            
+            try {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result';
+                resultDiv.textContent = '🔄 Obtendo estatísticas...';
+                
+                const categories = await window.supabaseManager.getCategories();
+                
+                const stats = {
+                    total: categories.length,
+                    active: categories.filter(c => c.is_active).length,
+                    inactive: categories.filter(c => !c.is_active).length,
+                    withIcons: categories.filter(c => c.icon).length,
+                    withColors: categories.filter(c => c.color).length
+                };
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `📊 Estatísticas das Categorias:\n\n` +
+                    `Total: ${stats.total}\n` +
+                    `Ativas: ${stats.active}\n` +
+                    `Inativas: ${stats.inactive}\n` +
+                    `Com ícones: ${stats.withIcons}\n` +
+                    `Com cores: ${stats.withColors}`;
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro ao obter estatísticas: ${error.message}`;
+            }
+        }
+
+        // Testar automaticamente quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de teste categories carregada');
+            setTimeout(() => {
+                testCategoriesConnection();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Cards de Agendamentos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            --background-dark: #0F0F23;
+            --background-card: #1A1A2E;
+            --background-light: #2A2A3E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --accent-green: #10B981;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --border-color: #374151;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --accent-blue-dark: #2563eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+    </style>
+    <link rel="stylesheet" href="dashboard-schedules.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Teste - Cards de Agendamentos Aprimorados</h1>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
+            Cards na mesma linha sem barra de rolagem - se ajustam automaticamente ao espaço disponível
+        </p>
+        
+        <!-- Schedule Section -->
+        <section class="schedule-section">
+            <div class="schedule-header">
+                <h3 class="section-title">
+                    Meus Agendamentos
+                </h3>
+                <button class="add-schedule-btn">
+                    Novo Agendamento
+                </button>
+            </div>
+            <div class="schedule-list" id="dashboardScheduleList">
+                <!-- Cards de teste -->
+                <div class="schedule-card" data-schedule-id="1">
+                    <div class="schedule-card-header">
+                        <h3 class="schedule-card-title">Salmos</h3>
+                        <div class="schedule-card-actions">
+                            <button class="schedule-action-btn" title="Editar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button class="schedule-action-btn delete" title="Excluir">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-card-content">
+                        <div class="schedule-card-info">
+                            <div class="schedule-card-time">
+                                <span class="time-icon">🕐</span>
+                                <span class="time-text">07:00</span>
+                            </div>
+                            
+                            <div class="schedule-card-days">
+                                <span class="day-badge">Seg</span>
+                                <span class="day-badge">Ter</span>
+                                <span class="day-badge">Qua</span>
+                                <span class="day-badge">Qui</span>
+                                <span class="day-badge">Sex</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-card" data-schedule-id="2">
+                    <div class="schedule-card-header">
+                        <h3 class="schedule-card-title">Evangelho</h3>
+                        <div class="schedule-card-actions">
+                            <button class="schedule-action-btn" title="Editar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button class="schedule-action-btn delete" title="Excluir">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-card-content">
+                        <div class="schedule-card-info">
+                            <div class="schedule-card-time">
+                                <span class="time-icon">🕐</span>
+                                <span class="time-text">21:00</span>
+                            </div>
+                            
+                            <div class="schedule-card-days">
+                                <span class="day-badge">Seg</span>
+                                <span class="day-badge">Ter</span>
+                                <span class="day-badge">Qua</span>
+                                <span class="day-badge">Qui</span>
+                                <span class="day-badge">Sex</span>
+                                <span class="day-badge">Sáb</span>
+                                <span class="day-badge">Dom</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-card" data-schedule-id="3">
+                    <div class="schedule-card-header">
+                        <h3 class="schedule-card-title">Imitação de Cristo</h3>
+                        <div class="schedule-card-actions">
+                            <button class="schedule-action-btn" title="Editar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button class="schedule-action-btn delete" title="Excluir">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-card-content">
+                        <div class="schedule-card-info">
+                            <div class="schedule-card-time">
+                                <span class="time-icon">🕐</span>
+                                <span class="time-text">12:00</span>
+                            </div>
+                            
+                            <div class="schedule-card-days">
+                                <span class="day-badge">Seg</span>
+                                <span class="day-badge">Qua</span>
+                                <span class="day-badge">Sex</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-card" data-schedule-id="4">
+                    <div class="schedule-card-header">
+                        <h3 class="schedule-card-title">Jaculatórias</h3>
+                        <div class="schedule-card-actions">
+                            <button class="schedule-action-btn" title="Editar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button class="schedule-action-btn delete" title="Excluir">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-card-content">
+                        <div class="schedule-card-info">
+                            <div class="schedule-card-time">
+                                <span class="time-icon">🕐</span>
+                                <span class="time-text">18:00</span>
+                            </div>
+                            
+                            <div class="schedule-card-days">
+                                <span class="day-badge">Ter</span>
+                                <span class="day-badge">Qui</span>
+                                <span class="day-badge">Sáb</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-card more-card">
+                    <div class="schedule-card-header">
+                        <h3 class="schedule-card-title">Ver mais agendamentos</h3>
+                    </div>
+                    <div class="schedule-card-content">
+                        <div class="schedule-card-info">
+                            <div class="schedule-card-description">
+                                +2 agendamentos restantes
+                            </div>
+                            <div class="schedule-card-explore">
+                                <span class="explore-icon">→</span>
+                                <span class="explore-text">EXPLORAR</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estado vazio para teste -->
+        <section class="schedule-section" style="margin-top: 3rem;">
+            <div class="schedule-header">
+                <h3 class="section-title">
+                    Estado Vazio
+                </h3>
+            </div>
+            <div class="schedule-list">
+                <div class="schedule-card empty-state">
+                    <div class="empty-state-icon">📅</div>
+                    <div class="empty-state-title">Nenhum agendamento encontrado</div>
+                    <div class="empty-state-description">Crie seu primeiro agendamento para começar a meditar regularmente</div>
+                    <button class="add-schedule-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Criar Primeiro Agendamento
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html> 

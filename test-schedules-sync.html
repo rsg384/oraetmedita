@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Sincronização de Agendamentos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-dark: #101223;
+            --background-primary: #181a2a;
+            --background-card: #23243a;
+            --background-light: #2a2b4a;
+            --text-primary: #f5f6fa;
+            --text-secondary: #a3a8c9;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --border-color: #3a3b5a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .test-section {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .test-card {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .test-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .test-result {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-success { color: var(--accent-green); }
+        .result-error { color: #ef4444; }
+        .result-warning { color: #f59e0b; }
+        .result-info { color: var(--accent-blue); }
+
+        .btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .log-container {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+        }
+
+        .log-success { color: var(--accent-green); }
+        .log-error { color: #ef4444; }
+        .log-warning { color: #f59e0b; }
+        .log-info { color: var(--accent-blue); }
+
+        .schedules-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .schedule-item {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .schedule-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .schedule-details {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-synced { background: var(--accent-green); }
+        .status-unsynced { background: #ef4444; }
+        .status-warning { background: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Teste - Sincronização de Agendamentos</h1>
+            <p>Verificando se os agendamentos estão sincronizados entre as páginas</p>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">📊 Status da Sincronização</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <div class="test-title">Total de Agendamentos</div>
+                    <div class="test-result result-info" id="totalSchedules">-</div>
+                    <div class="result-info">No localStorage</div>
+                </div>
+                <div class="test-card">
+                    <div class="test-title">Agendamentos do Usuário</div>
+                    <div class="test-result result-info" id="userSchedules">-</div>
+                    <div class="result-info">Filtrados por usuário atual</div>
+                </div>
+                <div class="test-card">
+                    <div class="test-title">Status de Sincronização</div>
+                    <div class="test-result" id="syncStatus">-</div>
+                    <div class="result-info">Entre páginas</div>
+                </div>
+                <div class="test-card">
+                    <div class="test-title">Usuário Atual</div>
+                    <div class="test-result result-info" id="currentUser">-</div>
+                    <div class="result-info">ID e nome</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">🔧 Ações de Teste</h2>
+            <button class="btn" onclick="runSyncTest()">🧪 Executar Teste de Sincronização</button>
+            <button class="btn btn-success" onclick="createTestSchedule()">📝 Criar Agendamento de Teste</button>
+            <button class="btn btn-warning" onclick="fixSyncIssues()">🔧 Corrigir Problemas</button>
+            <button class="btn btn-danger" onclick="clearAllSchedules()">🗑️ Limpar Todos</button>
+            <button class="btn" onclick="window.location.href='agendamentos.html'">📅 Ir para Agendamentos</button>
+            <button class="btn" onclick="window.location.href='dashboard.html'">📊 Ir para Dashboard</button>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">📋 Agendamentos Atuais</h2>
+            <div id="schedulesDisplay" class="schedules-display">
+                <!-- Agendamentos serão exibidos aqui -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">📝 Log de Testes</h2>
+            <div id="logContainer" class="log-container">
+                <!-- Logs serão exibidos aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="session-manager.js"></script>
+    <script src="fix-schedules-sync.js"></script>
+    <script>
+        let testLog = [];
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            testLog.push({ message: logEntry, type });
+            
+            const logContainer = document.getElementById('logContainer');
+            if (logContainer) {
+                const logElement = document.createElement('div');
+                logElement.className = `log-entry log-${type}`;
+                logElement.textContent = logEntry;
+                logContainer.appendChild(logElement);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function updateStatusDisplay() {
+            const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            const userId = currentUser ? currentUser.id : 'anonymous';
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            const userSchedules = allSchedules.filter(s => s.userId === userId);
+
+            // Atualizar status
+            document.getElementById('totalSchedules').textContent = allSchedules.length;
+            document.getElementById('userSchedules').textContent = userSchedules.length;
+            document.getElementById('currentUser').textContent = currentUser ? `${currentUser.name} (${userId})` : 'Não logado';
+            
+            // Verificar sincronização
+            const syncIssues = [];
+            if (allSchedules.length > 0 && userSchedules.length === 0) {
+                syncIssues.push('Usuário não tem agendamentos');
+            }
+            if (allSchedules.some(s => !s.userId)) {
+                syncIssues.push('Agendamentos sem userId');
+            }
+            if (allSchedules.some(s => s.userId === 'anonymous')) {
+                syncIssues.push('Agendamentos com userId "anonymous"');
+            }
+            
+            const syncStatus = syncIssues.length > 0 ? syncIssues.join(', ') : '✅ Sincronizado';
+            const syncElement = document.getElementById('syncStatus');
+            syncElement.textContent = syncStatus;
+            syncElement.className = syncIssues.length > 0 ? 'test-result result-error' : 'test-result result-success';
+        }
+
+        function displaySchedules() {
+            const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            const userId = currentUser ? currentUser.id : 'anonymous';
+            const userSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]').filter(s => s.userId === userId);
+
+            const schedulesDisplay = document.getElementById('schedulesDisplay');
+            schedulesDisplay.innerHTML = '';
+
+            if (userSchedules.length === 0) {
+                schedulesDisplay.innerHTML = '<div class="schedule-item"><div class="schedule-title">Nenhum agendamento encontrado para o usuário atual</div></div>';
+                return;
+            }
+
+            userSchedules.forEach(schedule => {
+                const statusClass = schedule.userId && schedule.userId !== 'anonymous' ? 'status-synced' : 'status-unsynced';
+                const statusText = schedule.userId && schedule.userId !== 'anonymous' ? 'Sincronizado' : 'Não sincronizado';
+                
+                const scheduleElement = document.createElement('div');
+                scheduleElement.className = 'schedule-item';
+                scheduleElement.innerHTML = `
+                    <div class="schedule-title">
+                        <span class="status-indicator ${statusClass}"></span>
+                        ${schedule.title || 'Sem título'}
+                    </div>
+                    <div class="schedule-details">
+                        <div>⏰ ${schedule.time}</div>
+                        <div>📅 ${schedule.days ? schedule.days.join(', ') : 'Sem dias'}</div>
+                        <div>🏷️ ${schedule.category}</div>
+                        <div>👤 ${schedule.userName || 'Sem usuário'}</div>
+                        <div>🆔 ${schedule.userId || 'Sem ID'}</div>
+                        <div>📊 ${statusText}</div>
+                    </div>
+                `;
+                schedulesDisplay.appendChild(scheduleElement);
+            });
+        }
+
+        function runSyncTest() {
+            addLog('=== INICIANDO TESTE DE SINCRONIZAÇÃO ===', 'info');
+            
+            const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            const userId = currentUser ? currentUser.id : 'anonymous';
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            const userSchedules = allSchedules.filter(s => s.userId === userId);
+
+            addLog(`Usuário atual: ${currentUser ? currentUser.name : 'Não logado'} (ID: ${userId})`, 'info');
+            addLog(`Total de agendamentos no sistema: ${allSchedules.length}`, 'info');
+            addLog(`Agendamentos do usuário atual: ${userSchedules.length}`, 'info');
+
+            // Verificar problemas
+            const issues = [];
+            
+            if (allSchedules.length > 0 && userSchedules.length === 0) {
+                issues.push('Usuário não tem agendamentos apesar de existirem agendamentos no sistema');
+            }
+
+            const schedulesWithoutUserId = allSchedules.filter(s => !s.userId);
+            if (schedulesWithoutUserId.length > 0) {
+                issues.push(`${schedulesWithoutUserId.length} agendamentos sem userId`);
+            }
+
+            const anonymousSchedules = allSchedules.filter(s => s.userId === 'anonymous');
+            if (anonymousSchedules.length > 0) {
+                issues.push(`${anonymousSchedules.length} agendamentos com userId "anonymous"`);
+            }
+
+            if (issues.length > 0) {
+                addLog('❌ Problemas encontrados:', 'error');
+                issues.forEach(issue => addLog(`- ${issue}`, 'error'));
+            } else {
+                addLog('✅ Nenhum problema encontrado na sincronização', 'success');
+            }
+
+            // Testar criação de agendamento
+            addLog('🧪 Testando criação de agendamento...', 'info');
+            const testResult = createTestSchedule();
+            if (testResult) {
+                addLog('✅ Agendamento de teste criado com sucesso', 'success');
+            } else {
+                addLog('❌ Falha ao criar agendamento de teste', 'error');
+            }
+
+            updateStatusDisplay();
+            displaySchedules();
+            
+            addLog('=== TESTE DE SINCRONIZAÇÃO CONCLUÍDO ===', 'info');
+        }
+
+        function createTestSchedule() {
+            try {
+                const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+                const userId = currentUser ? currentUser.id : 'anonymous';
+                
+                if (!currentUser || userId === 'anonymous') {
+                    addLog('Usuário não está logado. Não é possível criar agendamento de teste.', 'error');
+                    return false;
+                }
+
+                const testSchedule = {
+                    id: Date.now() + Math.random().toString(36).substr(2, 9),
+                    title: 'Meditação de Teste - Sincronização',
+                    time: '08:00',
+                    category: 'Teste',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 15,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: 'Agendamento de teste para verificar sincronização',
+                    userId: userId,
+                    userName: currentUser.name
+                };
+
+                const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                allSchedules.push(testSchedule);
+                localStorage.setItem('user_schedules', JSON.stringify(allSchedules));
+
+                addLog('Agendamento de teste criado com sucesso', 'success');
+                updateStatusDisplay();
+                displaySchedules();
+                
+                return true;
+            } catch (error) {
+                addLog(`Erro ao criar agendamento de teste: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        function fixSyncIssues() {
+            addLog('=== INICIANDO CORREÇÃO DE PROBLEMAS ===', 'info');
+            
+            if (window.fixSchedulesSync) {
+                window.fixSchedulesSync();
+                addLog('Correção executada com sucesso', 'success');
+            } else {
+                addLog('Função de correção não disponível', 'error');
+            }
+            
+            updateStatusDisplay();
+            displaySchedules();
+        }
+
+        function clearAllSchedules() {
+            if (confirm('Tem certeza que deseja limpar TODOS os agendamentos? Esta ação não pode ser desfeita.')) {
+                localStorage.removeItem('user_schedules');
+                addLog('Todos os agendamentos foram removidos', 'warning');
+                updateStatusDisplay();
+                displaySchedules();
+            }
+        }
+
+        // Executar teste inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('Página de teste carregada', 'info');
+            updateStatusDisplay();
+            displaySchedules();
+        });
+    </script>
+</body>
+</html> 

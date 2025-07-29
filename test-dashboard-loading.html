@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Carregamento - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #101223;
+            color: #f5f6fa;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #2a2d3e;
+            border-radius: 8px;
+        }
+        .success { color: #7ee787; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        .info { color: #3b82f6; }
+        button {
+            background: #7ee787;
+            color: #101223;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #6ee677;
+        }
+        pre {
+            background: #23243a;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste de Carregamento do Dashboard</h1>
+    
+    <div class="test-section">
+        <h2>📦 Carregamento de Dados</h2>
+        <button onclick="loadBackupData()">Carregar Dados do Backup</button>
+        <button onclick="checkLocalStorage()">Verificar localStorage</button>
+        <button onclick="testSessionManager()">Testar SessionManager</button>
+        <button onclick="testLogin()">Testar Login Automático</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Resultados</h2>
+        <div id="results"></div>
+    </div>
+    
+    <script src="session-manager.js"></script>
+    <script>
+        let sessionManager;
+        
+        // Inicializar SessionManager
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando teste...');
+            sessionManager = new SessionManager();
+            window.sessionManager = sessionManager;
+        });
+        
+        // Função para carregar dados do backup
+        async function loadBackupData() {
+            try {
+                console.log('📦 Carregando dados do backup...');
+                
+                const backupData = {
+                    "users": [
+                        {
+                            "id": "user_1753519273275_vo9clmtxv",
+                            "name": "Rodrigo Silva Goes",
+                            "email": "rodrigo@exemplo.com",
+                            "userNumber": 1,
+                            "createdAt": "2025-07-26T08:00:00.000Z",
+                            "lastLogin": "2025-07-26T08:00:00.000Z",
+                            "preferences": {
+                                "theme": "dark",
+                                "notifications": true,
+                                "language": "pt-BR"
+                            },
+                            "stats": {
+                                "consecutiveDays": 5,
+                                "completedMeditations": 12,
+                                "totalTime": "2h 30min",
+                                "totalMeditations": 15,
+                                "inProgressMeditations": 3
+                            }
+                        }
+                    ],
+                    "meditations": [
+                        {
+                            "id": "1",
+                            "title": "Princípios da Vida Sobrenatural",
+                            "category": "vida-sobrenatural",
+                            "duration": 12,
+                            "scriptureReference": "João 15:1-8",
+                            "scriptureText": "Eu sou a videira verdadeira, e meu Pai é o agricultor...",
+                            "icon": "📖",
+                            "lectio": "Neste texto, Jesus se apresenta como a videira verdadeira...",
+                            "meditatio": "Reflita sobre o que significa 'permanecer em Cristo'...",
+                            "oratio": "Senhor Jesus, videira verdadeira, eu quero permanecer em ti...",
+                            "contemplatio": "Permaneça em silêncio na presença de Jesus...",
+                            "createdAt": "2024-01-15T10:00:00.000Z",
+                            "updatedAt": "2024-01-15T10:00:00.000Z"
+                        },
+                        {
+                            "id": "2",
+                            "title": "A Humildade de Maria",
+                            "category": "mariologia",
+                            "duration": 15,
+                            "scriptureReference": "Lucas 1:26-38",
+                            "scriptureText": "No sexto mês, o anjo Gabriel foi enviado...",
+                            "icon": "💝",
+                            "lectio": "Maria recebe a visita do anjo Gabriel...",
+                            "meditatio": "Como você reage quando Deus te chama...",
+                            "oratio": "Maria, Mãe de Deus, ensina-me a humildade...",
+                            "contemplatio": "Contemple Maria em sua humildade...",
+                            "createdAt": "2024-01-16T14:30:00.000Z",
+                            "updatedAt": "2024-01-16T14:30:00.000Z"
+                        },
+                        {
+                            "id": "3",
+                            "title": "A Oração do Pai Nosso",
+                            "category": "oracao",
+                            "duration": 18,
+                            "scriptureReference": "Mateus 6:9-13",
+                            "scriptureText": "Vós, pois, orai assim: Pai nosso...",
+                            "icon": "🙏",
+                            "lectio": "Jesus nos ensina a orar com o Pai Nosso...",
+                            "meditatio": "O que significa para você chamar Deus de 'Pai'...",
+                            "oratio": "Pai nosso que estás nos céus...",
+                            "contemplatio": "Permaneça em silêncio...",
+                            "createdAt": "2024-01-17T09:15:00.000Z",
+                            "updatedAt": "2024-01-17T09:15:00.000Z"
+                        }
+                    ],
+                    "categories": [
+                        {
+                            "id": "vida-sobrenatural",
+                            "name": "Vida Sobrenatural",
+                            "description": "Meditações sobre a vida espiritual e a graça de Deus",
+                            "icon": "📖",
+                            "color": "#8B5CF6",
+                            "meditationCount": 1
+                        },
+                        {
+                            "id": "mariologia",
+                            "name": "Mariologia",
+                            "description": "Meditações sobre Nossa Senhora e sua devoção",
+                            "icon": "💝",
+                            "color": "#EC4899",
+                            "meditationCount": 1
+                        },
+                        {
+                            "id": "oracao",
+                            "name": "Oração",
+                            "description": "Meditações sobre a vida de oração e intimidade com Deus",
+                            "icon": "🙏",
+                            "color": "#3B82F6",
+                            "meditationCount": 1
+                        }
+                    ]
+                };
+                
+                // Salvar dados no localStorage
+                localStorage.setItem('users', JSON.stringify(backupData.users));
+                localStorage.setItem('meditations', JSON.stringify(backupData.meditations));
+                localStorage.setItem('categories', JSON.stringify(backupData.categories));
+                
+                addResult('✅ Dados do backup carregados com sucesso', 'success');
+                addResult(`👥 Usuários: ${backupData.users.length}`, 'info');
+                addResult(`📖 Meditações: ${backupData.meditations.length}`, 'info');
+                addResult(`📂 Categorias: ${backupData.categories.length}`, 'info');
+                
+            } catch (error) {
+                addResult(`❌ Erro ao carregar dados do backup: ${error.message}`, 'error');
+            }
+        }
+        
+        // Função para verificar localStorage
+        function checkLocalStorage() {
+            try {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+                const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+                
+                addResult('📊 Dados no localStorage:', 'info');
+                addResult(`👥 Usuários: ${users.length}`, 'info');
+                addResult(`📖 Meditações: ${meditations.length}`, 'info');
+                addResult(`📂 Categorias: ${categories.length}`, 'info');
+                
+                if (users.length > 0) {
+                    addResult(`👤 Primeiro usuário: ${users[0].name} (${users[0].email})`, 'success');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erro ao verificar localStorage: ${error.message}`, 'error');
+            }
+        }
+        
+        // Função para testar SessionManager
+        async function testSessionManager() {
+            try {
+                if (!sessionManager) {
+                    addResult('❌ SessionManager não inicializado', 'error');
+                    return;
+                }
+                
+                addResult('✅ SessionManager inicializado', 'success');
+                addResult(`🆔 ID da sessão: ${sessionManager.currentSessionId}`, 'info');
+                
+                const isLoggedIn = sessionManager.isLoggedIn();
+                addResult(`🔐 Usuário logado: ${isLoggedIn ? 'Sim' : 'Não'}`, isLoggedIn ? 'success' : 'warning');
+                
+                if (isLoggedIn) {
+                    const currentUser = sessionManager.getCurrentUser();
+                    addResult(`👤 Usuário atual: ${currentUser.name}`, 'success');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erro ao testar SessionManager: ${error.message}`, 'error');
+            }
+        }
+        
+        // Função para testar login automático
+        async function testLogin() {
+            try {
+                if (!sessionManager) {
+                    addResult('❌ SessionManager não inicializado', 'error');
+                    return;
+                }
+                
+                addResult('🔐 Testando login automático...', 'info');
+                
+                const loginResult = await sessionManager.loginUser({
+                    email: 'rodrigo@exemplo.com'
+                });
+                
+                if (loginResult) {
+                    addResult(`✅ Login realizado com sucesso: ${loginResult.name}`, 'success');
+                    addResult(`📊 Estatísticas: ${loginResult.stats.consecutiveDays} dias, ${loginResult.stats.completedMeditations} meditações`, 'info');
+                } else {
+                    addResult('❌ Falha no login', 'error');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erro no login: ${error.message}`, 'error');
+            }
+        }
+        
+        // Função para adicionar resultados
+        function addResult(message, type) {
+            const resultsDiv = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = type;
+            resultElement.textContent = message;
+            resultsDiv.appendChild(resultElement);
+            console.log(message);
+        }
+        
+        // Limpar resultados
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+    </script>
+</body>
+</html> 

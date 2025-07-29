@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Função Simples</title>
+</head>
+<body>
+    <h1>Teste da Função generateDashboardMeditation</h1>
+    
+    <div class="chatgpt-style-input">
+        <div class="input-container">
+            <input type="text" class="chatgpt-input" placeholder="Digite o assunto católico que deseja meditar hoje" id="dashboard-meditation-topic">
+            <button class="chatgpt-send-btn" onclick="generateDashboardMeditation()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script>
+        // Função para gerar meditação
+        function generateDashboardMeditation() {
+            console.log('🚀 Função generateDashboardMeditation chamada');
+            
+            const topicInput = document.getElementById('dashboard-meditation-topic');
+            if (!topicInput) {
+                console.error('❌ Campo dashboard-meditation-topic não encontrado');
+                alert('Erro: Campo de tópico não encontrado');
+                return;
+            }
+            
+            const topic = topicInput.value.trim();
+            console.log('📝 Tópico digitado:', topic);
+            
+            if (!topic) {
+                alert('Por favor, digite um assunto para a meditação');
+                return;
+            }
+            
+            alert('Gerando sua meditação personalizada...');
+            
+            // Criar meditação simples
+            const meditation = {
+                id: Date.now() + Math.random().toString(36).substr(2, 9),
+                title: `Meditação sobre ${topic}`,
+                topic: topic,
+                content: `Esta é uma meditação personalizada sobre "${topic}". Aqui você encontrará reflexões profundas e orientações espirituais para aprofundar sua fé e conexão com Deus através deste tema.`,
+                duration: '15 min',
+                createdAt: new Date().toISOString(),
+                userId: 'test-user',
+                userName: 'Usuário Teste'
+            };
+            
+            // Salvar meditação
+            const existingMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+            existingMeditations.push(meditation);
+            localStorage.setItem('personalized_meditations', JSON.stringify(existingMeditations));
+            
+            // Limpar campo
+            document.getElementById('dashboard-meditation-topic').value = '';
+            
+            // Mostrar resultado
+            document.getElementById('result').innerHTML = `
+                <h3>Meditação Criada:</h3>
+                <p><strong>Título:</strong> ${meditation.title}</p>
+                <p><strong>Tópico:</strong> ${meditation.topic}</p>
+                <p><strong>Duração:</strong> ${meditation.duration}</p>
+                <p><strong>ID:</strong> ${meditation.id}</p>
+            `;
+            
+            alert('Meditação criada com sucesso!');
+            console.log('✅ Meditação criada:', meditation);
+        }
+        
+        console.log('✅ Script carregado, função disponível:', typeof generateDashboardMeditation);
+    </script>
+</body>
+</html> 

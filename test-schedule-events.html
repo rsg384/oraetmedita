@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Eventos do Modal de Agendamento</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            --background-dark: #0F0F23;
+            --background-card: #1A1A2E;
+            --background-light: #2A2A3E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --accent-green: #10B981;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --border-color: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .test-section {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+
+        .test-button {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .test-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .test-button.success {
+            background: var(--accent-green);
+        }
+
+        .test-button.danger {
+            background: #ef4444;
+        }
+
+        .log-area {
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--border-color);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-select, .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-light);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .weekdays {
+            display: flex;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .weekday-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            background: var(--background-light);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .weekday-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .weekday-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-section">
+            <h1 class="test-title">🧪 Teste - Eventos do Modal de Agendamento</h1>
+            <p>Este teste verifica se os eventos do modal de agendamento estão funcionando corretamente.</p>
+            
+            <button class="test-button" onclick="testOpenModal()">🔓 Abrir Modal</button>
+            <button class="test-button success" onclick="testWeekdayButtons()">📅 Testar Botões de Dias</button>
+            <button class="test-button" onclick="testFormSubmit()">📝 Testar Submit do Formulário</button>
+            <button class="test-button danger" onclick="clearLog()">🗑️ Limpar Log</button>
+            
+            <div class="log-area" id="logArea">
+                <div>📋 Log de eventos aparecerá aqui...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Agendamento -->
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Agendar Meditação</h3>
+                <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+            </div>
+            <div style="padding: 3rem; background: var(--background-card); margin: 1rem 2rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                <form id="scheduleForm">
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="Oração">Oração</option>
+                            <option value="Contemplação">Contemplação</option>
+                            <option value="Lectio Divina">Lectio Divina</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Dias da Semana</label>
+                        <div class="weekdays">
+                            <button type="button" class="weekday-btn" data-day="seg">S</button>
+                            <button type="button" class="weekday-btn" data-day="ter">T</button>
+                            <button type="button" class="weekday-btn" data-day="qua">Q</button>
+                            <button type="button" class="weekday-btn" data-day="qui">Q</button>
+                            <button type="button" class="weekday-btn" data-day="sex">S</button>
+                            <button type="button" class="weekday-btn" data-day="sab">S</button>
+                            <button type="button" class="weekday-btn" data-day="dom">D</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Horário</label>
+                        <input type="time" name="time" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notificações</label>
+                        <input type="checkbox" name="notifications" checked> Ativar lembretes
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeScheduleModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Agenda</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para log
+        function log(message) {
+            const logArea = document.getElementById('logArea');
+            const timestamp = new Date().toLocaleTimeString();
+            logArea.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        // Função para limpar log
+        function clearLog() {
+            document.getElementById('logArea').innerHTML = '<div>📋 Log limpo...</div>';
+        }
+
+        // Funções do modal
+        function openScheduleModal() {
+            log('🔓 Abrindo modal de agendamento...');
+            document.getElementById('scheduleModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            log('✅ Modal aberto com sucesso');
+        }
+
+        function closeScheduleModal() {
+            log('❌ Fechando modal de agendamento...');
+            document.getElementById('scheduleModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('scheduleForm').reset();
+            document.querySelectorAll('.weekday-btn').forEach(btn => btn.classList.remove('active'));
+            log('✅ Modal fechado com sucesso');
+        }
+
+        function saveSchedule(event) {
+            event.preventDefault();
+            log('📝 Formulário submetido');
+            
+            const formData = new FormData(event.target);
+            const selectedDays = Array.from(document.querySelectorAll('.weekday-btn.active'))
+                .map(btn => btn.dataset.day);
+            
+            log(`📋 Dados do formulário:`);
+            log(`- Categoria: ${formData.get('category')}`);
+            log(`- Horário: ${formData.get('time')}`);
+            log(`- Dias selecionados: ${selectedDays.join(', ')}`);
+            log(`- Notificações: ${formData.get('notifications') === 'on' ? 'Sim' : 'Não'}`);
+            
+            if (selectedDays.length === 0) {
+                log('❌ Erro: Nenhum dia selecionado');
+                alert('Selecione pelo menos um dia da semana');
+                return;
+            }
+            
+            log('✅ Agendamento salvo com sucesso!');
+            closeScheduleModal();
+        }
+
+        // Função para testar abertura do modal
+        function testOpenModal() {
+            log('🧪 === TESTE: ABRIR MODAL ===');
+            openScheduleModal();
+        }
+
+        // Função para testar botões de dias da semana
+        function testWeekdayButtons() {
+            log('🧪 === TESTE: BOTÕES DE DIAS ===');
+            
+            const weekdayButtons = document.querySelectorAll('.weekday-btn');
+            log(`📅 Encontrados ${weekdayButtons.length} botões de dias`);
+            
+            if (weekdayButtons.length > 0) {
+                // Simular cliques em alguns botões
+                weekdayButtons[0].click();
+                weekdayButtons[2].click();
+                weekdayButtons[4].click();
+                log('✅ Cliques simulados nos botões S, Q, S');
+            }
+        }
+
+        // Função para testar submit do formulário
+        function testFormSubmit() {
+            log('🧪 === TESTE: SUBMIT DO FORMULÁRIO ===');
+            
+            const form = document.getElementById('scheduleForm');
+            if (form) {
+                // Preencher formulário
+                form.querySelector('select[name="category"]').value = 'Oração';
+                form.querySelector('input[name="time"]').value = '08:00';
+                
+                // Selecionar alguns dias
+                const weekdayButtons = document.querySelectorAll('.weekday-btn');
+                weekdayButtons[0].classList.add('active');
+                weekdayButtons[2].classList.add('active');
+                
+                log('📝 Formulário preenchido, simulando submit...');
+                form.dispatchEvent(new Event('submit'));
+            }
+        }
+
+        // Adicionar eventos aos botões de dias da semana
+        function addWeekdayButtonEvents() {
+            log('🔧 Adicionando eventos aos botões de dias da semana...');
+            
+            const weekdayButtons = document.querySelectorAll('.weekday-btn');
+            weekdayButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    log(`📅 Dia clicado: ${this.dataset.day}`);
+                    this.classList.toggle('active');
+                    log(`✅ Classe active toggleada para: ${this.dataset.day}`);
+                });
+            });
+            
+            log('✅ Eventos dos botões de dias da semana adicionados');
+        }
+
+        // Adicionar evento ao formulário
+        function addFormSubmitEvent() {
+            log('🔧 Adicionando evento de submit ao formulário...');
+            
+            const form = document.getElementById('scheduleForm');
+            form.addEventListener('submit', function(event) {
+                saveSchedule(event);
+            });
+            
+            log('✅ Evento de submit adicionado ao formulário');
+        }
+
+        // Inicializar eventos quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Página carregada, inicializando eventos...');
+            addWeekdayButtonEvents();
+            addFormSubmitEvent();
+            log('✅ Eventos inicializados com sucesso');
+        });
+
+        // Log inicial
+        log('🧪 Teste de eventos do modal de agendamento iniciado');
+    </script>
+</body>
+</html> 

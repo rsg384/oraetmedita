@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção Rápida</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .success { color: green; background: #d4edda; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .error { color: red; background: #f8d7da; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Correção Rápida - Conteúdo das Meditações</h1>
+    
+    <button onclick="fixNow()">🔧 Corrigir Agora</button>
+    <button onclick="testNow()">🧪 Testar Agora</button>
+    
+    <div id="result"></div>
+
+    <script>
+        function fixNow() {
+            const result = document.getElementById('result');
+            
+            // Criar meditação com conteúdo completo
+            const meditation = {
+                id: 'med_1',
+                title: 'Salmo 1 - O Homem Bem-Aventurado',
+                categoryId: 'cat_4',
+                category: 'Salmos',
+                duration: 15,
+                status: 'pending',
+                lectio: 'Bem-aventurado o homem que não anda segundo o conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda dos escarnecedores. Antes tem o seu prazer na lei do Senhor, e na sua lei medita de dia e de noite.',
+                meditatio: 'Reflita sobre o que significa "andar", "deter-se" e "assentar-se" na companhia dos ímpios. Como você pode cultivar o prazer na lei do Senhor? Que práticas te ajudam a meditar na palavra de Deus?',
+                oratio: 'Senhor, ensina-me a amar tua lei e a meditar nela constantemente. Que eu possa ser como a árvore plantada junto às correntes das águas, dando frutos no tempo certo. Ajuda-me a evitar os caminhos dos ímpios e a permanecer firme em tua palavra.',
+                contemplatio: 'Contemple a imagem da árvore frutífera plantada junto às águas, símbolo da vida espiritual abundante. Sinta-se enraizado na palavra de Deus, nutrido pela graça divina, e frutificando para a glória do Pai.'
+            };
+            
+            // Salvar no localStorage
+            localStorage.setItem('meditations', JSON.stringify([meditation]));
+            
+            result.innerHTML = '<div class="success">✅ Meditação corrigida! Agora clique em "Testar Agora"</div>';
+        }
+        
+        function testNow() {
+            const result = document.getElementById('result');
+            
+            // Buscar meditação
+            const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            const meditation = meditations.find(m => m.id === 'med_1');
+            
+            if (meditation && meditation.lectio) {
+                // Salvar como meditacao-atual
+                localStorage.setItem('meditacao-atual', JSON.stringify(meditation));
+                
+                result.innerHTML = '<div class="success">✅ Pronto! Agora vá para o dashboard e clique em "Salmo 1"</div>';
+                result.innerHTML += '<button onclick="window.location.href=\'dashboard.html\'">📊 Ir para Dashboard</button>';
+            } else {
+                result.innerHTML = '<div class="error">❌ Meditação não encontrada ou sem conteúdo. Clique em "Corrigir Agora" primeiro.</div>';
+            }
+        }
+    </script>
+</body>
+</html> 

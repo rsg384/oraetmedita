@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Acumulação de Agendamentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste - Acumulação de Agendamentos</h1>
+    
+    <div class="test-container">
+        <h2>📝 Teste de Criação</h2>
+        <button class="test-button" onclick="createMultipleSchedules()">Criar 3 Agendamentos</button>
+        <button class="test-button" onclick="createSingleSchedule()">Criar 1 Agendamento</button>
+        <button class="test-button" onclick="checkSchedules()">Verificar Agendamentos</button>
+        <button class="test-button" onclick="clearSchedules()">Limpar Todos</button>
+        <div id="output" class="test-output"></div>
+    </div>
+
+    <script src="session-manager.js"></script>
+    <script src="sync-schedules-user.js"></script>
+    
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            output.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        function createSingleSchedule() {
+            log('=== CRIANDO 1 AGENDAMENTO ===');
+            
+            try {
+                const testSchedule = {
+                    title: `Agendamento Teste ${Date.now()}`,
+                    category: 'Evangelho',
+                    time: '08:00',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true,
+                    createdAt: new Date().toISOString()
+                };
+                
+                log(`📝 Criando agendamento: ${testSchedule.title}`);
+                
+                if (window.saveScheduleWithUser) {
+                    const savedSchedule = window.saveScheduleWithUser(testSchedule);
+                    log(`✅ Agendamento salvo com sucesso!`, 'success');
+                    log(`   ID: ${savedSchedule.id}`);
+                    log(`   userId: ${savedSchedule.userId}`);
+                    log(`   title: ${savedSchedule.title}`);
+                } else {
+                    log('❌ Função saveScheduleWithUser não disponível', 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function createMultipleSchedules() {
+            log('=== CRIANDO 3 AGENDAMENTOS ===');
+            
+            const schedules = [
+                {
+                    title: 'Meditação Matinal',
+                    category: 'Evangelho',
+                    time: '06:00',
+                    days: ['seg', 'ter', 'qua', 'qui', 'sex'],
+                    notifications: true
+                },
+                {
+                    title: 'Oração da Tarde',
+                    category: 'Princípios',
+                    time: '18:00',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true
+                },
+                {
+                    title: 'Reflexão Noturna',
+                    category: 'Imitação',
+                    time: '21:00',
+                    days: ['ter', 'qui', 'sab'],
+                    notifications: false
+                }
+            ];
+            
+            schedules.forEach((schedule, index) => {
+                setTimeout(() => {
+                    try {
+                        const scheduleWithDate = {
+                            ...schedule,
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        log(`📝 Criando agendamento ${index + 1}: ${schedule.title}`);
+                        
+                        if (window.saveScheduleWithUser) {
+                            const savedSchedule = window.saveScheduleWithUser(scheduleWithDate);
+                            log(`✅ Agendamento ${index + 1} salvo: ${savedSchedule.title}`, 'success');
+                        } else {
+                            log(`❌ Erro ao criar agendamento ${index + 1}`, 'error');
+                        }
+                    } catch (error) {
+                        log(`❌ Erro ao criar agendamento ${index + 1}: ${error.message}`, 'error');
+                    }
+                }, index * 500);
+            });
+        }
+        
+        function checkSchedules() {
+            log('=== VERIFICANDO AGENDAMENTOS ===');
+            
+            try {
+                const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                log(`📋 Total de agendamentos: ${allSchedules.length}`, 'success');
+                
+                if (allSchedules.length > 0) {
+                    allSchedules.forEach((schedule, index) => {
+                        log(`📅 ${index + 1}. ${schedule.title}`);
+                        log(`   ID: ${schedule.id}`);
+                        log(`   userId: ${schedule.userId || 'N/A'}`);
+                        log(`   category: ${schedule.category}`);
+                        log(`   time: ${schedule.time}`);
+                        log(`   days: ${schedule.days.join(', ')}`);
+                        log('');
+                    });
+                } else {
+                    log('📭 Nenhum agendamento encontrado', 'warning');
+                }
+                
+                // Verificar se loadUserSchedules funciona
+                if (window.loadUserSchedules) {
+                    const userSchedules = window.loadUserSchedules();
+                    log(`👤 Agendamentos do usuário atual: ${userSchedules.length}`, 'success');
+                    
+                    if (userSchedules.length > 0) {
+                        userSchedules.forEach((schedule, index) => {
+                            log(`   ${index + 1}. ${schedule.title} (${schedule.userId})`);
+                        });
+                    }
+                }
+                
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearSchedules() {
+            if (confirm('Tem certeza que deseja limpar todos os agendamentos?')) {
+                localStorage.removeItem('user_schedules');
+                log('✅ Todos os agendamentos foram removidos', 'success');
+            }
+        }
+        
+        // Executar verificação inicial
+        window.addEventListener('load', () => {
+            log('🚀 Página carregada');
+            setTimeout(checkSchedules, 1000);
+        });
+    </script>
+</body>
+</html> 

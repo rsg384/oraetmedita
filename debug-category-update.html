@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Edição de Categorias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+        .category-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .category-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .category-id {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐛 Debug - Edição de Categorias</h1>
+        
+        <div class="test-section">
+            <h3>Testes Disponíveis</h3>
+            <button class="btn" onclick="testSupabaseManager()">Testar Supabase Manager</button>
+            <button class="btn" onclick="testUpdateCategory()">Testar updateCategory</button>
+            <button class="btn" onclick="loadCategories()">Carregar Categorias</button>
+            <button class="btn success" onclick="testDirectUpdate()">Teste Direto de Atualização</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Categorias Disponíveis</h3>
+            <div id="categoriesList"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Logs</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <!-- Supabase Manager -->
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        async function testSupabaseManager() {
+            log('🔍 Testando Supabase Manager...');
+            
+            if (!window.supabaseManager) {
+                log('❌ Supabase Manager não está disponível');
+                return;
+            }
+            
+            log('✅ Supabase Manager encontrado');
+            log('📋 Métodos disponíveis:');
+            log('- getCategories: ' + (typeof window.supabaseManager.getCategories));
+            log('- createCategory: ' + (typeof window.supabaseManager.createCategory));
+            log('- updateCategory: ' + (typeof window.supabaseManager.updateCategory));
+            log('- deleteCategory: ' + (typeof window.supabaseManager.deleteCategory));
+        }
+
+        async function testUpdateCategory() {
+            log('🧪 Testando método updateCategory...');
+            
+            try {
+                // Primeiro, buscar uma categoria
+                const categories = await window.supabaseManager.getCategories();
+                log(`📊 Categorias encontradas: ${categories.length}`);
+                
+                if (categories.length === 0) {
+                    log('❌ Nenhuma categoria encontrada para testar');
+                    return;
+                }
+                
+                const testCategory = categories[0];
+                log(`📝 Categoria de teste: ${testCategory.name} (${testCategory.id})`);
+                
+                // Testar atualização
+                const updateData = {
+                    name: testCategory.name + ' - TESTE ' + Date.now(),
+                    description: 'Descrição de teste atualizada',
+                    icon: '🧪',
+                    color: '#ff0000',
+                    is_active: true
+                };
+                
+                log('📋 Dados para atualização:', JSON.stringify(updateData, null, 2));
+                
+                const result = await window.supabaseManager.updateCategory(testCategory.id, updateData);
+                log('📋 Resultado da atualização:', JSON.stringify(result, null, 2));
+                
+                log('✅ Teste de updateCategory concluído');
+                
+            } catch (error) {
+                log(`❌ Erro no teste: ${error.message}`);
+            }
+        }
+
+        async function loadCategories() {
+            log('📖 Carregando categorias...');
+            
+            try {
+                const categories = await window.supabaseManager.getCategories();
+                log(`📊 Total de categorias: ${categories.length}`);
+                
+                const listElement = document.getElementById('categoriesList');
+                listElement.innerHTML = '';
+                
+                categories.forEach(category => {
+                    const item = document.createElement('div');
+                    item.className = 'category-item';
+                    item.innerHTML = `
+                        <div class="category-name">${category.name}</div>
+                        <div class="category-id">ID: ${category.id}</div>
+                        <div class="category-id">Descrição: ${category.description || 'N/A'}</div>
+                        <div class="category-id">Ícone: ${category.icon || 'N/A'} | Cor: ${category.color || 'N/A'}</div>
+                    `;
+                    listElement.appendChild(item);
+                });
+                
+                log('✅ Categorias carregadas');
+            } catch (error) {
+                log(`❌ Erro ao carregar categorias: ${error.message}`);
+            }
+        }
+
+        async function testDirectUpdate() {
+            log('🎯 Teste direto de atualização...');
+            
+            try {
+                // Buscar categorias
+                const categories = await window.supabaseManager.getCategories();
+                if (categories.length === 0) {
+                    log('❌ Nenhuma categoria para testar');
+                    return;
+                }
+                
+                const category = categories[0];
+                log(`🎯 Testando com categoria: ${category.name}`);
+                
+                // Simular exatamente o que acontece no admin-panel
+                const editingId = category.id;
+                const categoryData = {
+                    name: category.name + ' - EDITADO ' + Date.now(),
+                    description: 'Descrição editada via teste',
+                    icon: '✏️',
+                    color: '#00ff00',
+                    status: 'active'
+                };
+                
+                log('📝 Dados de edição:', JSON.stringify(categoryData, null, 2));
+                
+                // Verificar se é UUID do Supabase
+                if (editingId.includes('-') && editingId.length === 36) {
+                    log('✅ ID é UUID do Supabase, atualizando diretamente...');
+                    
+                    const supabaseCategoryData = {
+                        name: categoryData.name,
+                        description: categoryData.description,
+                        icon: categoryData.icon || '',
+                        color: categoryData.color || '#7ee787',
+                        is_active: categoryData.status === 'active',
+                        sort_order: 0
+                    };
+                    
+                    log('📋 Dados para Supabase:', JSON.stringify(supabaseCategoryData, null, 2));
+                    
+                    const result = await window.supabaseManager.updateCategory(editingId, supabaseCategoryData);
+                    log('📋 Resultado:', JSON.stringify(result, null, 2));
+                    
+                    log('✅ Atualização direta concluída');
+                } else {
+                    log('⚠️ ID não é UUID do Supabase');
+                }
+                
+            } catch (error) {
+                log(`❌ Erro no teste direto: ${error.message}`);
+            }
+        }
+
+        // Carregar quando a página carregar
+        window.addEventListener('load', function() {
+            log('🚀 Página carregada. Iniciando debug...');
+            testSupabaseManager();
+        });
+    </script>
+</body>
+</html> 

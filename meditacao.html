@@ -1,0 +1,2900 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lectio Divina - Meditação</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #101223;
+      color: #f5f6fa;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+      background: #181a2a;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #181a2a;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border-bottom: 1px solid #23243a;
+    }
+    
+    /* Botão Voltar */
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      color: #f5f6fa;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+      font-size: 14px;
+    }
+    
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .back-icon {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .back-text {
+      font-weight: 500;
+    }
+    
+    /* Centro do Header */
+    .header-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .meditation-title {
+      color: #9ca3af;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    
+    .meditation-number {
+      color: #7ee787;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    /* Botão de Tema */
+    .theme-toggle-btn {
+      background: #23243a;
+      border: 1px solid #3a3b5a;
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .theme-toggle-btn:hover {
+      background: #2d2e4a;
+      border-color: #4a4b6a;
+    }
+    
+    .main-content {
+      padding: 120px 24px 24px 24px;
+      margin-top: 0;
+    }
+    
+    .theme-toggle {
+      background: #23243a;
+      border: none;
+      color: #a3a8c9;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      margin-left: 12px;
+    }
+    
+    .theme-toggle:hover {
+      background: #2a2b4a;
+      color: #fff;
+    }
+
+    .theme-icon {
+      transition: all 0.3s ease;
+    }
+
+    .theme-icon.sun-icon {
+      display: block;
+    }
+
+    .theme-icon.moon-icon {
+      display: none;
+    }
+
+    body.light-mode .theme-icon.sun-icon {
+      display: none;
+    }
+
+    body.light-mode .theme-icon.moon-icon {
+      display: block;
+    }
+    
+    /* Modo claro */
+    body.light-mode {
+      background: #f5f6fa;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .container {
+      background: #ffffff;
+    }
+    
+    body.light-mode .header {
+      background: #ffffff;
+      border-bottom: 1px solid #dee2e6;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body.light-mode .back-btn {
+      color: #2c3e50;
+    }
+    
+    body.light-mode .back-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    body.light-mode .meditation-title {
+      color: #6c757d;
+    }
+    
+    body.light-mode .meditation-number {
+      color: #17a2b8;
+    }
+    
+    body.light-mode .theme-toggle-btn {
+      background: #f8f9fa;
+      border-color: #dee2e6;
+    }
+    
+    body.light-mode .theme-toggle-btn:hover {
+      background: #e9ecef;
+      border-color: #adb5bd;
+    }
+    
+    body.light-mode .header .back {
+      color: #6c757d;
+    }
+    
+    body.light-mode .header .back:hover {
+      color: #2c3e50;
+    }
+    
+    body.light-mode .header .info .categoria {
+      color: #6c757d;
+    }
+    
+    body.light-mode .progress-bar {
+      background: #e9ecef;
+    }
+    
+    body.light-mode .step {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+    
+    body.light-mode .step.active {
+      background: #d1ecf1;
+      color: #2c3e50;
+      border-bottom: 3px solid #17a2b8;
+    }
+    
+    body.light-mode .content {
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body.light-mode .theme-toggle {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+    
+    body.light-mode .theme-toggle:hover {
+      background: #dee2e6;
+      color: #2c3e50;
+    }
+    
+    /* Formatação do conteúdo das meditações */
+    .content {
+      text-align: justify;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    
+    .content em {
+      font-style: italic;
+    }
+    
+    .content strong {
+      font-weight: bold;
+    }
+    
+    body.light-mode .main-text {
+      color: #2c3e50;
+    }
+    
+    body.light-mode .instruction {
+      background: #e3f2fd;
+      border-left: 4px solid #17a2b8;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .reflection-box {
+      background: #f8f9fa;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .reflection-box h3 {
+      color: #17a2b8;
+    }
+    
+    body.light-mode .question {
+      background: #e3f2fd;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .question strong {
+      color: #17a2b8;
+    }
+    
+    body.light-mode .practical-application {
+      background: #e3f2fd;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .practical-application h4 {
+      color: #17a2b8;
+    }
+    
+    body.light-mode .prayer-box {
+      background: #f8f9fa;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .prayer-text {
+      color: #6c757d;
+    }
+    
+    body.light-mode .intentions {
+      background: #e3f2fd;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .intention-item {
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    body.light-mode .personal-prayer {
+      background: #e3f2fd;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .personal-prayer textarea {
+      background: #ffffff;
+      border: 1px solid #dee2e6;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .contemplation-box {
+      background: #f8f9fa;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .timer-box {
+      background: #e3f2fd;
+      color: #2c3e50;
+    }
+    .header .back {
+      color: #a3a8c9;
+      text-decoration: none;
+      font-size: 1.1em;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .2s;
+    }
+    .header .back:hover {
+      color: #fff;
+    }
+    .header .info {
+      text-align: right;
+    }
+    .header .info .categoria {
+      font-size: 1em;
+      color: #a3a8c9;
+    }
+    .header .info .tempo {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #7ee787;
+      margin-left: 8px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 16px;
+      background: #23243a;
+      border-radius: 8px;
+      margin: 16px 0 24px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #7ee787 60%, #a3a8c9 100%);
+      border-radius: 8px;
+      transition: width .4s;
+    }
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 4px;
+    }
+    .step {
+      flex: 1;
+      background: #23243a;
+      color: #a3a8c9;
+      padding: 10px 0;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      border-bottom: 3px solid transparent;
+    }
+    .step.active {
+      background: #222b4a;
+      color: #fff;
+      border-bottom: 3px solid #7ee787;
+    }
+    .content {
+      background: #181a2a;
+      border-radius: 0 0 12px 12px;
+      padding: 24px 16px 16px 16px;
+      min-height: 320px;
+      box-shadow: 0 2px 8px #0001;
+    }
+    
+    /* Estilos para a lista de meditações */
+    .meditation-list {
+      margin-top: 20px;
+    }
+    
+    .meditation-item {
+      background: #181a2a;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid #23243a;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .meditation-item:hover {
+      background: #1e1f2e;
+      border-color: #7ee787;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(126, 231, 135, 0.2);
+    }
+    
+    .meditation-info {
+      flex: 1;
+    }
+    
+    .meditation-title {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    
+    .meditation-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9em;
+    }
+    
+    .status-icon {
+      font-size: 1.2em;
+    }
+    
+    .status-completed {
+      color: #7ee787;
+    }
+    
+    .status-in-progress {
+      color: #60a5fa;
+    }
+    
+    .status-locked {
+      color: #a3a8c9;
+    }
+    
+    .meditation-duration {
+      color: #7ee787;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+    
+    .meditation-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .action-btn {
+      background: #23243a;
+      border: none;
+      color: #a3a8c9;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+    
+    .action-btn:hover {
+      background: #2a2b4a;
+      color: #fff;
+    }
+    
+    .action-btn.primary {
+      background: #7ee787;
+      color: #101223;
+    }
+    
+    .action-btn.primary:hover {
+      background: #6dd676;
+    }
+    
+    /* Modo claro para a lista de meditações */
+    body.light-mode .meditation-item {
+      background: #ffffff;
+      border-color: #e9ecef;
+    }
+    
+    body.light-mode .meditation-item:hover {
+      background: #f8f9fa;
+      border-color: #17a2b8;
+    }
+    
+    body.light-mode .meditation-title {
+      color: #2c3e50;
+    }
+    
+    body.light-mode .action-btn {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+    
+    body.light-mode .action-btn:hover {
+      background: #dee2e6;
+      color: #2c3e50;
+    }
+    
+    body.light-mode .action-btn.primary {
+      background: #17a2b8;
+      color: #ffffff;
+    }
+    
+    body.light-mode .action-btn.primary:hover {
+      background: #138496;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0; }
+      .header { padding: 12px 16px; }
+      .main-content { padding: 100px 16px 16px 16px; }
+      .content { padding: 12px 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back-btn" id="back-button" onclick="goBack()">
+        <span class="back-icon">←</span>
+        <span class="back-text">Voltar</span>
+      </button>
+      
+      <div class="header-center">
+        <div class="meditation-title" id="meditation-title" style="font-size: 2.5rem; font-weight: bold;">Salmos</div>
+        <!-- Removido: <div class="meditation-number" id="meditation-number">12</div> -->
+      </div>
+      
+      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Alternar tema">
+        <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="main-content">
+      <!-- Lista de Meditações -->
+      <div class="meditation-list" id="meditation-list">
+        <!-- As meditações serão carregadas aqui -->
+      </div>
+      
+      <!-- Container para meditação individual (inicialmente oculto) -->
+      <div class="meditation-container" id="meditation-container" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width: 25%"></div>
+        </div>
+        <div class="steps">
+          <div class="step active" data-step="1"><span id="step1-title">Leitura</span></div>
+          <div class="step" data-step="2"><span id="step2-title">Meditação</span></div>
+          <div class="step" data-step="3"><span id="step3-title">Oração</span></div>
+          <div class="step" data-step="4"><span id="step4-title">Contemplação</span></div>
+        </div>
+        <div class="content" id="step-content">
+          <!-- Conteúdo dinâmico dos passos será inserido aqui -->
+        </div>
+        
+        <!-- Botão Meditação Concluída -->
+        <div class="completion-section" style="text-align: center; margin-top: 2rem; padding: 2rem;">
+          <button id="complete-meditation-btn" class="completion-btn" onclick="completeMeditation()" style="display: none;">
+            ✅ Meditação Concluída
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    #step-content {
+      display: block;
+    }
+
+    .main-text {
+      line-height: 1.7;
+      margin: 16px 0;
+      color: #f5f6fa;
+    }
+    .instruction {
+      background: #2a2b4a;
+      border-left: 4px solid #7ee787;
+      padding: 12px 16px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .reflection-box {
+      background: #23243a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .reflection-box h3 {
+      color: #7ee787;
+      margin: 0 0 12px 0;
+    }
+    .question {
+      background: #2a2b4a;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+    .question strong {
+      color: #7ee787;
+    }
+    .practical-application {
+      background: #2a2b4a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .practical-application h4 {
+      color: #7ee787;
+      margin: 0 0 8px 0;
+    }
+    .prayer-box {
+      background: #23243a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .prayer-text {
+      font-style: italic;
+      color: #a3a8c9;
+      line-height: 1.6;
+      margin: 12px 0;
+    }
+    .intentions {
+      background: #2a2b4a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .intention-item {
+      margin: 8px 0;
+      padding: 8px 0;
+      border-bottom: 1px solid #3a3b5a;
+    }
+    .personal-prayer {
+      background: #2a2b4a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .personal-prayer textarea {
+      width: 100%;
+      min-height: 120px;
+      background: #181a2a;
+      border: 1px solid #3a3b5a;
+      border-radius: 8px;
+      color: #f5f6fa;
+      padding: 12px;
+      font-family: inherit;
+      resize: vertical;
+    }
+    .completion-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      margin: 20px auto;
+      display: inline-block;
+    }
+
+    .completion-btn:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .completion-btn:active {
+      transform: translateY(0);
+    }
+
+    .completion-section {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 2rem;
+      background: rgba(16, 185, 129, 0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .contemplation-box {
+      background: #23243a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .timer-box {
+      background: #2a2b4a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      text-align: center;
+    }
+    .timer-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .timer-btn {
+      background: #3a3b5a;
+      border: none;
+      color: #f5f6fa;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .timer-btn:hover {
+      background: #4a4b6a;
+    }
+    .timer-btn.active {
+      background: #7ee787;
+      color: #101223;
+    }
+    .commitment-box {
+      background: #2a2b4a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .commitment-checkboxes {
+      margin: 12px 0;
+    }
+    .commitment-checkbox {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      gap: 8px;
+    }
+    .commitment-checkbox input {
+      width: 18px;
+      height: 18px;
+    }
+    .completion-box {
+      background: #23243a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+      text-align: center;
+    }
+    .evaluation {
+      background: #2a2b4a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .evaluation-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .eval-btn {
+      background: #3a3b5a;
+      border: none;
+      color: #f5f6fa;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .eval-btn:hover {
+      background: #4a4b6a;
+    }
+    .navigation-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .nav-btn {
+      background: #3a3b5a;
+      border: none;
+      color: #f5f6fa;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .nav-btn:hover {
+      background: #4a4b6a;
+    }
+    .nav-btn.primary {
+      background: #7ee787;
+      color: #101223;
+    }
+    .nav-btn.primary:hover {
+      background: #6dd676;
+    }
+    .save-btn {
+      background: #7ee787;
+      border: none;
+      color: #101223;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 8px 4px;
+    }
+    .save-btn:hover {
+      background: #6dd676;
+    }
+    .clear-btn {
+      background: #4a4b6a;
+      border: none;
+      color: #f5f6fa;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 8px 4px;
+    }
+    .clear-btn:hover {
+      background: #5a5b7a;
+    }
+    
+    /* Botão de Conclusão */
+    .completion-btn {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .completion-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+    
+    .completion-btn:active {
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    // Dados da meditação
+    const meditacaoData = {
+      titulo: "A Vida Interior",
+      categoria: "Princípios da Vida Sobrenatural",
+      licao: 1,
+      total: 24,
+      duracao: 12,
+      passos: {
+        1: {
+          titulo: "LEITURA",
+          icone: "📖",
+          conteudo: `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">A Vida Interior</h2>
+            
+            <h3>📚 Texto Principal para Leitura</h3>
+            <div class="main-text">
+              A vida interior é o fundamento de toda espiritualidade cristã. É a dimensão mais profunda da existência humana, onde a alma se encontra com Deus no silêncio do coração.
+            </div>
+            
+            <div class="main-text">
+              Jesus nos ensina que o Reino de Deus está dentro de nós. Isso significa que não precisamos procurar Deus em lugares distantes - Ele já habita em nossa alma pela graça do Batismo. A vida interior é o santuário íntimo onde acontece a verdadeira transformação espiritual.
+            </div>
+            
+            <div class="main-text">
+              Os três pilares da vida interior são:
+            </div>
+            
+            <div class="main-text">
+              <strong>1. Recolhimento:</strong> A capacidade de se voltar para dentro, saindo do barulho exterior para encontrar o silêncio do coração. É como Jesus que "se retirava para lugares solitários para orar" (Lc 5,16).
+            </div>
+            
+            <div class="main-text">
+              <strong>2. Silêncio:</strong> O espaço sagrado onde podemos escutar a voz suave de Deus. No silêncio, descobrimos que Deus fala não com palavras, mas com sua presença que toca o coração.
+            </div>
+            
+            <div class="main-text">
+              <strong>3. Presença:</strong> A consciência constante de que Deus está conosco. São Paulo nos lembra: "Nele vivemos, nos movemos e existimos" (At 17,28).
+            </div>
+            
+            <div class="main-text">
+              A vida interior não é fuga do mundo, mas sim a fonte de força para viver autenticamente os valores cristãos na vida cotidiana. É no encontro íntimo com Deus que encontramos a paz, a direção e a força para enfrentar os desafios da vida.
+            </div>
+            
+            <div class="instruction">
+              👁️ Leia este texto duas vezes, devagar, deixando as palavras penetrarem em seu coração.
+            </div>
+          `
+        },
+        2: {
+          titulo: "MEDITAÇÃO",
+          icone: "🤔",
+          conteudo: `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">A Vida Interior</h2>
+            
+            <div class="reflection-box">
+              <h3>💭 PARA REFLETIR</h3>
+              <div class="main-text">Leia cada pergunta devagar e reflita honestamente</div>
+            </div>
+            
+            <h3>🔍 Perguntas para Reflexão:</h3>
+            
+            <div class="question">
+              <strong>1. Descobrindo sua vida interior:</strong><br>
+              Em que momentos do dia você se lembra de que Deus está presente em sua alma? Quando você sente mais facilidade para "entrar no seu quarto interior" e encontrar Deus?
+            </div>
+            
+            <div class="question">
+              <strong>2. Identificando os obstáculos:</strong><br>
+              O que mais distrai você da vida interior? Talvez seja o celular, as preocupações do trabalho, o barulho constante, ou a pressa da rotina. Seja honesto consigo mesmo.
+            </div>
+            
+            <div class="question">
+              <strong>3. Reconhecendo a presença de Deus:</strong><br>
+              Como Deus já se manifestou em sua vida? Que sinais de sua presença você pode reconhecer: uma paz inexplicável, uma inspiração boa, um encontro providencial, uma oração atendida?
+            </div>
+            
+            <div class="question">
+              <strong>4. Planejando mudanças práticas:</strong><br>
+              Como você pode criar pequenos espaços de silêncio em sua rotina? Pense em momentos específicos: ao acordar, no trânsito, antes das refeições, antes de dormir.
+            </div>
+            
+            <div class="practical-application">
+              <h4>💡 Aplicação Prática:</h4>
+              <div class="main-text">
+                <strong>No trabalho:</strong> Antes de começar suas tarefas, faça uma oração breve oferecendo o dia a Deus. Pratique pequenas jaculatórias durante o dia: "Jesus, eu confio em Vós" ou "Senhor, dai-me força".
+              </div>
+              <div class="main-text">
+                <strong>Em casa:</strong> Reserve 5 minutos pela manhã para silêncio, antes de pegar o celular. Crie um "cantinho de oração" em seu quarto, mesmo que seja apenas uma imagem sacra.
+              </div>
+              <div class="main-text">
+                <strong>Nos relacionamentos:</strong> Antes de responder com irritação, faça uma oração rápida pedindo paciência. Veja Cristo nas pessoas que encontra, especialmente nas mais difíceis.
+              </div>
+            </div>
+            
+            <div class="instruction">
+              🎯 <strong>Frase para memorizar:</strong> "O Reino de Deus está dentro de vós" - Jesus quer lembrar você desta verdade todos os dias.
+            </div>
+          `
+        },
+        3: {
+          titulo: "ORAÇÃO",
+          icone: "🙏",
+          conteudo: `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">A Vida Interior</h2>
+            
+            <div class="prayer-box">
+              <h3>🙏 DIÁLOGO COM DEUS</h3>
+              <div class="main-text">Leia esta oração devagar, como se estivesse conversando pessoalmente com Jesus</div>
+            </div>
+            
+            <h3>🙏 Oração Dirigida:</h3>
+            
+            <div class="prayer-text">
+              "Senhor Jesus, Tu disseste que o Reino de Deus está dentro de nós. Que verdade maravilhosa! Ajuda-me a descobrir cada dia este tesouro que já possuo pela graça do Batismo.
+            </div>
+            
+            <div class="prayer-text">
+              Perdoa-me pelas vezes em que Te ignoro, mesmo sabendo que habitas em minha alma. Perdoa-me por buscar felicidade apenas nas coisas exteriores, esquecendo-me de que a fonte da verdadeira alegria está em Ti.
+            </div>
+            
+            <div class="prayer-text">
+              Senhor, reconheço que vivo muitas vezes na superfície da vida, correndo atrás de mil coisas e esquecendo-me do essencial. Ensina-me a cultivar o silêncio, o recolhimento e a oração.
+            </div>
+            
+            <div class="prayer-text">
+              Dá-me a graça de lembrar-me de Ti durante o dia. Que nas pequenas pausas, nos momentos de dificuldade, nas alegrias e tristezas, eu sempre me volte para Ti que vives em mim.
+            </div>
+            
+            <div class="prayer-text">
+              Que minha vida seja um reflexo de Tua presença em mim. Que as pessoas percebam em mim algo de Teu amor, Tua paz e Tua bondade.
+            </div>
+            
+            <div class="prayer-text">
+              Virgem Maria, Mãe da vida interior, que soubeste guardar todas as coisas em teu coração, intercede por mim. Ajuda-me a aprender de ti o recolhimento, o silêncio e a contemplação.
+            </div>
+            
+            <div class="prayer-text">
+              Amém."
+            </div>
+            
+            <div class="intentions">
+              <h4>🕊️ Intenções Específicas:</h4>
+              <div class="main-text">Reze pelas seguintes intenções, uma por vez, com o coração:</div>
+              
+              <div class="intention-item">
+                <strong>Pelos que perderam a fé:</strong> Para que redescubram a presença de Deus em suas vidas
+              </div>
+              <div class="intention-item">
+                <strong>Pelas famílias em conflito:</strong> Para que encontrem a paz no diálogo e no perdão
+              </div>
+              <div class="intention-item">
+                <strong>Pelos jovens:</strong> Para que encontrem sentido e direção para suas vidas
+              </div>
+              <div class="intention-item">
+                <strong>Pelos sacerdotes e religiosos:</strong> Para que sejam fiéis à sua vocação
+              </div>
+              <div class="intention-item">
+                <strong>Por sua conversão:</strong> Para que cresça sempre mais na vida interior
+              </div>
+            </div>
+            
+            <div class="personal-prayer">
+              <h4>💬 Sua Oração Pessoal:</h4>
+              <div class="main-text">Agora fale com Deus com suas próprias palavras. Conte-lhe suas alegrias, preocupações, pedidos...</div>
+              
+              <textarea id="personal-prayer-text" placeholder="Escreva aqui sua oração pessoal...&#10;&#10;(Este texto será salvo apenas para você)"></textarea>
+              
+              <div style="text-align: center; margin-top: 12px;">
+                <button class="save-btn" onclick="salvarOracao()">💾 Salvar Oração</button>
+                <button class="clear-btn" onclick="limparOracao()">🔄 Limpar Texto</button>
+              </div>
+            </div>
+          `
+        },
+        4: {
+          titulo: "CONTEMPLAÇÃO",
+          icone: "✨",
+          conteudo: `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">A Vida Interior</h2>
+            
+            <div class="contemplation-box">
+              <h3>🧘‍♀️ SILÊNCIO INTERIOR</h3>
+              <div class="main-text">Agora é momento de simplesmente ESTAR com Deus</div>
+            </div>
+            
+            <h3>🧘‍♀️ Instruções para o Silêncio:</h3>
+            <div class="main-text">Leia estas instruções e depois pratique:</div>
+            
+            <div class="main-text">
+              • Encontre uma posição confortável. Sente-se com as costas eretas, mas relaxadas. Coloque as mãos sobre o colo.<br>
+              • Feche suavemente os olhos. Não force, apenas deixe as pálpebras se fecharem naturalmente.<br>
+              • Respire normalmente. Não precisa controlar a respiração, apenas observe-a acontecer.<br>
+              • Se pensamentos surgirem, não se preocupe. É normal. Simplesmente volte gentilmente à presença de Deus.<br>
+              • Repita mentalmente, se necessário: "Jesus, eu confio em Vós" ou "Senhor, Tu estás em mim".
+            </div>
+            
+            <div class="instruction">
+              📝 <strong>Texto para Contemplação:</strong><br>
+              "O Reino de Deus está dentro de vós"<br>
+              Permaneça com esta frase. Não precisa pensar sobre ela, apenas deixe que ela repouse em seu coração. Deus está aqui, agora, dentro de você.
+            </div>
+            
+            <div class="main-text">
+              Não precisa fazer nada, apenas estar. Como Maria aos pés de Jesus, escolha a melhor parte: simplesmente permanecer na presença do Senhor.
+            </div>
+            
+            <div class="timer-box">
+              <h4>⏰ Tempo de Silêncio:</h4>
+              <div class="main-text">Escolha o tempo de contemplação:</div>
+              
+              <div class="timer-buttons">
+                <button class="timer-btn" onclick="iniciarContemplacao(2)">2 minutos</button>
+                <button class="timer-btn" onclick="iniciarContemplacao(3)">3 minutos</button>
+                <button class="timer-btn" onclick="iniciarContemplacao(5)">5 minutos</button>
+                <button class="timer-btn" onclick="iniciarContemplacao(0)">Sem limite</button>
+              </div>
+              
+              <div id="timer-display" style="display: none;">
+                <div style="font-size: 2em; margin: 16px 0;" id="timer-text">03:00</div>
+                <button class="save-btn" onclick="pararContemplacao()">⏹️ Parar</button>
+              </div>
+            </div>
+            
+            <div class="commitment-box">
+              <h4>🎯 Propósito para Hoje:</h4>
+              <div class="main-text">Hoje eu vou colocar em prática:</div>
+              
+              <div class="main-text" style="font-style: italic; color: #7ee787;">
+                "Fazer três pausas durante o dia para lembrar-me de que Deus está presente em minha alma"
+              </div>
+              
+              <div class="commitment-checkboxes">
+                <div class="commitment-checkbox">
+                  <input type="checkbox" id="check1">
+                  <label for="check1">☐ Ao acordar (antes de pegar o celular)</label>
+                </div>
+                <div class="commitment-checkbox">
+                  <input type="checkbox" id="check2">
+                  <label for="check2">☐ No almoço (oração breve de gratidão)</label>
+                </div>
+                <div class="commitment-checkbox">
+                  <input type="checkbox" id="check3">
+                  <label for="check3">☐ Antes de dormir (exame de consciência)</label>
+                </div>
+              </div>
+              
+              <div class="main-text">
+                ⭐ <strong>Palavra-chave para lembrar hoje:</strong> "PRESENÇA"
+              </div>
+              
+              <div class="main-text">
+                ✍️ <strong>Meu compromisso pessoal:</strong>
+              </div>
+              
+              <textarea id="personal-commitment" placeholder="Escreva uma ação concreta que vai fazer hoje..." style="width: 100%; min-height: 80px; background: #181a2a; border: 1px solid #3a3b5a; border-radius: 8px; color: #f5f6fa; padding: 12px; font-family: inherit; resize: vertical;"></textarea>
+              
+              <div style="text-align: center; margin-top: 12px;">
+                <button class="save-btn" onclick="salvarCompromisso()">💾 Salvar Compromisso</button>
+                <button class="clear-btn" onclick="limparCompromisso()">🔄 Limpar</button>
+              </div>
+              
+              <div style="text-align: center; margin-top: 20px; padding: 20px; border-top: 1px solid #3a3b5a;">
+                <h4>✅ Concluir Meditação</h4>
+                <div class="main-text" style="margin-bottom: 16px;">
+                  Marque esta meditação como concluída para atualizar suas estatísticas
+                </div>
+                <button class="completion-btn" onclick="concluirMeditacao()" style="
+                  background: linear-gradient(135deg, #7ee787, #56d364);
+                  color: #0d1117;
+                  border: none;
+                  padding: 12px 24px;
+                  border-radius: 8px;
+                  font-weight: bold;
+                  font-size: 16px;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  box-shadow: 0 4px 12px rgba(126, 231, 135, 0.3);
+                ">
+                  🎉 Marcar como Concluída
+                </button>
+              </div>
+            </div>
+            
+            <div class="completion-box">
+              <h3>🎉 MEDITAÇÃO CONCLUÍDA!</h3>
+              <div class="main-text">Parabéns! Você completou "A Vida Interior"</div>
+              
+              <div style="margin: 16px 0;">
+                <div>⏱️ Tempo dedicado: 12 minutos</div>
+                <div>🔥 Streak atual: 12 dias consecutivos</div>
+                <div>📊 Progresso: 1/24 (Princípios da Vida Sobrenatural)</div>
+              </div>
+              
+              <div class="evaluation">
+                <h4>Como foi sua experiência hoje?</h4>
+                <div class="evaluation-buttons">
+                  <button class="eval-btn" onclick="avaliarMeditacao('muito-boa')">😊 Muito boa</button>
+                  <button class="eval-btn" onclick="avaliarMeditacao('boa')">😐 Boa</button>
+                  <button class="eval-btn" onclick="avaliarMeditacao('dificil')">😔 Difícil</button>
+                </div>
+                
+                <div style="margin-top: 12px;">
+                  <div class="main-text">💬 Comentário (opcional):</div>
+                  <textarea id="avaliacao-comentario" placeholder="Compartilhe sua experiência..." style="width: 100%; min-height: 60px; background: #181a2a; border: 1px solid #3a3b5a; border-radius: 8px; color: #f5f6fa; padding: 12px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+              </div>
+              
+              <div class="navigation-buttons">
+                <a href="#" class="nav-btn primary" onclick="proximaMeditacao()">▶️ Próxima: A Graça Santificante</a>
+                <a href="dashboard.html" class="nav-btn">🏠 Dashboard</a>
+                <a href="#" class="nav-btn" onclick="agendarProxima()">📅 Agendar Próxima</a>
+                <a href="#" class="nav-btn" onclick="compartilharProgresso()">📤 Compartilhar Progresso</a>
+              </div>
+            </div>
+          `
+        }
+      }
+    };
+
+    // Função helper para filtrar meditações por usuário
+    function getPersonalizedMeditationsForCurrentUser() {
+        try {
+            // Obter usuário atual
+            const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+            const userId = currentUser.id || 'anonymous';
+            
+            // Carregar todas as meditações personalizadas
+            const allPersonalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+            
+            // Filtrar apenas as meditações do usuário atual
+            const userMeditations = allPersonalizedMeditations.filter(meditation => 
+                meditation.userId === userId
+            );
+            
+            console.log('👤 Usuário atual:', currentUser.name, 'ID:', userId);
+            console.log('📊 Meditações personalizadas do usuário:', userMeditations.length);
+            
+            return userMeditations;
+        } catch (error) {
+            console.error('❌ Erro ao filtrar meditações por usuário:', error);
+            return [];
+        }
+    }
+
+    let currentStep = 1;
+    let contemplationTimer = null;
+    let contemplationTime = 0;
+
+    // Inicializar a página
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 DOMContentLoaded disparado');
+      // Adicionar um pequeno delay para garantir que o DOM esteja completamente carregado
+      setTimeout(() => {
+        console.log('⏰ Timeout executado');
+        carregarDadosMeditacao();
+        setupBackButton();
+        loadTheme();
+      }, 100);
+    });
+
+    // Configurar botão de voltar
+    function setupBackButton() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromParam = urlParams.get('from');
+      
+      const backButton = document.getElementById('back-button');
+      
+      if (backButton) {
+        if (fromParam === 'minhas-meditacoes') {
+          // Se veio especificamente de minhas meditações, voltar para lá
+          backButton.href = 'minhas-meditacoes.html';
+        } else {
+          // Padrão: voltar para o dashboard
+          backButton.href = 'dashboard.html';
+        }
+      } else {
+        console.warn('⚠️ Botão de voltar não encontrado');
+      }
+    }
+
+    // Carregar dados da meditação selecionada
+    function carregarDadosMeditacao() {
+      console.log('🔄 Carregando dados da meditação...');
+      console.log('🔍 Função carregarDadosMeditacao chamada');
+      console.log('🔍 localStorage disponível:', typeof localStorage !== 'undefined');
+      
+      // PRIMEIRO: Verificar se há uma meditação específica carregada (nova funcionalidade)
+      const currentMeditation = localStorage.getItem('current_meditation');
+      if (currentMeditation) {
+        try {
+          const meditation = JSON.parse(currentMeditation);
+          console.log('✅ Meditação específica carregada:', meditation);
+          
+          meditacaoData.titulo = meditation.title || 'Meditação Personalizada';
+          meditacaoData.categoria = meditation.topic || 'Personalizada';
+          
+          // Atualizar o header com os dados corretos
+          const titleElement = document.getElementById('meditation-title');
+          if (titleElement) {
+            titleElement.textContent = meditation.title || 'Meditação Personalizada';
+          }
+          
+          // Atualizar o título da página
+          document.title = `Lectio Divina - ${meditation.title || 'Meditação Personalizada'}`;
+          
+          // Processar o conteúdo da meditação
+          const processedContent = processMeditationContent(meditation.content);
+          
+          // Garantir que os passos existam
+          if (!meditacaoData.passos) {
+            meditacaoData.passos = {};
+          }
+          
+          // Atualizar os passos com os dados da meditação personalizada
+          // LEITURA
+          meditacaoData.passos[1] = meditacaoData.passos[1] || {};
+          meditacaoData.passos[1].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || 'Meditação Personalizada'}</h2>
+            <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedContent}</div>
+            <div class="instruction">
+              👁️ Leia este texto duas vezes, devagar, deixando as palavras penetrarem em seu coração.
+            </div>
+          `;
+          
+          // MEDITAÇÃO
+          meditacaoData.passos[2] = meditacaoData.passos[2] || {};
+          meditacaoData.passos[2].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || 'Meditação Personalizada'}</h2>
+            <div class="reflection-box">
+              <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedContent}</div>
+            </div>
+          `;
+          
+          // ORAÇÃO
+          meditacaoData.passos[3] = meditacaoData.passos[3] || {};
+          meditacaoData.passos[3].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || 'Meditação Personalizada'}</h2>
+            <div class="prayer-box">
+              <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedContent}</div>
+            </div>
+          `;
+          
+          // CONTEMPLAÇÃO
+          meditacaoData.passos[4] = meditacaoData.passos[4] || {};
+          meditacaoData.passos[4].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || 'Meditação Personalizada'}</h2>
+            <div class="contemplation-box">
+              <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedContent}</div>
+            </div>
+          `;
+          
+          // Mostrar o container da meditação
+          const meditationContainer = document.getElementById('meditation-container');
+          const meditationList = document.getElementById('meditation-list');
+          
+          if (meditationContainer) {
+            meditationContainer.style.display = 'block';
+            console.log('✅ Container da meditação mostrado');
+          }
+          
+          if (meditationList) {
+            meditationList.style.display = 'none';
+            console.log('✅ Lista de meditações ocultada');
+          }
+          
+          // Atualizar a interface
+          console.log('🔍 Chamando showStep(1) para mostrar o primeiro passo');
+          showStep(1);
+          
+          // Limpar a meditação atual após carregar
+          localStorage.removeItem('current_meditation');
+          
+          return;
+          
+        } catch (error) {
+          console.error('❌ Erro ao carregar meditação específica:', error);
+        }
+      }
+      
+      // SEGUNDO: tentar carregar dados da meditação atual (dashboard)
+      const meditacaoAtual = localStorage.getItem('meditacao-atual');
+      
+      console.log('📊 Dados da meditação atual:', meditacaoAtual);
+      
+      if (meditacaoAtual) {
+        try {
+          const meditationData = JSON.parse(meditacaoAtual);
+          console.log('✅ Dados da meditação atual carregados:', meditationData);
+          console.log('🔍 Estrutura dos dados:', {
+            id: meditationData.id,
+            title: meditationData.title,
+            category: meditationData.category,
+            lectio: !!meditationData.lectio,
+            meditatio: !!meditationData.meditatio,
+            oratio: !!meditationData.oratio,
+            contemplatio: !!meditationData.contemplatio
+          });
+          console.log('🔍 Conteúdo real dos campos:', {
+            lectio: meditationData.lectio ? meditationData.lectio.substring(0, 50) + '...' : 'null',
+            meditatio: meditationData.meditatio ? meditationData.meditatio.substring(0, 50) + '...' : 'null',
+            oratio: meditationData.oratio ? meditationData.oratio.substring(0, 50) + '...' : 'null',
+            contemplatio: meditationData.contemplatio ? meditationData.contemplatio.substring(0, 50) + '...' : 'null'
+          });
+          
+          // CORREÇÃO CRÍTICA: Se os campos de conteúdo estão vazios, buscar na lista de meditações
+          if (!meditationData.lectio && !meditationData.meditatio && !meditationData.oratio && !meditationData.contemplatio) {
+            console.log('⚠️ Campos de conteúdo vazios, buscando na lista de meditações...');
+            
+            const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            const meditationWithContent = meditations.find(m => m.id === meditationData.id);
+            
+            if (meditationWithContent && (meditationWithContent.lectio || meditationWithContent.meditatio || meditationWithContent.oratio || meditationWithContent.contemplatio)) {
+              console.log('✅ Meditação com conteúdo encontrada na lista:', meditationWithContent.title);
+              
+              // Criar objeto com conteúdo completo
+              const meditationDataCompleto = {
+                ...meditationData,
+                lectio: meditationWithContent.lectio || '',
+                meditatio: meditationWithContent.meditatio || '',
+                oratio: meditationWithContent.oratio || '',
+                contemplatio: meditationWithContent.contemplatio || ''
+              };
+              
+              console.log('🔍 Conteúdo real dos campos (CORRIGIDO):', {
+                lectio: meditationDataCompleto.lectio ? meditationDataCompleto.lectio.substring(0, 50) + '...' : 'null',
+                meditatio: meditationDataCompleto.meditatio ? meditationDataCompleto.meditatio.substring(0, 50) + '...' : 'null',
+                oratio: meditationDataCompleto.oratio ? meditationDataCompleto.oratio.substring(0, 50) + '...' : 'null',
+                contemplatio: meditationDataCompleto.contemplatio ? meditationDataCompleto.contemplatio.substring(0, 50) + '...' : 'null'
+              });
+              
+              // Carregar meditação individual com dados completos
+              console.log('🔍 Chamando carregarMeditacaoIndividual com dados completos:', meditationDataCompleto);
+              carregarMeditacaoIndividual(meditationDataCompleto, meditationDataCompleto.category || 'Meditação');
+              console.log('🔍 carregarMeditacaoIndividual concluída');
+              return;
+            } else {
+              console.log('❌ Meditação com conteúdo não encontrada na lista');
+            }
+          }
+          
+          // Carregar meditação individual diretamente
+          console.log('🔍 Chamando carregarMeditacaoIndividual com:', meditationData);
+          carregarMeditacaoIndividual(meditationData, meditationData.category || 'Meditação');
+          console.log('🔍 carregarMeditacaoIndividual concluída');
+          return;
+        } catch (error) {
+          console.error('❌ Erro ao carregar dados da meditação atual:', error);
+        }
+      }
+      
+      // Se não há dados da meditação atual, tentar dados antigos do localStorage
+      const currentMeditations = localStorage.getItem('current_meditations');
+      const currentCategory = localStorage.getItem('current_category');
+      
+      console.log('📊 Dados antigos do localStorage:', { currentMeditations, currentCategory });
+      
+      if (currentMeditations && currentCategory) {
+        try {
+          const data = JSON.parse(currentMeditations);
+          console.log('✅ Dados carregados do dashboard:', data);
+          
+          if (data.meditations && data.meditations.length > 0) {
+            const meditation = data.meditations[0];
+            console.log('📖 Meditação encontrada:', meditation);
+            console.log('🔍 Campos da meditação:', {
+              reading: meditation.reading,
+              lectio: meditation.lectio,
+              meditation: meditation.meditation,
+              meditatio: meditation.meditatio,
+              prayer: meditation.prayer,
+              oratio: meditation.oratio,
+              contemplation: meditation.contemplation,
+              contemplatio: meditation.contemplatio
+            });
+            
+            // Carregar meditação individual diretamente
+            carregarMeditacaoIndividual(meditation, data.category);
+            return;
+          }
+        } catch (error) {
+          console.error('❌ Erro ao carregar dados do dashboard:', error);
+        }
+      }
+      
+      // Se não há dados do dashboard, tentar URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryName = urlParams.get('category');
+      
+      console.log('📊 Categoria da URL:', categoryName);
+      
+      if (categoryName) {
+        // Buscar meditações personalizadas no localStorage
+        const userMeditations = JSON.parse(localStorage.getItem('userMeditations') || '[]');
+        console.log('📊 Meditações do usuário:', userMeditations);
+        
+        // Filtrar meditações pela categoria (case-insensitive)
+        const categoryMeditations = userMeditations.filter(meditation => 
+          meditation.topic && meditation.topic.toLowerCase() === categoryName.toLowerCase()
+        );
+        
+        console.log('📊 Meditações encontradas para categoria:', categoryMeditations);
+        
+        if (categoryMeditations.length > 0) {
+          // Atualizar o header com os dados da categoria com verificação de segurança
+          const categoryTitle = document.getElementById('category-title');
+          const meditationCount = document.getElementById('meditation-count');
+          
+          if (categoryTitle) categoryTitle.textContent = categoryName;
+          if (meditationCount) meditationCount.textContent = `${categoryMeditations.length} meditações`;
+          
+          // Atualizar o título da página
+          document.title = `Lectio Divina - ${categoryName}`;
+          
+          // Mostrar lista de meditações
+          mostrarListaMeditacoes(categoryMeditations, categoryName);
+        } else {
+          console.error('❌ Nenhuma meditação encontrada na categoria:', categoryName);
+          mostrarErro(`Nenhuma meditação encontrada na categoria "${categoryName}".`);
+        }
+      } else {
+        console.error('❌ Nenhuma categoria especificada');
+        console.log('🔍 Tentando carregar dados da meditação atual...');
+        
+        // Tentar carregar dados da meditação atual mesmo sem categoria
+        const meditacaoAtual = localStorage.getItem('meditacao-atual');
+        console.log('🔍 meditacao-atual no localStorage:', meditacaoAtual ? 'encontrado' : 'não encontrado');
+        if (meditacaoAtual) {
+          try {
+            const meditationData = JSON.parse(meditacaoAtual);
+            console.log('✅ Dados da meditação atual encontrados:', meditationData.title);
+            console.log('🔍 Estrutura dos dados:', meditationData);
+            carregarMeditacaoIndividual(meditationData, meditationData.category || 'Meditação');
+            return;
+          } catch (error) {
+            console.error('❌ Erro ao carregar dados da meditação atual:', error);
+          }
+        } else {
+          console.log('❌ Nenhum dado de meditação atual encontrado no localStorage');
+        }
+        
+        mostrarErro('Nenhuma categoria especificada.');
+      }
+    }
+    
+    // Função para mostrar a lista de meditações
+    function mostrarListaMeditacoes(meditations, categoryName) {
+      const meditationList = document.getElementById('meditation-list');
+      const meditationContainer = document.getElementById('meditation-container');
+      
+      // Verificação de segurança
+      if (!meditationList || !meditationContainer) {
+        console.error('❌ Elementos necessários não encontrados');
+        return;
+      }
+      
+      // Esconder container de meditação individual
+      meditationContainer.style.display = 'none';
+      
+      // Limpar lista atual
+      meditationList.innerHTML = '';
+      
+      // Criar itens para cada meditação
+      meditations.forEach((meditation, index) => {
+        const meditationItem = document.createElement('div');
+        meditationItem.className = 'meditation-item';
+        meditationItem.onclick = () => iniciarMeditacao(meditation, categoryName);
+        
+        // Determinar status da meditação (simulado por enquanto)
+        const status = getMeditationStatus(meditation, index);
+        const duration = meditation.duration || '15 min';
+        
+        meditationItem.innerHTML = `
+          <div class="meditation-info">
+            <div class="meditation-title">${meditation.title || `Meditação ${index + 1}`}</div>
+            <div class="meditation-status">
+              <span class="status-icon ${status.class}">${status.icon}</span>
+              <span class="${status.class}">${status.text}</span>
+            </div>
+          </div>
+          <div class="meditation-duration">${duration}</div>
+        `;
+        
+        meditationList.appendChild(meditationItem);
+      });
+      
+      console.log('✅ Lista de meditações carregada:', meditations.length, 'meditações');
+    }
+    
+    // Função para determinar o status da meditação
+    function getMeditationStatus(meditation, index) {
+      // Por enquanto, vamos simular status baseado no índice
+      // Na implementação real, isso viria do localStorage ou banco de dados
+      if (index === 0) {
+        return {
+          icon: '✅',
+          text: 'Concluída',
+          class: 'status-completed'
+        };
+      } else if (index === 1) {
+        return {
+          icon: '⏳',
+          text: 'Em progresso',
+          class: 'status-in-progress'
+        };
+      } else {
+        return {
+          icon: '🔒',
+          text: 'Bloqueada',
+          class: 'status-locked'
+        };
+      }
+    }
+    
+    // Função para iniciar uma meditação específica
+    function iniciarMeditacao(meditation, categoryName) {
+      console.log('🚀 Iniciando meditação:', meditation.title);
+      
+      // Salvar meditação atual no localStorage
+      localStorage.setItem('current_meditation', JSON.stringify({
+        meditation: meditation,
+        type: 'personalized',
+        category: categoryName
+      }));
+      
+      // Esconder lista e mostrar meditação individual
+      document.getElementById('meditation-list').style.display = 'none';
+      document.getElementById('meditation-container').style.display = 'block';
+      
+      // Carregar dados da meditação específica
+      carregarMeditacaoIndividual(meditation, categoryName);
+    }
+    
+    // Função para mostrar erro
+    function mostrarErro(mensagem) {
+      const meditationList = document.getElementById('meditation-list');
+      meditationList.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #f87171;">
+          <div style="font-size: 3em; margin-bottom: 16px;">❌</div>
+          <h3>Erro</h3>
+          <p>${mensagem}</p>
+          <button onclick="window.location.href='minhas-meditacoes.html'" class="action-btn primary">
+            Voltar para Minhas Meditações
+          </button>
+        </div>
+      `;
+    }
+    
+    // Função para carregar uma meditação individual
+    function carregarMeditacaoIndividual(meditation, categoryName) {
+      try {
+        console.log('📖 Carregando meditação individual:', meditation.title);
+        console.log('🔍 Todos os campos da meditação:', meditation);
+        console.log('🔍 Chaves disponíveis:', Object.keys(meditation));
+        console.log('🔍 meditacaoData existe:', !!meditacaoData);
+        console.log('🔍 Categoria:', categoryName);
+        console.log('🔍 Tipo de meditation:', typeof meditation);
+        console.log('🔍 meditation é objeto:', meditation && typeof meditation === 'object');
+        
+        // Verificar se meditacaoData existe
+        if (!meditacaoData) {
+          console.error('❌ meditacaoData não está definido');
+          return;
+        }
+        
+        // Sempre sobrescrever os passos para evitar resíduos de execuções anteriores
+        meditacaoData.passos = {
+          1: { conteudo: "" },
+          2: { conteudo: "" },
+          3: { conteudo: "" },
+          4: { conteudo: "" }
+        };
+        
+        console.log('✅ Passos inicializados');
+      
+      // LEITURA
+      console.log('🔍 Campos da meditação para leitura:', {
+        reading: meditation.reading,
+        lectio: meditation.lectio,
+        hasReading: !!meditation.reading,
+        hasLectio: !!meditation.lectio
+      });
+      const leitura = meditation.reading || meditation.lectio || '';
+      console.log('📖 Leitura encontrada:', !!leitura, leitura ? leitura.substring(0, 100) + '...' : 'Nenhuma');
+      if (leitura) {
+        const processedReading = processMeditationContent(leitura);
+        meditacaoData.passos[1].conteudo = `
+          <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || categoryName}</h2>
+          <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedReading}</div>
+          <div class="instruction">
+            👁️ Leia este texto duas vezes, devagar, deixando as palavras penetrarem em seu coração.
+          </div>
+        `;
+        console.log('✅ Passo 1 (Leitura) carregado');
+        console.log('🔍 Conteúdo do passo 1:', meditacaoData.passos[1].conteudo.substring(0, 100) + '...');
+      } else {
+        console.log('❌ Nenhuma leitura encontrada');
+      }
+      // MEDITAÇÃO
+      console.log('🔍 Campos da meditação para meditação:', {
+        meditation: meditation.meditation,
+        meditatio: meditation.meditatio,
+        hasMeditation: !!meditation.meditation,
+        hasMeditatio: !!meditation.meditatio
+      });
+      const meditacao = meditation.meditation || meditation.meditatio || '';
+      console.log('🤔 Meditação encontrada:', !!meditacao, meditacao ? meditacao.substring(0, 100) + '...' : 'Nenhuma');
+      if (meditacao) {
+        const processedMeditation = processMeditationContent(meditacao);
+        meditacaoData.passos[2].conteudo = `
+          <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || categoryName}</h2>
+          <div class="reflection-box">
+            <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedMeditation}</div>
+          </div>
+        `;
+        console.log('✅ Passo 2 (Meditação) carregado');
+      }
+      // ORAÇÃO
+      const oracao = meditation.prayer || meditation.oratio || '';
+      console.log('🙏 Oração encontrada:', !!oracao, oracao ? oracao.substring(0, 100) + '...' : 'Nenhuma');
+      if (oracao) {
+        const processedPrayer = processMeditationContent(oracao);
+        meditacaoData.passos[3].conteudo = `
+          <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || categoryName}</h2>
+          <div class="prayer-box">
+            <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedPrayer}</div>
+            <div class="instruction">
+              <strong>Oração Pessoal:</strong> Agora é sua vez de falar com Deus. Use o espaço abaixo para escrever sua própria oração.
+            </div>
+            <textarea id="personal-prayer-text" placeholder="Escreva sua oração pessoal aqui..." style="width: 100%; min-height: 100px; background: #23243a; border: 1px solid #3a3b5a; border-radius: 8px; color: #f5f6fa; padding: 12px; font-family: inherit; resize: vertical; margin-top: 12px;"></textarea>
+            <div style="margin-top: 12px; display: flex; gap: 8px;">
+              <button onclick="salvarOracao()" style="background: #7ee787; color: #101223; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">💾 Salvar</button>
+              <button onclick="limparOracao()" style="background: #23243a; color: #f5f6fa; border: 1px solid #3a3b5a; padding: 8px 16px; border-radius: 6px; cursor: pointer;">🗑️ Limpar</button>
+            </div>
+          </div>
+        `;
+        console.log('✅ Passo 3 (Oração) carregado');
+      }
+      // CONTEMPLAÇÃO
+      const contemplacao = meditation.contemplation || meditation.contemplatio || '';
+      console.log('🧘 Contemplação encontrada:', !!contemplacao, contemplacao ? contemplacao.substring(0, 100) + '...' : 'Nenhuma');
+      if (contemplacao) {
+        const processedContemplation = processMeditationContent(contemplacao);
+        // Verificar se veio de minhas-meditacoes.html
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromParam = urlParams.get('from');
+        const isFromMinhasMeditacoes = fromParam === 'minhas-meditacoes';
+        
+        let completionButton = '';
+        if (isFromMinhasMeditacoes) {
+          completionButton = `
+            <div style="margin-top: 24px; text-align: center;">
+              <button class="completion-btn" onclick="concluirMeditacao()" style="
+                background: linear-gradient(135deg, #7ee787 0%, #10b981 100%);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 16px;
+                box-shadow: 0 4px 12px rgba(126, 231, 135, 0.3);
+              ">
+                ✅ Meditação Concluída
+              </button>
+            </div>
+          `;
+        }
+        
+        meditacaoData.passos[4].conteudo = `
+          <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || categoryName}</h2>
+          <div class="contemplation-box">
+            <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedContemplation}</div>
+            <div class="instruction">
+              <strong>Momento de Silêncio:</strong> Agora, simplesmente fique em silêncio na presença de Deus. Você pode usar um timer ou simplesmente contemplar.
+            </div>
+            ${completionButton}
+          </div>
+        `;
+        console.log('✅ Passo 4 (Contemplação) carregado');
+      }
+      // Esconder lista e mostrar meditação individual com verificação de segurança
+      const meditationList = document.getElementById('meditation-list');
+      const meditationContainer = document.getElementById('meditation-container');
+      const stepContent = document.getElementById('step-content');
+      
+      console.log('🔍 Elementos encontrados:', {
+        meditationList: !!meditationList,
+        meditationContainer: !!meditationContainer,
+        stepContent: !!stepContent
+      });
+      
+      if (meditationList) meditationList.style.display = 'none';
+      if (meditationContainer) meditationContainer.style.display = 'block';
+      if (stepContent) stepContent.innerHTML = '';
+      
+      console.log('✅ Interface atualizada');
+      
+      // Mostrar o primeiro passo
+      console.log('🔍 Chamando showStep(1)');
+      showStep(1);
+      console.log('🔍 showStep(1) concluída');
+      console.log('✅ Meditação individual carregada com sucesso');
+    } catch (error) {
+      console.error('❌ Erro ao carregar meditação individual:', error);
+    }
+    }
+    
+    // Função para processar o conteúdo da meditação
+    function processMeditationContent(content) {
+      console.log('🔧 processMeditationContent chamada com:', content ? 'conteúdo válido' : 'conteúdo vazio');
+      if (!content) {
+        console.log('❌ Conteúdo vazio, retornando string vazia');
+        return '';
+      }
+      
+      console.log('🔧 Processando conteúdo:', content.substring(0, 200) + '...');
+      
+      // Remover referências a "primeira parte", "segunda parte", "terceira parte"
+      let processedContent = content
+        .replace(/\*Primeira parte do texto da leitura/g, '')
+        .replace(/\*Segunda parte do texto da leitura/g, '')
+        .replace(/\*Terceira parte do texto da leitura/g, '')
+        .replace(/Esta parte introduz o tema e estabelece o fundamento espiritual da [^.]*\./g, '')
+        .replace(/Esta parte aprofundando o tema da [^.]*\./g, '')
+        .replace(/Esta parte concluindo com reflexões sobre a [^.]*\./g, '')
+        .replace(/e sua manifestação na vida cristã através da graça divina e da ação do Espírito Santo\./g, '')
+        .replace(/e sua importância para a santificação e crescimento espiritual\./g, '')
+        .replace(/com citações bíblicas e referências aos documentos católicos\./g, '')
+        .replace(/na vida cristã\./g, '')
+        .replace(/como fruto do Espírito Santo/g, '')
+        .replace(/\[Bíblia Sagrada, [^\]]*\]/g, '')
+        .replace(/\[Catecismo da Igreja Católica, [^\]]*\]/g, '')
+        .replace(/\[[^\]]*\]/g, '');
+      
+      // Limpar espaços extras e quebras de linha
+      processedContent = processedContent
+        .replace(/\n\s*\n\s*\n/g, '\n\n')
+        .replace(/\*\s*\n\s*\*/g, '\n\n*')
+        .trim();
+      
+      console.log('✅ Conteúdo processado:', processedContent.substring(0, 200) + '...');
+      
+      return processedContent;
+    }
+
+// Mostrar passo específico
+function showStep(step) {
+  try {
+    console.log(`🎯 Mostrando passo ${step}...`);
+    console.log('🔍 currentStep antes:', currentStep);
+    currentStep = step;
+    console.log('🔍 currentStep depois:', currentStep);
+    
+    // Verificar se meditacaoData existe
+    if (!meditacaoData || !meditacaoData.passos) {
+      console.warn('⚠️ Dados da meditação não estão prontos ainda');
+      console.log('🔍 meditacaoData:', meditacaoData);
+      console.log('🔍 meditacaoData.passos:', meditacaoData?.passos);
+      return;
+    }
+    
+    // Atualizar classes dos passos
+    document.querySelectorAll('.step').forEach((el, index) => {
+      el.classList.toggle('active', index + 1 === step);
+    });
+    
+    // Manter títulos originais dos passos com verificação de segurança
+    const step1Title = document.getElementById('step1-title');
+    const step2Title = document.getElementById('step2-title');
+    const step3Title = document.getElementById('step3-title');
+    const step4Title = document.getElementById('step4-title');
+    
+    if (step1Title) step1Title.textContent = "Leitura";
+    if (step2Title) step2Title.textContent = "Meditação";
+    if (step3Title) step3Title.textContent = "Oração";
+    if (step4Title) step4Title.textContent = "Contemplação";
+
+    // Atualizar conteúdo
+    const content = document.getElementById('step-content');
+    console.log('🔍 Elemento content encontrado:', !!content);
+    console.log('🔍 Passo existe:', !!meditacaoData.passos[step]);
+    console.log('🔍 Conteúdo do passo:', meditacaoData.passos[step]?.conteudo ? 'Sim' : 'Não');
+    
+    if (content && meditacaoData.passos[step]) {
+      if (meditacaoData.passos[step].conteudo) {
+        console.log(`📄 Atualizando conteúdo do passo ${step}:`, meditacaoData.passos[step].conteudo.substring(0, 100) + '...');
+        
+        // DEBUG: Verificar se o elemento está visível antes de atualizar
+        console.log('🔍 Estado do elemento antes da atualização:', {
+          display: content.style.display,
+          visibility: content.style.visibility,
+          opacity: content.style.opacity,
+          height: content.offsetHeight,
+          width: content.offsetWidth,
+          parentDisplay: content.parentElement?.style.display,
+          parentVisibility: content.parentElement?.style.visibility
+        });
+        
+        content.innerHTML = meditacaoData.passos[step].conteudo;
+        console.log('✅ Conteúdo atualizado');
+        console.log('🔍 Conteúdo final do elemento:', content.innerHTML.substring(0, 200) + '...');
+        console.log('🔍 Elemento content visível:', content.offsetHeight > 0);
+        
+        // Garantir que o conteúdo seja visível
+        content.style.display = 'block';
+        content.style.visibility = 'visible';
+        content.style.opacity = '1';
+        
+        // DEBUG: Verificar se o elemento está visível depois de atualizar
+        console.log('🔍 Estado do elemento depois da atualização:', {
+          display: content.style.display,
+          visibility: content.style.visibility,
+          opacity: content.style.opacity,
+          height: content.offsetHeight,
+          width: content.offsetWidth,
+          parentDisplay: content.parentElement?.style.display,
+          parentVisibility: content.parentElement?.style.visibility
+        });
+        
+        // DEBUG: Verificar se o container pai está visível
+        const meditationContainer = document.getElementById('meditation-container');
+        if (meditationContainer) {
+          console.log('🔍 Estado do meditation-container:', {
+            display: meditationContainer.style.display,
+            visibility: meditationContainer.style.visibility,
+            height: meditationContainer.offsetHeight,
+            width: meditationContainer.offsetWidth
+          });
+        }
+        
+      } else {
+        content.innerHTML = "<div style='text-align:center;color:#a3a8c9;padding:2em'>Nenhum conteúdo disponível para esta etapa.</div>";
+        console.warn('⚠️ Nenhum conteúdo disponível para esta etapa.');
+        console.log('🔍 Passos disponíveis:', Object.keys(meditacaoData.passos));
+        console.log('🔍 Conteúdo dos passos:', meditacaoData.passos);
+      }
+    } else {
+      console.error('❌ Elemento content não encontrado ou passo não existe');
+      console.log('🔍 Elemento content:', content);
+      console.log('🔍 Passo:', step);
+      console.log('🔍 meditacaoData.passos:', meditacaoData.passos);
+    }
+    
+    // Atualizar header
+    console.log('🔍 updateHeader chamada');
+    updateHeader();
+    console.log('✅ Header atualizado:', undefined);
+    
+    // Mostrar botão de conclusão se estiver no último passo
+    showCompletionButton();
+    
+  } catch (error) {
+    console.error('❌ Erro em showStep:', error);
+  }
+}
+
+// Atualizar header
+function updateHeader() {
+  try {
+    console.log('🔍 updateHeader chamada');
+    // Verificar se meditacaoData e currentStep existem
+    if (!meditacaoData || !meditacaoData.passos || !currentStep) {
+      console.warn('⚠️ Dados da meditação não estão prontos ainda');
+      console.log('🔍 meditacaoData:', meditacaoData);
+      console.log('🔍 meditacaoData.passos:', meditacaoData?.passos);
+      console.log('🔍 currentStep:', currentStep);
+      return;
+    }
+    
+    const stepData = meditacaoData.passos[currentStep];
+    
+    // Atualizar título da meditação
+    const dadosSalvos = localStorage.getItem('meditacao-atual');
+    if (dadosSalvos) {
+      const dados = JSON.parse(dadosSalvos);
+      const titleElement = document.getElementById('meditation-title');
+      if (titleElement) {
+        titleElement.textContent = dados.category || 'Meditação';
+      }
+      
+      // O elemento meditation-number foi removido, então não tentamos acessá-lo
+      console.log('✅ Header atualizado:', dados.category);
+    }
+  } catch (error) {
+    console.error('❌ Erro ao atualizar header:', error);
+  }
+}
+
+// Função para voltar
+function goBack() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const fromParam = urlParams.get('from');
+  
+  if (fromParam === 'minhas-meditacoes') {
+    // Se veio especificamente de minhas meditações, voltar para lá
+    window.location.href = 'minhas-meditacoes.html';
+  } else {
+    // Padrão: voltar para o dashboard
+    window.location.href = 'dashboard.html';
+  }
+}
+
+// Event listeners para navegação
+document.addEventListener('click', function(e) {
+  // Verificar se o clique foi no elemento step ou em seus filhos
+  const stepElement = e.target.closest('.step');
+  if (stepElement) {
+    const step = parseInt(stepElement.dataset.step);
+    showStep(step);
+  }
+});
+
+// Funções para salvar dados
+function salvarOracao() {
+  const oracao = document.getElementById('personal-prayer-text').value;
+  localStorage.setItem('oracao-pessoal', oracao);
+  alert('Oração salva com sucesso!');
+}
+
+function limparOracao() {
+  document.getElementById('personal-prayer-text').value = '';
+}
+
+function salvarCompromisso() {
+  const compromisso = document.getElementById('personal-commitment').value;
+  localStorage.setItem('compromisso-pessoal', compromisso);
+  alert('Compromisso salvo com sucesso!');
+}
+
+function limparCompromisso() {
+  document.getElementById('personal-commitment').value = '';
+}
+
+// Funções para contemplação
+function iniciarContemplacao(minutos) {
+  contemplationTime = minutos * 60;
+  const timerDisplay = document.getElementById('timer-display');
+  const timerText = document.getElementById('timer-text');
+  
+  timerDisplay.style.display = 'block';
+  
+  if (minutos === 0) {
+    timerText.textContent = '∞';
+    return;
+  }
+  
+  contemplationTimer = setInterval(() => {
+    contemplationTime--;
+    const mins = Math.floor(contemplationTime / 60);
+    const secs = contemplationTime % 60;
+    timerText.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    
+    if (contemplationTime <= 0) {
+      pararContemplacao();
+      alert('Tempo de contemplação concluído!');
+    }
+  }, 1000);
+}
+
+function pararContemplacao() {
+  if (contemplationTimer) {
+    clearInterval(contemplationTimer);
+    contemplationTimer = null;
+  }
+  document.getElementById('timer-display').style.display = 'none';
+}
+
+// Funções de avaliação e navegação
+function avaliarMeditacao(tipo) {
+  localStorage.setItem('avaliacao-meditacao', tipo);
+  const comentario = document.getElementById('avaliacao-comentario').value;
+  if (comentario) {
+    localStorage.setItem('avaliacao-comentario', comentario);
+  }
+  alert('Avaliação registrada! Obrigado por compartilhar sua experiência.');
+}
+
+function proximaMeditacao() {
+  // Marcar meditação como concluída
+  const dadosSalvos = localStorage.getItem('meditacao-atual');
+  if (dadosSalvos) {
+    const dados = JSON.parse(dadosSalvos);
+    localStorage.setItem('meditacao-concluida', JSON.stringify({
+      ...dados,
+      concluidaEm: new Date().toISOString()
+    }));
+  }
+  
+  alert('Meditação concluída! Redirecionando para a próxima...');
+  setTimeout(() => {
+    window.location.href = 'dashboard.html';
+  }, 1500);
+}
+
+function agendarProxima() {
+  alert('Funcionalidade de agendamento será implementada em breve!');
+}
+
+function compartilharProgresso() {
+  alert('Funcionalidade de compartilhamento será implementada em breve!');
+}
+
+// Função para alternar entre modo claro e escuro
+function toggleTheme() {
+  const body = document.body;
+  const currentTheme = body.classList.contains('light-mode') ? 'light' : 'dark';
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  
+  if (newTheme === 'light') {
+    body.classList.add('light-mode');
+  } else {
+    body.classList.remove('light-mode');
+  }
+  
+  localStorage.setItem('theme', newTheme);
+  
+  // Mostrar notificação
+  const themeName = newTheme === 'light' ? 'claro' : 'escuro';
+  showNotification(`Tema alterado para ${themeName}`, 'success');
+}
+
+// Carregar tema salvo
+function loadTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+  } else {
+    document.body.classList.remove('light-mode');
+  }
+}
+
+// Função para mostrar notificações
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `notification notification-${type}`;
+  notification.textContent = message;
+  
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Função para debug dos dados
+function debugData() {
+  console.log('🔍 Debug dos dados:');
+  console.log('current_meditations:', localStorage.getItem('current_meditations'));
+  console.log('current_category:', localStorage.getItem('current_category'));
+  console.log('personalized_meditations:', localStorage.getItem('personalized_meditations'));
+  console.log('personalized_meditations_history:', localStorage.getItem('personalized_meditations_history'));
+  
+  try {
+    const currentMeditations = localStorage.getItem('current_meditations');
+    if (currentMeditations) {
+      const data = JSON.parse(currentMeditations);
+      console.log('📊 Dados parseados:', data);
+      if (data.meditations && data.meditations.length > 0) {
+        console.log('📖 Primeira meditação:', data.meditations[0]);
+      }
+    }
+  } catch (error) {
+    console.error('❌ Erro ao parsear dados:', error);
+  }
+}
+
+// Carregar dados salvos ao iniciar
+window.addEventListener('load', function() {
+  console.log('🚀 Página de meditação carregada');
+  
+  // Debug dos dados
+  debugData();
+  
+  // Carregar tema
+  loadTheme();
+  
+  const oracaoSalva = localStorage.getItem('oracao-pessoal');
+  const compromissoSalvo = localStorage.getItem('compromisso-pessoal');
+  
+
+  
+  // Verificar se há dados antigos do localStorage
+  const currentMeditations = localStorage.getItem('current_meditations');
+  const currentCategory = localStorage.getItem('current_category');
+  
+  if (currentMeditations && currentCategory) {
+    try {
+      const data = JSON.parse(currentMeditations);
+      console.log('✅ Dados carregados:', data);
+      
+      // Verificar se há meditações na categoria
+      if (data.meditations && data.meditations.length > 0) {
+        const meditation = data.meditations[0];
+        console.log('📖 Meditação selecionada:', meditation);
+        
+        meditacaoData.titulo = meditation.title || data.category;
+        meditacaoData.categoria = data.category;
+        
+        // Atualizar o header com os dados corretos
+        const titleElement = document.getElementById('meditation-title');
+        if (titleElement) {
+          titleElement.textContent = meditation.title || data.category;
+        }
+        
+        // Atualizar o título da página
+        document.title = `Lectio Divina - ${meditation.title || data.category}`;
+        
+        // Usar a função processMeditationContent já definida acima
+        
+        // Garantir que os passos existam
+        if (!meditacaoData.passos) {
+          meditacaoData.passos = {};
+        }
+        
+        // Atualizar os passos com os dados da meditação personalizada
+        // LEITURA
+        const leitura = meditation.reading || meditation.lectio || '';
+        if (leitura) {
+          const processedReading = processMeditationContent(leitura);
+          meditacaoData.passos[1] = meditacaoData.passos[1] || {};
+          meditacaoData.passos[1].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || data.category}</h2>
+            <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedReading}</div>
+            <div class="instruction">
+              👁️ Leia este texto duas vezes, devagar, deixando as palavras penetrarem em seu coração.
+            </div>
+          `;
+        }
+        // MEDITAÇÃO
+        const meditacao = meditation.meditation || meditation.meditatio || '';
+        if (meditacao) {
+          const processedMeditation = processMeditationContent(meditacao);
+          meditacaoData.passos[2] = meditacaoData.passos[2] || {};
+          meditacaoData.passos[2].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || data.category}</h2>
+            <div class="reflection-box">
+              <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedMeditation}</div>
+            </div>
+          `;
+        }
+        // ORAÇÃO
+        const oracao = meditation.prayer || meditation.oratio || '';
+        if (oracao) {
+          const processedPrayer = processMeditationContent(oracao);
+          meditacaoData.passos[3] = meditacaoData.passos[3] || {};
+          meditacaoData.passos[3].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || data.category}</h2>
+            <div class="prayer-box">
+              <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedPrayer}</div>
+              <div class="instruction">
+                <strong>Oração Pessoal:</strong> Agora é sua vez de falar com Deus. Use o espaço abaixo para escrever sua própria oração.
+              </div>
+              <textarea id="personal-prayer-text" placeholder="Escreva sua oração pessoal aqui..." style="width: 100%; min-height: 100px; background: #23243a; border: 1px solid #3a3b5a; border-radius: 8px; color: #f5f6fa; padding: 12px; font-family: inherit; resize: vertical; margin-top: 12px;"></textarea>
+              <div style="margin-top: 12px; display: flex; gap: 8px;">
+                <button onclick="salvarOracao()" style="background: #7ee787; color: #101223; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">💾 Salvar</button>
+                <button onclick="limparOracao()" style="background: #23243a; color: #f5f6fa; border: 1px solid #3a3b5a; padding: 8px 16px; border-radius: 6px; cursor: pointer;">🗑️ Limpar</button>
+              </div>
+            </div>
+          `;
+        }
+        // CONTEMPLAÇÃO
+        const contemplacao = meditation.contemplation || meditation.contemplatio || '';
+        if (contemplacao) {
+          const processedContemplation = processMeditationContent(contemplacao);
+          
+          // Verificar se veio de minhas-meditacoes.html
+          const urlParams = new URLSearchParams(window.location.search);
+          const fromParam = urlParams.get('from');
+          const isFromMinhasMeditacoes = fromParam === 'minhas-meditacoes';
+          
+          let completionButton = '';
+          if (isFromMinhasMeditacoes) {
+            completionButton = `
+              <div style="margin-top: 24px; text-align: center;">
+                <button class="completion-btn" onclick="concluirMeditacao()" style="
+                  background: linear-gradient(135deg, #7ee787 0%, #10b981 100%);
+                  color: white;
+                  border: none;
+                  padding: 12px 24px;
+                  border-radius: 8px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  font-size: 16px;
+                  box-shadow: 0 4px 12px rgba(126, 231, 135, 0.3);
+                ">
+                  ✅ Meditação Concluída
+                </button>
+              </div>
+            `;
+          }
+          
+          meditacaoData.passos[4] = meditacaoData.passos[4] || {};
+          meditacaoData.passos[4].conteudo = `
+            <h2 style="text-align: center; color: #7ee787; margin-bottom: 20px; font-size: 1.5em;">${meditation.title || data.category}</h2>
+            <div class="contemplation-box">
+              <div class="content" style="text-align: justify; line-height: 1.8; font-size: 1.1em;">${processedContemplation}</div>
+              <div class="instruction">
+                <strong>Momento de Silêncio:</strong> Agora, simplesmente fique em silêncio na presença de Deus. Você pode usar um timer ou simplesmente contemplar.
+              </div>
+              ${completionButton}
+            </div>
+          `;
+        }
+        
+        // Mostrar o container da meditação
+        const meditationContainer = document.getElementById('meditation-container');
+        const meditationList = document.getElementById('meditation-list');
+        
+        if (meditationContainer) {
+          meditationContainer.style.display = 'block';
+          console.log('✅ Container da meditação mostrado');
+        }
+        
+        if (meditationList) {
+          meditationList.style.display = 'none';
+          console.log('✅ Lista de meditações ocultada');
+        }
+        
+        // Mostrar o primeiro passo
+        console.log('🎯 Mostrando primeiro passo...');
+        showStep(1);
+        console.log('✅ Meditação carregada com sucesso');
+        
+        // Verificar se o conteúdo foi exibido
+        setTimeout(() => {
+          const contentElement = document.getElementById('step-content');
+          if (contentElement) {
+            console.log('📄 Conteúdo exibido:', contentElement.innerHTML.substring(0, 200) + '...');
+          } else {
+            console.error('❌ Elemento step-content não encontrado');
+          }
+        }, 100);
+      } else {
+        console.error('❌ Nenhuma meditação encontrada na categoria');
+        alert('Erro: Nenhuma meditação encontrada. Tente gerar novas meditações.');
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar dados:', error);
+      alert('Erro ao carregar dados da meditação. Tente novamente.');
+    }
+  } else {
+    console.log('📝 Nenhum dado de meditação personalizada encontrado, usando dados padrão');
+    // Usar dados padrão se não houver meditação personalizada
+    showStep(1);
+  }
+  
+  if (oracaoSalva) {
+    const textarea = document.getElementById('personal-prayer-text');
+    if (textarea) textarea.value = oracaoSalva;
+  }
+  
+  if (compromissoSalvo) {
+    const textarea = document.getElementById('personal-commitment');
+    if (textarea) textarea.value = compromissoSalvo;
+  }
+  
+  // Mostrar botão de conclusão sempre que a página carrega
+  showCompletionButton();
+});
+
+// Função para mostrar o botão de conclusão
+function showCompletionButton() {
+  const currentStep = parseInt(localStorage.getItem('currentStep') || '1');
+  const completionBtn = document.getElementById('complete-meditation-btn');
+  
+  // Verificar se veio de minhas-meditacoes.html
+  const urlParams = new URLSearchParams(window.location.search);
+  const fromParam = urlParams.get('from');
+  const isFromMinhasMeditacoes = fromParam === 'minhas-meditacoes';
+  
+  // Mostrar botão sempre que a página carrega
+  if (completionBtn) {
+    completionBtn.style.display = 'inline-block';
+    console.log('✅ Botão de conclusão sempre visível no passo:', currentStep, 'Origem:', fromParam);
+  }
+  
+  // Atualizar o currentStep no localStorage
+  localStorage.setItem('currentStep', currentStep.toString());
+}
+
+// Função para marcar meditação como concluída
+async function completeMeditation() {
+  try {
+    console.log('🎯 Iniciando conclusão da meditação...');
+    
+    // Obter dados da meditação atual
+    const currentMeditation = JSON.parse(localStorage.getItem('meditacao-atual') || '{}');
+    const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+    
+    console.log('📊 Meditação atual:', currentMeditation);
+    console.log('📊 Meditações personalizadas encontradas:', personalizedMeditations.length);
+    
+    // Marcar meditação como concluída
+    if (currentMeditation.id) {
+      // Para meditações personalizadas
+      const meditationIndex = personalizedMeditations.findIndex(m => m.id === currentMeditation.id);
+      if (meditationIndex !== -1) {
+        personalizedMeditations[meditationIndex].status = 'completed';
+        personalizedMeditations[meditationIndex].completedAt = new Date().toISOString();
+        localStorage.setItem('personalized_meditations', JSON.stringify(personalizedMeditations));
+        console.log('✅ Meditação personalizada marcada como concluída:', currentMeditation.title);
+        
+        // Sincronizar com Supabase se disponível
+        console.log('🔄 Verificando Supabase Manager para atualização...');
+        if (window.supabaseManager) {
+          try {
+            console.log('📤 Atualizando status da meditação personalizada no Supabase...');
+            
+            // Buscar a meditação no Supabase pelo meditation_id
+            const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations();
+            const supabaseMeditation = supabaseMeditations.find(med => 
+              med.meditation_id === currentMeditation.id
+            );
+            
+            if (supabaseMeditation) {
+              const updateData = {
+                status: 'completed',
+                completed_at: new Date().toISOString(),
+                last_updated: new Date().toISOString()
+              };
+              
+              await window.supabaseManager.updatePersonalizedMeditation(supabaseMeditation.id, updateData);
+              console.log('✅ Status da meditação personalizada atualizado no Supabase');
+            } else {
+              console.log('⚠️ Meditação personalizada não encontrada no Supabase');
+            }
+            
+          } catch (supabaseError) {
+            console.error('⚠️ Erro ao atualizar no Supabase:', supabaseError);
+            console.log('ℹ️ Status atualizado apenas localmente');
+          }
+        } else {
+          console.log('ℹ️ Supabase Manager não disponível - status atualizado apenas localmente');
+        }
+        
+      } else {
+        // Para meditações admin
+        const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+        const adminMeditationIndex = adminMeditations.findIndex(m => m.id === currentMeditation.id);
+        if (adminMeditationIndex !== -1) {
+          adminMeditations[adminMeditationIndex].status = 'completed';
+          adminMeditations[adminMeditationIndex].completedAt = new Date().toISOString();
+          localStorage.setItem('meditations', JSON.stringify(adminMeditations));
+          console.log('✅ Meditação admin marcada como concluída:', currentMeditation.title);
+        }
+      }
+    }
+    
+    // Atualizar estatísticas do usuário
+    updateUserStats();
+    
+    // Atualizar estatísticas específicas para minhas-meditacoes
+    updateMinhasMeditacoesStats();
+    
+    // Incrementar contador de meditações concluídas
+    incrementCompletedMeditations();
+    
+    // Mostrar notificação de sucesso
+    showNotification('Meditação concluída com sucesso!', 'success');
+    
+    // Redirecionar para a página apropriada
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromParam = urlParams.get('from');
+    
+    setTimeout(() => {
+      if (fromParam === 'minhas-meditacoes') {
+        window.location.href = 'minhas-meditacoes.html';
+      } else {
+        window.location.href = 'dashboard.html';
+      }
+    }, 2000);
+    
+  } catch (error) {
+    console.error('❌ Erro ao concluir meditação:', error);
+    showNotification('Erro ao concluir meditação', 'error');
+  }
+}
+
+// Função para atualizar estatísticas do usuário
+function updateUserStats() {
+  try {
+    // Obter meditações personalizadas do usuário atual
+    const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+    const personalizedCompleted = personalizedMeditations.filter(m => m.status === 'completed');
+    const personalizedInProgress = personalizedMeditations.filter(m => 
+      m.status !== 'completed' && m.lastViewed
+    );
+    
+    // Obter meditações admin
+    const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+    const adminCompleted = adminMeditations.filter(m => m.status === 'completed');
+    const adminInProgress = adminMeditations.filter(m => 
+      m.status !== 'completed' && m.lastViewed
+    );
+    
+    // Combinar estatísticas
+    const totalCompleted = personalizedCompleted.length + adminCompleted.length;
+    const totalInProgress = personalizedInProgress.length + adminInProgress.length;
+    
+    // Salvar estatísticas
+    const stats = {
+      totalCompleted: totalCompleted,
+      totalInProgress: totalInProgress,
+      personalizedCompleted: personalizedCompleted.length,
+      adminCompleted: adminCompleted.length,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    localStorage.setItem('user_meditation_stats', JSON.stringify(stats));
+    
+    console.log('✅ Estatísticas atualizadas:', stats);
+    
+  } catch (error) {
+    console.error('Erro ao atualizar estatísticas:', error);
+  }
+}
+
+// Função para atualizar estatísticas específicas de minhas-meditacoes
+function updateMinhasMeditacoesStats() {
+  try {
+    console.log('📊 Atualizando estatísticas de minhas-meditacoes...');
+    
+    // Obter meditações personalizadas do usuário atual
+    const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+    const totalMeditations = personalizedMeditations.length;
+    const completedMeditations = personalizedMeditations.filter(m => m.status === 'completed').length;
+    
+    // Salvar estatísticas para minhas-meditacoes
+    const stats = {
+      totalMeditations: totalMeditations,
+      completedMeditations: completedMeditations,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    localStorage.setItem('minhas_meditacoes_stats', JSON.stringify(stats));
+    console.log('✅ Estatísticas de minhas-meditacoes atualizadas:', stats);
+    
+  } catch (error) {
+    console.error('❌ Erro ao atualizar estatísticas de minhas-meditacoes:', error);
+  }
+}
+
+// Função para marcar meditação como visualizada
+function markMeditationAsViewed() {
+  try {
+    const currentMeditation = JSON.parse(localStorage.getItem('meditacao-atual') || '{}');
+    
+    if (currentMeditation.id) {
+      // Verificar se é uma meditação personalizada
+      const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+      const personalizedIndex = personalizedMeditations.findIndex(m => m.id === currentMeditation.id);
+      if (personalizedIndex !== -1) {
+        personalizedMeditations[personalizedIndex].lastViewed = new Date().toISOString();
+        if (!personalizedMeditations[personalizedIndex].status) {
+          personalizedMeditations[personalizedIndex].status = 'in_progress';
+        }
+        localStorage.setItem('personalized_meditations', JSON.stringify(personalizedMeditations));
+        console.log('✅ Meditação personalizada marcada como visualizada:', currentMeditation.title);
+      }
+      
+      // Verificar se é uma meditação admin
+      const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+      const adminIndex = adminMeditations.findIndex(m => m.id === currentMeditation.id);
+      if (adminIndex !== -1) {
+        adminMeditations[adminIndex].lastViewed = new Date().toISOString();
+        if (!adminMeditations[adminIndex].status) {
+          adminMeditations[adminIndex].status = 'in_progress';
+        }
+        localStorage.setItem('meditations', JSON.stringify(adminMeditations));
+        console.log('✅ Meditação admin marcada como visualizada:', currentMeditation.title);
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao marcar meditação como visualizada:', error);
+  }
+}
+
+// Marcar como visualizada quando a página carrega
+document.addEventListener('DOMContentLoaded', function() {
+  markMeditationAsViewed();
+});
+
+// Adicionar novo script para concluir meditação
+function concluirMeditacao() {
+  try {
+    console.log('🎉 Iniciando conclusão da meditação...');
+    
+    // Verificar se o usuário está logado
+    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    console.log('👤 Usuário atual:', currentUser);
+    
+    if (!currentUser.id || currentUser.id === 'anonymous') {
+      console.warn('⚠️ Usuário não está logado. Fazendo login automático...');
+      
+      // Tentar fazer login automático com dados padrão
+      const defaultUser = {
+        id: 'user_' + Date.now(),
+        name: 'Usuário',
+        email: 'user@example.com',
+        userNumber: 1,
+        createdAt: new Date().toISOString(),
+        stats: {
+          consecutiveDays: 0,
+          completedMeditations: 0,
+          totalTime: '0h 0min',
+          totalMeditations: 0,
+          inProgressMeditations: 0
+        }
+      };
+      
+      // Salvar usuário padrão
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      users.push(defaultUser);
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('userData', JSON.stringify(defaultUser));
+      
+      console.log('✅ Usuário padrão criado:', defaultUser.name);
+    }
+    
+    const currentMeditation = JSON.parse(localStorage.getItem('meditacao-atual') || '{}');
+    const updatedUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    
+    console.log('📝 Meditação atual:', currentMeditation.title);
+    console.log('👤 Usuário atual:', updatedUser.name);
+    
+    // Verificar se é uma meditação personalizada
+    const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+    console.log('📋 Meditações personalizadas encontradas:', personalizedMeditations.length);
+    console.log('🔍 ID da meditação atual:', currentMeditation.id);
+    
+    if (currentMeditation.id) {
+      const meditationIndex = personalizedMeditations.findIndex(m => m.id === currentMeditation.id);
+      console.log('🔍 Índice da meditação encontrado:', meditationIndex);
+      
+      if (meditationIndex !== -1) {
+        console.log('📝 Meditação antes da atualização:', personalizedMeditations[meditationIndex]);
+        personalizedMeditations[meditationIndex].status = 'completed';
+        personalizedMeditations[meditationIndex].completedAt = new Date().toISOString();
+        personalizedMeditations[meditationIndex].completionTime = new Date().toISOString();
+        localStorage.setItem('personalized_meditations', JSON.stringify(personalizedMeditations));
+        console.log('✅ Meditação personalizada marcada como concluída:', currentMeditation.title);
+        console.log('📝 Meditação após atualização:', personalizedMeditations[meditationIndex]);
+      } else {
+        console.log('⚠️ Meditação não encontrada nas personalizadas');
+      }
+    }
+    
+    // Verificar se é uma meditação admin (não personalizada)
+    const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+    console.log('📋 Meditações admin encontradas:', adminMeditations.length);
+    
+    if (currentMeditation.id) {
+      const meditationIndex = adminMeditations.findIndex(m => m.id === currentMeditation.id);
+      console.log('🔍 Índice da meditação admin encontrado:', meditationIndex);
+      
+      if (meditationIndex !== -1) {
+        console.log('📝 Meditação admin antes da atualização:', adminMeditations[meditationIndex]);
+        adminMeditations[meditationIndex].status = 'completed';
+        adminMeditations[meditationIndex].completedAt = new Date().toISOString();
+        adminMeditations[meditationIndex].completionTime = new Date().toISOString();
+        localStorage.setItem('meditations', JSON.stringify(adminMeditations));
+        console.log('✅ Meditação admin marcada como concluída:', currentMeditation.title);
+        console.log('📝 Meditação admin após atualização:', adminMeditations[meditationIndex]);
+      } else {
+        console.log('⚠️ Meditação não encontrada nas admin');
+      }
+    }
+    
+    // Atualizar estatísticas do usuário
+    updateUserStatistics(updatedUser.id, currentMeditation);
+    
+    // Atualizar estatísticas gerais
+    updateUserStats && updateUserStats();
+    
+    // Atualizar estatísticas específicas para minhas-meditacoes
+    updateMinhasMeditacoesStats();
+    
+    // Mostrar feedback visual
+    showCompletionFeedback();
+    
+    // Mostrar notificação
+    showNotification && showNotification('🎉 Meditação concluída com sucesso!', 'success');
+    
+    // Redirecionar após 2 segundos
+    setTimeout(() => { 
+      window.location.href = 'dashboard.html'; 
+    }, 2000);
+    
+  } catch (error) {
+    console.error('❌ Erro ao concluir meditação:', error);
+    alert('Erro ao concluir meditação. Tente novamente.');
+  }
+}
+
+// Função para atualizar estatísticas do usuário
+function updateUserStatistics(userId, meditation) {
+  try {
+    console.log('📊 Atualizando estatísticas do usuário...');
+    
+    // Carregar dados do usuário
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const userIndex = users.findIndex(u => u.id === userId);
+    
+    if (userIndex !== -1) {
+      const user = users[userIndex];
+      
+      // Atualizar estatísticas
+      user.stats = user.stats || {};
+      user.stats.completedMeditations = (user.stats.completedMeditations || 0) + 1;
+      user.stats.totalMeditations = (user.stats.totalMeditations || 0) + 1;
+      user.stats.lastCompletedAt = new Date().toISOString();
+      
+      // Calcular streak (dias consecutivos)
+      const today = new Date().toDateString();
+      const lastCompleted = user.stats.lastCompletedAt ? new Date(user.stats.lastCompletedAt).toDateString() : null;
+      
+      if (lastCompleted === today || !lastCompleted) {
+        user.stats.consecutiveDays = (user.stats.consecutiveDays || 0) + 1;
+      } else {
+        user.stats.consecutiveDays = 1;
+      }
+      
+      // Salvar dados atualizados
+      users[userIndex] = user;
+      localStorage.setItem('users', JSON.stringify(users));
+      
+      console.log('✅ Estatísticas atualizadas:', {
+        completedMeditations: user.stats.completedMeditations,
+        consecutiveDays: user.stats.consecutiveDays,
+        lastCompletedAt: user.stats.lastCompletedAt
+      });
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro ao atualizar estatísticas:', error);
+  }
+}
+
+// Função para mostrar feedback visual de conclusão
+function showCompletionFeedback() {
+  try {
+    // Criar overlay de sucesso
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(16, 18, 35, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+    `;
+    
+    const content = document.createElement('div');
+    content.style.cssText = `
+      text-align: center;
+      color: #f5f6fa;
+      animation: scaleIn 0.5s ease;
+    `;
+    
+    content.innerHTML = `
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+      <h2 style="color: #7ee787; margin-bottom: 1rem;">Meditação Concluída!</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem;">Parabéns! Você completou sua meditação com sucesso.</p>
+      <div style="background: #23243a; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+        <p>📊 Suas estatísticas foram atualizadas</p>
+        <p>🔥 Streak atual: ${getCurrentStreak()} dias consecutivos</p>
+      </div>
+      <p style="color: #9ca3af;">Redirecionando para o dashboard...</p>
+    `;
+    
+    overlay.appendChild(content);
+    document.body.appendChild(overlay);
+    
+    // Adicionar CSS para animações
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes scaleIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+    
+  } catch (error) {
+    console.error('❌ Erro ao mostrar feedback:', error);
+  }
+}
+
+// Função para incrementar contador de meditações concluídas
+function incrementCompletedMeditations() {
+  try {
+    console.log('📈 Incrementando contador de meditações concluídas...');
+    
+    // Obter estatísticas atuais
+    const currentStats = JSON.parse(localStorage.getItem('minhas_meditacoes_stats') || '{}');
+    const currentCompleted = currentStats.completedMeditations || 0;
+    const newCompleted = currentCompleted + 1;
+    
+    console.log('📊 Contador atual de concluídas:', currentCompleted, 'Novo contador:', newCompleted);
+    
+    // Atualizar estatísticas
+    const updatedStats = {
+      ...currentStats,
+      completedMeditations: newCompleted,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    localStorage.setItem('minhas_meditacoes_stats', JSON.stringify(updatedStats));
+    
+    // Atualizar elemento DOM se estiver na página minhas-meditacoes
+    const completedElement = document.getElementById('completedMeditations');
+    if (completedElement) {
+      completedElement.textContent = newCompleted;
+      console.log('✅ Elemento DOM de concluídas atualizado:', newCompleted);
+    }
+    
+    console.log('✅ Contador de concluídas incrementado com sucesso');
+  } catch (error) {
+    console.error('❌ Erro ao incrementar contador de concluídas:', error);
+  }
+}
+
+// Função para obter streak atual
+function getCurrentStreak() {
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.id === currentUser.id);
+    
+    return user && user.stats ? user.stats.consecutiveDays || 0 : 0;
+  } catch (error) {
+    return 0;
+  }
+}
+
+// Função para atualizar estatísticas específicas de minhas-meditacoes
+function updateMinhasMeditacoesStats() {
+  try {
+    console.log('📊 Atualizando estatísticas de minhas-meditacoes...');
+    
+    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+    
+    // Calcular estatísticas
+    const totalMeditations = personalizedMeditations.length;
+    const completedMeditations = personalizedMeditations.filter(m => m.status === 'completed').length;
+    const inProgressMeditations = personalizedMeditations.filter(m => m.status === 'in_progress').length;
+    const pendingMeditations = personalizedMeditations.filter(m => !m.status || m.status === 'pending').length;
+    
+    console.log('📊 Estatísticas calculadas:', {
+      total: totalMeditations,
+      completed: completedMeditations,
+      inProgress: inProgressMeditations,
+      pending: pendingMeditations
+    });
+    
+    // Salvar estatísticas no localStorage para uso na página minhas-meditacoes
+    const stats = {
+      totalMeditations,
+      completedMeditations,
+      inProgressMeditations,
+      pendingMeditations,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    localStorage.setItem('minhas_meditacoes_stats', JSON.stringify(stats));
+    console.log('✅ Estatísticas de minhas-meditacoes salvas:', stats);
+    
+  } catch (error) {
+    console.error('❌ Erro ao atualizar estatísticas de minhas-meditacoes:', error);
+  }
+}
+
+// Marcar como 'em andamento' ao entrar na contemplação
+// (adicione no showStep ou ao renderizar o passo 4)
+if (currentStep === 4) {
+  try {
+    const currentMeditation = JSON.parse(localStorage.getItem('meditacao-atual') || '{}');
+    const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+    if (currentMeditation.id) {
+      const meditationIndex = personalizedMeditations.findIndex(m => m.id === currentMeditation.id);
+      if (meditationIndex !== -1 && personalizedMeditations[meditationIndex].status !== 'completed') {
+        personalizedMeditations[meditationIndex].status = 'in_progress';
+        personalizedMeditations[meditationIndex].lastViewed = new Date().toISOString();
+        localStorage.setItem('personalized_meditations', JSON.stringify(personalizedMeditations));
+      }
+    }
+  } catch (error) { /* ignorar */ }
+}
+
+// Incluir Supabase Manager
+</script>
+<script src="supabase-config.js"></script>
+</body>
+</html> 

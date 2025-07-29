@@ -1,0 +1,49 @@
+{
+  "meditations": [
+    {
+      "id": "1",
+      "title": "Princípios da Vida Sobrenatural",
+      "category": "vida-sobrenatural",
+      "duration": 12,
+      "scriptureReference": "João 15:1-8",
+      "scriptureText": "Eu sou a videira verdadeira, e meu Pai é o agricultor. Todo ramo que em mim não dá fruto, ele o corta; e todo ramo que dá fruto, ele o limpa, para que dê mais fruto ainda. Vós já estais limpos pela palavra que vos tenho falado. Permanecei em mim, e eu permanecerei em vós. Como o ramo não pode dar fruto por si mesmo, se não permanecer na videira, assim também vós não podeis dar fruto, se não permanecerdes em mim. Eu sou a videira, vós sois os ramos. Quem permanece em mim e eu nele, esse dá muito fruto; porque sem mim nada podeis fazer. Se alguém não permanecer em mim, será lançado fora, como o ramo, e secará; e o apanham, lançam no fogo e o queimam. Se permanecerdes em mim, e as minhas palavras permanecerem em vós, pedireis o que quiserdes, e vos será feito. Nisto é glorificado meu Pai, em que deis muito fruto; e assim vos tornareis meus discípulos.",
+      "icon": "📖",
+      "lectio": "Neste texto, Jesus se apresenta como a videira verdadeira e nos convida a permanecer nele. A palavra 'permanecer' aparece várias vezes, indicando a importância de uma relação contínua e profunda com Cristo. Observe como Jesus enfatiza que sem ele nada podemos fazer, mostrando nossa dependência total de sua graça.",
+      "meditatio": "Reflita sobre o que significa 'permanecer em Cristo' na sua vida diária. Como você pode cultivar essa relação mais profunda? Que frutos você tem produzido? Há áreas da sua vida onde você sente que não está 'permanecendo' em Cristo? O que isso significa para sua oração, seus relacionamentos, seu trabalho?",
+      "oratio": "Senhor Jesus, videira verdadeira, eu quero permanecer em ti. Ajuda-me a reconhecer minha dependência total de tua graça. Que eu possa dar frutos que glorifiquem o Pai. Purifica-me, como o agricultor limpa os ramos, para que eu possa produzir mais frutos ainda. Ensina-me a permanecer em tua palavra e em tua presença.",
+      "contemplatio": "Permaneça em silêncio na presença de Jesus, a videira verdadeira. Sinta-se como um ramo conectado à fonte da vida. Deixe que o amor de Deus flua através de você. Simplesmente esteja na presença de quem é a vida, a verdade e o caminho.",
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "updatedAt": "2024-01-15T10:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "title": "A Humildade de Maria",
+      "category": "mariologia",
+      "duration": 15,
+      "scriptureReference": "Lucas 1:26-38",
+      "scriptureText": "No sexto mês, o anjo Gabriel foi enviado por Deus a uma cidade da Galileia, chamada Nazaré, a uma virgem desposada com um homem chamado José, da casa de Davi; e o nome da virgem era Maria. Entrando onde ela estava, disse: 'Ave, cheia de graça, o Senhor está contigo!' Ela ficou perturbada com essas palavras e pôs-se a pensar qual seria o significado da saudação. O anjo disse-lhe: 'Não temas, Maria, pois encontraste graça diante de Deus. Eis que conceberás e darás à luz um filho, e tu o chamarás com o nome de Jesus. Ele será grande e será chamado Filho do Altíssimo, e o Senhor Deus lhe dará o trono de Davi, seu pai; ele reinará para sempre na casa de Jacó, e o seu reinado não terá fim.' Maria disse ao anjo: 'Como se fará isso, pois não conheço homem?' O anjo respondeu-lhe: 'O Espírito Santo virá sobre ti, e a força do Altíssimo te envolverá com a sua sombra. Por isso mesmo, o Santo que há de nascer será chamado Filho de Deus. Também Isabel, tua parenta, concebeu um filho na sua velhice, e este é o sexto mês para aquela que era chamada estéril, porque a Deus nada é impossível.' Então Maria disse: 'Eis aqui a serva do Senhor. Faça-se em mim segundo a tua palavra.' E o anjo afastou-se dela.",
+      "icon": "💝",
+      "lectio": "Maria recebe a visita do anjo Gabriel com uma mensagem extraordinária. Observe sua reação inicial de perturbação e reflexão. Ela faz uma pergunta honesta sobre como isso acontecerá, mas sua resposta final é de total disponibilidade: 'Eis aqui a serva do Senhor. Faça-se em mim segundo a tua palavra.'",
+      "meditatio": "Como você reage quando Deus te chama para algo que parece impossível ou que vai mudar completamente sua vida? Você tem a humildade de Maria para se colocar como 'serva do Senhor'? Que significa para você 'faça-se em mim segundo a tua palavra'? Como você pode cultivar essa disponibilidade total a Deus?",
+      "oratio": "Maria, Mãe de Deus, ensina-me a humildade. Ajuda-me a dizer 'sim' a Deus como tu disseste. Que eu possa ser uma serva fiel do Senhor, disponível para sua vontade. Intercede por mim para que eu tenha a coragem de aceitar os planos de Deus para minha vida, mesmo quando não os entendo completamente.",
+      "contemplatio": "Contemple Maria em sua humildade e disponibilidade. Veja como ela se coloca totalmente nas mãos de Deus. Deixe que seu exemplo inspire você a confiar mais profundamente na providência divina. Permaneça em silêncio, permitindo que Deus fale ao seu coração.",
+      "createdAt": "2024-01-16T14:30:00.000Z",
+      "updatedAt": "2024-01-16T14:30:00.000Z"
+    },
+    {
+      "id": "3",
+      "title": "A Oração do Pai Nosso",
+      "category": "oracao",
+      "duration": 18,
+      "scriptureReference": "Mateus 6:9-13",
+      "scriptureText": "Vós, pois, orai assim: Pai nosso que estás nos céus, santificado seja o teu nome; venha o teu reino; faça-se a tua vontade, assim na terra como no céu; o pão nosso de cada dia dá-nos hoje; e perdoa-nos as nossas dívidas, assim como nós temos perdoado aos nossos devedores; e não nos deixes cair em tentação; mas livra-nos do mal; porque teu é o reino, e o poder, e a glória, para sempre. Amém.",
+      "icon": "🙏",
+      "lectio": "Jesus nos ensina a orar com o Pai Nosso, uma oração que começa reconhecendo a paternidade de Deus e sua santidade. Observe como a oração equilibra as necessidades espirituais (santificação do nome, vinda do reino) com as necessidades materiais (pão de cada dia, perdão).",
+      "meditatio": "O que significa para você chamar Deus de 'Pai'? Como você pode santificar o nome de Deus em sua vida? Que significa 'venha o teu reino' no seu contexto atual? Como você pode viver de forma que a vontade de Deus seja feita na terra como no céu?",
+      "oratio": "Pai nosso que estás nos céus, ensina-me a orar como Jesus ensinou. Que eu possa santificar teu nome com minha vida. Venha teu reino em meu coração e em minha família. Que tua vontade seja feita em mim. Dá-me o pão de cada dia, tanto material quanto espiritual. Perdoa-me como eu perdoo aos outros. Livra-me do mal e da tentação.",
+      "contemplatio": "Permaneça em silêncio, deixando que as palavras do Pai Nosso ecoem em seu coração. Sinta-se como filho amado diante do Pai celestial. Deixe que a paz de Deus invada seu ser. Simplesmente esteja na presença de quem é Pai, Filho e Espírito Santo.",
+      "createdAt": "2024-01-17T09:15:00.000Z",
+      "updatedAt": "2024-01-17T09:15:00.000Z"
+    }
+  ]
+} 

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Acumulação de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #101223;
+            color: #f5f6fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section {
+            background: #23243a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .btn {
+            background: #7ee787;
+            color: #101223;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        .data-display {
+            background: #1a1b2e;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .user-card {
+            background: #2a2d3e;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #7ee787;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #3a3b5a;
+            border-radius: 4px;
+            background: #1a1b2e;
+            color: #f5f6fa;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #065f46;
+            color: #d1fae5;
+        }
+        .status.error {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+        .status.warning {
+            background: #92400e;
+            color: #fef3c7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug - Acumulação de Usuários</h1>
+        
+        <div class="section">
+            <h2>📊 Status Atual</h2>
+            <button class="btn" onclick="checkAllData()">🔄 Verificar Todos os Dados</button>
+            <button class="btn btn-danger" onclick="clearAllUserData()">🗑️ Limpar Todos os Dados</button>
+            <button class="btn btn-warning" onclick="simulateMultipleRegistrations()">🧪 Simular Múltiplos Cadastros</button>
+            <div id="status-display"></div>
+        </div>
+
+        <div class="section">
+            <h2>👥 Usuários no Array 'users'</h2>
+            <button class="btn" onclick="checkUsersArray()">📋 Verificar Array 'users'</button>
+            <div id="users-array-display"></div>
+        </div>
+
+        <div class="section">
+            <h2>👤 Dados do 'userData'</h2>
+            <button class="btn" onclick="checkUserData()">📋 Verificar 'userData'</button>
+            <div id="userdata-display"></div>
+        </div>
+
+        <div class="section">
+            <h2>🔑 Dados do 'current_user'</h2>
+            <button class="btn" onclick="checkCurrentUser()">📋 Verificar 'current_user'</button>
+            <div id="current-user-display"></div>
+        </div>
+
+        <div class="section">
+            <h2>📝 Simular Cadastro</h2>
+            <form id="debug-form">
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <input type="text" id="debug-name" placeholder="Nome do usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="debug-email" placeholder="email@exemplo.com" required>
+                </div>
+                <button type="submit" class="btn">📝 Simular Cadastro</button>
+            </form>
+            <div id="form-result"></div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Logs Detalhados</h2>
+            <button class="btn" onclick="showDetailedLogs()">📋 Mostrar Logs</button>
+            <div id="logs-display"></div>
+        </div>
+    </div>
+
+    <script>
+        // Função para gerenciar usuários (mesma do index.html)
+        function manageUsers(newUserData) {
+            console.log('🔄 Função manageUsers chamada com:', newUserData);
+            
+            // Carregar usuários existentes
+            let existingUsers = [];
+            try {
+                const usersData = localStorage.getItem('users');
+                if (usersData) {
+                    existingUsers = JSON.parse(usersData);
+                    console.log('📋 Usuários carregados do localStorage:', existingUsers.length);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar usuários:', error);
+                existingUsers = [];
+            }
+            
+            // Verificar se o email já existe
+            const existingUserIndex = existingUsers.findIndex(user => user.email === newUserData.email);
+            console.log('🔍 Verificando email:', newUserData.email, 'Índice encontrado:', existingUserIndex);
+            
+            if (existingUserIndex !== -1) {
+                // Atualizar usuário existente
+                console.log('🔄 Atualizando usuário existente');
+                existingUsers[existingUserIndex] = {
+                    ...existingUsers[existingUserIndex],
+                    ...newUserData,
+                    lastActivity: new Date().toISOString()
+                };
+            } else {
+                // Adicionar novo usuário
+                console.log('➕ Adicionando novo usuário');
+                existingUsers.push(newUserData);
+            }
+            
+            // Salvar array atualizado
+            try {
+                localStorage.setItem('users', JSON.stringify(existingUsers));
+                console.log('✅ Usuários salvos com sucesso. Total:', existingUsers.length);
+                
+                // Verificar se foi salvo corretamente
+                const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+                console.log('🔍 Verificação: usuários salvos:', savedUsers.length);
+                
+                return { success: true, isNew: existingUserIndex === -1, totalUsers: existingUsers.length };
+            } catch (error) {
+                console.error('❌ Erro ao salvar usuários:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        function checkAllData() {
+            const statusDiv = document.getElementById('status-display');
+            let html = '<div class="status success">';
+            
+            // Verificar array 'users'
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            html += `<p>📋 Array 'users': ${users.length} usuários</p>`;
+            
+            // Verificar userData
+            const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+            html += `<p>👤 userData: ${userData ? 'Presente' : 'Ausente'}</p>`;
+            
+            // Verificar current_user
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+            html += `<p>🔑 current_user: ${currentUser ? 'Presente' : 'Ausente'}</p>`;
+            
+            // Verificar se há duplicatas
+            const allEmails = [];
+            users.forEach(user => allEmails.push(user.email));
+            if (userData) allEmails.push(userData.email);
+            if (currentUser) allEmails.push(currentUser.email);
+            
+            const uniqueEmails = [...new Set(allEmails)];
+            html += `<p>📧 Emails únicos encontrados: ${uniqueEmails.length}</p>`;
+            html += `<p>📧 Total de emails (incluindo duplicatas): ${allEmails.length}</p>`;
+            
+            html += '</div>';
+            statusDiv.innerHTML = html;
+        }
+
+        function checkUsersArray() {
+            const displayDiv = document.getElementById('users-array-display');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            if (users.length === 0) {
+                displayDiv.innerHTML = '<div class="status warning">Array "users" está vazio</div>';
+                return;
+            }
+            
+            let html = `<div class="status success">Total de usuários: ${users.length}</div>`;
+            users.forEach((user, index) => {
+                html += `
+                    <div class="user-card">
+                        <h4>Usuário ${index + 1}</h4>
+                        <p><strong>ID:</strong> ${user.id}</p>
+                        <p><strong>Nome:</strong> ${user.name}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Plano:</strong> ${user.planType}</p>
+                        <p><strong>Data de Registro:</strong> ${user.registrationDate}</p>
+                        <p><strong>Última Atividade:</strong> ${user.lastActivity}</p>
+                    </div>
+                `;
+            });
+            displayDiv.innerHTML = html;
+        }
+
+        function checkUserData() {
+            const displayDiv = document.getElementById('userdata-display');
+            const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+            
+            if (!userData) {
+                displayDiv.innerHTML = '<div class="status warning">userData não encontrado</div>';
+                return;
+            }
+            
+            displayDiv.innerHTML = `
+                <div class="user-card">
+                    <h4>Dados do userData</h4>
+                    <div class="data-display">${JSON.stringify(userData, null, 2)}</div>
+                </div>
+            `;
+        }
+
+        function checkCurrentUser() {
+            const displayDiv = document.getElementById('current-user-display');
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+            
+            if (!currentUser) {
+                displayDiv.innerHTML = '<div class="status warning">current_user não encontrado</div>';
+                return;
+            }
+            
+            displayDiv.innerHTML = `
+                <div class="user-card">
+                    <h4>Dados do current_user</h4>
+                    <div class="data-display">${JSON.stringify(currentUser, null, 2)}</div>
+                </div>
+            `;
+        }
+
+        function clearAllUserData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados de usuários?')) {
+                localStorage.removeItem('users');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('current_user');
+                alert('✅ Todos os dados de usuários foram limpos');
+                checkAllData();
+            }
+        }
+
+        function simulateMultipleRegistrations() {
+            const testUsers = [
+                { name: 'João Silva', email: 'joao@teste.com' },
+                { name: 'Maria Santos', email: 'maria@teste.com' },
+                { name: 'Pedro Costa', email: 'pedro@teste.com' },
+                { name: 'Ana Oliveira', email: 'ana@teste.com' }
+            ];
+            
+            let results = [];
+            testUsers.forEach((user, index) => {
+                const newUserData = {
+                    id: 'user_' + (Date.now() + index),
+                    name: user.name,
+                    email: user.email,
+                    registrationDate: new Date().toISOString(),
+                    trialExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                    planType: 'trial',
+                    lastActivity: new Date().toISOString()
+                };
+                
+                const result = manageUsers(newUserData);
+                results.push({
+                    user: user.name,
+                    email: user.email,
+                    success: result.success,
+                    isNew: result.isNew,
+                    totalUsers: result.totalUsers
+                });
+            });
+            
+            let html = '<div class="status success">';
+            html += '<h4>Resultados da Simulação:</h4>';
+            results.forEach(result => {
+                html += `<p>${result.user} (${result.email}): ${result.success ? '✅' : '❌'} ${result.isNew ? 'Novo' : 'Atualizado'} - Total: ${result.totalUsers}</p>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('status-display').innerHTML = html;
+            checkUsersArray();
+        }
+
+        function showDetailedLogs() {
+            const displayDiv = document.getElementById('logs-display');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+            
+            let html = '<div class="data-display">';
+            html += '=== DADOS COMPLETOS DO LOCALSTORAGE ===\n\n';
+            html += `Array 'users':\n${JSON.stringify(users, null, 2)}\n\n`;
+            html += `userData:\n${JSON.stringify(userData, null, 2)}\n\n`;
+            html += `current_user:\n${JSON.stringify(currentUser, null, 2)}\n\n`;
+            html += '=== ANÁLISE ===\n\n';
+            
+            // Análise de duplicatas
+            const allEmails = [];
+            users.forEach(user => allEmails.push(user.email));
+            if (userData) allEmails.push(userData.email);
+            if (currentUser) allEmails.push(currentUser.email);
+            
+            const emailCounts = {};
+            allEmails.forEach(email => {
+                emailCounts[email] = (emailCounts[email] || 0) + 1;
+            });
+            
+            html += 'Contagem de emails:\n';
+            Object.entries(emailCounts).forEach(([email, count]) => {
+                html += `${email}: ${count} vez(es)\n`;
+            });
+            
+            html += '</div>';
+            displayDiv.innerHTML = html;
+        }
+
+        // Form handler
+        document.getElementById('debug-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('debug-name').value;
+            const email = document.getElementById('debug-email').value;
+            
+            const newUserData = {
+                id: 'user_' + Date.now(),
+                name: name,
+                email: email,
+                registrationDate: new Date().toISOString(),
+                trialExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                planType: 'trial',
+                lastActivity: new Date().toISOString()
+            };
+            
+            const result = manageUsers(newUserData);
+            
+            let html = '';
+            if (result.success) {
+                localStorage.setItem('userData', JSON.stringify(newUserData));
+                html = `<div class="status success">
+                    ${result.isNew ? '✅ Novo usuário adicionado' : '🔄 Usuário atualizado'}: ${name} (${email})
+                    <br>Total de usuários: ${result.totalUsers}
+                </div>`;
+            } else {
+                html = `<div class="status error">❌ Erro ao salvar usuário: ${result.error}</div>`;
+            }
+            
+            document.getElementById('form-result').innerHTML = html;
+            document.getElementById('debug-form').reset();
+            checkAllData();
+            checkUsersArray();
+        });
+
+        // Carregar dados iniciais
+        window.addEventListener('load', function() {
+            checkAllData();
+        });
+    </script>
+</body>
+</html> 

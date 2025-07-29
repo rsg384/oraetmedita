@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Tela de Cadastro Aprimorada</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #2ea043;
+        }
+        .btn-secondary {
+            background: #21262d;
+            border: 1px solid #30363d;
+        }
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #30363d;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .feature-list li::before {
+            content: "✅ ";
+            margin-right: 0.5rem;
+        }
+        .demo-frame {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #30363d;
+            border-radius: 8px;
+            background: white;
+        }
+        .highlight {
+            background: #238636;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Tela de Cadastro Aprimorada</h1>
+        
+        <div class="test-section">
+            <h3>🎯 Funcionalidades Implementadas</h3>
+            <ul class="feature-list">
+                <li><span class="highlight">Botão "Já tenho conta"</span> no canto superior direito</li>
+                <li><span class="highlight">Design moderno</span> com gradientes e animações</li>
+                <li><span class="highlight">Validação em tempo real</span> de senhas</li>
+                <li><span class="highlight">Toggle de visibilidade</span> das senhas</li>
+                <li><span class="highlight">Estados de loading</span> com spinner</li>
+                <li><span class="highlight">Mensagens de feedback</span> (sucesso/erro)</li>
+                <li><span class="highlight">Login social</span> (Google/Facebook)</li>
+                <li><span class="highlight">Design responsivo</span> para mobile</li>
+                <li><span class="highlight">Animações suaves</span> nos elementos</li>
+                <li><span class="highlight">Formulário em grid</span> para nome/sobrenome</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Ações de Teste</h3>
+            <a href="signup-enhanced.html" class="btn" target="_blank">Abrir Tela de Cadastro</a>
+            <a href="login.html" class="btn btn-secondary" target="_blank">Página de Login</a>
+            <a href="dashboard.html" class="btn btn-secondary" target="_blank">Dashboard</a>
+            <a href="index.html" class="btn btn-secondary" target="_blank">Página Inicial</a>
+        </div>
+
+        <div class="test-section">
+            <h3>📱 Demonstração da Tela</h3>
+            <iframe src="signup-enhanced.html" class="demo-frame"></iframe>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Checklist de Testes</h3>
+            <div style="background: #0d1117; padding: 1rem; border-radius: 6px;">
+                <h4>✅ Testes de Funcionalidade:</h4>
+                <ul>
+                    <li>Clique no botão "Já tenho conta" → deve redirecionar para login</li>
+                    <li>Preencha o formulário com dados válidos → deve mostrar loading</li>
+                    <li>Teste validação de senha (menos de 8 caracteres) → deve mostrar erro</li>
+                    <li>Teste confirmação de senha (diferente) → deve mostrar erro</li>
+                    <li>Teste e-mail inválido → deve mostrar erro</li>
+                    <li>Clique no ícone de olho nas senhas → deve alternar visibilidade</li>
+                    <li>Teste botões de login social → deve mostrar mensagem</li>
+                </ul>
+                
+                <h4>✅ Testes de Design:</h4>
+                <ul>
+                    <li>Redimensione a janela → deve ser responsivo</li>
+                    <li>Hover nos botões → deve ter animações</li>
+                    <li>Focus nos campos → deve ter bordas coloridas</li>
+                    <li>Verifique cores e gradientes → devem estar harmoniosos</li>
+                    <li>Teste em mobile → deve adaptar layout</li>
+                </ul>
+                
+                <h4>✅ Testes de UX:</h4>
+                <ul>
+                    <li>Navegação entre campos com Tab → deve funcionar</li>
+                    <li>Mensagens de erro → devem ser claras</li>
+                    <li>Estados de loading → devem ser visíveis</li>
+                    <li>Transições → devem ser suaves</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Comparação: Antes vs Depois</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="background: #0d1117; padding: 1rem; border-radius: 6px;">
+                    <h4>❌ Antes:</h4>
+                    <ul>
+                        <li>Design básico</li>
+                        <li>Sem opção de login visível</li>
+                        <li>Validação limitada</li>
+                        <li>Sem responsividade</li>
+                        <li>Sem animações</li>
+                    </ul>
+                </div>
+                <div style="background: #0d1117; padding: 1rem; border-radius: 6px;">
+                    <h4>✅ Depois:</h4>
+                    <ul>
+                        <li>Design moderno com gradientes</li>
+                        <li>Botão de login destacado no topo</li>
+                        <li>Validação robusta em tempo real</li>
+                        <li>Totalmente responsivo</li>
+                        <li>Animações suaves</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 Links Úteis</h3>
+            <a href="CADASTRO_APRIMORADO.md" class="btn btn-secondary" target="_blank">📄 Documentação Completa</a>
+            <a href="ELEMENTOS_PAGINAS.md" class="btn btn-secondary" target="_blank">📋 Elementos das Páginas</a>
+            <a href="test-categories-debug.html" class="btn btn-secondary" target="_blank">🔍 Debug de Categorias</a>
+        </div>
+    </div>
+
+    <script>
+        console.log('🧪 Página de teste da tela de cadastro aprimorada carregada');
+        
+        // Adicionar logs para monitoramento
+        window.addEventListener('load', function() {
+            console.log('✅ Todos os elementos carregados');
+        });
+        
+        // Verificar se o iframe carregou
+        document.querySelector('iframe').addEventListener('load', function() {
+            console.log('✅ Iframe da tela de cadastro carregado');
+        });
+    </script>
+</body>
+</html> 

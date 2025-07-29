@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Geração de Meditações no Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .chatgpt-style-input {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e5;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 12px;
+        }
+        .chatgpt-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+            background: transparent;
+            resize: none;
+            min-height: 24px;
+            max-height: 120px;
+            line-height: 1.5;
+        }
+        .chatgpt-send-btn {
+            background: #10a37f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .chatgpt-send-btn:hover {
+            background: #0d8c6f;
+            transform: scale(1.05);
+        }
+        .chatgpt-send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            max-width: 300px;
+        }
+        .notification-success { background: #10B981; }
+        .notification-error { background: #EF4444; }
+        .notification-info { background: #3B82F6; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Teste - Geração de Meditações no Dashboard</h1>
+        
+        <p>Esta página testa se a função de geração de meditações está funcionando corretamente.</p>
+        
+        <!-- Campo de input estilo ChatGPT -->
+        <div class="chatgpt-style-input">
+            <div class="input-container">
+                <input type="text" class="chatgpt-input" placeholder="Digite o assunto católico que deseja meditar hoje" id="dashboard-meditation-topic">
+                <button class="chatgpt-send-btn" onclick="generateDashboardMeditation()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <h3>Logs de Debug:</h3>
+        <div id="debug-log" class="log"></div>
+        
+        <h3>Testes Manuais:</h3>
+        <button onclick="testAPIFunctions()">Testar Funções da API</button>
+        <button onclick="testUserData()">Testar Dados do Usuário</button>
+        <button onclick="clearLog()">Limpar Log</button>
+    </div>
+
+    <!-- Scripts necessários -->
+    <script src="api-config.js"></script>
+    <script src="chatgpt-api.js"></script>
+    <script src="session-manager.js"></script>
+
+    <script>
+        // Função para adicionar logs
+        function addLog(message) {
+            const logDiv = document.getElementById('debug-log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        // Função para mostrar notificação
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Função para gerar meditação (cópia da função do dashboard)
+        async function generateDashboardMeditation() {
+            addLog('🚀 Função generateDashboardMeditation chamada');
+            
+            const topicInput = document.getElementById('dashboard-meditation-topic');
+            if (!topicInput) {
+                addLog('❌ Campo dashboard-meditation-topic não encontrado');
+                showNotification('Erro: Campo de tópico não encontrado', 'error');
+                return;
+            }
+            
+            const topic = topicInput.value.trim();
+            addLog('📝 Tópico digitado: ' + topic);
+            
+            if (!topic) {
+                showNotification('Por favor, digite um assunto para a meditação', 'error');
+                return;
+            }
+            
+            // Desabilitar botão durante a geração
+            const sendBtn = document.querySelector('#dashboard-meditation-topic').closest('.chatgpt-style-input').querySelector('.chatgpt-send-btn');
+            const originalText = sendBtn.innerHTML;
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="spinning">
+                    <path d="M12 2L12 6M12 18L12 22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12L6 12M18 12L22 12M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
+            
+            showNotification('Gerando sua meditação personalizada...', 'info');
+            
+            try {
+                // Verificar se as funções da API estão disponíveis
+                addLog('🔍 Verificando se as funções da API estão disponíveis...');
+                addLog('checkAPIStatus disponível: ' + typeof checkAPIStatus);
+                addLog('generateMeditations disponível: ' + typeof generateMeditations);
+                
+                if (typeof checkAPIStatus !== 'function') {
+                    throw new Error('Função checkAPIStatus não está disponível');
+                }
+                
+                if (typeof generateMeditations !== 'function') {
+                    throw new Error('Função generateMeditations não está disponível');
+                }
+                
+                // Verificar se a API está disponível
+                addLog('🔍 Verificando status da API...');
+                const apiStatus = await checkAPIStatus();
+                addLog('📊 Status da API: ' + JSON.stringify(apiStatus));
+                
+                if (!apiStatus.status || apiStatus.status !== 'success') {
+                    throw new Error('API do ChatGPT não está disponível');
+                }
+                
+                // Gerar com ChatGPT usando as mesmas regras
+                addLog('🤖 Gerando meditação com ChatGPT para: ' + topic);
+                const result = await generateMeditations(topic);
+                addLog('📄 Resultado da geração: ' + JSON.stringify(result, null, 2));
+                
+                if (result && result.meditations && result.meditations.length > 0) {
+                    addLog('✅ Meditação gerada: ' + result.meditations[0].title);
+                    
+                    // Obter usuário atual
+                    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                    const userId = currentUser.id || 'anonymous';
+                    
+                    addLog('👤 Usuário atual na geração: ' + currentUser.name + ' ID: ' + userId);
+                    
+                    // Salvar meditação personalizada
+                    const existingPersonalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                    
+                    const meditation = result.meditations[0];
+                    const meditationWithMeta = {
+                        id: meditation.id,
+                        title: meditation.title,
+                        topic: result.category,
+                        content: meditation.content,
+                        duration: meditation.duration || '15 min',
+                        status: 'pending',
+                        createdAt: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        source: 'chatgpt',
+                        type: 'simple',
+                        userId: userId,
+                        userName: currentUser.name || 'Usuário'
+                    };
+                    
+                    // Adicionar nova meditação ao array existente
+                    const updatedMeditations = existingPersonalized.concat([meditationWithMeta]);
+                    localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                    
+                    // Limpar campo
+                    document.getElementById('dashboard-meditation-topic').value = '';
+                    
+                    // Reabilitar botão
+                    sendBtn.disabled = false;
+                    sendBtn.innerHTML = originalText;
+                    
+                    showNotification('Meditação criada com sucesso!', 'success');
+                    addLog('✅ Meditação salva com sucesso!');
+                    
+                } else {
+                    throw new Error('Nenhuma meditação foi gerada');
+                }
+                
+            } catch (error) {
+                addLog('❌ Erro ao gerar meditação: ' + error.message);
+                
+                // Reabilitar botão
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = originalText;
+                
+                showNotification('Erro ao gerar meditação: ' + error.message, 'error');
+            }
+        }
+
+        // Função para testar as funções da API
+        function testAPIFunctions() {
+            addLog('🧪 Testando funções da API...');
+            addLog('checkAPIStatus: ' + typeof checkAPIStatus);
+            addLog('generateMeditations: ' + typeof generateMeditations);
+            addLog('chatGPTAPI: ' + typeof chatGPTAPI);
+            
+            if (typeof checkAPIStatus === 'function') {
+                checkAPIStatus().then(status => {
+                    addLog('✅ Status da API: ' + JSON.stringify(status));
+                }).catch(error => {
+                    addLog('❌ Erro ao verificar API: ' + error.message);
+                });
+            }
+        }
+
+        // Função para testar dados do usuário
+        function testUserData() {
+            addLog('👤 Testando dados do usuário...');
+            const userData = localStorage.getItem('userData');
+            addLog('userData no localStorage: ' + userData);
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    addLog('Usuário parseado: ' + JSON.stringify(user, null, 2));
+                } catch (error) {
+                    addLog('❌ Erro ao fazer parse do userData: ' + error.message);
+                }
+            }
+        }
+
+        // Função para limpar log
+        function clearLog() {
+            document.getElementById('debug-log').innerHTML = '';
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🚀 Página de teste carregada');
+            addLog('Verificando scripts carregados...');
+            addLog('api-config.js: ' + (typeof window.API_CONFIG !== 'undefined'));
+            addLog('chatgpt-api.js: ' + (typeof chatGPTAPI !== 'undefined'));
+            addLog('session-manager.js: ' + (typeof window.sessionManager !== 'undefined'));
+        });
+    </script>
+</body>
+</html> 

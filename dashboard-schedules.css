@@ -1,0 +1,291 @@
+/* CSS para cards de agendamentos no dashboard */
+
+.schedule-section {
+    margin-bottom: 2rem;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.add-schedule-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-schedule-btn:hover {
+    background: var(--accent-blue-dark);
+    transform: translateY(-1px);
+}
+
+.schedule-list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-top: 1rem;
+    justify-content: flex-start;
+    width: 100%;
+    overflow: hidden;
+}
+
+.schedule-card {
+    background: var(--background-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 260px;
+    flex: 0 0 260px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.schedule-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-blue);
+}
+
+.schedule-card.more-card {
+    border: 2px dashed var(--accent-blue);
+    opacity: 0.8;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+}
+
+.schedule-card.more-card:hover {
+    opacity: 1;
+    border-color: var(--accent-blue);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+}
+
+.schedule-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.schedule-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+    line-height: 1.3;
+    flex: 1;
+}
+
+.schedule-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.schedule-action-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.schedule-action-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+.schedule-action-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.schedule-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.schedule-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.schedule-card-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.time-icon {
+    font-size: 0.875rem;
+}
+
+.time-text {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.schedule-card-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow: hidden;
+    max-height: 70px;
+    justify-content: flex-start;
+}
+
+.day-badge {
+    background: var(--accent-blue);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    min-width: 24px;
+    flex-shrink: 0;
+}
+
+.schedule-card-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.schedule-card-explore {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-blue);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: auto;
+}
+
+.explore-icon {
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.schedule-card.more-card:hover .explore-icon {
+    transform: translateX(2px);
+}
+
+/* Estado vazio */
+.schedule-card.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-description {
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .schedule-card {
+        width: 260px;
+        flex: 0 0 260px;
+    }
+}
+
+@media (max-width: 768px) {
+    .schedule-list {
+        gap: 16px;
+        flex-wrap: wrap;
+        overflow: visible;
+    }
+    
+    .schedule-card {
+        width: 100%;
+        height: auto;
+        min-height: 180px;
+        flex: 1 1 auto;
+    }
+    
+    .schedule-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .add-schedule-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .schedule-card-actions {
+        margin-left: 8px;
+    }
+    
+    .schedule-card-days {
+        gap: 6px;
+        max-height: 60px;
+    }
+    
+    .day-badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        min-width: 24px;
+    }
+} 

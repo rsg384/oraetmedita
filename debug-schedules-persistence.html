@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico - Persistência de Agendamentos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-dark: #101223;
+            --background-primary: #181a2a;
+            --background-card: #23243a;
+            --background-light: #2a2b4a;
+            --text-primary: #f5f6fa;
+            --text-secondary: #a3a8c9;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --border-color: #3a3b5a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .diagnostic-section {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-card {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .status-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-success { color: var(--accent-green); }
+        .status-warning { color: #f59e0b; }
+        .status-error { color: #ef4444; }
+        .status-info { color: var(--accent-blue); }
+
+        .btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .log-container {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+        }
+
+        .log-success { color: var(--accent-green); }
+        .log-error { color: #ef4444; }
+        .log-warning { color: #f59e0b; }
+        .log-info { color: var(--accent-blue); }
+
+        .test-form {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--background-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--background-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .weekday-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .weekday-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--background-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .weekday-btn.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .schedules-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .schedule-item {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .schedule-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .schedule-details {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Diagnóstico - Persistência de Agendamentos</h1>
+            <p>Verificando problemas de salvamento e carregamento de agendamentos</p>
+        </div>
+
+        <div class="diagnostic-section">
+            <h2 class="section-title">📊 Status da Persistência</h2>
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-title">Usuário Atual</div>
+                    <div class="status-value result-info" id="currentUser">-</div>
+                    <div class="result-info">ID e nome</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-title">Total no localStorage</div>
+                    <div class="status-value result-info" id="totalInStorage">-</div>
+                    <div class="result-info">Agendamentos salvos</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-title">Agendamentos do Usuário</div>
+                    <div class="status-value result-info" id="userSchedules">-</div>
+                    <div class="result-info">Filtrados por usuário</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-title">Status de Persistência</div>
+                    <div class="status-value" id="persistenceStatus">-</div>
+                    <div class="result-info">Salvamento/Recuperação</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="diagnostic-section">
+            <h2 class="section-title">🧪 Teste de Criação de Agendamento</h2>
+            <div class="test-form">
+                <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-select" id="testCategory">
+                        <option value="Princípios Básicos">Princípios Básicos</option>
+                        <option value="Evangelho">Evangelho</option>
+                        <option value="Imitação de Cristo">Imitação de Cristo</option>
+                        <option value="Jaculatórias">Jaculatórias</option>
+                        <option value="Teste">Teste</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Horário</label>
+                    <input type="time" class="form-input" id="testTime" value="08:00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Dias da Semana</label>
+                    <div class="weekday-buttons">
+                        <button class="weekday-btn" data-day="seg">Seg</button>
+                        <button class="weekday-btn" data-day="ter">Ter</button>
+                        <button class="weekday-btn" data-day="qua">Qua</button>
+                        <button class="weekday-btn" data-day="qui">Qui</button>
+                        <button class="weekday-btn" data-day="sex">Sex</button>
+                        <button class="weekday-btn" data-day="sab">Sáb</button>
+                        <button class="weekday-btn" data-day="dom">Dom</button>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="createTestSchedule()">📝 Criar Agendamento de Teste</button>
+                <button class="btn" onclick="testPersistence()">🔄 Testar Persistência</button>
+                <button class="btn btn-warning" onclick="forceSaveSchedules()">💾 Forçar Salvamento</button>
+                <button class="btn btn-danger" onclick="clearAllSchedules()">🗑️ Limpar Todos</button>
+            </div>
+        </div>
+
+        <div class="diagnostic-section">
+            <h2 class="section-title">📋 Agendamentos Atuais</h2>
+            <div id="schedulesDisplay" class="schedules-display">
+                <!-- Agendamentos serão exibidos aqui -->
+            </div>
+        </div>
+
+        <div class="diagnostic-section">
+            <h2 class="section-title">📝 Log de Diagnóstico</h2>
+            <div id="logContainer" class="log-container">
+                <!-- Logs serão exibidos aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="session-manager.js"></script>
+    <script>
+        let diagnosticLog = [];
+        let selectedDays = ['seg', 'qua', 'sex']; // Padrão
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            diagnosticLog.push({ message: logEntry, type });
+            
+            const logContainer = document.getElementById('logContainer');
+            if (logContainer) {
+                const logElement = document.createElement('div');
+                logElement.className = `log-entry log-${type}`;
+                logElement.textContent = logEntry;
+                logContainer.appendChild(logElement);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function getCurrentUser() {
+            try {
+                if (window.sessionManager) {
+                    return window.sessionManager.getCurrentUser();
+                }
+                return JSON.parse(localStorage.getItem('userData') || '{}');
+            } catch (error) {
+                addLog(`Erro ao obter usuário atual: ${error.message}`, 'error');
+                return null;
+            }
+        }
+
+        function getAllSchedules() {
+            try {
+                return JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            } catch (error) {
+                addLog(`Erro ao obter agendamentos: ${error.message}`, 'error');
+                return [];
+            }
+        }
+
+        function getUserSchedules(userId) {
+            const allSchedules = getAllSchedules();
+            return allSchedules.filter(s => s.userId === userId);
+        }
+
+        function updateStatusDisplay() {
+            const currentUser = getCurrentUser();
+            const userId = currentUser ? currentUser.id : 'anonymous';
+            const allSchedules = getAllSchedules();
+            const userSchedules = getUserSchedules(userId);
+
+            // Atualizar status
+            document.getElementById('currentUser').textContent = currentUser ? `${currentUser.name} (${userId})` : 'Não logado';
+            document.getElementById('totalInStorage').textContent = allSchedules.length;
+            document.getElementById('userSchedules').textContent = userSchedules.length;
+            
+            // Verificar persistência
+            const persistenceIssues = [];
+            if (allSchedules.length === 0) {
+                persistenceIssues.push('Nenhum agendamento no localStorage');
+            }
+            if (allSchedules.length > 0 && userSchedules.length === 0) {
+                persistenceIssues.push('Usuário não tem agendamentos');
+            }
+            if (allSchedules.some(s => !s.userId)) {
+                persistenceIssues.push('Agendamentos sem userId');
+            }
+            
+            const persistenceStatus = persistenceIssues.length > 0 ? persistenceIssues.join(', ') : '✅ Persistência OK';
+            const persistenceElement = document.getElementById('persistenceStatus');
+            persistenceElement.textContent = persistenceStatus;
+            persistenceElement.className = persistenceIssues.length > 0 ? 'status-value status-error' : 'status-value status-success';
+        }
+
+        function displaySchedules() {
+            const currentUser = getCurrentUser();
+            const userId = currentUser ? currentUser.id : 'anonymous';
+            const userSchedules = getUserSchedules(userId);
+
+            const schedulesDisplay = document.getElementById('schedulesDisplay');
+            schedulesDisplay.innerHTML = '';
+
+            if (userSchedules.length === 0) {
+                schedulesDisplay.innerHTML = '<div class="schedule-item"><div class="schedule-title">Nenhum agendamento encontrado para o usuário atual</div></div>';
+                return;
+            }
+
+            userSchedules.forEach(schedule => {
+                const scheduleElement = document.createElement('div');
+                scheduleElement.className = 'schedule-item';
+                scheduleElement.innerHTML = `
+                    <div class="schedule-title">${schedule.title || 'Sem título'}</div>
+                    <div class="schedule-details">
+                        <div>⏰ ${schedule.time}</div>
+                        <div>📅 ${schedule.days ? schedule.days.join(', ') : 'Sem dias'}</div>
+                        <div>🏷️ ${schedule.category}</div>
+                        <div>👤 ${schedule.userName || 'Sem usuário'}</div>
+                        <div>🆔 ${schedule.userId || 'Sem ID'}</div>
+                        <div>📅 Criado: ${schedule.createdAt ? new Date(schedule.createdAt).toLocaleString() : 'Sem data'}</div>
+                    </div>
+                `;
+                schedulesDisplay.appendChild(scheduleElement);
+            });
+        }
+
+        function createTestSchedule() {
+            try {
+                const currentUser = getCurrentUser();
+                const userId = currentUser ? currentUser.id : 'anonymous';
+                
+                if (!currentUser || userId === 'anonymous') {
+                    addLog('Usuário não está logado. Não é possível criar agendamento de teste.', 'error');
+                    return false;
+                }
+
+                const category = document.getElementById('testCategory').value;
+                const time = document.getElementById('testTime').value;
+
+                const testSchedule = {
+                    id: Date.now() + Math.random().toString(36).substr(2, 9),
+                    title: `Meditação de Teste - ${category}`,
+                    time: time,
+                    category: category,
+                    days: selectedDays,
+                    notifications: true,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 15,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: `Agendamento de teste para ${category} às ${time}`,
+                    userId: userId,
+                    userName: currentUser.name
+                };
+
+                addLog(`Criando agendamento de teste: ${testSchedule.title}`, 'info');
+
+                const allSchedules = getAllSchedules();
+                allSchedules.push(testSchedule);
+                
+                localStorage.setItem('user_schedules', JSON.stringify(allSchedules));
+                addLog('Agendamento de teste salvo no localStorage', 'success');
+
+                updateStatusDisplay();
+                displaySchedules();
+                
+                return true;
+            } catch (error) {
+                addLog(`Erro ao criar agendamento de teste: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        function testPersistence() {
+            addLog('=== TESTANDO PERSISTÊNCIA ===', 'info');
+            
+            const currentUser = getCurrentUser();
+            const userId = currentUser ? currentUser.id : 'anonymous';
+            const allSchedules = getAllSchedules();
+            const userSchedules = getUserSchedules(userId);
+
+            addLog(`Usuário: ${currentUser ? currentUser.name : 'Não logado'} (ID: ${userId})`, 'info');
+            addLog(`Total no localStorage: ${allSchedules.length}`, 'info');
+            addLog(`Agendamentos do usuário: ${userSchedules.length}`, 'info');
+
+            // Verificar se os dados estão sendo salvos corretamente
+            const testSchedule = userSchedules.find(s => s.title && s.title.includes('Teste'));
+            if (testSchedule) {
+                addLog(`✅ Agendamento de teste encontrado: ${testSchedule.title}`, 'success');
+            } else {
+                addLog('❌ Nenhum agendamento de teste encontrado', 'error');
+            }
+
+            // Verificar estrutura dos dados
+            if (userSchedules.length > 0) {
+                const sampleSchedule = userSchedules[0];
+                addLog('📋 Estrutura do agendamento:', 'info');
+                addLog(`- ID: ${sampleSchedule.id}`, 'info');
+                addLog(`- Título: ${sampleSchedule.title}`, 'info');
+                addLog(`- userId: ${sampleSchedule.userId}`, 'info');
+                addLog(`- userName: ${sampleSchedule.userName}`, 'info');
+                addLog(`- createdAt: ${sampleSchedule.createdAt}`, 'info');
+            }
+
+            addLog('=== TESTE DE PERSISTÊNCIA CONCLUÍDO ===', 'info');
+        }
+
+        function forceSaveSchedules() {
+            addLog('=== FORÇANDO SALVAMENTO ===', 'info');
+            
+            const currentUser = getCurrentUser();
+            const userId = currentUser ? currentUser.id : 'anonymous';
+            const allSchedules = getAllSchedules();
+            const userSchedules = getUserSchedules(userId);
+
+            // Verificar se há agendamentos para salvar
+            if (userSchedules.length === 0) {
+                addLog('Nenhum agendamento para salvar', 'warning');
+                return;
+            }
+
+            // Forçar salvamento
+            try {
+                localStorage.setItem('user_schedules', JSON.stringify(allSchedules));
+                addLog(`✅ ${allSchedules.length} agendamentos salvos no localStorage`, 'success');
+                
+                // Verificar se foi salvo corretamente
+                const savedSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                addLog(`Verificação: ${savedSchedules.length} agendamentos recuperados`, 'info');
+                
+                if (savedSchedules.length === allSchedules.length) {
+                    addLog('✅ Salvamento confirmado', 'success');
+                } else {
+                    addLog('❌ Erro na verificação do salvamento', 'error');
+                }
+            } catch (error) {
+                addLog(`Erro ao forçar salvamento: ${error.message}`, 'error');
+            }
+        }
+
+        function clearAllSchedules() {
+            if (confirm('Tem certeza que deseja limpar TODOS os agendamentos? Esta ação não pode ser desfeita.')) {
+                localStorage.removeItem('user_schedules');
+                addLog('Todos os agendamentos foram removidos', 'warning');
+                updateStatusDisplay();
+                displaySchedules();
+            }
+        }
+
+        // Configurar botões de dia da semana
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('Página de diagnóstico carregada', 'info');
+            
+            // Configurar botões de dia da semana
+            document.querySelectorAll('.weekday-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const day = this.dataset.day;
+                    
+                    if (this.classList.contains('active')) {
+                        if (!selectedDays.includes(day)) {
+                            selectedDays.push(day);
+                        }
+                    } else {
+                        selectedDays = selectedDays.filter(d => d !== day);
+                    }
+                    
+                    addLog(`Dias selecionados: ${selectedDays.join(', ')}`, 'info');
+                });
+            });
+
+            // Marcar dias padrão como ativos
+            selectedDays.forEach(day => {
+                const btn = document.querySelector(`[data-day="${day}"]`);
+                if (btn) btn.classList.add('active');
+            });
+
+            updateStatusDisplay();
+            displaySchedules();
+        });
+    </script>
+</body>
+</html> 

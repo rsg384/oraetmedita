@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Completo - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .header h1 {
+            color: #4a5568;
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+        .section h2 {
+            color: #2d3748;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .status.success { background: #c6f6d5; color: #22543d; }
+        .status.error { background: #fed7d7; color: #742a2a; }
+        .status.warning { background: #fef5e7; color: #744210; }
+        .status.info { background: #bee3f8; color: #2a4365; }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .data-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .data-card h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+            font-size: 1.1rem;
+        }
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .data-item:last-child {
+            border-bottom: none;
+        }
+        .data-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .data-value {
+            color: #2d3748;
+            font-family: 'Courier New', monospace;
+        }
+        .button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        .button.danger {
+            background: #e53e3e;
+        }
+        .button.danger:hover {
+            background: #c53030;
+        }
+        .button.success {
+            background: #38a169;
+        }
+        .button.success:hover {
+            background: #2f855a;
+        }
+        .log-container {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        .log-entry.info { color: #63b3ed; }
+        .log-entry.success { color: #68d391; }
+        .log-entry.warning { color: #f6e05e; }
+        .log-entry.error { color: #fc8181; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Diagnóstico Completo do Dashboard</h1>
+            <p>Verificação detalhada de todos os componentes do sistema</p>
+        </div>
+
+        <!-- Seção 1: Verificação do SessionManager -->
+        <div class="section">
+            <h2>🔐 SessionManager <span id="sessionStatus" class="status info">Verificando...</span></h2>
+            <div class="data-grid">
+                <div class="data-card">
+                    <h3>Status do SessionManager</h3>
+                    <div class="data-item">
+                        <span class="data-label">SessionManager Existe:</span>
+                        <span class="data-value" id="sessionManagerExists">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">ID da Sessão:</span>
+                        <span class="data-value" id="sessionId">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Usuário Logado:</span>
+                        <span class="data-value" id="userLoggedIn">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Usuário Atual:</span>
+                        <span class="data-value" id="currentUser">-</span>
+                    </div>
+                </div>
+                <div class="data-card">
+                    <h3>Ações</h3>
+                    <button class="button" onclick="checkSessionManager()">Verificar SessionManager</button>
+                    <button class="button success" onclick="forceLogin()">Forçar Login</button>
+                    <button class="button danger" onclick="clearSession()">Limpar Sessão</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 2: Verificação do localStorage -->
+        <div class="section">
+            <h2>💾 localStorage <span id="localStorageStatus" class="status info">Verificando...</span></h2>
+            <div class="data-grid">
+                <div class="data-card">
+                    <h3>Dados do Usuário</h3>
+                    <div class="data-item">
+                        <span class="data-label">userData:</span>
+                        <span class="data-value" id="userDataStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">users:</span>
+                        <span class="data-value" id="usersStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">meditations:</span>
+                        <span class="data-value" id="meditationsStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">categories:</span>
+                        <span class="data-value" id="categoriesStatus">-</span>
+                    </div>
+                </div>
+                <div class="data-card">
+                    <h3>Ações</h3>
+                    <button class="button" onclick="checkLocalStorage()">Verificar localStorage</button>
+                    <button class="button success" onclick="loadBackupData()">Carregar Backup</button>
+                    <button class="button danger" onclick="clearLocalStorage()">Limpar localStorage</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 3: Verificação dos Elementos do DOM -->
+        <div class="section">
+            <h2>🎯 Elementos do DOM <span id="domStatus" class="status info">Verificando...</span></h2>
+            <div class="data-grid">
+                <div class="data-card">
+                    <h3>Elementos Principais</h3>
+                    <div class="data-item">
+                        <span class="data-label">userName:</span>
+                        <span class="data-value" id="userNameStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">userAvatar:</span>
+                        <span class="data-value" id="userAvatarStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">heroGreeting:</span>
+                        <span class="data-value" id="heroGreetingStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">consecutiveDays:</span>
+                        <span class="data-value" id="consecutiveDaysStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">completedMeditations:</span>
+                        <span class="data-value" id="completedMeditationsStatus">-</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">totalTime:</span>
+                        <span class="data-value" id="totalTimeStatus">-</span>
+                    </div>
+                </div>
+                <div class="data-card">
+                    <h3>Ações</h3>
+                    <button class="button" onclick="checkDOMElements()">Verificar DOM</button>
+                    <button class="button success" onclick="updateDOMElements()">Atualizar Elementos</button>
+                    <button class="button" onclick="navigateToDashboard()">Ir para Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 4: Logs de Debug -->
+        <div class="section">
+            <h2>📝 Logs de Debug</h2>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry info">🔍 Iniciando diagnóstico...</div>
+            </div>
+            <button class="button" onclick="clearLogs()">Limpar Logs</button>
+            <button class="button" onclick="exportLogs()">Exportar Logs</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="session-manager.js"></script>
+    <script>
+        // Função para adicionar logs
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Verificar SessionManager
+        function checkSessionManager() {
+            addLog('🔐 Verificando SessionManager...', 'info');
+            
+            const sessionManagerExists = window.sessionManager !== undefined;
+            const sessionId = sessionManagerExists ? window.sessionManager.currentSessionId : 'N/A';
+            const userLoggedIn = sessionManagerExists ? window.sessionManager.isLoggedIn() : false;
+            const currentUser = sessionManagerExists ? window.sessionManager.getCurrentUser() : null;
+            
+            document.getElementById('sessionManagerExists').textContent = sessionManagerExists ? '✅ Sim' : '❌ Não';
+            document.getElementById('sessionId').textContent = sessionId;
+            document.getElementById('userLoggedIn').textContent = userLoggedIn ? '✅ Sim' : '❌ Não';
+            document.getElementById('currentUser').textContent = currentUser ? currentUser.name : 'Nenhum';
+            
+            const status = document.getElementById('sessionStatus');
+            if (sessionManagerExists && userLoggedIn) {
+                status.textContent = '✅ Funcionando';
+                status.className = 'status success';
+                addLog('✅ SessionManager funcionando corretamente', 'success');
+            } else if (sessionManagerExists) {
+                status.textContent = '⚠️ Sem usuário';
+                status.className = 'status warning';
+                addLog('⚠️ SessionManager existe mas sem usuário logado', 'warning');
+            } else {
+                status.textContent = '❌ Não encontrado';
+                status.className = 'status error';
+                addLog('❌ SessionManager não encontrado', 'error');
+            }
+        }
+
+        // Verificar localStorage
+        function checkLocalStorage() {
+            addLog('💾 Verificando localStorage...', 'info');
+            
+            const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            
+            document.getElementById('userDataStatus').textContent = userData ? '✅ Existe' : '❌ Não existe';
+            document.getElementById('usersStatus').textContent = `${users.length} usuários`;
+            document.getElementById('meditationsStatus').textContent = `${meditations.length} meditações`;
+            document.getElementById('categoriesStatus').textContent = `${categories.length} categorias`;
+            
+            const status = document.getElementById('localStorageStatus');
+            if (users.length > 0 && meditations.length > 0 && categories.length > 0) {
+                status.textContent = '✅ Dados completos';
+                status.className = 'status success';
+                addLog('✅ localStorage com dados completos', 'success');
+            } else if (users.length > 0) {
+                status.textContent = '⚠️ Dados parciais';
+                status.className = 'status warning';
+                addLog('⚠️ localStorage com dados parciais', 'warning');
+            } else {
+                status.textContent = '❌ Sem dados';
+                status.className = 'status error';
+                addLog('❌ localStorage sem dados', 'error');
+            }
+        }
+
+        // Verificar elementos do DOM
+        function checkDOMElements() {
+            addLog('🎯 Verificando elementos do DOM...', 'info');
+            
+            const elements = {
+                userName: document.getElementById('userName'),
+                userAvatar: document.getElementById('userAvatar'),
+                heroGreeting: document.getElementById('heroGreeting'),
+                consecutiveDays: document.getElementById('consecutiveDays'),
+                completedMeditations: document.getElementById('completedMeditations'),
+                totalTime: document.getElementById('totalTime')
+            };
+            
+            document.getElementById('userNameStatus').textContent = elements.userName ? '✅ Encontrado' : '❌ Não encontrado';
+            document.getElementById('userAvatarStatus').textContent = elements.userAvatar ? '✅ Encontrado' : '❌ Não encontrado';
+            document.getElementById('heroGreetingStatus').textContent = elements.heroGreeting ? '✅ Encontrado' : '❌ Não encontrado';
+            document.getElementById('consecutiveDaysStatus').textContent = elements.consecutiveDays ? '✅ Encontrado' : '❌ Não encontrado';
+            document.getElementById('completedMeditationsStatus').textContent = elements.completedMeditations ? '✅ Encontrado' : '❌ Não encontrado';
+            document.getElementById('totalTimeStatus').textContent = elements.totalTime ? '✅ Encontrado' : '❌ Não encontrado';
+            
+            const foundElements = Object.values(elements).filter(el => el !== null).length;
+            const totalElements = Object.keys(elements).length;
+            
+            const status = document.getElementById('domStatus');
+            if (foundElements === totalElements) {
+                status.textContent = '✅ Todos encontrados';
+                status.className = 'status success';
+                addLog('✅ Todos os elementos do DOM encontrados', 'success');
+            } else {
+                status.textContent = `${foundElements}/${totalElements} encontrados`;
+                status.className = 'status warning';
+                addLog(`⚠️ ${foundElements}/${totalElements} elementos encontrados`, 'warning');
+            }
+        }
+
+        // Forçar login
+        async function forceLogin() {
+            addLog('🔐 Forçando login...', 'info');
+            
+            try {
+                if (window.sessionManager) {
+                    const loginResult = await window.sessionManager.loginUser({
+                        email: 'rodrigo@exemplo.com'
+                    });
+                    
+                    if (loginResult) {
+                        addLog(`✅ Login realizado: ${loginResult.name}`, 'success');
+                        checkSessionManager();
+                    } else {
+                        addLog('❌ Falha no login', 'error');
+                    }
+                } else {
+                    addLog('❌ SessionManager não encontrado', 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Erro no login: ${error.message}`, 'error');
+            }
+        }
+
+        // Carregar dados do backup
+        function loadBackupData() {
+            addLog('📦 Carregando dados do backup...', 'info');
+            
+            try {
+                const backupData = {
+                    "users": [
+                        {
+                            "id": "user_1753519273275_vo9clmtxv",
+                            "name": "Rodrigo Silva Goes",
+                            "email": "rodrigo@exemplo.com",
+                            "userNumber": 1,
+                            "createdAt": "2025-07-26T08:00:00.000Z",
+                            "lastLogin": "2025-07-26T08:00:00.000Z",
+                            "preferences": {
+                                "theme": "dark",
+                                "notifications": true,
+                                "language": "pt-BR"
+                            },
+                            "stats": {
+                                "consecutiveDays": 5,
+                                "completedMeditations": 12,
+                                "totalTime": "2h 30min",
+                                "totalMeditations": 15,
+                                "inProgressMeditations": 3
+                            }
+                        }
+                    ],
+                    "meditations": [
+                        {
+                            "id": "1",
+                            "title": "Princípios da Vida Sobrenatural",
+                            "category": "vida-sobrenatural",
+                            "duration": 12,
+                            "scriptureReference": "João 15:1-8",
+                            "scriptureText": "Eu sou a videira verdadeira, e meu Pai é o agricultor...",
+                            "icon": "📖",
+                            "lectio": "Neste texto, Jesus se apresenta como a videira verdadeira...",
+                            "meditatio": "Reflita sobre o que significa 'permanecer em Cristo'...",
+                            "oratio": "Senhor Jesus, videira verdadeira, eu quero permanecer em ti...",
+                            "contemplatio": "Permaneça em silêncio na presença de Jesus...",
+                            "createdAt": "2024-01-15T10:00:00.000Z",
+                            "updatedAt": "2024-01-15T10:00:00.000Z"
+                        }
+                    ],
+                    "categories": [
+                        {
+                            "id": "vida-sobrenatural",
+                            "name": "Vida Sobrenatural",
+                            "description": "Meditações sobre a vida espiritual e a graça de Deus",
+                            "icon": "📖",
+                            "color": "#8B5CF6",
+                            "meditationCount": 1
+                        },
+                        {
+                            "id": "mariologia",
+                            "name": "Mariologia",
+                            "description": "Meditações sobre Nossa Senhora e sua devoção",
+                            "icon": "💝",
+                            "color": "#EC4899",
+                            "meditationCount": 1
+                        },
+                        {
+                            "id": "oracao",
+                            "name": "Oração",
+                            "description": "Meditações sobre a vida de oração e intimidade com Deus",
+                            "icon": "🙏",
+                            "color": "#3B82F6",
+                            "meditationCount": 1
+                        }
+                    ]
+                };
+                
+                localStorage.setItem('users', JSON.stringify(backupData.users));
+                localStorage.setItem('meditations', JSON.stringify(backupData.meditations));
+                localStorage.setItem('categories', JSON.stringify(backupData.categories));
+                
+                addLog('✅ Dados do backup carregados com sucesso', 'success');
+                checkLocalStorage();
+                
+            } catch (error) {
+                addLog(`❌ Erro ao carregar backup: ${error.message}`, 'error');
+            }
+        }
+
+        // Limpar sessão
+        function clearSession() {
+            addLog('🧹 Limpando sessão...', 'info');
+            
+            if (window.sessionManager) {
+                window.sessionManager.logoutUser();
+                addLog('✅ Sessão limpa', 'success');
+            }
+            
+            checkSessionManager();
+        }
+
+        // Limpar localStorage
+        function clearLocalStorage() {
+            addLog('🧹 Limpando localStorage...', 'info');
+            
+            localStorage.removeItem('userData');
+            localStorage.removeItem('users');
+            localStorage.removeItem('meditations');
+            localStorage.removeItem('categories');
+            
+            addLog('✅ localStorage limpo', 'success');
+            checkLocalStorage();
+        }
+
+        // Atualizar elementos do DOM
+        function updateDOMElements() {
+            addLog('🔄 Atualizando elementos do DOM...', 'info');
+            
+            const user = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            
+            if (user) {
+                const elements = {
+                    userName: document.getElementById('userName'),
+                    userAvatar: document.getElementById('userAvatar'),
+                    heroGreeting: document.getElementById('heroGreeting'),
+                    consecutiveDays: document.getElementById('consecutiveDays'),
+                    completedMeditations: document.getElementById('completedMeditations'),
+                    totalTime: document.getElementById('totalTime')
+                };
+                
+                if (elements.userName) elements.userName.textContent = user.name;
+                if (elements.userAvatar) elements.userAvatar.textContent = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                if (elements.heroGreeting) {
+                    const now = new Date();
+                    const hour = now.getHours();
+                    let greeting = '🌅 Bom dia';
+                    if (hour >= 12 && hour < 18) greeting = '☀️ Boa tarde';
+                    else if (hour >= 18) greeting = '🌙 Boa noite';
+                    elements.heroGreeting.textContent = `${greeting}, ${user.name.split(' ')[0]}!`;
+                }
+                if (elements.consecutiveDays) elements.consecutiveDays.textContent = user.stats?.consecutiveDays || 0;
+                if (elements.completedMeditations) elements.completedMeditations.textContent = user.stats?.completedMeditations || 0;
+                if (elements.totalTime) elements.totalTime.textContent = user.stats?.totalTime || '0h 0min';
+                
+                addLog('✅ Elementos do DOM atualizados', 'success');
+            } else {
+                addLog('❌ Nenhum usuário logado para atualizar elementos', 'error');
+            }
+        }
+
+        // Navegar para o dashboard
+        function navigateToDashboard() {
+            addLog('🚀 Navegando para o dashboard...', 'info');
+            window.location.href = 'dashboard.html';
+        }
+
+        // Limpar logs
+        function clearLogs() {
+            document.getElementById('logContainer').innerHTML = '<div class="log-entry info">🔍 Logs limpos...</div>';
+        }
+
+        // Exportar logs
+        function exportLogs() {
+            const logs = document.getElementById('logContainer').innerText;
+            const blob = new Blob([logs], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'diagnostico-logs.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Inicializar diagnóstico
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🚀 Iniciando diagnóstico completo...', 'info');
+            
+            setTimeout(() => {
+                checkSessionManager();
+                checkLocalStorage();
+                checkDOMElements();
+                
+                addLog('✅ Diagnóstico inicial concluído', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

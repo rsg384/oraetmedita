@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Botão Agendamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0F0F23;
+            color: white;
+            padding: 20px;
+        }
+        
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1A1A2E;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .add-schedule-btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .add-schedule-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: block;
+        }
+        
+        .modal-content {
+            background: #1A1A2E;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            border: 1px solid #374151;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: #A1A1AA;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-select, .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #2A2A3E;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .weekdays {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .weekday-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #374151;
+            background: #2A2A3E;
+            color: #A1A1AA;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .weekday-btn.active {
+            background: #3B82F6;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .log {
+            background: #2A2A3E;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Teste do Botão de Novo Agendamento</h1>
+        
+        <button class="add-schedule-btn" onclick="openScheduleModal()">Novo Agendamento</button>
+        
+        <div class="log" id="log">
+            <strong>Log de eventos:</strong><br>
+        </div>
+        
+        <button onclick="testButton()" style="background: #10B981; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin: 10px;">
+            Testar Botão
+        </button>
+        
+        <button onclick="clearLog()" style="background: #6B7280; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin: 10px;">
+            Limpar Log
+        </button>
+    </div>
+    
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agendar Meditação</h3>
+                <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+            </div>
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select name="category" class="form-select" required>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="Oração">Oração</option>
+                        <option value="Contemplação">Contemplação</option>
+                        <option value="Lectio Divina">Lectio Divina</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Dias da Semana</label>
+                    <div class="weekdays">
+                        <button type="button" class="weekday-btn" data-day="seg">S</button>
+                        <button type="button" class="weekday-btn" data-day="ter">T</button>
+                        <button type="button" class="weekday-btn" data-day="qua">Q</button>
+                        <button type="button" class="weekday-btn" data-day="qui">Q</button>
+                        <button type="button" class="weekday-btn" data-day="sex">S</button>
+                        <button type="button" class="weekday-btn" data-day="sab">S</button>
+                        <button type="button" class="weekday-btn" data-day="dom">D</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Horário</label>
+                    <input name="time" type="time" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Notificações</label>
+                    <input name="notifications" type="checkbox" checked>
+                    <label>Ativar lembretes</label>
+                </div>
+                
+                <button type="submit" class="btn-primary">Salvar Agenda</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+        
+        function openScheduleModal() {
+            log('🎯 openScheduleModal chamada');
+            
+            const modal = document.getElementById('scheduleModal');
+            if (!modal) {
+                log('❌ Modal não encontrado');
+                return;
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            log('✅ Modal aberto com sucesso');
+        }
+        
+        function closeScheduleModal() {
+            log('🎯 closeScheduleModal chamada');
+            
+            const modal = document.getElementById('scheduleModal');
+            if (!modal) {
+                log('❌ Modal não encontrado');
+                return;
+            }
+            
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            const form = document.getElementById('scheduleForm');
+            if (form) {
+                form.reset();
+            }
+            
+            document.querySelectorAll('.weekday-btn').forEach(btn => btn.classList.remove('active'));
+            log('✅ Modal fechado com sucesso');
+        }
+        
+        function testButton() {
+            log('🧪 === TESTANDO BOTÃO ===');
+            
+            const button = document.querySelector('.add-schedule-btn');
+            if (button) {
+                log('✅ Botão encontrado, simulando clique...');
+                button.click();
+                
+                setTimeout(() => {
+                    const modal = document.getElementById('scheduleModal');
+                    if (modal && modal.classList.contains('active')) {
+                        log('✅ Modal abriu com sucesso!');
+                        
+                        setTimeout(() => {
+                            const closeBtn = modal.querySelector('.close-btn');
+                            if (closeBtn) {
+                                closeBtn.click();
+                                log('✅ Modal fechou com sucesso!');
+                            }
+                        }, 2000);
+                    } else {
+                        log('❌ Modal não abriu');
+                    }
+                }, 1000);
+            } else {
+                log('❌ Botão não encontrado');
+            }
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<strong>Log de eventos:</strong><br>';
+        }
+        
+        // Eventos para botões de dias da semana
+        document.querySelectorAll('.weekday-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                log(`📅 Dia clicado: ${this.dataset.day} (ativo: ${this.classList.contains('active')})`);
+            });
+        });
+        
+        // Evento de submit do formulário
+        document.getElementById('scheduleForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            log('📝 Formulário submetido');
+            
+            const formData = new FormData(this);
+            const selectedDays = Array.from(document.querySelectorAll('.weekday-btn.active'))
+                .map(btn => btn.dataset.day);
+            
+            log('📊 Dados do formulário:');
+            log(`- Categoria: ${formData.get('category')}`);
+            log(`- Horário: ${formData.get('time')}`);
+            log(`- Notificações: ${formData.get('notifications')}`);
+            log(`- Dias: ${selectedDays.join(', ')}`);
+            
+            alert('Agendamento salvo com sucesso!');
+            closeScheduleModal();
+        });
+        
+        // Fechar modal ao clicar fora
+        document.getElementById('scheduleModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeScheduleModal();
+            }
+        });
+        
+        log('🚀 Página de teste carregada');
+    </script>
+</body>
+</html> 

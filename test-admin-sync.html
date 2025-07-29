@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Sincronização Admin - Supabase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Sincronização Admin - Supabase</h1>
+        
+        <div class="test-section">
+            <h3>1. Verificar Supabase Manager</h3>
+            <button class="btn" onclick="checkSupabaseManager()">Verificar Supabase Manager</button>
+            <div id="supabase-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Testar Conexão com Supabase</h3>
+            <button class="btn" onclick="testSupabaseConnection()">Testar Conexão</button>
+            <div id="connection-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. Verificar Categorias no Supabase</h3>
+            <button class="btn" onclick="checkSupabaseCategories()">Verificar Categorias</button>
+            <div id="categories-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Verificar Categorias Locais</h3>
+            <button class="btn" onclick="checkLocalCategories()">Verificar Locais</button>
+            <div id="local-categories-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>5. Testar Criação de Categoria</h3>
+            <button class="btn btn-success" onclick="testCreateCategory()">Criar Categoria de Teste</button>
+            <div id="create-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>6. Verificar Logs do Console</h3>
+            <button class="btn" onclick="checkConsoleLogs()">Verificar Console</button>
+            <div id="console-status" class="log"></div>
+        </div>
+    </div>
+
+    <!-- Supabase Manager -->
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        function addLog(elementId, message) {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            element.innerHTML += `[${timestamp}] ${message}\n`;
+            element.scrollTop = element.scrollHeight;
+        }
+
+        function checkSupabaseManager() {
+            addLog('supabase-status', '🔍 Verificando Supabase Manager...');
+            
+            if (window.supabaseManager) {
+                addLog('supabase-status', '✅ Supabase Manager encontrado!');
+                addLog('supabase-status', `📋 Métodos disponíveis: ${Object.keys(window.supabaseManager).join(', ')}`);
+            } else {
+                addLog('supabase-status', '❌ Supabase Manager NÃO encontrado!');
+                addLog('supabase-status', '💡 Verifique se o arquivo supabase-config.js está carregado');
+            }
+        }
+
+        async function testSupabaseConnection() {
+            addLog('connection-status', '🔄 Testando conexão com Supabase...');
+            
+            try {
+                const isConnected = await window.supabaseManager.testConnection();
+                if (isConnected) {
+                    addLog('connection-status', '✅ Conexão com Supabase estabelecida!');
+                } else {
+                    addLog('connection-status', '❌ Falha na conexão com Supabase');
+                }
+            } catch (error) {
+                addLog('connection-status', `❌ Erro ao testar conexão: ${error.message}`);
+            }
+        }
+
+        async function checkSupabaseCategories() {
+            addLog('categories-status', '🔄 Verificando categorias no Supabase...');
+            
+            try {
+                const categories = await window.supabaseManager.getCategories();
+                addLog('categories-status', `✅ Encontradas ${categories.length} categorias no Supabase:`);
+                categories.forEach(cat => {
+                    addLog('categories-status', `  - ${cat.name} (ID: ${cat.id})`);
+                });
+            } catch (error) {
+                addLog('categories-status', `❌ Erro ao buscar categorias: ${error.message}`);
+            }
+        }
+
+        function checkLocalCategories() {
+            addLog('local-categories-status', '🔄 Verificando categorias locais...');
+            
+            try {
+                const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+                addLog('local-categories-status', `✅ Encontradas ${categories.length} categorias locais:`);
+                categories.forEach(cat => {
+                    addLog('local-categories-status', `  - ${cat.name} (ID: ${cat.id})`);
+                });
+            } catch (error) {
+                addLog('local-categories-status', `❌ Erro ao buscar categorias locais: ${error.message}`);
+            }
+        }
+
+        async function testCreateCategory() {
+            addLog('create-status', '🔄 Testando criação de categoria...');
+            
+            try {
+                const testCategory = {
+                    name: 'Categoria de Teste - ' + Date.now(),
+                    description: 'Categoria criada para teste de sincronização',
+                    icon: '🧪',
+                    color: '#7ee787',
+                    is_active: true,
+                    sort_order: 999
+                };
+                
+                addLog('create-status', `📝 Criando categoria: ${testCategory.name}`);
+                
+                const createdCategory = await window.supabaseManager.createCategory(testCategory);
+                
+                if (createdCategory && createdCategory[0]) {
+                    addLog('create-status', `✅ Categoria criada com sucesso no Supabase!`);
+                    addLog('create-status', `  - ID: ${createdCategory[0].id}`);
+                    addLog('create-status', `  - Nome: ${createdCategory[0].name}`);
+                } else {
+                    addLog('create-status', `❌ Erro: Categoria não foi criada no Supabase`);
+                }
+            } catch (error) {
+                addLog('create-status', `❌ Erro ao criar categoria: ${error.message}`);
+            }
+        }
+
+        function checkConsoleLogs() {
+            addLog('console-status', '📋 Verifique o console do navegador (F12) para ver logs detalhados');
+            addLog('console-status', '🔍 Procure por mensagens que começam com:');
+            addLog('console-status', '  - 🔄 Sincronizando categoria com Supabase...');
+            addLog('console-status', '  - ✅ Categoria criada no Supabase');
+            addLog('console-status', '  - ❌ Erro ao sincronizar categoria');
+        }
+
+        // Verificar automaticamente ao carregar
+        window.addEventListener('load', function() {
+            addLog('supabase-status', '🚀 Página carregada. Clique nos botões para testar.');
+        });
+    </script>
+</body>
+</html> 

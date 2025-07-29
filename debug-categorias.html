@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Categorias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .debug-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .debug-content {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error {
+            color: #dc3545;
+        }
+        .success {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug - Categorias Personalizadas</h1>
+        
+        <div class="debug-section">
+            <div class="debug-title">📊 Dados do userMeditations:</div>
+            <button onclick="checkUserMeditations()">Verificar userMeditations</button>
+            <div id="userMeditationsOutput" class="debug-content"></div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-title">🎯 Teste de Busca por Categoria:</div>
+            <input type="text" id="categoryToTest" placeholder="Digite o nome da categoria" style="padding: 8px; margin: 5px; width: 200px;">
+            <button onclick="testCategorySearch()">Testar Busca</button>
+            <div id="categorySearchOutput" class="debug-content"></div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-title">🔄 Teste de Abertura de Categoria:</div>
+            <input type="text" id="categoryToOpen" placeholder="Digite o nome da categoria" style="padding: 8px; margin: 5px; width: 200px;">
+            <button onclick="testCategoryOpen()">Testar Abertura</button>
+            <div id="categoryOpenOutput" class="debug-content"></div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-title">🧹 Limpar Dados:</div>
+            <button onclick="clearAllData()" style="background: #dc3545;">Limpar Todos os Dados</button>
+            <button onclick="clearUserMeditations()" style="background: #ffc107; color: #333;">Limpar Apenas userMeditations</button>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-title">📋 Navegação:</div>
+            <button onclick="window.location.href='index.html'">Voltar para Index</button>
+            <button onclick="window.location.href='minhas-meditacoes.html'">Ir para Minhas Meditações</button>
+        </div>
+    </div>
+
+    <script>
+        function checkUserMeditations() {
+            const output = document.getElementById('userMeditationsOutput');
+            const userMeditationsData = localStorage.getItem('userMeditations');
+            
+            if (!userMeditationsData) {
+                output.innerHTML = '<span class="error">❌ Nenhum dado encontrado em userMeditations</span>';
+                return;
+            }
+
+            try {
+                const userMeditations = JSON.parse(userMeditationsData);
+                output.innerHTML = `<span class="success">✅ Dados encontrados (${userMeditations.length} meditações):</span>\n\n${JSON.stringify(userMeditations, null, 2)}`;
+                
+                // Mostrar tópicos únicos
+                const topics = [...new Set(userMeditations.map(m => m.topic))];
+                output.innerHTML += `\n\n📋 Tópicos únicos encontrados:\n${topics.map(t => `- "${t}"`).join('\n')}`;
+                
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ Erro ao parsear dados: ${error.message}</span>`;
+            }
+        }
+
+        function testCategorySearch() {
+            const output = document.getElementById('categorySearchOutput');
+            const categoryName = document.getElementById('categoryToTest').value.trim();
+            
+            if (!categoryName) {
+                output.innerHTML = '<span class="error">❌ Digite um nome de categoria</span>';
+                return;
+            }
+
+            const userMeditationsData = localStorage.getItem('userMeditations');
+            if (!userMeditationsData) {
+                output.innerHTML = '<span class="error">❌ Nenhum dado encontrado em userMeditations</span>';
+                return;
+            }
+
+            try {
+                const userMeditations = JSON.parse(userMeditationsData);
+                
+                // Testar busca exata
+                const exactMatches = userMeditations.filter(meditation => 
+                    meditation.topic === categoryName
+                );
+                
+                // Testar busca case-insensitive
+                const caseInsensitiveMatches = userMeditations.filter(meditation => 
+                    meditation.topic.toLowerCase() === categoryName.toLowerCase()
+                );
+                
+                // Testar busca parcial
+                const partialMatches = userMeditations.filter(meditation => 
+                    meditation.topic.toLowerCase().includes(categoryName.toLowerCase())
+                );
+
+                output.innerHTML = `
+                    <span class="success">🔍 Resultados da busca para "${categoryName}":</span>
+                    
+                    \n\n📊 Busca exata (${exactMatches.length} resultados):
+                    ${exactMatches.length > 0 ? JSON.stringify(exactMatches, null, 2) : 'Nenhum resultado'}
+                    
+                    \n\n📊 Busca case-insensitive (${caseInsensitiveMatches.length} resultados):
+                    ${caseInsensitiveMatches.length > 0 ? JSON.stringify(caseInsensitiveMatches, null, 2) : 'Nenhum resultado'}
+                    
+                    \n\n📊 Busca parcial (${partialMatches.length} resultados):
+                    ${partialMatches.length > 0 ? JSON.stringify(partialMatches, null, 2) : 'Nenhum resultado'}
+                `;
+                
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ Erro na busca: ${error.message}</span>`;
+            }
+        }
+
+        function testCategoryOpen() {
+            const output = document.getElementById('categoryOpenOutput');
+            const categoryName = document.getElementById('categoryToOpen').value.trim();
+            
+            if (!categoryName) {
+                output.innerHTML = '<span class="error">❌ Digite um nome de categoria</span>';
+                return;
+            }
+
+            // Simular a função openCategoryModal
+            console.log('🚀 Testando abertura da categoria:', categoryName);
+            
+            const userMeditationsData = localStorage.getItem('userMeditations');
+            if (!userMeditationsData) {
+                output.innerHTML = '<span class="error">❌ Nenhum dado encontrado em userMeditations</span>';
+                return;
+            }
+
+            try {
+                const userMeditations = JSON.parse(userMeditationsData);
+                console.log('📚 Buscando em userMeditations:', userMeditations);
+                
+                // Filtrar meditações da categoria específica (case-insensitive)
+                const categoryMeditations = userMeditations.filter(meditation => 
+                    meditation.topic.toLowerCase() === categoryName.toLowerCase()
+                );
+                
+                if (categoryMeditations.length > 0) {
+                    const categoryData = {
+                        category: categoryName,
+                        meditations: categoryMeditations,
+                        createdAt: categoryMeditations[0].createdAt || new Date().toISOString(),
+                        lastUpdated: categoryMeditations[0].lastUpdated || new Date().toISOString(),
+                        totalGenerated: categoryMeditations.length
+                    };
+                    
+                    output.innerHTML = `
+                        <span class="success">✅ Categoria encontrada!</span>
+                        
+                        \n\n📊 Dados da categoria:
+                        ${JSON.stringify(categoryData, null, 2)}
+                        
+                        \n\n🚀 Próximos passos:
+                        1. Salvar current_category: "${categoryName}"
+                        2. Salvar current_meditations
+                        3. Redirecionar para meditacao.html?category=${encodeURIComponent(categoryName)}
+                    `;
+                    
+                    // Simular salvamento
+                    localStorage.setItem('current_category', categoryName);
+                    localStorage.setItem('current_meditations', JSON.stringify(categoryData));
+                    
+                    output.innerHTML += '\n\n✅ Dados salvos no localStorage!';
+                    
+                } else {
+                    output.innerHTML = `
+                        <span class="error">❌ Categoria não encontrada: "${categoryName}"</span>
+                        
+                        \n\n📋 Tópicos disponíveis:
+                        ${[...new Set(userMeditations.map(m => m.topic))].map(t => `- "${t}"`).join('\n')}
+                    `;
+                }
+                
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ Erro na busca: ${error.message}</span>`;
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar TODOS os dados?')) {
+                localStorage.clear();
+                alert('Todos os dados foram limpos!');
+                location.reload();
+            }
+        }
+
+        function clearUserMeditations() {
+            if (confirm('Tem certeza que deseja limpar apenas userMeditations?')) {
+                localStorage.removeItem('userMeditations');
+                alert('userMeditations foi limpo!');
+                location.reload();
+            }
+        }
+
+        // Carregar dados automaticamente
+        window.onload = function() {
+            checkUserMeditations();
+        };
+    </script>
+</body>
+</html> 

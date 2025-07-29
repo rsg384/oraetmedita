@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Tabela Schedules</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+        }
+        .test-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #5a6fd8;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Tabela Schedules</h1>
+        
+        <div class="test-section">
+            <h3>📋 Verificar Supabase Manager</h3>
+            <button onclick="checkSupabaseManager()">Verificar Supabase Manager</button>
+            <div id="supabase-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📅 Carregar Agendamentos</h3>
+            <button onclick="loadSchedules()">Carregar Todos os Agendamentos</button>
+            <button onclick="loadUserSchedules()">Carregar Agendamentos do Usuário</button>
+            <div id="schedules-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>➕ Criar Agendamento</h3>
+            <button onclick="createSchedule()">Criar Agendamento de Teste</button>
+            <div id="create-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>✏️ Atualizar Agendamento</h3>
+            <button onclick="updateSchedule()">Atualizar Agendamento</button>
+            <div id="update-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🗑️ Excluir Agendamento</h3>
+            <button onclick="deleteSchedule()">Excluir Agendamento</button>
+            <div id="delete-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Estatísticas</h3>
+            <button onclick="getScheduleStats()">Obter Estatísticas</button>
+            <div id="stats-result" class="result"></div>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        // Verificar Supabase Manager
+        function checkSupabaseManager() {
+            const result = document.getElementById('supabase-result');
+            result.innerHTML = '';
+            
+            try {
+                if (window.supabaseManager) {
+                    result.innerHTML += '✅ Supabase Manager disponível\n';
+                    result.innerHTML += `📝 Tipo: ${typeof window.supabaseManager}\n`;
+                    result.innerHTML += `🔗 URL: ${window.supabaseManager.supabaseUrl}\n`;
+                } else {
+                    result.innerHTML += '❌ Supabase Manager não disponível\n';
+                }
+            } catch (error) {
+                result.innerHTML += `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Carregar agendamentos
+        async function loadSchedules() {
+            const result = document.getElementById('schedules-result');
+            result.innerHTML = '🔄 Carregando agendamentos...\n';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('Supabase Manager não disponível');
+                }
+                
+                const schedules = await window.supabaseManager.getSchedules();
+                result.innerHTML = `✅ Agendamentos carregados: ${schedules.length}\n\n`;
+                
+                schedules.forEach(schedule => {
+                    result.innerHTML += `📅 ${schedule.title}\n`;
+                    result.innerHTML += `   ⏰ ${schedule.start_time}\n`;
+                    result.innerHTML += `   📍 ${schedule.status}\n`;
+                    result.innerHTML += `   🔄 ${schedule.is_recurring ? 'Recorrente' : 'Único'}\n\n`;
+                });
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Carregar agendamentos do usuário
+        async function loadUserSchedules() {
+            const result = document.getElementById('schedules-result');
+            result.innerHTML = '🔄 Carregando agendamentos do usuário...\n';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('Supabase Manager não disponível');
+                }
+                
+                // Simular ID do usuário
+                const userId = 'test-user-id';
+                const schedules = await window.supabaseManager.getUserSchedules(userId);
+                result.innerHTML = `✅ Agendamentos do usuário carregados: ${schedules.length}\n\n`;
+                
+                schedules.forEach(schedule => {
+                    result.innerHTML += `📅 ${schedule.title}\n`;
+                    result.innerHTML += `   ⏰ ${schedule.start_time}\n`;
+                    result.innerHTML += `   📍 ${schedule.status}\n\n`;
+                });
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Criar agendamento
+        async function createSchedule() {
+            const result = document.getElementById('create-result');
+            result.innerHTML = '🔄 Criando agendamento...\n';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('Supabase Manager não disponível');
+                }
+                
+                const scheduleData = {
+                    user_id: 'test-user-id',
+                    title: 'Meditação de Teste',
+                    description: 'Agendamento criado para teste',
+                    start_time: '08:00:00',
+                    duration_minutes: 15,
+                    is_recurring: true,
+                    recurrence_type: 'daily',
+                    start_date: new Date().toISOString().split('T')[0],
+                    status: 'active',
+                    priority: 1,
+                    reminder_minutes: 10
+                };
+                
+                const newSchedule = await window.supabaseManager.createSchedule(scheduleData);
+                result.innerHTML = `✅ Agendamento criado com sucesso!\n`;
+                result.innerHTML += `📅 ID: ${newSchedule.id}\n`;
+                result.innerHTML += `📝 Título: ${newSchedule.title}\n`;
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Atualizar agendamento
+        async function updateSchedule() {
+            const result = document.getElementById('update-result');
+            result.innerHTML = '🔄 Atualizando agendamento...\n';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('Supabase Manager não disponível');
+                }
+                
+                // Primeiro, carregar um agendamento
+                const schedules = await window.supabaseManager.getSchedules();
+                if (schedules.length === 0) {
+                    result.innerHTML = '⚠️ Nenhum agendamento encontrado para atualizar\n';
+                    return;
+                }
+                
+                const scheduleId = schedules[0].id;
+                const updateData = {
+                    title: 'Meditação Atualizada',
+                    description: 'Agendamento atualizado para teste',
+                    priority: 2
+                };
+                
+                const updatedSchedule = await window.supabaseManager.updateSchedule(scheduleId, updateData);
+                result.innerHTML = `✅ Agendamento atualizado com sucesso!\n`;
+                result.innerHTML += `📅 ID: ${updatedSchedule.id}\n`;
+                result.innerHTML += `📝 Título: ${updatedSchedule.title}\n`;
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Excluir agendamento
+        async function deleteSchedule() {
+            const result = document.getElementById('delete-result');
+            result.innerHTML = '🔄 Excluindo agendamento...\n';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('Supabase Manager não disponível');
+                }
+                
+                // Primeiro, carregar um agendamento
+                const schedules = await window.supabaseManager.getSchedules();
+                if (schedules.length === 0) {
+                    result.innerHTML = '⚠️ Nenhum agendamento encontrado para excluir\n';
+                    return;
+                }
+                
+                const scheduleId = schedules[0].id;
+                await window.supabaseManager.deleteSchedule(scheduleId);
+                result.innerHTML = `✅ Agendamento excluído com sucesso!\n`;
+                result.innerHTML += `📅 ID: ${scheduleId}\n`;
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Obter estatísticas
+        async function getScheduleStats() {
+            const result = document.getElementById('stats-result');
+            result.innerHTML = '🔄 Obtendo estatísticas...\n';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('Supabase Manager não disponível');
+                }
+                
+                const stats = await window.supabaseManager.getScheduleStats();
+                result.innerHTML = `✅ Estatísticas obtidas:\n`;
+                result.innerHTML += `📊 Total de agendamentos: ${stats.total_schedules}\n`;
+                result.innerHTML += `✅ Agendamentos ativos: ${stats.active_schedules}\n`;
+                result.innerHTML += `🔄 Agendamentos recorrentes: ${stats.recurring_schedules}\n`;
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Verificar Supabase Manager ao carregar
+        window.addEventListener('load', function() {
+            setTimeout(checkSupabaseManager, 1000);
+        });
+    </script>
+</body>
+</html> 

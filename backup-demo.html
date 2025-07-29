@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Backup - Ora et Medita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-dark: #101223;
+            --background-primary: #181a2a;
+            --background-card: #23243a;
+            --background-light: #2a2b4a;
+            --text-primary: #f5f6fa;
+            --text-secondary: #a3a8c9;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --border-color: #3a3b5a;
+            --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .backup-section {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .backup-info {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .backup-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .backup-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .action-btn.import {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .action-btn.import:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .data-preview {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .preview-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--background-card);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .data-name {
+            font-weight: 500;
+        }
+
+        .data-count {
+            background: var(--accent-blue);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-active {
+            background: var(--accent-green);
+        }
+
+        .status-inactive {
+            background: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .backup-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Ora et Medita</div>
+            <div class="subtitle">Sistema de Backup Simplificado</div>
+        </div>
+
+        <div class="backup-section">
+            <h2 class="section-title">
+                <span style="font-size: 1.5rem;">💾</span>
+                Gerenciamento de Backup
+            </h2>
+            
+            <div class="backup-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Status do Sistema</div>
+                        <div class="info-value">
+                            <span class="status-indicator status-active"></span>
+                            Ativo
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Último Backup</div>
+                        <div class="info-value" id="lastBackup">Nunca</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Tamanho dos Dados</div>
+                        <div class="info-value" id="dataSize">Calculando...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Versão</div>
+                        <div class="info-value">2.0</div>
+                    </div>
+                </div>
+                
+                <div class="backup-description">
+                    O sistema de backup inclui todos os dados: meditações, categorias, usuários, 
+                    meditações personalizadas, agendamentos, estatísticas, histórico de atividades 
+                    e metas espirituais. Use os botões abaixo para exportar ou importar seus dados.
+                </div>
+            </div>
+
+            <div class="backup-actions">
+                <button class="action-btn export" onclick="exportBackup()">
+                    <span style="font-size: 1.2rem;">📤</span>
+                    Exportar Dados
+                </button>
+                <button class="action-btn import" onclick="importBackup()">
+                    <span style="font-size: 1.2rem;">📥</span>
+                    Importar Dados
+                </button>
+            </div>
+        </div>
+
+        <div class="backup-section">
+            <h2 class="section-title">
+                <span style="font-size: 1.5rem;">📊</span>
+                Dados Incluídos no Backup
+            </h2>
+            
+            <div class="data-preview">
+                <div class="preview-title">Estrutura Completa dos Dados</div>
+                <div class="data-list" id="dataPreview">
+                    <!-- Dados serão carregados dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backup Manager -->
+    <script src="backup-manager.js"></script>
+
+    <script>
+        // Função para exportar backup
+        function exportBackup() {
+            if (window.backupManager) {
+                window.backupManager.exportData();
+            } else {
+                alert('Sistema de backup não disponível');
+            }
+        }
+
+        // Função para importar backup
+        function importBackup() {
+            if (window.backupManager) {
+                window.backupManager.importData();
+            } else {
+                alert('Sistema de backup não disponível');
+            }
+        }
+
+        // Função para calcular tamanho dos dados
+        function calculateDataSize() {
+            try {
+                let totalSize = 0;
+                const keys = Object.keys(localStorage);
+                
+                keys.forEach(key => {
+                    const value = localStorage.getItem(key);
+                    totalSize += new Blob([value]).size;
+                });
+                
+                const sizeInKB = Math.round(totalSize / 1024);
+                const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+                
+                return sizeInKB > 1024 ? `${sizeInMB} MB` : `${sizeInKB} KB`;
+            } catch (error) {
+                return 'Erro';
+            }
+        }
+
+        // Função para carregar preview dos dados
+        function loadDataPreview() {
+            try {
+                const dataPreview = document.getElementById('dataPreview');
+                if (!dataPreview) return;
+
+                const dataStructure = [
+                    { name: 'Meditações Padrão', key: 'meditations', icon: '📖' },
+                    { name: 'Categorias', key: 'categories', icon: '📂' },
+                    { name: 'Usuários Cadastrados', key: 'users', icon: '👥' },
+                    { name: 'Meditações Personalizadas', key: 'personalized_meditations', icon: '✨' },
+                    { name: 'Agendamentos', key: 'user_schedules', icon: '📅' },
+                    { name: 'Estatísticas de Usuários', key: 'user_meditation_stats', icon: '📊' },
+                    { name: 'Dados de Sessão', key: 'session', icon: '🔐' },
+                    { name: 'Histórico de Atividades', key: 'activity_history', icon: '📝' },
+                    { name: 'Metas Espirituais', key: 'spiritual_goals', icon: '🎯' },
+                    { name: 'Configurações do Sistema', key: 'system_config', icon: '⚙️' }
+                ];
+
+                dataPreview.innerHTML = dataStructure.map(item => {
+                    const data = JSON.parse(localStorage.getItem(item.key) || '[]');
+                    const count = Array.isArray(data) ? data.length : (data ? 1 : 0);
+                    
+                    return `
+                        <div class="data-item">
+                            <div class="data-name">
+                                <span style="margin-right: 0.5rem;">${item.icon}</span>
+                                ${item.name}
+                            </div>
+                            <div class="data-count">${count}</div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar preview dos dados:', error);
+            }
+        }
+
+        // Função para atualizar informações do sistema
+        function updateSystemInfo() {
+            try {
+                // Atualizar tamanho dos dados
+                const dataSizeElement = document.getElementById('dataSize');
+                if (dataSizeElement) {
+                    dataSizeElement.textContent = calculateDataSize();
+                }
+
+                // Atualizar último backup
+                const lastBackupElement = document.getElementById('lastBackup');
+                if (lastBackupElement) {
+                    const lastBackup = localStorage.getItem('lastBackupDate');
+                    if (lastBackup) {
+                        const date = new Date(lastBackup);
+                        lastBackupElement.textContent = date.toLocaleDateString('pt-BR');
+                    } else {
+                        lastBackupElement.textContent = 'Nunca';
+                    }
+                }
+
+            } catch (error) {
+                console.error('❌ Erro ao atualizar informações do sistema:', error);
+            }
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de backup carregada');
+            
+            // Carregar preview dos dados
+            loadDataPreview();
+            
+            // Atualizar informações do sistema
+            updateSystemInfo();
+            
+            // Atualizar a cada 5 segundos
+            setInterval(updateSystemInfo, 5000);
+            
+            console.log('✅ Página de backup inicializada');
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Ora et Medita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-dark: #101223;
+            --background-primary: #181a2a;
+            --background-card: #23243a;
+            --background-light: #2a2b4a;
+            --text-primary: #f5f6fa;
+            --text-secondary: #a3a8c9;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --border-color: #3a3b5a;
+            --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background com gradiente e elementos decorativos */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-gradient);
+            opacity: 0.1;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        /* Modal Container */
+        .modal-container {
+            background: var(--background-card);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            max-width: 480px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Header do Modal */
+        .modal-header {
+            background: var(--primary-gradient);
+            padding: 2rem 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-subtitle {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Botão de Login no Topo */
+        .login-option {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+        }
+
+        .login-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* Conteúdo do Modal */
+        .modal-content {
+            padding: 2rem;
+        }
+
+        /* Benefícios */
+        .benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .benefit-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--success-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Formulário */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--background-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Botão de Cadastro */
+        .signup-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signup-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .signup-btn:hover::before {
+            left: 100%;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Termos e Condições */
+        .terms {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .terms a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        /* Botão de Fechar */
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .modal-container {
+                width: 95%;
+                margin: 1rem;
+            }
+
+            .modal-header {
+                padding: 1.5rem 1.5rem 1rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animações */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Estados de loading */
+        .signup-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .signup-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success-gradient);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal de Cadastro -->
+    <div class="modal-container">
+        <!-- Botão de Fechar -->
+        <button class="close-btn" onclick="closeModal()">×</button>
+        
+        <!-- Header -->
+        <div class="modal-header">
+            <!-- Opção de Login -->
+            <div class="login-option">
+                <button class="login-btn" onclick="showLoginModal()">
+                    Já tenho conta
+                </button>
+            </div>
+            
+            <h1 class="modal-title">Crie sua conta</h1>
+            <p class="modal-subtitle">Cadastre-se gratuitamente e tenha acesso completo por 7 dias às meditações personalizadas</p>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="modal-content">
+            <!-- Benefícios -->
+            <div class="benefits">
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <span>Sem cartão de crédito</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <span>Cancelamento a qualquer momento</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <span>Acesso a todas as meditações personalizadas</span>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="firstName">Nome</label>
+                        <input type="text" id="firstName" name="firstName" class="form-input" placeholder="Seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="lastName">Sobrenome</label>
+                        <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Seu sobrenome" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">E-mail</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Senha</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Mínimo 8 caracteres" minlength="8" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Confirmar Senha</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Confirme sua senha" minlength="8" required>
+                </div>
+
+                <button type="submit" class="signup-btn" id="signupBtn">
+                    Criar Conta Gratuita
+                </button>
+            </form>
+
+            <!-- Termos -->
+            <div class="terms">
+                Ao criar sua conta, você concorda com nossos 
+                <a href="#" onclick="showTerms()">Termos de Serviço</a> e 
+                <a href="#" onclick="showPrivacy()">Política de Privacidade</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login (oculto por padrão) -->
+    <div id="loginModal" class="modal-container" style="display: none;">
+        <div class="modal-header">
+            <button class="close-btn" onclick="closeLoginModal()">×</button>
+            <h1 class="modal-title">Fazer Login</h1>
+            <p class="modal-subtitle">Entre com suas credenciais para acessar sua conta</p>
+        </div>
+
+        <div class="modal-content">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">E-mail</label>
+                    <input type="email" id="loginEmail" name="email" class="form-input" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" name="password" class="form-input" placeholder="Sua senha" required>
+                </div>
+
+                <button type="submit" class="signup-btn" id="loginBtn">
+                    Entrar
+                </button>
+            </form>
+
+            <div class="terms" style="margin-top: 1rem;">
+                <a href="#" onclick="showForgotPassword()">Esqueceu sua senha?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para fechar modal
+        function closeModal() {
+            // Aqui você pode adicionar lógica para fechar o modal
+            console.log('Modal fechado');
+        }
+
+        // Função para mostrar modal de login
+        function showLoginModal() {
+            document.querySelector('.modal-container').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        // Função para fechar modal de login
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.querySelector('.modal-container').style.display = 'block';
+        }
+
+        // Função para lidar com cadastro
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const submitBtn = document.getElementById('signupBtn');
+            
+            // Validar senhas
+            const password = form.password.value;
+            const confirmPassword = form.confirmPassword.value;
+            
+            if (password !== confirmPassword) {
+                showNotification('As senhas não coincidem!', 'error');
+                return;
+            }
+            
+            // Simular loading
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Criando conta...';
+            
+            // Simular requisição
+            setTimeout(() => {
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = 'Criar Conta Gratuita';
+                
+                // Simular sucesso
+                showNotification('Conta criada com sucesso!', 'success');
+                
+                // Limpar formulário
+                form.reset();
+                
+                // Redirecionar após 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                
+            }, 2000);
+        }
+
+        // Função para lidar com login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const submitBtn = document.getElementById('loginBtn');
+            
+            // Simular loading
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Entrando...';
+            
+            // Simular requisição
+            setTimeout(() => {
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = 'Entrar';
+                
+                // Simular sucesso
+                showNotification('Login realizado com sucesso!', 'success');
+                
+                // Redirecionar após 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                
+            }, 2000);
+        }
+
+        // Função para mostrar notificações
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Mostrar notificação
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Remover notificação
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Funções auxiliares
+        function showTerms() {
+            alert('Termos de Serviço - Em desenvolvimento');
+        }
+
+        function showPrivacy() {
+            alert('Política de Privacidade - Em desenvolvimento');
+        }
+
+        function showForgotPassword() {
+            alert('Recuperação de senha - Em desenvolvimento');
+        }
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+                closeLoginModal();
+            }
+        });
+
+        // Fechar modal clicando fora
+        document.addEventListener('click', function(event) {
+            if (event.target === document.body) {
+                closeModal();
+                closeLoginModal();
+            }
+        });
+    </script>
+</body>
+</html> 

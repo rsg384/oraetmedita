@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Integração API ChatGPT</title>
+</head>
+<body>
+    <h1>Teste de Integração com API ChatGPT</h1>
+    
+    <div class="chatgpt-style-input">
+        <div class="input-container">
+            <input type="text" class="chatgpt-input" placeholder="Digite o assunto católico que deseja meditar hoje" id="dashboard-meditation-topic">
+            <button class="chatgpt-send-btn" onclick="testGenerateMeditation()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script src="api-config.js"></script>
+    <script src="chatgpt-api.js"></script>
+    
+    <script>
+        async function testGenerateMeditation() {
+            console.log('🧪 Teste de integração iniciado');
+            
+            const topicInput = document.getElementById('dashboard-meditation-topic');
+            const topic = topicInput.value.trim();
+            
+            if (!topic) {
+                alert('Por favor, digite um assunto para a meditação');
+                return;
+            }
+            
+            document.getElementById('result').innerHTML = '<p>🔄 Testando integração com API...</p>';
+            
+            try {
+                // Teste 1: Verificar se as funções estão disponíveis
+                console.log('🔍 Verificando disponibilidade das funções...');
+                console.log('checkAPIStatus:', typeof checkAPIStatus);
+                console.log('generateMeditations:', typeof generateMeditations);
+                
+                if (typeof checkAPIStatus !== 'function') {
+                    throw new Error('Função checkAPIStatus não está disponível');
+                }
+                
+                if (typeof generateMeditations !== 'function') {
+                    throw new Error('Função generateMeditations não está disponível');
+                }
+                
+                // Teste 2: Verificar status da API
+                console.log('🔍 Verificando status da API...');
+                const apiStatus = await checkAPIStatus();
+                console.log('📊 Status da API:', apiStatus);
+                
+                if (!apiStatus.status || apiStatus.status !== 'success') {
+                    throw new Error('API do ChatGPT não está disponível');
+                }
+                
+                // Teste 3: Gerar meditação
+                console.log('🤖 Gerando meditação...');
+                const result = await generateMeditations(topic);
+                console.log('📄 Resultado da geração:', result);
+                
+                if (result && result.meditations && result.meditations.length > 0) {
+                    const meditation = result.meditations[0];
+                    
+                    document.getElementById('result').innerHTML = `
+                        <h3>✅ Teste Concluído com Sucesso!</h3>
+                        <p><strong>Título:</strong> ${meditation.title}</p>
+                        <p><strong>Tópico:</strong> ${result.category}</p>
+                        <p><strong>Duração:</strong> ${meditation.duration}</p>
+                        <p><strong>Conteúdo:</strong></p>
+                        <div style="white-space: pre-wrap; background: #f5f5f5; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                            ${meditation.content}
+                        </div>
+                    `;
+                    
+                    console.log('✅ Teste concluído com sucesso!');
+                } else {
+                    throw new Error('Nenhuma meditação foi gerada');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro no teste:', error);
+                document.getElementById('result').innerHTML = `
+                    <h3>❌ Erro no Teste</h3>
+                    <p><strong>Erro:</strong> ${error.message}</p>
+                    <p>Verifique o console para mais detalhes.</p>
+                `;
+            }
+        }
+        
+        console.log('✅ Script de teste carregado');
+        console.log('Funções disponíveis:', {
+            checkAPIStatus: typeof checkAPIStatus,
+            generateMeditations: typeof generateMeditations
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Rápido - Supabase</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .log { background: #f0f0f0; padding: 10px; margin: 10px 0; font-family: monospace; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>⚡ Teste Rápido - Supabase</h1>
+    
+    <button onclick="testSupabase()">Testar Supabase</button>
+    <button onclick="testCreateCategory()">Criar Categoria</button>
+    
+    <div class="log" id="log"></div>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        function log(message) {
+            document.getElementById('log').textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            console.log(message);
+        }
+
+        async function testSupabase() {
+            log('🔍 Testando Supabase Manager...');
+            
+            if (!window.supabaseManager) {
+                log('❌ Supabase Manager NÃO encontrado!');
+                return;
+            }
+            
+            log('✅ Supabase Manager encontrado!');
+            
+            try {
+                log('🔄 Testando conexão...');
+                const isConnected = await window.supabaseManager.testConnection();
+                log(isConnected ? '✅ Conexão OK' : '❌ Conexão falhou');
+            } catch (error) {
+                log('❌ Erro: ' + error.message);
+            }
+        }
+
+        async function testCreateCategory() {
+            log('🚀 Testando criação de categoria...');
+            
+            if (!window.supabaseManager) {
+                log('❌ Supabase Manager não disponível!');
+                return;
+            }
+            
+            try {
+                const categoryData = {
+                    name: 'Teste Rápido - ' + Date.now(),
+                    description: 'Categoria de teste',
+                    icon: '⚡',
+                    color: '#7ee787',
+                    is_active: true,
+                    sort_order: 999
+                };
+                
+                log('📝 Enviando dados: ' + JSON.stringify(categoryData));
+                
+                const result = await window.supabaseManager.createCategory(categoryData);
+                log('📋 Resultado: ' + JSON.stringify(result));
+                
+                if (result && result[0]) {
+                    log('✅ Categoria criada! ID: ' + result[0].id);
+                } else {
+                    log('❌ Categoria não foi criada');
+                }
+            } catch (error) {
+                log('❌ Erro: ' + error.message);
+            }
+        }
+
+        log('🚀 Página carregada. Clique nos botões para testar.');
+    </script>
+</body>
+</html> 

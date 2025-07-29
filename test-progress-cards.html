@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Cards de Progresso por Categoria</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .btn:hover {
+            background: #2ea043;
+        }
+        .btn-secondary {
+            background: #21262d;
+            border: 1px solid #30363d;
+        }
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .progress-card {
+            background: #161b22;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #30363d;
+            transition: all 0.3s ease;
+        }
+        .progress-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .progress-title {
+            font-weight: 600;
+            color: #c9d1d9;
+            font-size: 1.1rem;
+        }
+        .progress-percentage {
+            font-weight: 700;
+            color: #7ee787;
+            font-size: 1.2rem;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7ee787 0%, #56d364 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            color: #8b949e;
+            font-size: 0.875rem;
+        }
+        .view-more-card {
+            background: linear-gradient(135deg, #161b22 0%, #21262d 100%);
+            border: 2px dashed #30363d;
+            transition: all 0.3s ease;
+        }
+        .view-more-card:hover {
+            border-color: #58a6ff;
+            background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+        .view-more-card .progress-title {
+            color: #58a6ff;
+        }
+        .view-more-card .progress-percentage {
+            color: #58a6ff !important;
+        }
+        .view-more-card .progress-text {
+            color: #58a6ff !important;
+        }
+        .status {
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        .status.success {
+            background: #0c2d6b;
+            color: #58a6ff;
+            border: 1px solid #1f6feb;
+        }
+        .status.info {
+            background: #1c1f23;
+            color: #8b949e;
+            border: 1px solid #30363d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Cards de Progresso por Categoria</h1>
+        
+        <div class="test-section">
+            <h3>📊 Status dos Scripts</h3>
+            <div id="scriptStatus"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Controles de Teste</h3>
+            <button class="btn" onclick="createTestData()">📝 Criar Dados de Teste</button>
+            <button class="btn btn-secondary" onclick="clearTestData()">🗑️ Limpar Dados</button>
+            <button class="btn" onclick="renderTestCards()">🔄 Renderizar Cards</button>
+            <button class="btn btn-secondary" onclick="checkData()">🔍 Verificar Dados</button>
+            <a href="dashboard.html" class="btn btn-secondary">📊 Ir para Dashboard</a>
+        </div>
+
+        <div class="test-section">
+            <h3>📈 Cards de Progresso por Categoria</h3>
+            <div class="progress-grid" id="testProgressGrid">
+                <!-- Cards serão renderizados aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar status dos scripts
+        function checkScriptStatus() {
+            const statusDiv = document.getElementById('scriptStatus');
+            const scripts = [
+                'session-manager.js',
+                'dashboard-progress-cards.js',
+                'progress-sync.js'
+            ];
+            
+            let statusHTML = '';
+            scripts.forEach(script => {
+                const exists = typeof window[script.replace('.js', '').replace('-', '_')] !== 'undefined';
+                statusHTML += `
+                    <div class="status ${exists ? 'success' : 'info'}">
+                        ${exists ? '✅' : '❌'} ${script}: ${exists ? 'Carregado' : 'Não encontrado'}
+                    </div>
+                `;
+            });
+            
+            statusDiv.innerHTML = statusHTML;
+        }
+
+        // Criar dados de teste
+        function createTestData() {
+            console.log('📝 Criando dados de teste...');
+            
+            // Criar categorias de teste
+            const testCategories = [
+                {
+                    id: 'cat_salmos',
+                    name: 'Salmos',
+                    description: 'Meditações sobre os Salmos da Bíblia',
+                    icon: '📖',
+                    color: '#7ee787'
+                },
+                {
+                    id: 'cat_jaculatorias',
+                    name: 'Jaculatórias',
+                    description: 'Orações breves e fervorosas',
+                    icon: '🙏',
+                    color: '#f85149'
+                },
+                {
+                    id: 'cat_evangelho',
+                    name: 'Evangelho do dia',
+                    description: 'Meditações sobre o Evangelho',
+                    icon: '✝️',
+                    color: '#d29922'
+                },
+                {
+                    id: 'cat_imitacao',
+                    name: 'Imitação de Cristo',
+                    description: 'Baseado na obra de Tomás de Kempis',
+                    icon: '📚',
+                    color: '#a371f7'
+                },
+                {
+                    id: 'cat_amigos',
+                    name: 'Amigos de Cristo',
+                    description: 'Meditações sobre amizade espiritual',
+                    icon: '👥',
+                    color: '#58a6ff'
+                },
+                {
+                    id: 'cat_fundamentos',
+                    name: 'Os Fundamentos da Vida Espiritual',
+                    description: 'Bases da vida espiritual',
+                    icon: '🏗️',
+                    color: '#f0883e'
+                },
+                {
+                    id: 'cat_perfeicao',
+                    name: 'A perfeição cristã',
+                    description: 'Caminho da perfeição',
+                    icon: '⭐',
+                    color: '#f0b400'
+                },
+                {
+                    id: 'cat_virtudes',
+                    name: 'Virtudes Morais',
+                    description: 'Desenvolvimento das virtudes',
+                    icon: '💎',
+                    color: '#db61a2'
+                }
+            ];
+
+            // Criar meditações de teste
+            const testMeditations = [
+                {
+                    id: 'med_salmo_1',
+                    title: 'Salmo 1 - O Homem Bem-Aventurado',
+                    categoryId: 'cat_salmos',
+                    status: 'completed'
+                },
+                {
+                    id: 'med_salmo_23',
+                    title: 'Salmo 23 - O Senhor é meu Pastor',
+                    categoryId: 'cat_salmos',
+                    status: 'pending'
+                },
+                {
+                    id: 'med_jac_1',
+                    title: 'Jaculatória da Manhã',
+                    categoryId: 'cat_jaculatorias',
+                    status: 'completed'
+                },
+                {
+                    id: 'med_jac_2',
+                    title: 'Jaculatória da Tarde',
+                    categoryId: 'cat_jaculatorias',
+                    status: 'in_progress'
+                },
+                {
+                    id: 'med_jac_3',
+                    title: 'Jaculatória da Noite',
+                    categoryId: 'cat_jaculatorias',
+                    status: 'pending'
+                }
+            ];
+
+            // Salvar no localStorage
+            localStorage.setItem('categories', JSON.stringify(testCategories));
+            localStorage.setItem('meditations', JSON.stringify(testMeditations));
+            
+            console.log('✅ Dados de teste criados:', {
+                categories: testCategories.length,
+                meditations: testMeditations.length
+            });
+            
+            alert('✅ Dados de teste criados com sucesso!');
+        }
+
+        // Limpar dados de teste
+        function clearTestData() {
+            localStorage.removeItem('categories');
+            localStorage.removeItem('meditations');
+            localStorage.removeItem('personalized_meditations');
+            console.log('🗑️ Dados de teste removidos');
+            alert('🗑️ Dados de teste removidos!');
+        }
+
+        // Verificar dados
+        function checkData() {
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            const personalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+            
+            console.log('🔍 Dados atuais:', {
+                categories: categories.length,
+                meditations: meditations.length,
+                personalized: personalized.length
+            });
+            
+            alert(`📊 Dados encontrados:\n- Categorias: ${categories.length}\n- Meditações: ${meditations.length}\n- Personalizadas: ${personalized.length}`);
+        }
+
+        // Renderizar cards de teste
+        function renderTestCards() {
+            const progressGrid = document.getElementById('testProgressGrid');
+            if (!progressGrid) return;
+
+            // Simular a função getCategoriesDataForDashboard
+            function getTestCategoriesData() {
+                try {
+                    const adminCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+                    const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+                    
+                    let allCategories = [];
+                    
+                    adminCategories.forEach(category => {
+                        const categoryMeditations = adminMeditations.filter(m => m.categoryId === category.id);
+                        const completedMeditations = categoryMeditations.filter(m => m.status === 'completed').length;
+                        const inProgressMeditations = categoryMeditations.filter(m => 
+                            m.status === 'in_progress' || m.status === 'pending'
+                        ).length;
+                        
+                        allCategories.push({
+                            id: category.id,
+                            name: category.name,
+                            description: category.description,
+                            icon: category.icon || '📖',
+                            color: category.color || '#7ee787',
+                            total: categoryMeditations.length,
+                            completed: completedMeditations,
+                            inProgress: inProgressMeditations,
+                            locked: 0
+                        });
+                    });
+                    
+                    return allCategories;
+                } catch (error) {
+                    console.error('❌ Erro ao carregar dados das categorias:', error);
+                    return [];
+                }
+            }
+
+            const categories = getTestCategoriesData();
+            
+            // Limpar grid
+            progressGrid.innerHTML = '';
+            
+            if (categories.length === 0) {
+                progressGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #8b949e;">
+                        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Nenhuma categoria encontrada</p>
+                        <p style="font-size: 0.9rem;">Clique em "Criar Dados de Teste" para começar</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Ordenar por número de meditações completadas (decrescente) e pegar apenas os 3 primeiros
+            const topCategories = categories
+                .sort((a, b) => b.completed - a.completed)
+                .slice(0, 3);
+            
+            // Renderizar os 3 cards principais
+            topCategories.forEach(category => {
+                const percentage = category.total > 0 ? Math.round((category.completed / category.total) * 100) : 0;
+                
+                const progressCard = document.createElement('div');
+                progressCard.className = 'progress-card';
+                progressCard.setAttribute('data-category', category.id);
+                
+                progressCard.innerHTML = `
+                    <div class="progress-header">
+                        <span class="progress-title">${category.icon} ${category.name}</span>
+                        <span class="progress-percentage">${percentage}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                    <div class="progress-text">${category.completed} de ${category.total} meditações completadas</div>
+                `;
+                
+                progressGrid.appendChild(progressCard);
+            });
+            
+            // Adicionar card "Ver + categorias" se há mais de 3 categorias
+            if (categories.length > 3) {
+                const remainingCount = categories.length - 3;
+                const viewMoreCard = document.createElement('div');
+                viewMoreCard.className = 'progress-card view-more-card';
+                viewMoreCard.style.cursor = 'pointer';
+                viewMoreCard.onclick = function() {
+                    alert(`📊 Redirecionando para ver todas as ${categories.length} categorias...`);
+                };
+                
+                viewMoreCard.innerHTML = `
+                    <div class="progress-header">
+                        <span class="progress-title">📊 Ver + categorias</span>
+                        <span class="progress-percentage">+${remainingCount}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%; background: #58a6ff;"></div>
+                    </div>
+                    <div class="progress-text">Clique para ver todas as ${categories.length} categorias</div>
+                `;
+                
+                progressGrid.appendChild(viewMoreCard);
+            }
+            
+            console.log('✅ Cards de teste renderizados:', topCategories.length + (categories.length > 3 ? 1 : 0));
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            checkScriptStatus();
+            renderTestCards();
+        });
+    </script>
+</body>
+</html> 

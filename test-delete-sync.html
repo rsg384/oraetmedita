@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Sincronização de Exclusão</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+        }
+        .test-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #5a6fd8;
+        }
+        .danger {
+            background: #dc3545;
+        }
+        .danger:hover {
+            background: #c82333;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+        .meditation-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Sincronização de Exclusão</h1>
+        
+        <div class="test-section">
+            <h3>📋 Verificar Supabase Manager</h3>
+            <button onclick="checkSupabaseManager()">Verificar Supabase Manager</button>
+            <div id="supabase-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Carregar Meditações Personalizadas</h3>
+            <button onclick="loadPersonalizedMeditations()">Carregar do LocalStorage</button>
+            <button onclick="loadSupabaseMeditations()">Carregar do Supabase</button>
+            <div id="meditations-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🗑️ Testar Exclusão</h3>
+            <button onclick="testDeleteFunction()">Testar Função de Exclusão</button>
+            <button onclick="deleteRandomMeditation()" class="danger">Excluir Meditação Aleatória</button>
+            <div id="delete-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔄 Verificar Sincronização</h3>
+            <button onclick="checkSync()">Verificar Sincronização</button>
+            <div id="sync-result" class="result"></div>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        let currentMeditations = [];
+
+        // Verificar Supabase Manager
+        function checkSupabaseManager() {
+            const result = document.getElementById('supabase-result');
+            result.innerHTML = '';
+            
+            try {
+                if (window.supabaseManager) {
+                    result.innerHTML += '✅ Supabase Manager disponível\n';
+                    result.innerHTML += `📝 Tipo: ${typeof window.supabaseManager}\n`;
+                    result.innerHTML += `🔗 URL: ${window.supabaseManager.supabaseUrl}\n`;
+                } else {
+                    result.innerHTML += '❌ Supabase Manager não disponível\n';
+                }
+            } catch (error) {
+                result.innerHTML += `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Carregar meditações do LocalStorage
+        function loadPersonalizedMeditations() {
+            const result = document.getElementById('meditations-result');
+            result.innerHTML = '🔄 Carregando meditações do LocalStorage...\n';
+            
+            try {
+                const personalizedData = localStorage.getItem('personalized_meditations');
+                if (personalizedData) {
+                    currentMeditations = JSON.parse(personalizedData);
+                    result.innerHTML = `✅ Meditações carregadas do LocalStorage: ${currentMeditations.length}\n\n`;
+                    
+                    currentMeditations.forEach((meditation, index) => {
+                        result.innerHTML += `${index + 1}. ${meditation.title}\n`;
+                        result.innerHTML += `   ID: ${meditation.id}\n`;
+                        result.innerHTML += `   Tópico: ${meditation.topic}\n`;
+                        result.innerHTML += `   Status: ${meditation.status}\n\n`;
+                    });
+                } else {
+                    result.innerHTML = '❌ Nenhuma meditação encontrada no LocalStorage\n';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Carregar meditações do Supabase
+        async function loadSupabaseMeditations() {
+            const result = document.getElementById('meditations-result');
+            result.innerHTML = '🔄 Carregando meditações do Supabase...\n';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('Supabase Manager não disponível');
+                }
+                
+                const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations();
+                result.innerHTML = `✅ Meditações carregadas do Supabase: ${supabaseMeditations.length}\n\n`;
+                
+                supabaseMeditations.forEach((meditation, index) => {
+                    result.innerHTML += `${index + 1}. ${meditation.title}\n`;
+                    result.innerHTML += `   ID: ${meditation.id}\n`;
+                    result.innerHTML += `   Meditation ID: ${meditation.meditation_id}\n`;
+                    result.innerHTML += `   Tópico: ${meditation.topic}\n`;
+                    result.innerHTML += `   Status: ${meditation.status}\n\n`;
+                });
+            } catch (error) {
+                result.innerHTML = `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Testar função de exclusão
+        function testDeleteFunction() {
+            const result = document.getElementById('delete-result');
+            result.innerHTML = '🧪 Testando função de exclusão...\n';
+            
+            try {
+                // Simular uma meditação para teste
+                const testMeditation = {
+                    id: 'test-meditation-id',
+                    title: 'Meditação de Teste',
+                    topic: 'Teste',
+                    status: 'pending'
+                };
+                
+                result.innerHTML += '📝 Meditação de teste criada\n';
+                result.innerHTML += `   ID: ${testMeditation.id}\n`;
+                result.innerHTML += `   Título: ${testMeditation.title}\n`;
+                
+                // Verificar se a função existe
+                if (typeof deleteMeditation === 'function') {
+                    result.innerHTML += '✅ Função deleteMeditation encontrada\n';
+                } else {
+                    result.innerHTML += '❌ Função deleteMeditation não encontrada\n';
+                }
+                
+                // Verificar se é async
+                if (deleteMeditation.constructor.name === 'AsyncFunction') {
+                    result.innerHTML += '✅ Função é assíncrona\n';
+                } else {
+                    result.innerHTML += '⚠️ Função não é assíncrona\n';
+                }
+                
+            } catch (error) {
+                result.innerHTML += `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Excluir meditação aleatória
+        async function deleteRandomMeditation() {
+            const result = document.getElementById('delete-result');
+            result.innerHTML = '🗑️ Excluindo meditação aleatória...\n';
+            
+            try {
+                if (currentMeditations.length === 0) {
+                    result.innerHTML += '❌ Nenhuma meditação disponível para exclusão\n';
+                    return;
+                }
+                
+                // Escolher meditação aleatória
+                const randomIndex = Math.floor(Math.random() * currentMeditations.length);
+                const meditationToDelete = currentMeditations[randomIndex];
+                
+                result.innerHTML += `📝 Meditação selecionada: ${meditationToDelete.title}\n`;
+                result.innerHTML += `   ID: ${meditationToDelete.id}\n`;
+                
+                // Chamar função de exclusão
+                await deleteMeditation(meditationToDelete.id);
+                
+                result.innerHTML += '✅ Função de exclusão executada\n';
+                
+            } catch (error) {
+                result.innerHTML += `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Verificar sincronização
+        async function checkSync() {
+            const result = document.getElementById('sync-result');
+            result.innerHTML = '🔄 Verificando sincronização...\n';
+            
+            try {
+                // Carregar do LocalStorage
+                const localStorageData = localStorage.getItem('personalized_meditations');
+                const localMeditations = localStorageData ? JSON.parse(localStorageData) : [];
+                
+                result.innerHTML += `📱 LocalStorage: ${localMeditations.length} meditações\n`;
+                
+                // Carregar do Supabase
+                if (window.supabaseManager) {
+                    const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations();
+                    result.innerHTML += `☁️ Supabase: ${supabaseMeditations.length} meditações\n`;
+                    
+                    // Comparar IDs
+                    const localIds = localMeditations.map(m => m.id).sort();
+                    const supabaseIds = supabaseMeditations.map(m => m.meditation_id).sort();
+                    
+                    const localIdsStr = localIds.join(', ');
+                    const supabaseIdsStr = supabaseIds.join(', ');
+                    
+                    result.innerHTML += `\n📱 IDs LocalStorage: ${localIdsStr}\n`;
+                    result.innerHTML += `☁️ IDs Supabase: ${supabaseIdsStr}\n`;
+                    
+                    if (localIds.length === supabaseIds.length && localIds.every((id, index) => id === supabaseIds[index])) {
+                        result.innerHTML += '\n✅ Sincronização OK - IDs coincidem\n';
+                    } else {
+                        result.innerHTML += '\n⚠️ Sincronização inconsistente - IDs não coincidem\n';
+                    }
+                } else {
+                    result.innerHTML += '❌ Supabase Manager não disponível\n';
+                }
+                
+            } catch (error) {
+                result.innerHTML += `❌ Erro: ${error.message}\n`;
+            }
+        }
+
+        // Função de exclusão simulada (baseada na função real)
+        async function deleteMeditation(meditationId) {
+            console.log('🗑️ Iniciando exclusão da meditação:', meditationId);
+            
+            try {
+                // Obter usuário atual
+                const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                const userId = currentUser.id || 'anonymous';
+                
+                const personalizedData = localStorage.getItem('personalized_meditations');
+                if (personalizedData) {
+                    const allMeditations = JSON.parse(personalizedData);
+                    
+                    // Verificar se a meditação existe antes de deletar
+                    const meditationToDelete = allMeditations.find(med => 
+                        med.id === meditationId && med.userId === userId
+                    );
+                    
+                    if (meditationToDelete) {
+                        console.log('📝 Meditação encontrada para exclusão:', meditationToDelete.title);
+                        
+                        // Sincronizar com Supabase se disponível
+                        console.log('🔄 Verificando Supabase Manager...');
+                        if (window.supabaseManager) {
+                            try {
+                                console.log('📤 Excluindo meditação personalizada do Supabase...');
+                                
+                                // Buscar a meditação no Supabase pelo meditation_id
+                                const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations();
+                                const supabaseMeditation = supabaseMeditations.find(med => 
+                                    med.meditation_id === meditationId
+                                );
+                                
+                                if (supabaseMeditation) {
+                                    console.log('🗑️ Excluindo do Supabase:', supabaseMeditation.id);
+                                    await window.supabaseManager.deletePersonalizedMeditation(supabaseMeditation.id);
+                                    console.log('✅ Meditação excluída do Supabase com sucesso');
+                                } else {
+                                    console.log('⚠️ Meditação não encontrada no Supabase');
+                                }
+                            } catch (supabaseError) {
+                                console.error('⚠️ Erro ao excluir do Supabase:', supabaseError);
+                                console.log('ℹ️ Meditação excluída apenas localmente');
+                            }
+                        } else {
+                            console.log('ℹ️ Supabase Manager não disponível - exclusão apenas local');
+                        }
+                        
+                        // Remover apenas a meditação do usuário atual
+                        const updatedMeditations = allMeditations.filter(med => 
+                            !(med.id === meditationId && med.userId === userId)
+                        );
+                        localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                        
+                        console.log('✅ Meditação excluída com sucesso!');
+                    } else {
+                        console.log('❌ Meditação não encontrada.');
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro ao excluir meditação:', error);
+            }
+        }
+
+        // Verificar Supabase Manager ao carregar
+        window.addEventListener('load', function() {
+            setTimeout(checkSupabaseManager, 1000);
+        });
+    </script>
+</body>
+</html> 

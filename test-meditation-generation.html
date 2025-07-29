@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Geração de Meditações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-result {
+            background: #f0f0f0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste de Geração de Meditações</h1>
+    
+    <div>
+        <label for="topic">Tópico para teste:</label>
+        <input type="text" id="topic" value="A humildade cristã" style="width: 300px; padding: 8px; margin: 10px;">
+        <button onclick="testGeneration()">Testar Geração</button>
+        <button onclick="clearResults()">Limpar Resultados</button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        // Função para gerar 7 meditações personalizadas completas com tamanhos específicos
+        function generatePersonalizedMeditations(topic) {
+            try {
+                console.log('🎯 Iniciando generatePersonalizedMeditations com tópico:', topic);
+                
+                if (!topic || typeof topic !== 'string') {
+                    throw new Error('Tópico inválido fornecido para generatePersonalizedMeditations');
+                }
+
+                const meditationTitles = [
+                    `A Essência de ${topic} na Vida Cristã`,
+                    `${topic}: Um Dom de Deus`,
+                    `Cultivando ${topic} através da Oração`,
+                    `${topic} e a Graça Divina`,
+                    `O Caminho de ${topic} na Sagrada Escritura`,
+                    `${topic}: Reflexão e Contemplação`,
+                    `${topic} como Fruto do Espírito Santo`
+                ];
+
+                // Função para gerar texto longo para leitura (20 páginas)
+                function generateReadingText(title, topic) {
+                    return `<h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 24px;">${title}</h2>
+                    
+                    <div style="text-align: justify; line-height: 1.8; font-size: 16px; color: #34495e;">
+                        <p><strong>[Bíblia Sagrada, Mt 22,37]</strong> "Amarás o Senhor teu Deus de todo o teu coração, de toda a tua alma e de todo o teu espírito". Esta passagem fundamental nos ensina que ${topic} deve ser total e absoluto. O amor divino não admite divisões ou meias medidas. Quando cultivamos ${topic} com todo o nosso ser, naturalmente manifestamos esta virtude também para com o próximo.</p>
+                        
+                        <p><strong>[Catecismo da Igreja Católica, nn. 1822-1829]</strong> A Sagrada Escritura nos revela que ${topic} é uma expressão concreta do amor divino que deve permear todas as dimensões de nossa existência. Como nos ensina o Catecismo da Igreja Católica, ${topic} não é apenas uma virtude humana, mas uma participação no próprio amor de Deus.</p>
+                        
+                        <p><strong>[Encíclica "Deus Caritas Est", Bento XVI]</strong> Através dos séculos, os santos e doutores da Igreja testemunharam que ${topic} é o caminho seguro para a santidade e a união com Deus. A tradição católica nos mostra que ${topic} é uma graça que flui do coração de Cristo e se manifesta em nossa vida através da ação do Espírito Santo.</p>
+                    </div>`;
+                }
+
+                // Função para gerar texto longo para meditação (20 páginas)
+                function generateMeditationText(title, topic) {
+                    return `<h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 24px;">${title}</h2>
+                    
+                    <div style="text-align: justify; line-height: 1.8; font-size: 16px; color: #34495e;">
+                        <p><strong>[Bíblia Sagrada, 1Jo 4,8]</strong> ${topic} é mais que uma virtude humana - é um reflexo da própria natureza de Deus. Como cristãos, somos chamados a manifestar ${topic} em todas as nossas ações, seguindo o exemplo de Cristo. ${topic} não é apenas um sentimento ou uma atitude, mas uma disposição profunda do coração que nos transforma interiormente.</p>
+                        
+                        <p><strong>[Catecismo da Igreja Católica, nn. 1822-1829]</strong> Quando cultivamos ${topic}, nos tornamos mais semelhantes a Deus, que é a fonte de todo bem. Esta virtude nos capacita para amar como Deus ama e para servir como Cristo serviu. A tradição católica nos ensina que ${topic} é uma participação na própria vida divina, uma graça que nos é concedida para que possamos viver como filhos de Deus.</p>
+                        
+                        <p><strong>[Santa Teresa de Ávila, "Castelo Interior"]</strong> Os santos, através de seus escritos e exemplos de vida, nos mostram que ${topic} é o caminho seguro para a santidade e a união com Deus. A teologia espiritual, fundamentada na Sagrada Escritura e na tradição da Igreja, nos revela que ${topic} é uma virtude que se desenvolve através da cooperação humana com a graça divina.</p>
+                    </div>`;
+                }
+
+                // Função para gerar texto para oração (10 páginas)
+                function generatePrayerText(title, topic) {
+                    return `<h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 24px;">${title}</h2>
+                    
+                    <div style="text-align: justify; line-height: 1.8; font-size: 16px; color: #34495e;">
+                        <p><strong>[Bíblia Sagrada, Mt 22,37]</strong> Senhor, ensina-me a viver ${topic} em todas as circunstâncias da minha vida. Que eu possa ser um instrumento do teu amor e manifestar ${topic} em minhas palavras e ações. Ajuda-me a reconhecer que ${topic} é um dom que vem de ti e que deve ser cultivado com humildade e gratidão.</p>
+                        
+                        <p><strong>[Catecismo da Igreja Católica, nn. 1822-1829]</strong> Que eu possa viver ${topic} não por minhas forças, mas pela tua graça que me sustenta. Que eu possa ser um testemunho vivo de ${topic} no mundo, mostrando através de minha vida que esta virtude é fruto da tua graça.</p>
+                        
+                        <p><strong>[Encíclica "Deus Caritas Est", Bento XVI]</strong> Deus de bondade, agradeço-te pelo dom de ${topic} que me concedes. Ajuda-me a reconhecer que tudo vem de ti e a usar este dom para glorificar teu nome. Que eu possa cultivar ${topic} em meu coração e manifestá-la em todas as minhas relações. <strong>Amém.</strong></p>
+                    </div>`;
+                }
+
+                // Função para gerar texto para contemplação (10 páginas)
+                function generateContemplationText(title, topic) {
+                    return `<h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 24px;">${title}</h2>
+                    
+                    <div style="text-align: justify; line-height: 1.8; font-size: 16px; color: #34495e;">
+                        <p><strong>[Bíblia Sagrada, 1Jo 4,8]</strong> Contemplar ${topic} é contemplar a própria face de Deus. Em silêncio, deixe-se envolver pela presença divina que manifesta ${topic} em sua plenitude. Sinta-se envolvido pelo amor de Deus que é a fonte de todo ${topic}. Deixe-se ser transformado por esta experiência divina e permita que ${topic} se torne parte de sua natureza renovada.</p>
+                        
+                        <p><strong>[Catecismo da Igreja Católica, nn. 1822-1829]</strong> No repouso da contemplação, sinta-se envolvido pelo amor de Deus que é a fonte de todo ${topic}. Deixe-se ser transformado por esta experiência divina e reconheça que ${topic} é um dom precioso que Deus coloca em suas mãos. Em silêncio, agradeça e permita que este dom frutifique em sua vida.</p>
+                        
+                        <p><strong>[Encíclica "Deus Caritas Est", Bento XVI]</strong> Contemple ${topic} como um dom precioso que Deus coloca em suas mãos. Em silêncio, agradeça e permita que este dom frutifique em sua vida. Reconheça que ${topic} é uma graça que flui do coração de Deus e deixe-se ser inundado por esta graça transformadora.</p>
+                    </div>`;
+                }
+
+                const references = [
+                    `Referências: Mt 22,37; Catecismo da Igreja Católica, nn. 1822-1829; Encíclica "Deus Caritas Est" de Bento XVI; Escritos de Santo Agostinho sobre o amor; Documentos do Concílio Vaticano II.`,
+                    `Referências: Fl 4,13; Encíclicas de São João Paulo II; Escritos de Santa Teresa de Ávila; Teologia espiritual de São João da Cruz; Documentos da Igreja sobre a graça.`,
+                    `Referências: Mt 26,41; Catecismo da Igreja Católica, nn. 2558-2758; Encíclica "Redemptoris Mater" de São João Paulo II; Escritos de Santa Teresinha do Menino Jesus; Tradição monástica dos Padres do Deserto.`,
+                    `Referências: 2Cor 13,13; Catecismo da Igreja Católica, nn. 1996-2005; Encíclicas de Pio XII e Paulo VI sobre a graça; Santo Agostinho e Santo Tomás de Aquino; Concílio Vaticano II.`,
+                    `Referências: Sl 119,105; Dei Verbum (Concílio Vaticano II); Santo Ambrósio e São Jerônimo; Tradição judaico-cristã; Comentários bíblicos dos santos.`,
+                    `Referências: Mt 5,48; Lumen Gentium (Concílio Vaticano II); São Francisco de Sales e Santa Teresa de Ávila; Encíclicas sobre a santidade; Tradição ascética da Igreja.`,
+                    `Referências: Gl 5,22; Catecismo da Igreja Católica, nn. 1832; Encíclicas sobre o Espírito Santo; Teologia pneumatológica; São João da Cruz e místicos da Igreja.`
+                ];
+
+                const meditationsArray = meditationTitles.map((title, index) => {
+                    // Usar os textos completos com formatação HTML
+                    const reading = generateReadingText(title, topic);
+                    const meditation = generateMeditationText(title, topic);
+                    const prayer = generatePrayerText(title, topic);
+                    const contemplation = generateContemplationText(title, topic);
+                    const referenceText = references[index] || `Referências sobre ${topic} baseadas em documentos católicos.`;
+                    
+                    return {
+                        id: index + 1,
+                        title: title,
+                        duration: `${15 + (index * 2)} min`,
+                        status: 'pending',
+                        reading: reading,
+                        meditation: meditation,
+                        prayer: prayer,
+                        contemplation: contemplation,
+                        references: referenceText,
+                        createdAt: new Date().toISOString()
+                    };
+                });
+                
+                return {
+                    category: topic,
+                    icon: '✨',
+                    total: 7,
+                    completed: 0,
+                    meditations: meditationsArray
+                };
+            } catch (error) {
+                console.error('❌ Erro em generatePersonalizedMeditations:', error);
+                console.error('❌ Stack trace:', error.stack);
+                throw new Error(`Falha na geração de meditações: ${error.message}`);
+            }
+        }
+
+        function testGeneration() {
+            const topic = document.getElementById('topic').value.trim();
+            const resultsDiv = document.getElementById('results');
+            
+            if (!topic) {
+                addResult('❌ Por favor, digite um tópico para testar.', 'error');
+                return;
+            }
+            
+            addResult('🔄 Iniciando teste de geração...', 'info');
+            
+            try {
+                console.log('🧪 Testando geração com tópico:', topic);
+                
+                const result = generatePersonalizedMeditations(topic);
+                
+                console.log('✅ Resultado da geração:', result);
+                
+                if (result && result.meditations && result.meditations.length === 7) {
+                    addResult(`✅ Teste bem-sucedido! Geradas ${result.meditations.length} meditações sobre "${topic}"`, 'success');
+                    
+                    // Mostrar detalhes da primeira meditação
+                    const firstMeditation = result.meditations[0];
+                    addResult(`📖 Primeira meditação: "${firstMeditation.title}"`, 'info');
+                    addResult(`⏱️ Duração: ${firstMeditation.duration}`, 'info');
+                    addResult(`📝 Leitura: ${firstMeditation.reading.substring(0, 100)}...`, 'info');
+                    addResult(`🧘 Meditação: ${firstMeditation.meditation.substring(0, 100)}...`, 'info');
+                    addResult(`🙏 Oração: ${firstMeditation.prayer.substring(0, 100)}...`, 'info');
+                    addResult(`🕊️ Contemplação: ${firstMeditation.contemplation.substring(0, 100)}...`, 'info');
+                    
+                } else {
+                    addResult('❌ Erro: Estrutura de resultado inválida', 'error');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro no teste:', error);
+                addResult(`❌ Erro no teste: ${error.message}`, 'error');
+            }
+        }
+        
+        function addResult(message, type) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+    </script>
+</body>
+</html> 

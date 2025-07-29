@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Tabela Meditations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .meditation-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .meditation-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .meditation-category {
+            color: #666;
+            font-size: 12px;
+        }
+        .meditation-duration {
+            color: #888;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Teste - Tabela Meditations</h1>
+        
+        <div class="test-section">
+            <h3>Testes Disponíveis</h3>
+            <button class="btn" onclick="testTableExists()">Testar se Tabela Existe</button>
+            <button class="btn" onclick="getAllMeditations()">Buscar Todas as Meditações</button>
+            <button class="btn" onclick="getMeditationsByCategory()">Buscar por Categoria</button>
+            <button class="btn" onclick="createTestMeditation()">Criar Meditação de Teste</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Resultados</h3>
+            <div id="results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Logs</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        function showResults(title, data) {
+            const resultsElement = document.getElementById('results');
+            let html = `<h4>${title}</h4>`;
+            
+            if (Array.isArray(data)) {
+                data.forEach(meditation => {
+                    html += `
+                        <div class="meditation-card">
+                            <div class="meditation-title">${meditation.title}</div>
+                            <div class="meditation-category">Categoria: ${meditation.category_id}</div>
+                            <div class="meditation-duration">Duração: ${meditation.duration_minutes} min</div>
+                            <div class="meditation-duration">Nível: ${meditation.difficulty_level}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            
+            resultsElement.innerHTML = html;
+        }
+
+        async function testTableExists() {
+            log('🔍 Testando se a tabela meditations existe...');
+            
+            try {
+                const response = await fetch('https://pmqxibhulaybvpjvdvyp.supabase.co/rest/v1/meditations?select=count', {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc'
+                    }
+                });
+                
+                log(`📊 Status: ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Tabela meditations existe! Total: ${data.length} meditações`);
+                    showResults('Tabela Existe', data);
+                } else {
+                    const errorText = await response.text();
+                    log(`❌ Erro: ${response.status} - ${response.statusText}`);
+                    log(`📋 Detalhes: ${errorText}`);
+                }
+            } catch (error) {
+                log(`❌ Erro na requisição: ${error.message}`);
+            }
+        }
+
+        async function getAllMeditations() {
+            log('📖 Buscando todas as meditações...');
+            
+            try {
+                const response = await fetch('https://pmqxibhulaybvpjvdvyp.supabase.co/rest/v1/meditations?select=*&order=sort_order.asc', {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc'
+                    }
+                });
+                
+                log(`📊 Status: ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Encontradas ${data.length} meditações`);
+                    showResults('Todas as Meditações', data);
+                } else {
+                    const errorText = await response.text();
+                    log(`❌ Erro: ${response.status} - ${response.statusText}`);
+                    log(`📋 Detalhes: ${errorText}`);
+                }
+            } catch (error) {
+                log(`❌ Erro na requisição: ${error.message}`);
+            }
+        }
+
+        async function getMeditationsByCategory() {
+            log('🏷️ Buscando meditações por categoria...');
+            
+            try {
+                // Primeiro, buscar uma categoria
+                const categoryResponse = await fetch('https://pmqxibhulaybvpjvdvyp.supabase.co/rest/v1/categories?select=id,name&limit=1', {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc'
+                    }
+                });
+                
+                if (categoryResponse.ok) {
+                    const categories = await categoryResponse.json();
+                    if (categories.length > 0) {
+                        const categoryId = categories[0].id;
+                        const categoryName = categories[0].name;
+                        
+                        log(`🔍 Buscando meditações da categoria: ${categoryName} (ID: ${categoryId})`);
+                        
+                        const meditationResponse = await fetch(`https://pmqxibhulaybvpjvdvyp.supabase.co/rest/v1/meditations?select=*&category_id=eq.${categoryId}`, {
+                            headers: {
+                                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc',
+                                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc'
+                            }
+                        });
+                        
+                        if (meditationResponse.ok) {
+                            const meditations = await meditationResponse.json();
+                            log(`✅ Encontradas ${meditations.length} meditações na categoria ${categoryName}`);
+                            showResults(`Meditações da Categoria: ${categoryName}`, meditations);
+                        } else {
+                            const errorText = await meditationResponse.text();
+                            log(`❌ Erro ao buscar meditações: ${meditationResponse.status} - ${meditationResponse.statusText}`);
+                            log(`📋 Detalhes: ${errorText}`);
+                        }
+                    } else {
+                        log('❌ Nenhuma categoria encontrada');
+                    }
+                } else {
+                    log('❌ Erro ao buscar categorias');
+                }
+            } catch (error) {
+                log(`❌ Erro na requisição: ${error.message}`);
+            }
+        }
+
+        async function createTestMeditation() {
+            log('🚀 Criando meditação de teste...');
+            
+            try {
+                const response = await fetch('https://pmqxibhulaybvpjvdvyp.supabase.co/rest/v1/meditations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc'
+                    },
+                    body: JSON.stringify({
+                        title: 'Meditação de Teste - ' + Date.now(),
+                        content: 'Esta é uma meditação de teste criada para verificar se a tabela está funcionando corretamente.',
+                        duration_minutes: 10,
+                        difficulty_level: 'beginner',
+                        status: 'active',
+                        sort_order: 999,
+                        is_active: true
+                    })
+                });
+                
+                log(`📊 Status: ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Meditação criada com sucesso! ID: ${data[0].id}`);
+                    showResults('Meditação Criada', data);
+                } else {
+                    const errorText = await response.text();
+                    log(`❌ Erro: ${response.status} - ${response.statusText}`);
+                    log(`📋 Detalhes: ${errorText}`);
+                }
+            } catch (error) {
+                log(`❌ Erro na requisição: ${error.message}`);
+            }
+        }
+
+        log('🚀 Página carregada. Clique nos botões para testar a tabela meditations.');
+    </script>
+</body>
+</html> 

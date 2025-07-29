@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Correção do Botão Delete</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .btn:hover {
+            background: #2ea043;
+        }
+        .btn-danger {
+            background: #da3633;
+        }
+        .btn-danger:hover {
+            background: #f85149;
+        }
+        .btn-secondary {
+            background: #21262d;
+            border: 1px solid #30363d;
+        }
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+        .schedule-item {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .schedule-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .schedule-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .action-btn:hover {
+            background: #30363d;
+        }
+        .action-btn.delete {
+            color: #f85149;
+        }
+        .action-btn.delete:hover {
+            background: #da3633;
+            color: white;
+        }
+        .status {
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        .status.success {
+            background: #0c2d6b;
+            color: #58a6ff;
+            border: 1px solid #1f6feb;
+        }
+        .status.error {
+            background: #da3633;
+            color: #ff7b72;
+            border: 1px solid #f85149;
+        }
+        .status.info {
+            background: #1c1f23;
+            color: #8b949e;
+            border: 1px solid #30363d;
+        }
+        .log {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.8rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .test-result {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Correção do Botão Delete</h1>
+        
+        <div class="test-section">
+            <h3>📊 Status do Sistema</h3>
+            <div id="systemStatus"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Controles de Teste</h3>
+            <button class="btn" onclick="createTestData()">📝 Criar Dados de Teste</button>
+            <button class="btn btn-secondary" onclick="clearTestData()">🗑️ Limpar Dados</button>
+            <button class="btn" onclick="loadAndDisplay()">🔄 Carregar e Exibir</button>
+            <button class="btn btn-secondary" onclick="testDeleteFunction()">🧪 Testar Delete</button>
+            <button class="btn btn-secondary" onclick="clearLog()">📋 Limpar Log</button>
+            <a href="agendamentos.html" class="btn btn-secondary">📅 Ir para Agendamentos</a>
+        </div>
+
+        <div class="test-section">
+            <h3>📅 Agendamentos de Teste</h3>
+            <div id="schedulesDisplay">
+                <!-- Agendamentos serão exibidos aqui -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 Log de Operações</h3>
+            <div id="logOutput" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ Resultados dos Testes</h3>
+            <div id="testResults"></div>
+        </div>
+    </div>
+
+    <script>
+        let schedules = [];
+        let logOutput = [];
+        let testResults = [];
+
+        // Função para adicionar log
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            logOutput.push(logEntry);
+            
+            const logElement = document.getElementById('logOutput');
+            if (logElement) {
+                logElement.textContent = logOutput.join('\n');
+                logElement.scrollTop = logElement.scrollHeight;
+            }
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Função para adicionar resultado de teste
+        function addTestResult(testName, success, details = '') {
+            const result = {
+                name: testName,
+                success: success,
+                details: details,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            testResults.push(result);
+            updateTestResultsDisplay();
+        }
+
+        // Atualizar exibição dos resultados
+        function updateTestResultsDisplay() {
+            const resultsDiv = document.getElementById('testResults');
+            if (!resultsDiv) return;
+
+            const resultsHTML = testResults.map(result => `
+                <div class="test-result">
+                    <div class="status ${result.success ? 'success' : 'error'}">
+                        ${result.success ? '✅' : '❌'} ${result.name}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #8b949e; margin-top: 0.5rem;">
+                        ${result.details} (${result.timestamp})
+                    </div>
+                </div>
+            `).join('');
+
+            resultsDiv.innerHTML = resultsHTML;
+        }
+
+        // Verificar status do sistema
+        function checkSystemStatus() {
+            const statusDiv = document.getElementById('systemStatus');
+            const sessionManager = window.sessionManager;
+            const currentUser = sessionManager ? sessionManager.getCurrentUser() : null;
+            
+            let statusHTML = '';
+            statusHTML += `<div class="status ${sessionManager ? 'success' : 'error'}">`;
+            statusHTML += `${sessionManager ? '✅' : '❌'} SessionManager: ${sessionManager ? 'Disponível' : 'Não encontrado'}`;
+            statusHTML += '</div>';
+            
+            if (currentUser) {
+                statusHTML += `<div class="status success">`;
+                statusHTML += `👤 Usuário: ${currentUser.name} (ID: ${currentUser.id})`;
+                statusHTML += '</div>';
+            } else {
+                statusHTML += `<div class="status info">`;
+                statusHTML += `👤 Usuário: Nenhum usuário logado`;
+                statusHTML += '</div>';
+            }
+            
+            statusDiv.innerHTML = statusHTML;
+        }
+
+        // Criar dados de teste
+        function createTestData() {
+            addLog('📝 Criando dados de teste...');
+            
+            const testSchedules = [
+                {
+                    id: 'test_delete_1_' + Date.now(),
+                    title: 'Meditação Teste 1',
+                    time: '08:00',
+                    category: 'Salmos',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 15,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: 'Agendamento de teste 1',
+                    userId: 'test_user',
+                    userName: 'Usuário Teste'
+                },
+                {
+                    id: 'test_delete_2_' + Date.now(),
+                    title: 'Meditação Teste 2',
+                    time: '12:00',
+                    category: 'Jaculatórias',
+                    days: ['ter', 'qui'],
+                    notifications: false,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 10,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: 'Agendamento de teste 2',
+                    userId: 'test_user',
+                    userName: 'Usuário Teste'
+                },
+                {
+                    id: 'test_delete_3_' + Date.now(),
+                    title: 'Meditação Teste 3',
+                    time: '18:00',
+                    category: 'Evangelho',
+                    days: ['dom'],
+                    notifications: true,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 20,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: 'Agendamento de teste 3',
+                    userId: 'test_user',
+                    userName: 'Usuário Teste'
+                }
+            ];
+
+            localStorage.setItem('user_schedules', JSON.stringify(testSchedules));
+            addLog(`✅ ${testSchedules.length} agendamentos de teste criados`);
+            addTestResult('Criação de Dados', true, `${testSchedules.length} agendamentos criados`);
+            
+            loadAndDisplay();
+        }
+
+        // Limpar dados de teste
+        function clearTestData() {
+            localStorage.removeItem('user_schedules');
+            schedules = [];
+            addLog('🗑️ Dados de teste removidos');
+            addTestResult('Limpeza de Dados', true, 'Dados removidos com sucesso');
+            loadAndDisplay();
+        }
+
+        // Carregar e exibir dados
+        function loadAndDisplay() {
+            try {
+                const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+                const userId = currentUser ? currentUser.id : 'test_user';
+                
+                schedules = allSchedules.filter(schedule => schedule.userId === userId);
+                
+                addLog(`📅 Carregados ${schedules.length} agendamentos para usuário ${userId}`);
+                displaySchedules();
+                addTestResult('Carregamento de Dados', true, `${schedules.length} agendamentos carregados`);
+                
+            } catch (error) {
+                addLog(`❌ Erro ao carregar dados: ${error.message}`, 'error');
+                addTestResult('Carregamento de Dados', false, error.message);
+            }
+        }
+
+        // Exibir agendamentos
+        function displaySchedules() {
+            const displayDiv = document.getElementById('schedulesDisplay');
+            
+            if (schedules.length === 0) {
+                displayDiv.innerHTML = `
+                    <div class="status info">
+                        📅 Nenhum agendamento encontrado
+                    </div>
+                `;
+                return;
+            }
+
+            const schedulesHTML = schedules.map(schedule => `
+                <div class="schedule-item" data-schedule-id="${schedule.id}">
+                    <div class="schedule-info">
+                        <span>🕐 ${schedule.time}</span>
+                        <span>📖 ${schedule.category}</span>
+                        <span>📅 ${schedule.days.join(', ')}</span>
+                        <span>👤 ${schedule.userName}</span>
+                    </div>
+                    <div class="schedule-actions">
+                        <button class="action-btn" onclick="editSchedule('${schedule.id}')">✏️</button>
+                        <button class="action-btn delete" onclick="deleteSchedule('${schedule.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+
+            displayDiv.innerHTML = schedulesHTML;
+            addLog(`✅ ${schedules.length} agendamentos exibidos`);
+        }
+
+        // Função de delete testada
+        function deleteSchedule(scheduleId) {
+            addLog(`🗑️ === INÍCIO DA EXCLUSÃO ===`);
+            addLog(`🗑️ ID recebido: ${scheduleId} (Tipo: ${typeof scheduleId})`);
+            addLog(`📋 Total de agendamentos antes: ${schedules.length}`);
+            
+            if (!scheduleId) {
+                addLog(`❌ ID do agendamento é inválido: ${scheduleId}`, 'error');
+                addTestResult('Validação de ID', false, 'ID inválido');
+                return;
+            }
+            
+            if (confirm('Tem certeza que deseja excluir este agendamento?')) {
+                try {
+                    const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+                    const userId = currentUser ? currentUser.id : 'test_user';
+                    
+                    addLog(`👤 Usuário atual: ${currentUser ? currentUser.name : 'N/A'} (ID: ${userId})`);
+                    
+                    const scheduleIdStr = String(scheduleId);
+                    addLog(`🔄 ID convertido para string: ${scheduleIdStr}`);
+                    
+                    const scheduleExists = schedules.some(s => String(s.id) === scheduleIdStr);
+                    addLog(`🔍 Agendamento existe? ${scheduleExists}`);
+                    
+                    if (!scheduleExists) {
+                        addLog(`❌ Agendamento não encontrado no array local`, 'error');
+                        addTestResult('Verificação de Existência', false, 'Agendamento não encontrado');
+                        return;
+                    }
+                    
+                    const originalLength = schedules.length;
+                    const filteredSchedules = schedules.filter(s => String(s.id) !== scheduleIdStr);
+                    schedules = filteredSchedules;
+                    
+                    const removed = originalLength - schedules.length;
+                    addLog(`🔍 Resultado da filtragem: ${originalLength} → ${schedules.length} (removidos: ${removed})`);
+                    
+                    if (removed !== 1) {
+                        addLog(`❌ Erro na filtragem: número incorreto de itens removidos`, 'error');
+                        addTestResult('Filtragem', false, `Removidos ${removed} itens (esperado: 1)`);
+                        return;
+                    }
+                    
+                    const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                    addLog(`💾 Total de agendamentos no localStorage: ${allSchedules.length}`);
+                    
+                    const otherUsersSchedules = allSchedules.filter(schedule => schedule.userId !== userId);
+                    const updatedAllSchedules = [...otherUsersSchedules, ...schedules];
+                    
+                    localStorage.setItem('user_schedules', JSON.stringify(updatedAllSchedules));
+                    addLog(`✅ localStorage atualizado. Total final: ${updatedAllSchedules.length}`);
+                    
+                    displaySchedules();
+                    
+                    addLog(`✅ === EXCLUSÃO CONCLUÍDA COM SUCESSO ===`);
+                    addTestResult('Exclusão Completa', true, `Agendamento ${scheduleId} removido com sucesso`);
+                    
+                } catch (error) {
+                    addLog(`❌ Erro durante a exclusão: ${error.message}`, 'error');
+                    addTestResult('Exclusão', false, error.message);
+                }
+            } else {
+                addLog(`❌ Exclusão cancelada pelo usuário`);
+                addTestResult('Confirmação do Usuário', false, 'Usuário cancelou a exclusão');
+            }
+        }
+
+        // Função de edição (simulada)
+        function editSchedule(scheduleId) {
+            addLog(`✏️ Função de edição chamada para: ${scheduleId}`);
+            alert(`Função de edição para agendamento: ${scheduleId}`);
+        }
+
+        // Testar função de delete
+        function testDeleteFunction() {
+            addLog('🧪 Testando função de delete...');
+            
+            if (schedules.length === 0) {
+                addLog('⚠️ Nenhum agendamento para testar', 'error');
+                addTestResult('Teste de Delete', false, 'Nenhum agendamento disponível');
+                return;
+            }
+            
+            const testSchedule = schedules[0];
+            addLog(`🧪 Testando exclusão do agendamento: ${testSchedule.title} (ID: ${testSchedule.id})`);
+            
+            // Simular exclusão sem confirmação
+            const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            const userId = currentUser ? currentUser.id : 'test_user';
+            
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            const otherUsersSchedules = allSchedules.filter(schedule => schedule.userId !== userId);
+            
+            const updatedSchedules = schedules.filter(s => s.id !== testSchedule.id);
+            const updatedAllSchedules = [...otherUsersSchedules, ...updatedSchedules];
+            
+            localStorage.setItem('user_schedules', JSON.stringify(updatedAllSchedules));
+            schedules = updatedSchedules;
+            
+            addLog(`✅ Teste de exclusão concluído. Agendamentos restantes: ${schedules.length}`);
+            displaySchedules();
+            addTestResult('Teste Automático', true, `Agendamento ${testSchedule.id} removido automaticamente`);
+        }
+
+        // Limpar log
+        function clearLog() {
+            logOutput = [];
+            testResults = [];
+            document.getElementById('logOutput').textContent = '';
+            updateTestResultsDisplay();
+            addLog('📋 Log limpo');
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🚀 Página de teste carregada');
+            checkSystemStatus();
+            loadAndDisplay();
+        });
+    </script>
+</body>
+</html> 

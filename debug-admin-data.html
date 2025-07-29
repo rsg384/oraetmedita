@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Dados do Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .debug-title {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .data-item {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .data-key {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .data-value {
+            margin-top: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .empty-data {
+            color: #dc3545;
+            font-style: italic;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug - Dados do Admin no localStorage</h1>
+    
+    <div class="debug-section">
+        <h2 class="debug-title">Ações</h2>
+        <button class="btn" onclick="refreshData()">🔄 Atualizar Dados</button>
+        <button class="btn btn-danger" onclick="clearAllData()">🗑️ Limpar Todos os Dados</button>
+        <button class="btn" onclick="exportData()">📤 Exportar Dados</button>
+        <button class="btn" onclick="importData()">📥 Importar Dados</button>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">📊 Dados das Categorias (categories)</h2>
+        <div id="categories-data"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">📖 Dados das Meditações (meditations)</h2>
+        <div id="meditations-data"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">✨ Meditações Personalizadas (personalized_meditations)</h2>
+        <div id="personalized-data"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">📚 Histórico de Meditações (personalized_meditations_history)</h2>
+        <div id="history-data"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">👤 Dados do Usuário (userData)</h2>
+        <div id="user-data"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">📈 Progresso do Usuário (userProgress)</h2>
+        <div id="progress-data"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">⚙️ Configurações (settings)</h2>
+        <div id="settings-data"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2 class="debug-title">🔑 Dados de Acesso</h2>
+        <div id="access-data"></div>
+    </div>
+
+    <script>
+        function refreshData() {
+            displayData('categories-data', 'categories', 'Categorias');
+            displayData('meditations-data', 'meditations', 'Meditações');
+            displayData('personalized-data', 'personalized_meditations', 'Meditações Personalizadas');
+            displayData('history-data', 'personalized_meditations_history', 'Histórico');
+            displayData('user-data', 'userData', 'Dados do Usuário');
+            displayData('progress-data', 'userProgress', 'Progresso');
+            displayData('settings-data', 'settings', 'Configurações');
+            displayAccessData();
+        }
+
+        function displayData(elementId, key, title) {
+            const element = document.getElementById(elementId);
+            const data = localStorage.getItem(key);
+            
+            if (!data) {
+                element.innerHTML = `<div class="data-item"><span class="empty-data">❌ Nenhum dado encontrado para "${key}"</span></div>`;
+                return;
+            }
+
+            try {
+                const parsedData = JSON.parse(data);
+                let content = `<div class="data-item">`;
+                content += `<div class="data-key">${title} (${key}) - ${Array.isArray(parsedData) ? parsedData.length + ' itens' : 'objeto'}</div>`;
+                content += `<div class="data-value">${JSON.stringify(parsedData, null, 2)}</div>`;
+                content += `</div>`;
+                element.innerHTML = content;
+            } catch (error) {
+                element.innerHTML = `<div class="data-item"><span class="empty-data">❌ Erro ao processar dados: ${error.message}</span></div>`;
+            }
+        }
+
+        function displayAccessData() {
+            const element = document.getElementById('access-data');
+            let content = '';
+            
+            // Verificar todas as chaves que começam com 'access_'
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('access_')) {
+                    const data = localStorage.getItem(key);
+                    try {
+                        const parsedData = JSON.parse(data);
+                        content += `<div class="data-item">`;
+                        content += `<div class="data-key">${key}</div>`;
+                        content += `<div class="data-value">${JSON.stringify(parsedData, null, 2)}</div>`;
+                        content += `</div>`;
+                    } catch (error) {
+                        content += `<div class="data-item"><span class="empty-data">❌ Erro ao processar ${key}: ${error.message}</span></div>`;
+                    }
+                }
+            }
+            
+            if (!content) {
+                content = `<div class="data-item"><span class="empty-data">❌ Nenhum dado de acesso encontrado</span></div>`;
+            }
+            
+            element.innerHTML = content;
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Tem certeza que deseja limpar TODOS os dados do localStorage? Esta ação não pode ser desfeita!')) {
+                localStorage.clear();
+                alert('🗑️ Todos os dados foram limpos!');
+                refreshData();
+            }
+        }
+
+        function exportData() {
+            const data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key) {
+                    data[key] = localStorage.getItem(key);
+                }
+            }
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'admin-data-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            for (const [key, value] of Object.entries(data)) {
+                                localStorage.setItem(key, value);
+                            }
+                            alert('✅ Dados importados com sucesso!');
+                            refreshData();
+                        } catch (error) {
+                            alert('❌ Erro ao importar dados: ' + error.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Carregar dados ao abrir a página
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+        });
+    </script>
+</body>
+</html> 

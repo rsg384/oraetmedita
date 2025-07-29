@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Sincronização de Agendamentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #218838;
+        }
+        .test-output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .schedule-form {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .schedule-form input, .schedule-form select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .day-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .day-button {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .day-button.active {
+            background: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste - Sincronização de Agendamentos</h1>
+    
+    <div class="test-section">
+        <h2>📝 Criar Agendamento de Teste</h2>
+        <form id="scheduleForm" class="schedule-form">
+            <input type="text" id="scheduleTitle" placeholder="Título do agendamento" value="Meditação de Teste">
+            <select id="scheduleCategory">
+                <option value="Evangelho">Evangelho</option>
+                <option value="Princípios">Princípios</option>
+                <option value="Imitação">Imitação</option>
+                <option value="Jaculatórias">Jaculatórias</option>
+            </select>
+            <input type="time" id="scheduleTime" value="08:00">
+            <div>
+                <label>Dias da semana:</label>
+                <div class="day-buttons">
+                    <button type="button" class="day-button" data-day="seg">Seg</button>
+                    <button type="button" class="day-button" data-day="ter">Ter</button>
+                    <button type="button" class="day-button" data-day="qua">Qua</button>
+                    <button type="button" class="day-button" data-day="qui">Qui</button>
+                    <button type="button" class="day-button" data-day="sex">Sex</button>
+                    <button type="button" class="day-button" data-day="sab">Sáb</button>
+                    <button type="button" class="day-button" data-day="dom">Dom</button>
+                </div>
+            </div>
+            <label>
+                <input type="checkbox" id="scheduleNotifications" checked>
+                Ativar notificações
+            </label>
+            <button type="button" class="test-button" onclick="createTestSchedule()">Criar Agendamento</button>
+        </form>
+        <div id="create-output" class="test-output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Status dos Agendamentos</h2>
+        <button class="test-button" onclick="checkSchedulesStatus()">Verificar Status</button>
+        <button class="test-button" onclick="listAllSchedules()">Listar Todos</button>
+        <button class="test-button" onclick="clearAllSchedules()">Limpar Todos</button>
+        <div id="status-output" class="test-output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔄 Teste de Sincronização</h2>
+        <button class="test-button" onclick="testSynchronization()">Testar Sincronização</button>
+        <button class="test-button" onclick="simulateMultipleSchedules()">Criar Múltiplos</button>
+        <div id="sync-output" class="test-output"></div>
+    </div>
+
+    <script src="session-manager.js"></script>
+    <script src="sync-schedules-user.js"></script>
+    <script src="fix-schedules-display.js"></script>
+    
+    <script>
+        let selectedDays = ['seg', 'qua', 'sex'];
+        
+        // Configurar botões de dias
+        document.querySelectorAll('.day-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const day = this.dataset.day;
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active');
+                    selectedDays = selectedDays.filter(d => d !== day);
+                } else {
+                    this.classList.add('active');
+                    selectedDays.push(day);
+                }
+            });
+        });
+        
+        // Marcar dias padrão
+        document.querySelectorAll('.day-button').forEach(btn => {
+            if (selectedDays.includes(btn.dataset.day)) {
+                btn.classList.add('active');
+            }
+        });
+        
+        function logToElement(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            element.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            element.scrollTop = element.scrollHeight;
+        }
+        
+        function createTestSchedule() {
+            const output = document.getElementById('create-output');
+            output.textContent = '';
+            
+            try {
+                const title = document.getElementById('scheduleTitle').value;
+                const category = document.getElementById('scheduleCategory').value;
+                const time = document.getElementById('scheduleTime').value;
+                const notifications = document.getElementById('scheduleNotifications').checked;
+                
+                if (!title || !category || !time) {
+                    logToElement('create-output', 'Por favor, preencha todos os campos', 'error');
+                    return;
+                }
+                
+                const testSchedule = {
+                    title: title,
+                    category: category,
+                    time: time,
+                    days: selectedDays,
+                    notifications: notifications,
+                    createdAt: new Date().toISOString()
+                };
+                
+                logToElement('create-output', 'Criando agendamento...');
+                logToElement('create-output', `Dados: ${JSON.stringify(testSchedule, null, 2)}`);
+                
+                if (window.saveScheduleWithUser) {
+                    const savedSchedule = window.saveScheduleWithUser(testSchedule);
+                    logToElement('create-output', 'Agendamento criado com sucesso!', 'success');
+                    logToElement('create-output', `ID: ${savedSchedule.id}`);
+                    logToElement('create-output', `userId: ${savedSchedule.userId}`);
+                    
+                    // Limpar formulário
+                    document.getElementById('scheduleTitle').value = 'Meditação de Teste';
+                    document.getElementById('scheduleTime').value = '08:00';
+                    document.getElementById('scheduleNotifications').checked = true;
+                    
+                } else {
+                    logToElement('create-output', 'Função saveScheduleWithUser não disponível', 'error');
+                }
+                
+            } catch (error) {
+                logToElement('create-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function checkSchedulesStatus() {
+            const output = document.getElementById('status-output');
+            output.textContent = '';
+            
+            logToElement('status-output', '=== VERIFICANDO STATUS ===');
+            
+            // Verificar localStorage
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            logToElement('status-output', `Total de agendamentos: ${allSchedules.length}`);
+            
+            if (allSchedules.length > 0) {
+                allSchedules.forEach((schedule, index) => {
+                    logToElement('status-output', `${index + 1}. ${schedule.title} - ${schedule.category} - ${schedule.time} (${schedule.userId || 'sem userId'})`);
+                });
+            }
+            
+            // Verificar usuário atual
+            if (window.sessionManager) {
+                const user = window.sessionManager.getCurrentUser();
+                if (user) {
+                    logToElement('status-output', `Usuário atual: ${user.name} (${user.id})`, 'success');
+                } else {
+                    logToElement('status-output', 'Nenhum usuário logado', 'warning');
+                }
+            }
+        }
+        
+        function listAllSchedules() {
+            const output = document.getElementById('status-output');
+            output.textContent = '';
+            
+            logToElement('status-output', '=== LISTANDO TODOS OS AGENDAMENTOS ===');
+            
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            
+            if (allSchedules.length === 0) {
+                logToElement('status-output', 'Nenhum agendamento encontrado', 'warning');
+                return;
+            }
+            
+            allSchedules.forEach((schedule, index) => {
+                logToElement('status-output', `\n--- Agendamento ${index + 1} ---`);
+                logToElement('status-output', `ID: ${schedule.id}`);
+                logToElement('status-output', `Título: ${schedule.title}`);
+                logToElement('status-output', `Categoria: ${schedule.category}`);
+                logToElement('status-output', `Horário: ${schedule.time}`);
+                logToElement('status-output', `Dias: ${schedule.days.join(', ')}`);
+                logToElement('status-output', `Notificações: ${schedule.notifications ? 'Sim' : 'Não'}`);
+                logToElement('status-output', `userId: ${schedule.userId || 'N/A'}`);
+                logToElement('status-output', `userName: ${schedule.userName || 'N/A'}`);
+                logToElement('status-output', `Criado em: ${schedule.createdAt}`);
+            });
+        }
+        
+        function clearAllSchedules() {
+            if (confirm('Tem certeza que deseja limpar todos os agendamentos?')) {
+                localStorage.removeItem('user_schedules');
+                logToElement('status-output', 'Todos os agendamentos foram removidos', 'success');
+            }
+        }
+        
+        function testSynchronization() {
+            const output = document.getElementById('sync-output');
+            output.textContent = '';
+            
+            logToElement('sync-output', '=== TESTANDO SINCRONIZAÇÃO ===');
+            
+            try {
+                if (window.loadUserSchedules) {
+                    const userSchedules = window.loadUserSchedules();
+                    logToElement('sync-output', `Agendamentos carregados: ${userSchedules.length}`, 'success');
+                    
+                    userSchedules.forEach((schedule, index) => {
+                        logToElement('sync-output', `${index + 1}. ${schedule.title} - ${schedule.userId}`);
+                    });
+                } else {
+                    logToElement('sync-output', 'Função loadUserSchedules não disponível', 'error');
+                }
+            } catch (error) {
+                logToElement('sync-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function simulateMultipleSchedules() {
+            const output = document.getElementById('sync-output');
+            output.textContent = '';
+            
+            logToElement('sync-output', '=== CRIANDO MÚLTIPLOS AGENDAMENTOS ===');
+            
+            const testSchedules = [
+                {
+                    title: 'Meditação Matinal',
+                    category: 'Evangelho',
+                    time: '06:00',
+                    days: ['seg', 'ter', 'qua', 'qui', 'sex'],
+                    notifications: true
+                },
+                {
+                    title: 'Oração da Tarde',
+                    category: 'Princípios',
+                    time: '18:00',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true
+                },
+                {
+                    title: 'Reflexão Noturna',
+                    category: 'Imitação',
+                    time: '21:00',
+                    days: ['ter', 'qui', 'sab'],
+                    notifications: false
+                }
+            ];
+            
+            testSchedules.forEach((schedule, index) => {
+                setTimeout(() => {
+                    try {
+                        const scheduleWithDate = {
+                            ...schedule,
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        if (window.saveScheduleWithUser) {
+                            const savedSchedule = window.saveScheduleWithUser(scheduleWithDate);
+                            logToElement('sync-output', `✅ Agendamento ${index + 1} criado: ${savedSchedule.title}`, 'success');
+                        } else {
+                            logToElement('sync-output', `❌ Erro ao criar agendamento ${index + 1}`, 'error');
+                        }
+                    } catch (error) {
+                        logToElement('sync-output', `❌ Erro ao criar agendamento ${index + 1}: ${error.message}`, 'error');
+                    }
+                }, index * 500);
+            });
+        }
+        
+        // Executar verificação inicial
+        window.addEventListener('load', () => {
+            setTimeout(checkSchedulesStatus, 1000);
+        });
+    </script>
+</body>
+</html> 

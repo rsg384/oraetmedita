@@ -1,0 +1,74 @@
+[
+  {
+    "key": "cmd+shift+d",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./cursor-deploy.sh\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+s",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./cursor-deploy.sh -s\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+c",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./cursor-deploy.sh -c\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+m",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./cursor-deploy.sh -m \""
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+h",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./cursor-deploy.sh -h\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+g",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "git status\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+p",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "git push origin main\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+a",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "git add .\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+k",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "git commit -m \"📝 [AUTO] Deploy automático - $(date)\"\n"
+    },
+    "when": "terminalFocus"
+  }
+] 

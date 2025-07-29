@@ -1,0 +1,3222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Meditações - Ora et Medita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            --background-dark: #0F0F23;
+            --background-card: #1A1A2E;
+            --background-light: #2A2A3E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --accent-green: #10B981;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --border-color: #374151;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Modo Claro */
+        :root[data-theme="light"] {
+            --background-dark: #F8FAFC;
+            --background-card: #FFFFFF;
+            --background-light: #F1F5F9;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border-color: #E2E8F0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 100vw;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--background-card);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .sidebar-nav {
+            padding: 2rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 2rem 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border-left-color: var(--accent-blue);
+        }
+
+        .nav-item.active {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border-left-color: var(--accent-blue);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            background: var(--background-dark);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .theme-icon {
+            transition: all 0.3s ease;
+        }
+
+        .theme-icon.sun-icon {
+            display: block;
+        }
+
+        .theme-icon.moon-icon {
+            display: none;
+        }
+
+        :root[data-theme="light"] .theme-icon.sun-icon {
+            display: none;
+        }
+
+        :root[data-theme="light"] .theme-icon.moon-icon {
+            display: block;
+        }
+
+        .notification-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .notification-btn:hover {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--background-light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .hero-greeting {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--background-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state-text {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .create-meditation-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .create-meditation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 280px; /* Posiciona após o menu lateral */
+            top: 0;
+            width: calc(100% - 280px); /* Ocupa toda a largura menos o menu */
+            height: 100vh;
+            background: var(--background-dark);
+        }
+
+        .modal-content {
+            background: var(--background-dark);
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--background-card);
+            flex-shrink: 0;
+        }
+
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--background-light);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .modal-header h2 {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .close {
+            color: var(--text-secondary);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--background-light);
+        }
+
+        .close:hover {
+            color: var(--text-primary);
+            background: var(--background-card);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .meditation-content {
+            color: var(--text-primary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .meditation-topic,
+        .meditation-duration {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            background: var(--background-light);
+            border-radius: 8px;
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        /* Centralizar elementos de data e duração no modal */
+        .meditation-content .meditation-date,
+        .meditation-content .meditation-duration {
+            text-align: center;
+            display: block;
+            margin: 0.5rem auto;
+            max-width: 300px;
+        }
+
+        .meditation-text {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-align: justify;
+            background: var(--background-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            background: var(--background-card);
+            flex-shrink: 0;
+        }
+
+        /* Meditation Item Cards - App Style */
+        .category-card {
+            background: var(--background-light) !important;
+            border-radius: 12px !important;
+            padding: 1rem !important;
+            border: 1px solid var(--border-color) !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            margin-bottom: 0.75rem !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .category-card:hover {
+            background: var(--background-card);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .meditation-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, var(--background-light) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+
+
+        .meditation-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .meditation-count {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Statistics Section */
+        .stats-section {
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* My Meditations Section */
+        .my-meditations-section {
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .my-meditations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 0.5rem 0;
+            min-height: 200px;
+        }
+
+        /* Cards de Meditações */
+        .meditation-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            width: 100%;
+            height: 200px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .meditation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .meditation-card-content {
+            padding: 1.25rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .meditation-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            border-radius: 8px;
+            padding: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            transform: scale(1.05);
+        }
+
+        .delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        .meditation-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .meditation-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+        }
+
+        .meditation-topic {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+
+
+        .meditation-card-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+
+
+        .meditation-date {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Estado vazio para meditações */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--background-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        /* Estilos para o campo estilo ChatGPT */
+        .chatgpt-style-input {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 12px;
+        }
+
+        .chatgpt-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .chatgpt-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .chatgpt-send-btn {
+            background: var(--accent-green);
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatgpt-send-btn:hover {
+            background: #059669;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .chatgpt-style-input:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
+        }
+
+        .chatgpt-send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .chatgpt-send-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Categories Grid */
+        .categories-section {
+            margin-top: 2rem;
+        }
+
+        .categories-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .category-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .category-count {
+            background: var(--accent-purple);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-date {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .action-btn.delete {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+        }
+
+        /* Estilos para o novo design de cards com meditações */
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .category-info {
+            flex: 1;
+        }
+
+        .category-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .category-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .meditation-count {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .meditation-list {
+            margin: 1rem 0;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+
+
+        .meditation-info {
+            flex: 1;
+        }
+
+        .meditation-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .meditation-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .status-icon {
+            font-size: 1rem;
+        }
+
+        .status-completed {
+            color: var(--accent-green);
+        }
+
+        .status-in-progress {
+            color: var(--accent-blue);
+        }
+
+        .status-locked {
+            color: var(--text-secondary);
+        }
+
+        .meditation-duration {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .no-meditations {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 1rem;
+            font-style: italic;
+        }
+
+        .action-btn.delete:hover {
+            background: #b91c1c;
+        }
+
+        /* Estilos para os novos cards no formato das categorias normais */
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .category-info h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 0.25rem 0;
+        }
+
+        .category-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--background-light);
+            border-radius: 3px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-purple);
+            color: white;
+            border-color: var(--accent-purple);
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .my-meditations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .my-meditations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 280px; /* Espaço para o menu lateral */
+            top: 0;
+            width: calc(100% - 280px); /* Largura total menos o menu */
+            height: 100vh;
+            background: var(--background-primary);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--background-primary);
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            box-shadow: none;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 3rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--background-card);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--background-dark);
+            color: var(--text-primary);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .close:hover {
+            background: var(--background-dark);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 3rem;
+            max-height: none;
+            overflow-y: visible;
+            background: var(--background-card);
+            margin: 1rem 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .meditation-content {
+            line-height: 1.8;
+        }
+
+        .meditation-date,
+        .meditation-duration {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .meditation-text {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        .modal-footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--background-card);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary {
+            background: var(--background-dark);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background-light);
+        }
+
+        /* Responsividade do modal */
+        @media (max-width: 768px) {
+            .modal {
+                left: 0;
+                width: 100%;
+            }
+            
+            .modal-header,
+            .modal-footer {
+                padding: 1.5rem;
+            }
+            
+            .modal-body {
+                padding: 2rem;
+                margin: 1rem;
+            }
+        }
+
+        /* Schedules Section Styles */
+        .my-schedules-section {
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-schedule-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+        }
+
+        .add-schedule-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .schedules-list {
+            margin-top: 1rem;
+        }
+
+        /* Modal Styles for Schedule */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--background-card);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--background-light);
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-select,
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-light);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .weekdays {
+            display: flex;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .weekday-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            background: var(--background-light);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .weekday-btn:hover {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .weekday-btn.active {
+            background: var(--accent-purple);
+            color: white;
+            border-color: var(--accent-purple);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        /* Schedule Item Styles */
+        .schedule-item {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.3);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .schedule-info {
+            margin-bottom: 1rem;
+        }
+
+        .schedule-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .schedule-details {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .schedule-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .schedule-actions .btn-secondary {
+            padding: 8px 16px;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="logo">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                            <defs>
+                                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="32" height="32" rx="8" fill="url(#logoGradient)"/>
+                            <!-- Estrela maior no centro superior -->
+                            <path d="M16 8 L18 12 L22 12 L19 15 L20 19 L16 17 L12 19 L13 15 L10 12 L14 12 Z" fill="white"/>
+                            <!-- Estrela menor esquerda -->
+                            <path d="M10 20 L11 22 L13 22 L11.5 23.5 L12 25.5 L10 24.5 L8 25.5 L8.5 23.5 L7 22 L9 22 Z" fill="white"/>
+                            <!-- Estrela menor direita -->
+                            <path d="M22 20 L23 22 L25 22 L23.5 23.5 L24 25.5 L22 24.5 L20 25.5 L20.5 23.5 L19 22 L21 22 Z" fill="white"/>
+                        </svg>
+                    </div>
+                    Ora et Medita
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Navegação</div>
+                    <a href="dashboard.html" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9,22 9,12 15,12 15,22"/>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="minhas-meditacoes.html" class="nav-item active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                        Minhas Meditações
+                    </a>
+                    <a href="categorias.html" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                        Categorias
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Progresso</div>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        Progresso
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                        Agendamentos
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Comunidade</div>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        Comunidade
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Direção Espiritual
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Conta</div>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Configurações
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16,17 21,12 16,7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Sair
+                    </a>
+                </div>
+
+
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1>Minhas Meditações</h1>
+                </div>
+                <div class="user-menu">
+                    <button class="theme-toggle-btn" onclick="toggleTheme()" title="Alternar tema">
+                        <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                    <button class="notification-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">JS</div>
+                        <span id="userName">João Silva</span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Statistics Section -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalMeditations">0</div>
+                        <div class="stat-label">TOTAL</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedMeditations">0</div>
+                        <div class="stat-label">CONCLUÍDAS</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Meditations Section -->
+            <section class="my-meditations-section">
+                <div class="section-header">
+                    <h3 class="section-title">Minhas Meditações Geradas por IA</h3>
+                </div>
+                
+                <!-- Campo de input estilo ChatGPT -->
+                <div class="chatgpt-style-input">
+                    <div class="input-container">
+                        <input type="text" class="chatgpt-input" placeholder="Digite o assunto católico que deseja meditar hoje" id="meditation-topic">
+                        <button class="chatgpt-send-btn" onclick="generateMeditation()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="my-meditations-grid" id="my-meditations-grid">
+                    <!-- As meditações personalizadas serão carregadas aqui -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Agendar Meditação</h3>
+                <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+            </div>
+            <div style="padding: 3rem; background: var(--background-card); margin: 1rem 2rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                <form id="scheduleForm">
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <!-- Opções serão carregadas dinamicamente via JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Dias da Semana</label>
+                        <div class="weekdays">
+                            <button type="button" class="weekday-btn" data-day="seg">S</button>
+                            <button type="button" class="weekday-btn" data-day="ter">T</button>
+                            <button type="button" class="weekday-btn" data-day="qua">Q</button>
+                            <button type="button" class="weekday-btn" data-day="qui">Q</button>
+                            <button type="button" class="weekday-btn" data-day="sex">S</button>
+                            <button type="button" class="weekday-btn" data-day="sab">S</button>
+                            <button type="button" class="weekday-btn" data-day="dom">D</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Horário</label>
+                        <input name="time" type="time" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notificações</label>
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+                            <input name="notifications" type="checkbox" id="notifications" checked>
+                            <label for="notifications">Ativar lembretes</label>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeScheduleModal()">Cancelar</button>
+                        <button type="submit" class="btn-primary">Salvar Agenda</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função de teste para verificar elementos DOM
+        function testDOMElements() {
+            console.log('🧪 Testando elementos DOM na página minhas-meditacoes...');
+            
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            
+            console.log('🔍 userAvatar encontrado:', !!userAvatar);
+            console.log('🔍 userName encontrado:', !!userName);
+            
+            if (userAvatar) {
+                console.log('📝 userAvatar atual:', userAvatar.textContent);
+                userAvatar.textContent = 'TEST';
+                console.log('✅ userAvatar alterado para TEST');
+            }
+            
+            if (userName) {
+                console.log('📝 userName atual:', userName.textContent);
+                userName.textContent = 'TESTE USUÁRIO';
+                console.log('✅ userName alterado para TESTE USUÁRIO');
+            }
+        }
+
+        // Função para gerar meditação
+        async function generateMeditation() {
+            console.log('🚀 Função generateMeditation chamada');
+            
+            const topicInput = document.getElementById('meditation-topic');
+            if (!topicInput) {
+                console.error('❌ Campo meditation-topic não encontrado');
+                alert('Erro: Campo de tópico não encontrado');
+                return;
+            }
+            
+            const topic = topicInput.value.trim();
+            console.log('📝 Tópico digitado:', topic);
+            
+            if (!topic) {
+                alert('Por favor, digite um assunto para a meditação');
+                return;
+            }
+            
+            // Desabilitar botão durante a geração
+            const sendBtn = document.querySelector('#meditation-topic').closest('.chatgpt-style-input').querySelector('.chatgpt-send-btn');
+            const originalText = sendBtn.innerHTML;
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="spinning">
+                    <path d="M12 2L12 6M12 18L12 22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12L6 12M18 12L22 12M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
+            
+
+            
+            try {
+                // Verificar se as funções necessárias estão disponíveis
+                console.log('🔍 Verificando se as funções necessárias estão disponíveis...');
+                console.log('checkAPIStatus disponível:', typeof checkAPIStatus);
+                console.log('generateMeditations disponível:', typeof generateMeditations);
+                console.log('chatGPTAPI disponível:', typeof chatGPTAPI);
+                
+                if (typeof checkAPIStatus !== 'function') {
+                    console.error('❌ checkAPIStatus não está disponível. Verificando chatGPTAPI...');
+                    if (typeof chatGPTAPI !== 'undefined' && typeof chatGPTAPI.checkAPIStatus === 'function') {
+                        console.log('✅ Usando chatGPTAPI.checkAPIStatus');
+                        window.checkAPIStatus = chatGPTAPI.checkAPIStatus.bind(chatGPTAPI);
+                    } else {
+                        throw new Error('Função checkAPIStatus não está disponível. Verifique se o arquivo chatgpt-api.js foi carregado corretamente.');
+                    }
+                }
+                
+                if (typeof generateMeditations !== 'function') {
+                    console.error('❌ generateMeditations não está disponível. Verificando chatGPTAPI...');
+                    if (typeof chatGPTAPI !== 'undefined' && typeof chatGPTAPI.generateMeditations === 'function') {
+                        console.log('✅ Usando chatGPTAPI.generateMeditations');
+                        window.generateMeditations = chatGPTAPI.generateMeditations.bind(chatGPTAPI);
+                    } else {
+                        throw new Error('Função generateMeditations não está disponível. Verifique se o arquivo chatgpt-api.js foi carregado corretamente.');
+                    }
+                }
+                
+                // Verificar se a API está disponível
+                console.log('🔍 Verificando status da API...');
+                const apiStatus = await checkAPIStatus();
+                console.log('📊 Status da API:', apiStatus);
+                
+                if (!apiStatus.status || apiStatus.status !== 'success') {
+                    throw new Error('API do ChatGPT não está disponível');
+                }
+                
+                // Gerar com ChatGPT usando as mesmas regras
+                console.log('🤖 Gerando meditação com ChatGPT para:', topic);
+                const result = await generateMeditations(topic);
+                console.log('📄 Resultado da geração:', result);
+                
+                if (result && result.meditations && result.meditations.length > 0) {
+                    console.log('✅ Meditação gerada:', result.meditations[0].title);
+                    
+                    // Obter usuário atual
+                    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                    const userId = currentUser.id || 'anonymous';
+                    
+                    console.log('👤 Usuário atual na geração:', currentUser.name, 'ID:', userId);
+                    
+                    // Salvar meditação personalizada no formato correto
+                    const existingPersonalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                    
+                    const meditation = result.meditations[0];
+                    const meditationWithMeta = {
+                        id: meditation.id,
+                        title: meditation.title,
+                        topic: result.category,
+                        content: meditation.content,
+                        duration: meditation.duration || '15 min',
+                        status: 'pending',
+                        createdAt: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        source: 'chatgpt',
+                        type: 'simple',
+                        userId: userId,
+                        userName: currentUser.name || 'Usuário'
+                    };
+                    
+                    // Adicionar nova meditação ao array existente
+                    const updatedMeditations = existingPersonalized.concat([meditationWithMeta]);
+                    localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                    
+                    // Sincronizar com Supabase se disponível
+                    console.log('🔄 Verificando Supabase Manager...');
+                    if (window.supabaseManager) {
+                        try {
+                            console.log('📤 Sincronizando meditação personalizada com Supabase...');
+                            
+                            const supabaseMeditationData = {
+                                meditation_id: meditationWithMeta.id,
+                                title: meditationWithMeta.title,
+                                topic: meditationWithMeta.topic,
+                                content: meditationWithMeta.content,
+                                duration: meditationWithMeta.duration,
+                                status: meditationWithMeta.status,
+                                source: meditationWithMeta.source,
+                                type: meditationWithMeta.type,
+                                user_id: meditationWithMeta.userId,
+                                user_name: meditationWithMeta.userName,
+                                created_at: meditationWithMeta.createdAt,
+                                last_updated: meditationWithMeta.lastUpdated
+                            };
+                            
+                            const supabaseResult = await window.supabaseManager.createPersonalizedMeditation(supabaseMeditationData);
+                            console.log('✅ Meditação personalizada sincronizada com Supabase:', supabaseResult);
+                            
+                        } catch (supabaseError) {
+                            console.error('⚠️ Erro ao sincronizar com Supabase:', supabaseError);
+                            console.log('ℹ️ Meditação salva apenas localmente');
+                        }
+                    } else {
+                        console.log('ℹ️ Supabase Manager não disponível - meditação salva apenas localmente');
+                    }
+                    
+                    // Adicionar ao histórico de categorias
+                    addToPersonalizedHistory({
+                        category: 'Minhas Meditações',
+                        meditations: [meditationWithMeta],
+                        total: 1,
+                        createdAt: new Date().toISOString(),
+                        userId: userId,
+                        userName: currentUser.name || 'Usuário'
+                    });
+                    
+                    // Incrementar contador total de meditações geradas
+                    incrementTotalMeditations();
+                    
+                    // Limpar campo
+                    document.getElementById('meditation-topic').value = '';
+                    
+                    // Reabilitar botão
+                    sendBtn.disabled = false;
+                    sendBtn.innerHTML = originalText;
+                    
+                    // Recarregar meditações
+                    loadPersonalizedMeditations();
+                    
+                    // Mostrar notificação de sucesso
+                    showNotification('Meditação gerada e adicionada à categoria "Minhas Meditações"!', 'success');
+                    
+                    console.log('✅ Meditação salva e página atualizada');
+                    
+                } else {
+                    throw new Error('Nenhuma meditação foi gerada');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao gerar meditação:', error);
+                
+                // Reabilitar botão
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = originalText;
+                
+                alert(`Erro ao gerar meditação: ${error.message}`);
+            }
+        }
+
+        // Função de teste para verificar elementos DOM
+        function testDOMElements() {
+            console.log('🧪 Testando elementos DOM em minhas-meditacoes...');
+            
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            
+            console.log('🔍 userAvatar encontrado:', !!userAvatar);
+            console.log('🔍 userName encontrado:', !!userName);
+            
+            if (userAvatar) {
+                console.log('📝 userAvatar atual:', userAvatar.textContent);
+                userAvatar.textContent = 'TEST';
+                console.log('✅ userAvatar alterado para TEST');
+            }
+            
+            if (userName) {
+                console.log('📝 userName atual:', userName.textContent);
+                userName.textContent = 'TESTE USUÁRIO';
+                console.log('✅ userName alterado para TESTE USUÁRIO');
+            }
+        }
+
+        // Função para carregar dados do usuário
+        function loadUserData() {
+            try {
+                console.log('🔄 Iniciando carregamento de dados do usuário...');
+                
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                const userName = userData.name || 'Usuário';
+                const userEmail = userData.email || 'user@example.com';
+                
+                console.log('📊 Dados do usuário carregados do localStorage:', userData);
+                console.log('👤 Nome do usuário:', userName);
+                
+                // Atualizar nome do usuário
+                const userNameElement = document.getElementById('userName');
+                console.log('🔍 Elemento userName encontrado:', !!userNameElement);
+                if (userNameElement) {
+                    userNameElement.textContent = userName;
+                    console.log('✅ Nome do usuário atualizado:', userName);
+                } else {
+                    console.warn('⚠️ Elemento userName não encontrado');
+                }
+                
+                // Atualizar avatar com iniciais
+                const userAvatarElement = document.getElementById('userAvatar');
+                console.log('🔍 Elemento userAvatar encontrado:', !!userAvatarElement);
+                if (userAvatarElement) {
+                    const initials = userName.split(' ').map(name => name.charAt(0)).join('').toUpperCase();
+                    userAvatarElement.textContent = initials;
+                    console.log('✅ Avatar atualizado com iniciais:', initials);
+                } else {
+                    console.warn('⚠️ Elemento userAvatar não encontrado');
+                }
+                
+                console.log('✅ Dados do usuário carregados com sucesso:', { userName, userEmail });
+            } catch (error) {
+                console.error('❌ Erro ao carregar dados do usuário:', error);
+            }
+        }
+
+        // Função para incrementar contador total de meditações
+        function incrementTotalMeditations() {
+            try {
+                console.log('📈 Incrementando contador total de meditações...');
+                
+                // Obter estatísticas atuais
+                const currentStats = JSON.parse(localStorage.getItem('minhas_meditacoes_stats') || '{}');
+                const currentTotal = currentStats.totalMeditations || 0;
+                const newTotal = currentTotal + 1;
+                
+                console.log('📊 Contador atual:', currentTotal, 'Novo contador:', newTotal);
+                
+                // Atualizar estatísticas
+                const updatedStats = {
+                    ...currentStats,
+                    totalMeditations: newTotal,
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                localStorage.setItem('minhas_meditacoes_stats', JSON.stringify(updatedStats));
+                
+                // Atualizar elemento DOM se estiver na página
+                const totalElement = document.getElementById('totalMeditations');
+                if (totalElement) {
+                    totalElement.textContent = newTotal;
+                    console.log('✅ Elemento DOM atualizado:', newTotal);
+                }
+                
+                console.log('✅ Contador total incrementado com sucesso');
+            } catch (error) {
+                console.error('❌ Erro ao incrementar contador total:', error);
+            }
+        }
+
+        // Função para incrementar contador de meditações concluídas
+        function incrementCompletedMeditations() {
+            try {
+                console.log('✅ Incrementando contador de meditações concluídas...');
+                
+                // Obter estatísticas atuais
+                const currentStats = JSON.parse(localStorage.getItem('minhas_meditacoes_stats') || '{}');
+                const currentCompleted = currentStats.completedMeditations || 0;
+                const newCompleted = currentCompleted + 1;
+                
+                console.log('📊 Contador atual:', currentCompleted, 'Novo contador:', newCompleted);
+                
+                // Atualizar estatísticas
+                const updatedStats = {
+                    ...currentStats,
+                    completedMeditations: newCompleted,
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                localStorage.setItem('minhas_meditacoes_stats', JSON.stringify(updatedStats));
+                
+                // Atualizar elemento DOM se estiver na página
+                const completedElement = document.getElementById('completedMeditations');
+                if (completedElement) {
+                    completedElement.textContent = newCompleted;
+                    console.log('✅ Elemento DOM atualizado:', newCompleted);
+                }
+                
+                console.log('✅ Contador de concluídas incrementado com sucesso');
+            } catch (error) {
+                console.error('❌ Erro ao incrementar contador de concluídas:', error);
+            }
+        }
+
+        // Função para formatar data
+        function formatDate(dateString) {
+            if (!dateString) return 'Data não disponível';
+            
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+            } catch (error) {
+                return 'Data inválida';
+            }
+        }
+
+        // Função para atualizar estatísticas
+        function updateMeditationStats(meditations) {
+            console.log('📊 Atualizando estatísticas com', meditations.length, 'meditações');
+            
+            // Tentar carregar estatísticas salvas primeiro
+            const savedStats = JSON.parse(localStorage.getItem('minhas_meditacoes_stats') || 'null');
+            
+            if (savedStats && savedStats.lastUpdated) {
+                console.log('📊 Usando estatísticas salvas:', savedStats);
+                
+                // Atualizar elementos DOM com estatísticas salvas
+                const totalElement = document.getElementById('totalMeditations');
+                const completedElement = document.getElementById('completedMeditations');
+                
+                if (totalElement) totalElement.textContent = savedStats.totalMeditations || 0;
+                if (completedElement) completedElement.textContent = savedStats.completedMeditations || 0;
+                
+                return; // Usar estatísticas salvas
+            }
+            
+            // Se não há estatísticas salvas, calcular a partir das meditações
+            console.log('📊 Calculando estatísticas a partir das meditações...');
+            
+            // Mostrar status de cada meditação para debug
+            meditations.forEach((med, index) => {
+                console.log(`🔍 Meditação ${index + 1}:`, {
+                    title: med.title,
+                    status: med.status,
+                    userId: med.userId
+                });
+            });
+            
+            const total = meditations.length;
+            const completed = meditations.filter(med => med.status === 'completed').length;
+            
+            console.log('📈 Estatísticas calculadas:', { total, completed });
+            
+            // Atualizar elementos DOM
+            const totalElement = document.getElementById('totalMeditations');
+            const completedElement = document.getElementById('completedMeditations');
+            
+            console.log('🔍 Elementos DOM encontrados:', {
+                totalElement: !!totalElement,
+                completedElement: !!completedElement
+            });
+            
+            if (totalElement) totalElement.textContent = total;
+            if (completedElement) completedElement.textContent = completed;
+            
+            // Salvar estatísticas calculadas
+            const stats = {
+                totalMeditations: total,
+                completedMeditations: completed,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('minhas_meditacoes_stats', JSON.stringify(stats));
+            console.log('✅ Estatísticas salvas:', stats);
+        }
+
+        // Função para carregar meditações personalizadas
+        function loadPersonalizedMeditations() {
+            const meditationsGrid = document.getElementById('my-meditations-grid');
+            
+            if (!meditationsGrid) {
+                console.error('❌ Elemento my-meditations-grid não encontrado');
+                return;
+            }
+            
+            console.log('✅ Elemento my-meditations-grid encontrado:', meditationsGrid);
+
+            // Verificar se há um filtro de tópico na URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const topicFilter = urlParams.get('topic');
+            
+            if (topicFilter) {
+                console.log('🔍 Filtro de tópico encontrado:', topicFilter);
+            }
+
+            try {
+                console.log('🔄 Carregando meditações personalizadas...');
+                
+                // Verificar se há uma meditação específica para abrir
+                const currentMeditation = localStorage.getItem('current_meditation');
+                if (currentMeditation) {
+                    try {
+                        const meditation = JSON.parse(currentMeditation);
+                        console.log('🎯 Meditação específica encontrada:', meditation.title);
+                        
+                        // Salvar a meditação para a página de meditação
+                        localStorage.setItem('current_meditation', JSON.stringify(meditation));
+                        
+                        // Redirecionar para a página de meditação
+                        window.location.href = 'meditacao.html?from=minhas-meditacoes';
+                        
+                        return; // Parar a execução aqui
+                    } catch (error) {
+                        console.error('❌ Erro ao processar meditação específica:', error);
+                        localStorage.removeItem('current_meditation'); // Limpar dados inválidos
+                    }
+                }
+                
+                // Obter usuário atual
+                const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                const userId = currentUser.id || 'anonymous';
+                
+                console.log('👤 Usuário atual:', currentUser.name, 'ID:', userId);
+                console.log('🔍 Dados completos do usuário:', currentUser);
+                
+                // Carregar meditações do personalized_meditations
+                const personalizedData = localStorage.getItem('personalized_meditations');
+                
+                console.log('📊 Dados do personalized_meditations:', personalizedData);
+                
+                // Debug: mostrar todas as chaves do localStorage
+                console.log('🔍 Todas as chaves do localStorage:', Object.keys(localStorage));
+                console.log('🔍 Tamanho do personalized_meditations:', personalizedData ? personalizedData.length : 0);
+                
+                let allPersonalizedMeditations = [];
+                
+                // Processar meditações do personalized_meditations
+                if (personalizedData) {
+                    try {
+                        const allMeditations = JSON.parse(personalizedData);
+                        console.log('📚 Todas as meditações carregadas:', allMeditations);
+                        
+                        console.log('🔍 Filtrando meditações...');
+                        console.log('🔍 Total de meditações no sistema:', allMeditations.length);
+                        console.log('🔍 UserId procurado:', userId);
+                        
+                        // Mostrar todas as meditações para debug
+                        allMeditations.forEach((med, index) => {
+                            console.log(`🔍 Meditação ${index + 1}:`, {
+                                title: med.title,
+                                userId: med.userId,
+                                type: med.type,
+                                matches: med.userId === userId && (med.type === 'simple' || !med.type)
+                            });
+                        });
+                        
+                        // Filtrar apenas meditações do usuário atual (sem filtro de tipo)
+                        allPersonalizedMeditations = allMeditations.filter(med => 
+                            med.userId === userId
+                        );
+                        console.log('📋 Meditações do usuário atual encontradas:', allPersonalizedMeditations.length);
+                        
+                        // Aplicar filtro de tópico se especificado na URL
+                        if (topicFilter) {
+                            console.log('🔍 Aplicando filtro de tópico:', topicFilter);
+                            const filteredMeditations = allPersonalizedMeditations.filter(med => {
+                                const medTopic = med.topic || med.category || '';
+                                const matches = medTopic.toLowerCase().includes(topicFilter.toLowerCase());
+                                console.log(`🔍 Meditação "${med.title}" - Tópico: "${medTopic}" - Match: ${matches}`);
+                                return matches;
+                            });
+                            allPersonalizedMeditations = filteredMeditations;
+                            console.log('📋 Meditações após filtro de tópico:', allPersonalizedMeditations.length);
+                        }
+                        
+                    } catch (error) {
+                        console.error('❌ Erro ao carregar personalized_meditations:', error);
+                    }
+                }
+
+                console.log('📋 Total de meditações encontradas:', allPersonalizedMeditations.length);
+
+                // Limpar grid
+                meditationsGrid.innerHTML = '';
+                console.log('🧹 Grid limpo, pronto para adicionar cards');
+                
+                // Verificar se o grid foi limpo corretamente
+                setTimeout(() => {
+                    console.log('🔍 Grid após limpeza:', meditationsGrid.children.length, 'elementos');
+                }, 100);
+
+                if (allPersonalizedMeditations.length === 0) {
+                    console.log('📭 Nenhuma meditação encontrada, mostrando estado vazio');
+                    const emptyMessage = topicFilter 
+                        ? `Nenhuma meditação encontrada para o tópico "${topicFilter}"`
+                        : 'Nenhuma meditação encontrada';
+                    const emptyDescription = topicFilter
+                        ? 'Tente criar uma nova meditação ou verificar outros tópicos'
+                        : 'Crie sua primeira meditação personalizada para começar';
+                    
+                    meditationsGrid.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📖</div>
+                            <div class="empty-state-title">${emptyMessage}</div>
+                            <div class="empty-state-description">${emptyDescription}</div>
+                            <a href="index.html" class="btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                Criar Meditação
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Ordenar por data de criação (mais recentes primeiro)
+                allPersonalizedMeditations.sort((a, b) => {
+                    const dateA = new Date(a.createdAt || 0);
+                    const dateB = new Date(b.createdAt || 0);
+                    return dateB - dateA;
+                });
+
+                // Exibir todas as meditações sem limite
+                console.log('📋 Exibindo todas as meditações:', allPersonalizedMeditations.length);
+                console.log('🎴 Detalhes das meditações:', allPersonalizedMeditations.map(m => ({ title: m.title, userId: m.userId, type: m.type })));
+                
+                // Adicionar título informativo
+                const infoTitle = document.createElement('div');
+                infoTitle.style.cssText = 'grid-column: 1 / -1; text-align: center; margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.9rem;';
+                const filterInfo = topicFilter ? ` para o tópico "${topicFilter}"` : '';
+                infoTitle.textContent = `Exibindo ${allPersonalizedMeditations.length} meditações${filterInfo} em 3 colunas`;
+                meditationsGrid.appendChild(infoTitle);
+                
+                allPersonalizedMeditations.forEach((meditation, index) => {
+                    console.log(`🎴 Criando card ${index + 1}:`, meditation.title);
+                    const card = createMeditationCard(meditation);
+                    meditationsGrid.appendChild(card);
+                    
+                    // Verificar se o card foi adicionado corretamente
+                    console.log(`✅ Card ${index + 1} adicionado ao grid`);
+                    
+                    // Verificar se o card está visível
+                    setTimeout(() => {
+                        const isVisible = card.offsetParent !== null;
+                        console.log(`🔍 Card ${index + 1} visível:`, isVisible, 'Dimensões:', card.offsetWidth, 'x', card.offsetHeight);
+                    }, 50);
+                });
+                
+                // Verificar o total de cards no grid
+                const totalCards = meditationsGrid.children.length;
+                console.log('📊 Total de cards no grid após adição:', totalCards);
+                
+                // Verificação final do grid
+                setTimeout(() => {
+                    const allCards = meditationsGrid.querySelectorAll('.meditation-card');
+                    console.log('🔍 Verificação final - Cards no DOM:', allCards.length);
+                    console.log('🔍 Verificação final - Grid children:', meditationsGrid.children.length);
+                    console.log('🔍 Verificação final - Grid visível:', meditationsGrid.offsetParent !== null);
+                    console.log('🔍 Verificação final - Grid dimensões:', meditationsGrid.offsetWidth, 'x', meditationsGrid.offsetHeight);
+                }, 200);
+                
+                // Debug: verificar se os cards estão visíveis
+                setTimeout(() => {
+                    const cards = meditationsGrid.querySelectorAll('.meditation-card');
+                    console.log('🔍 Cards encontrados no DOM:', cards.length);
+                    cards.forEach((card, index) => {
+                        console.log(`🔍 Card ${index + 1}:`, {
+                            visible: card.offsetParent !== null,
+                            width: card.offsetWidth,
+                            height: card.offsetHeight,
+                            title: card.querySelector('.meditation-title')?.textContent
+                        });
+                    });
+                }, 100);
+                
+                // Atualizar estatísticas
+                updateMeditationStats(allPersonalizedMeditations);
+
+                console.log('✅ Carregamento concluído com sucesso');
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar meditações personalizadas:', error);
+                meditationsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <div class="empty-state-title">Erro ao carregar meditações</div>
+                        <div class="empty-state-description">Tente recarregar a página</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para criar um card de meditação
+        function createMeditationCard(meditation) {
+            console.log('🎴 Criando card para:', meditation);
+            
+            const card = document.createElement('div');
+            card.className = 'meditation-card';
+            card.dataset.meditationId = meditation.id;
+            card.onclick = () => openMeditationFullPage(meditation);
+
+            const title = meditation.title || 'Meditação';
+            const category = 'Minhas Meditações'; // Categoria fixa
+            const date = formatDate(meditation.createdAt);
+
+            card.innerHTML = `
+                <div class="meditation-card-content">
+                    <div class="meditation-card-header">
+                        <div class="meditation-info">
+                            <h4 class="meditation-title">${title}</h4>
+                        </div>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteMeditation('${meditation.id}')" title="Excluir meditação">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 6h18"/>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="meditation-card-footer">
+                        <span class="meditation-date">${date}</span>
+                    </div>
+                </div>
+            `;
+
+            console.log('✅ Card criado com sucesso para:', title);
+            return card;
+        }
+
+        // Função para abrir meditação em página completa
+        function openMeditationFullPage(meditation) {
+            console.log('🚀 Abrindo meditação em página completa:', meditation);
+            
+            // Salvar dados da meditação no localStorage para a página de visualização
+            localStorage.setItem('current_meditation', JSON.stringify(meditation));
+            
+            // Redirecionar para a página de visualização da meditação com parâmetro de origem
+            window.location.href = 'meditacao.html?from=minhas-meditacoes';
+        }
+
+
+
+        // Função para regenerar meditação
+        function regenerateMeditation(meditationId) {
+            if (confirm('Deseja regenerar esta meditação? Isso criará uma nova versão.')) {
+                // Implementar regeneração
+                alert('Funcionalidade de regeneração será implementada em breve.');
+            }
+        }
+
+        // Função para decrementar contador total de meditações
+        function decrementTotalMeditations() {
+            try {
+                console.log('📉 Decrementando contador total de meditações...');
+                
+                // Obter estatísticas atuais
+                const currentStats = JSON.parse(localStorage.getItem('minhas_meditacoes_stats') || '{}');
+                const currentTotal = currentStats.totalMeditations || 0;
+                const newTotal = Math.max(0, currentTotal - 1); // Não permitir valores negativos
+                
+                console.log('📊 Contador atual:', currentTotal, 'Novo contador:', newTotal);
+                
+                // Atualizar estatísticas
+                const updatedStats = {
+                    ...currentStats,
+                    totalMeditations: newTotal,
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                localStorage.setItem('minhas_meditacoes_stats', JSON.stringify(updatedStats));
+                
+                // Atualizar elemento DOM se estiver na página
+                const totalElement = document.getElementById('totalMeditations');
+                if (totalElement) {
+                    totalElement.textContent = newTotal;
+                    console.log('✅ Elemento DOM atualizado:', newTotal);
+                }
+                
+                console.log('✅ Contador total decrementado com sucesso');
+            } catch (error) {
+                console.error('❌ Erro ao decrementar contador total:', error);
+            }
+        }
+
+        // Função para excluir meditação
+        async function deleteMeditation(meditationId) {
+            if (confirm('Tem certeza que deseja excluir esta meditação?')) {
+                try {
+                    console.log('🗑️ Iniciando exclusão da meditação:', meditationId);
+                    
+                    // Obter usuário atual
+                    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                    const userId = currentUser.id || 'anonymous';
+                    
+                    const personalizedData = localStorage.getItem('personalized_meditations');
+                    if (personalizedData) {
+                        const allMeditations = JSON.parse(personalizedData);
+                        
+                        // Verificar se a meditação existe antes de deletar
+                        const meditationToDelete = allMeditations.find(med => 
+                            med.id === meditationId && med.userId === userId
+                        );
+                        
+                        if (meditationToDelete) {
+                            console.log('📝 Meditação encontrada para exclusão:', meditationToDelete.title);
+                            
+                            // Sincronizar com Supabase se disponível
+                            console.log('🔄 Verificando Supabase Manager...');
+                            if (window.supabaseManager) {
+                                try {
+                                    console.log('📤 Excluindo meditação personalizada do Supabase...');
+                                    
+                                    // Buscar a meditação no Supabase pelo meditation_id
+                                    const supabaseMeditations = await window.supabaseManager.getPersonalizedMeditations();
+                                    const supabaseMeditation = supabaseMeditations.find(med => 
+                                        med.meditation_id === meditationId
+                                    );
+                                    
+                                    if (supabaseMeditation) {
+                                        console.log('🗑️ Excluindo do Supabase:', supabaseMeditation.id);
+                                        await window.supabaseManager.deletePersonalizedMeditation(supabaseMeditation.id);
+                                        console.log('✅ Meditação excluída do Supabase com sucesso');
+                                    } else {
+                                        console.log('⚠️ Meditação não encontrada no Supabase');
+                                    }
+                                } catch (supabaseError) {
+                                    console.error('⚠️ Erro ao excluir do Supabase:', supabaseError);
+                                    console.log('ℹ️ Meditação excluída apenas localmente');
+                                }
+                            } else {
+                                console.log('ℹ️ Supabase Manager não disponível - exclusão apenas local');
+                            }
+                            
+                            // Remover apenas a meditação do usuário atual
+                            const updatedMeditations = allMeditations.filter(med => 
+                                !(med.id === meditationId && med.userId === userId)
+                            );
+                            localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                            
+                            // Decrementar contador total
+                            decrementTotalMeditations();
+                            
+                            // Recarregar a página
+                            loadPersonalizedMeditations();
+                            alert('Meditação excluída com sucesso!');
+                        } else {
+                            alert('Meditação não encontrada.');
+                        }
+                    }
+                } catch (error) {
+                    console.error('❌ Erro ao excluir meditação:', error);
+                    alert('Erro ao excluir meditação.');
+                }
+            }
+        }
+
+        // Função para obter descrição da categoria
+        function getCategoryDescription(categoryName) {
+            const descriptions = {
+                'amor de deus': 'Reflexões sobre o amor divino e sua manifestação',
+                'jesus cristo': 'Meditações sobre a vida e ensinamentos de Cristo',
+                'pecado': 'Reflexões sobre o pecado e a conversão',
+                'graça': 'Meditações sobre a graça divina',
+                'oração': 'Fundamentos da vida de oração',
+                'santidade': 'Caminho para a santificação',
+                'vida espiritual': 'Desenvolvimento da vida interior',
+                'fé': 'Fortificação da fé cristã'
+            };
+            
+            return descriptions[categoryName.toLowerCase()] || `Meditações sobre ${categoryName.toLowerCase()}`;
+        }
+
+        // Função para alternar a exibição das meditações
+        function toggleCategoryMeditations(categoryName) {
+            const card = document.querySelector(`[data-category="${categoryName}"]`);
+            const meditationList = card.querySelector('.meditation-list');
+            const button = card.querySelector('.btn-primary');
+            
+            if (meditationList.style.display === 'none') {
+                // Carregar e mostrar meditações
+                loadCategoryMeditations(categoryName, meditationList);
+                meditationList.style.display = 'block';
+                button.textContent = 'Ocultar Meditações';
+            } else {
+                // Ocultar meditações
+                meditationList.style.display = 'none';
+                button.textContent = 'Ver Meditações';
+            }
+        }
+
+        // Função para carregar meditações da categoria
+        function loadCategoryMeditations(categoryName, container) {
+            const userMeditationsData = localStorage.getItem('userMeditations');
+            if (!userMeditationsData) {
+                container.innerHTML = '<p class="no-meditations">Nenhuma meditação encontrada.</p>';
+                return;
+            }
+
+            try {
+                const userMeditations = JSON.parse(userMeditationsData);
+                const categoryMeditations = userMeditations.filter(meditation => 
+                    meditation.topic && meditation.topic.toLowerCase() === categoryName.toLowerCase()
+                );
+
+                if (categoryMeditations.length === 0) {
+                    container.innerHTML = '<p class="no-meditations">Nenhuma meditação encontrada nesta categoria.</p>';
+                    return;
+                }
+
+                // Criar lista de meditações
+                const meditationItems = categoryMeditations.map((meditation, index) => {
+                    const status = getMeditationStatus(meditation, index);
+                    const title = meditation.title || `Meditação ${index + 1}`;
+                    
+                    return `
+                        <div class="meditation-item" onclick="startMeditation('${categoryName}', ${index})">
+                            <div class="meditation-info">
+                                <div class="meditation-title">${title}</div>
+                                <div class="meditation-status">
+                                    <span class="status-icon ${status.class}">${status.icon}</span>
+                                    <span class="${status.class}">${status.text}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = meditationItems;
+            } catch (error) {
+                console.error('Erro ao carregar meditações:', error);
+                container.innerHTML = '<p class="no-meditations">Erro ao carregar meditações.</p>';
+            }
+        }
+
+        // Função para determinar status da meditação
+        function getMeditationStatus(meditation, index) {
+            // Simular status baseado no índice (na implementação real viria do localStorage)
+            if (index === 0) {
+                return { icon: '', text: 'Concluída', class: 'status-completed' };
+            } else if (index === 1) {
+                return { icon: '', text: 'Em progresso', class: 'status-in-progress' };
+            } else {
+                return { icon: '', text: 'Bloqueada', class: 'status-locked' };
+            }
+        }
+
+        // Função para iniciar uma meditação
+        function startMeditation(categoryName, meditationIndex) {
+            const userMeditationsData = localStorage.getItem('userMeditations');
+            if (!userMeditationsData) return;
+
+            try {
+                const userMeditations = JSON.parse(userMeditationsData);
+                const categoryMeditations = userMeditations.filter(meditation => 
+                    meditation.topic && meditation.topic.toLowerCase() === categoryName.toLowerCase()
+                );
+
+                if (categoryMeditations[meditationIndex]) {
+                    const meditation = categoryMeditations[meditationIndex];
+                    
+                    // Salvar dados para a página de meditação
+                    localStorage.setItem('current_meditation', JSON.stringify(meditation));
+                    localStorage.setItem('current_category', categoryName);
+                    
+                    // Redirecionar para a página de meditação
+                    window.location.href = 'meditacao.html?category=' + encodeURIComponent(categoryName) + '&from=minhas-meditacoes';
+                }
+            } catch (error) {
+                console.error('Erro ao iniciar meditação:', error);
+            }
+        }
+
+        // Função para regenerar uma categoria
+        function regenerateCategory(categoryName) {
+            if (!confirm(`Deseja regenerar as meditações da categoria "${categoryName}"?`)) {
+                return;
+            }
+
+            // Salvar o tópico para regeneração
+            localStorage.setItem('pending_topic', categoryName);
+            
+            // Redirecionar para a página inicial para regenerar
+            window.location.href = 'index.html';
+        }
+
+        // Função para excluir uma categoria
+        function deleteCategory(categoryName) {
+            if (!confirm(`Tem certeza que deseja excluir a categoria "${categoryName}" e todas as suas meditações?`)) {
+                return;
+            }
+
+            try {
+                // Remover do histórico
+                const historyData = localStorage.getItem('personalized_meditations_history');
+                if (historyData) {
+                    const history = JSON.parse(historyData);
+                    const filteredHistory = history.filter(item => item.category !== categoryName);
+                    localStorage.setItem('personalized_meditations_history', JSON.stringify(filteredHistory));
+                }
+                
+                // Remover dados atuais se for a mesma categoria
+                const currentData = localStorage.getItem('personalized_meditations');
+                if (currentData) {
+                    const current = JSON.parse(currentData);
+                    if (current.category === categoryName) {
+                        localStorage.removeItem('personalized_meditations');
+                    }
+                }
+                
+                // Recarrega a página para atualizar a lista
+                loadPersonalizedMeditations();
+                
+                alert('Categoria excluída com sucesso!');
+            } catch (error) {
+                console.error('Erro ao excluir categoria:', error);
+                alert('Erro ao excluir categoria. Tente novamente.');
+            }
+        }
+
+        // Carrega as meditações quando a página é carregada
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página "Minhas Meditações" carregada, iniciando carregamento...');
+            
+            // Verificar se há um novo usuário logado
+            const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+            const lastUser = sessionStorage.getItem('lastLoggedUser');
+            
+            if (lastUser && lastUser !== currentUser.id) {
+                console.log('🔄 Novo usuário detectado:', lastUser, '->', currentUser.id);
+                // Limpar cache e forçar recarregamento
+                sessionStorage.clear();
+            }
+            
+            // Salvar usuário atual na sessão
+            if (currentUser.id) {
+                sessionStorage.setItem('lastLoggedUser', currentUser.id);
+            }
+            
+            // Testar elementos DOM primeiro
+            setTimeout(() => {
+                console.log('🧪 Testando elementos DOM...');
+                testDOMElements();
+            }, 50);
+            
+            // Carregar dados do usuário com delay para garantir DOM carregado
+            setTimeout(() => {
+                console.log('⏰ Executando loadUserData com delay...');
+                loadUserData();
+            }, 200);
+            
+            // Criar meditação de teste se não houver nenhuma
+            const existingMeditations = localStorage.getItem('personalized_meditations');
+            if (!existingMeditations || JSON.parse(existingMeditations).length === 0) {
+                console.log('📝 Criando meditação de teste...');
+                const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                const userId = currentUser.id || 'anonymous';
+                
+                const testMeditation = [{
+                    id: 'teste-' + Date.now(),
+                    title: 'Meditação sobre o Amor de Deus',
+                    topic: 'Amor Divino',
+                    content: 'Esta é uma meditação de exemplo sobre o amor de Deus. O texto aqui seria gerado pela IA com aproximadamente 30 linhas de conteúdo meditativo e contemplativo, focado na tradição católica e na espiritualidade cristã.',
+                    duration: '15 min',
+                    status: 'completed',
+                    createdAt: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString(),
+                    source: 'chatgpt',
+                    type: 'simple',
+                    userId: userId
+                }];
+                localStorage.setItem('personalized_meditations', JSON.stringify(testMeditation));
+                console.log('✅ Meditação de teste criada para usuário:', userId);
+            }
+            
+            loadPersonalizedMeditations();
+            
+            // Carregar agendamentos
+            loadSchedules();
+        });
+
+        // Atualiza a lista quando a página ganha foco (para quando o usuário volta de outra página)
+        window.addEventListener('focus', function() {
+            console.log('🔄 Página ganhou foco, recarregando...');
+            loadPersonalizedMeditations();
+        });
+
+        // Função para alternar tema
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            root.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Mostrar notificação
+            const themeName = newTheme === 'light' ? 'claro' : 'escuro';
+            showNotification(`Tema alterado para ${themeName}`, 'success');
+        }
+
+        // Carregar tema salvo
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Carregar tema ao iniciar
+        loadTheme();
+
+        // Função para mostrar notificações
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
+                color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Funções para o modal de agendamento
+        function openScheduleModalFromMinhasMeditacoes() {
+            console.log('🚀 Abrindo modal de agendamento da página Minhas Meditações');
+            document.getElementById('scheduleModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Carregar categorias no select
+            updateCategorySelect();
+            
+            // Configurar eventos dos botões de dias da semana
+            setupWeekdayButtons();
+            
+            // Configurar evento do formulário
+            setupScheduleForm();
+        }
+
+        function closeScheduleModal() {
+            console.log('🔒 Fechando modal de agendamento');
+            document.getElementById('scheduleModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('scheduleForm').reset();
+            
+            // Reset weekday buttons
+            document.querySelectorAll('.weekday-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Limpar dados de edição
+            delete document.getElementById('scheduleForm').dataset.editId;
+            
+            // Resetar título do modal
+            document.getElementById('scheduleModal').querySelector('.modal-title').textContent = 'Agendar Meditação';
+        }
+
+        function updateCategorySelect() {
+            const categorySelect = document.querySelector('select[name="category"]');
+            if (!categorySelect) return;
+
+            // Categorias padrão do sistema
+            const categories = [
+                'Amor de Deus',
+                'Jesus Cristo',
+                'Pecado',
+                'Graça',
+                'Oração',
+                'Santidade',
+                'Vida Espiritual',
+                'Fé'
+            ];
+            
+            // Limpar e recriar options
+            categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
+        }
+
+        function setupWeekdayButtons() {
+            document.querySelectorAll('.weekday-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+        }
+
+        function setupScheduleForm() {
+            const form = document.getElementById('scheduleForm');
+            if (!form) return;
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                saveSchedule(event);
+            });
+        }
+
+        function saveSchedule(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            const selectedDays = [];
+            document.querySelectorAll('.weekday-btn.active').forEach(btn => {
+                selectedDays.push(btn.dataset.day);
+            });
+            
+            if (selectedDays.length === 0) {
+                alert('Selecione pelo menos um dia da semana');
+                return;
+            }
+            
+            const scheduleData = {
+                title: `Meditação ${formData.get('category')}`,
+                time: formData.get('time'),
+                category: formData.get('category'),
+                days: selectedDays,
+                notifications: formData.get('notifications') === 'on',
+                date: new Date().toISOString().split('T')[0], // Data atual
+                duration: 15, // Duração padrão
+                status: 'agendado',
+                createdAt: new Date().toISOString(),
+                description: `Agendamento para ${formData.get('category')} às ${formData.get('time')}`
+            };
+            
+            const editId = form.dataset.editId;
+            
+            if (editId) {
+                // Editar agendamento existente
+                scheduleData.id = editId;
+                scheduleData.lastUpdated = new Date().toISOString();
+            } else {
+                // Criar novo agendamento
+                scheduleData.id = Date.now() + Math.random().toString(36).substr(2, 9); // ID único
+            }
+            
+            try {
+                console.log('💾 Salvando agendamento:', scheduleData);
+                
+                // Obter usuário atual
+                const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                const userId = currentUser.id || 'anonymous';
+                
+                // Adicionar dados do usuário ao agendamento
+                scheduleData.userId = userId;
+                scheduleData.userName = currentUser.name || 'Usuário';
+                
+                // Salvar no localStorage
+                const existingSchedules = JSON.parse(localStorage.getItem('userSchedules') || '[]');
+                let updatedSchedules;
+                
+                if (editId) {
+                    // Atualizar agendamento existente
+                    updatedSchedules = existingSchedules.map(schedule => 
+                        schedule.id === editId ? scheduleData : schedule
+                    );
+                } else {
+                    // Adicionar novo agendamento
+                    updatedSchedules = [...existingSchedules, scheduleData];
+                }
+                
+                localStorage.setItem('userSchedules', JSON.stringify(updatedSchedules));
+                
+                console.log('✅ Agendamento salvo com sucesso');
+                
+                // Fechar modal
+                closeScheduleModal();
+                
+                // Mostrar notificação de sucesso
+                showNotification('Agendamento salvo com sucesso!', 'success');
+                
+                // Recarregar lista de agendamentos se necessário
+                loadSchedules();
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar agendamento:', error);
+                alert('Erro ao salvar agendamento. Tente novamente.');
+            }
+        }
+
+        function loadSchedules() {
+            const schedulesList = document.getElementById('schedulesList');
+            if (!schedulesList) return;
+
+            try {
+                const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                const userId = currentUser.id || 'anonymous';
+                
+                const allSchedules = JSON.parse(localStorage.getItem('userSchedules') || '[]');
+                const userSchedules = allSchedules.filter(schedule => schedule.userId === userId);
+                
+                if (userSchedules.length === 0) {
+                    schedulesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📅</div>
+                            <div class="empty-state-title">Nenhum agendamento encontrado</div>
+                            <div class="empty-state-description">Crie seu primeiro agendamento para começar</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Ordenar por data de criação (mais recentes primeiro)
+                userSchedules.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                const schedulesHTML = userSchedules.map(schedule => {
+                    const daysText = schedule.days.map(day => {
+                        const dayNames = {
+                            'seg': 'Segunda',
+                            'ter': 'Terça',
+                            'qua': 'Quarta',
+                            'qui': 'Quinta',
+                            'sex': 'Sexta',
+                            'sab': 'Sábado',
+                            'dom': 'Domingo'
+                        };
+                        return dayNames[day] || day;
+                    }).join(', ');
+                    
+                    return `
+                        <div class="schedule-item">
+                            <div class="schedule-info">
+                                <h4 class="schedule-title">${schedule.title}</h4>
+                                <p class="schedule-details">${schedule.category} • ${daysText} • ${schedule.time}</p>
+                            </div>
+                            <div class="schedule-actions">
+                                <button class="btn-secondary" onclick="editSchedule('${schedule.id}')">Editar</button>
+                                <button class="btn-secondary" onclick="deleteSchedule('${schedule.id}')">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                schedulesList.innerHTML = schedulesHTML;
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar agendamentos:', error);
+                schedulesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <div class="empty-state-title">Erro ao carregar agendamentos</div>
+                        <div class="empty-state-description">Tente recarregar a página</div>
+                    </div>
+                `;
+            }
+        }
+
+        function editSchedule(scheduleId) {
+            try {
+                const allSchedules = JSON.parse(localStorage.getItem('userSchedules') || '[]');
+                const schedule = allSchedules.find(s => s.id === scheduleId);
+                
+                if (!schedule) {
+                    alert('Agendamento não encontrado');
+                    return;
+                }
+                
+                // Preencher formulário com dados do agendamento
+                const form = document.getElementById('scheduleForm');
+                form.querySelector('select[name="category"]').value = schedule.category;
+                form.querySelector('input[name="time"]').value = schedule.time;
+                form.querySelector('input[name="notifications"]').checked = schedule.notifications;
+                
+                // Marcar dias da semana
+                document.querySelectorAll('.weekday-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (schedule.days.includes(btn.dataset.day)) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // Configurar para edição
+                form.dataset.editId = scheduleId;
+                document.getElementById('scheduleModal').querySelector('.modal-title').textContent = 'Editar Agendamento';
+                
+                // Abrir modal
+                openScheduleModalFromMinhasMeditacoes();
+                
+            } catch (error) {
+                console.error('❌ Erro ao editar agendamento:', error);
+                alert('Erro ao editar agendamento');
+            }
+        }
+
+        function deleteSchedule(scheduleId) {
+            if (!confirm('Tem certeza que deseja excluir este agendamento?')) {
+                return;
+            }
+            
+            try {
+                const allSchedules = JSON.parse(localStorage.getItem('userSchedules') || '[]');
+                const updatedSchedules = allSchedules.filter(schedule => schedule.id !== scheduleId);
+                localStorage.setItem('userSchedules', JSON.stringify(updatedSchedules));
+                
+                showNotification('Agendamento excluído com sucesso!', 'success');
+                loadSchedules();
+                
+            } catch (error) {
+                console.error('❌ Erro ao excluir agendamento:', error);
+                alert('Erro ao excluir agendamento');
+            }
+        }
+
+        // Função para adicionar meditações ao histórico (copiada da página index.html)
+        function addToPersonalizedHistory(newMeditations) {
+            try {
+                console.log('📝 Adicionando ao histórico:', newMeditations);
+                
+                // Verificar se newMeditations é válido
+                if (!newMeditations || typeof newMeditations !== 'object') {
+                    throw new Error('Dados de meditações inválidos');
+                }
+                
+                // Obter histórico existente
+                let history = JSON.parse(localStorage.getItem('personalized_meditations_history') || '[]');
+                
+                // Verificar se já existe uma categoria com o mesmo nome para o mesmo usuário
+                const existingIndex = history.findIndex(item => 
+                    item.category === newMeditations.category && 
+                    item.userId === newMeditations.userId
+                );
+                
+                if (existingIndex !== -1) {
+                    // Atualizar categoria existente
+                    history[existingIndex] = {
+                        ...newMeditations,
+                        lastUpdated: new Date().toISOString(),
+                        totalGenerated: (history[existingIndex].totalGenerated || 0) + 1
+                    };
+                } else {
+                    // Adicionar nova categoria
+                    history.push({
+                        ...newMeditations,
+                        createdAt: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        totalGenerated: 1
+                    });
+                }
+                
+                // Salvar histórico atualizado
+                localStorage.setItem('personalized_meditations_history', JSON.stringify(history));
+                
+                console.log('✅ Histórico de meditações personalizadas atualizado:', history);
+            } catch (error) {
+                console.error('❌ Erro ao salvar no histórico:', error);
+                console.error('❌ Stack trace:', error.stack);
+            }
+        }
+
+    </script>
+    
+    <!-- Scripts para geração de meditações -->
+    <script src="api-config.js"></script>
+    <script src="chatgpt-api.js"></script>
+    <script src="supabase-config.js"></script>
+    
+    <script src="force-user-update.js"></script>
+    <script src="immediate-user-update.js"></script>
+    
+    <script>
+        // Verificar se as funções necessárias estão disponíveis
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Verificando disponibilidade das funções...');
+            console.log('checkAPIStatus disponível:', typeof checkAPIStatus);
+            console.log('generateMeditations disponível:', typeof generateMeditations);
+            console.log('chatGPTAPI disponível:', typeof chatGPTAPI);
+            
+            if (typeof checkAPIStatus === 'undefined') {
+                console.error('❌ Função checkAPIStatus não está disponível');
+            }
+            
+            if (typeof generateMeditations === 'undefined') {
+                console.error('❌ Função generateMeditations não está disponível');
+            }
+            
+            if (typeof chatGPTAPI === 'undefined') {
+                console.error('❌ chatGPTAPI não está disponível');
+            }
+        });
+    </script>
+</body>
+</html> 

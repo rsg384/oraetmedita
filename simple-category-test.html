@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - Criação de Categoria</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .log { background: #f0f0f0; padding: 10px; margin: 10px 0; font-family: monospace; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Simples - Criação de Categoria</h1>
+    
+    <button onclick="testCreateCategory()">Criar Categoria de Teste</button>
+    <button onclick="checkSupabaseManager()">Verificar Supabase Manager</button>
+    
+    <div class="log" id="log"></div>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        function log(message) {
+            document.getElementById('log').textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            console.log(message);
+        }
+
+        function checkSupabaseManager() {
+            log('🔍 Verificando Supabase Manager...');
+            if (window.supabaseManager) {
+                log('✅ Supabase Manager encontrado!');
+                log('Métodos disponíveis: ' + Object.keys(window.supabaseManager).join(', '));
+            } else {
+                log('❌ Supabase Manager NÃO encontrado!');
+            }
+        }
+
+        async function testCreateCategory() {
+            log('🚀 Iniciando teste de criação de categoria...');
+            
+            if (!window.supabaseManager) {
+                log('❌ Supabase Manager não está disponível!');
+                return;
+            }
+            
+            try {
+                const categoryData = {
+                    name: 'Teste Categoria - ' + Date.now(),
+                    description: 'Categoria criada para teste',
+                    icon: '🧪',
+                    color: '#7ee787',
+                    is_active: true,
+                    sort_order: 999
+                };
+                
+                log('📝 Dados: ' + JSON.stringify(categoryData));
+                
+                const result = await window.supabaseManager.createCategory(categoryData);
+                log('📋 Resultado: ' + JSON.stringify(result));
+                
+                if (result && result[0]) {
+                    log('✅ Categoria criada com sucesso!');
+                    log('ID: ' + result[0].id);
+                } else {
+                    log('❌ Categoria não foi criada');
+                }
+            } catch (error) {
+                log('❌ Erro: ' + error.message);
+            }
+        }
+
+        log('🚀 Página carregada. Clique nos botões para testar.');
+    </script>
+</body>
+</html> 

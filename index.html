@@ -1,0 +1,4739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ora et Medita | Transforme sua vida espiritual com meditações católicas personalizadas</title>
+    <meta name="description" content="Ora et Medita é a primeira plataforma que cria meditações católicas exclusivas para você, baseadas na tradição milenar da Igreja. Transforme sua oração diária com IA.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ora et Medita | Meditações Católicas Personalizadas">
+    <meta property="og:description" content="Transforme sua vida espiritual com meditações católicas personalizadas pela IA">
+    <meta property="og:image" content="i8M3hOxErOcgb2ZXSpfD1YZW8.avif">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ora et Medita | Meditações Católicas Personalizadas">
+    <meta name="twitter:description" content="Transforme sua vida espiritual com meditações católicas personalizadas pela IA">
+    <meta name="twitter:image" content="i8M3hOxErOcgb2ZXSpfD1YZW8.avif">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #25282b;
+            --secondary-color: #52575c;
+            --accent-color: #f0743e;
+            --accent-light: #f9ccaf;
+            --accent-lighter: #fde7d7;
+            --success-color: #8bc7ad;
+            --success-light: #bae0cd;
+            --success-lighter: #dcefe4;
+            --blue-color: #9bb3d5;
+            --blue-light: #d6e3ef;
+            --blue-lighter: #e8f1f7;
+            --yellow-color: #ffd370;
+            --yellow-light: #ffeec6;
+            --yellow-lighter: #fff9eb;
+            --white: #ffffff;
+            --gray-100: #cacccf;
+            --gray-200: #a0a4a8;
+            --gray-300: #52575c;
+            --gray-400: #25282b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--primary-color);
+            background-color: var(--white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            padding: 16px 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-weight: 600;
+            font-size: 22px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .logo-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-secondary {
+            display: none;
+        }
+
+        .btn-primary {
+            background: #2C2C2C;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            box-shadow: none;
+        }
+
+        .btn-primary:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        /* Botão Enroll estilo ProLingo */
+        .btn-enroll {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-enroll:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-enroll-icon {
+            background: #f0743e;
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-enroll:hover .btn-enroll-icon {
+            background: #e65a2b;
+        }
+
+        .btn-enroll-text {
+            background: #2C2C2C;
+            color: white;
+            padding: 12px 20px 12px 16px;
+            border-radius: 0 50px 50px 0;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .btn-enroll:hover .btn-enroll-text {
+            background: #1a1a1a;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 90px 0 70px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            letter-spacing: -0.02em;
+            position: relative;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-title .sparkle-icon {
+            position: absolute;
+            top: -8px;
+            right: -25px;
+            font-size: 20px;
+            color: var(--accent-color);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            max-width: 600px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Estilos para o gerador de meditações IA */
+        .ai-meditation-generator {
+            margin: 2rem 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .ai-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #3a3b5a;
+            border-radius: 50px;
+            background: rgba(42, 45, 62, 0.8);
+            color: #e6e6e6;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .ai-input:focus {
+            outline: none;
+            border-color: #7ee787;
+            box-shadow: 0 0 0 3px rgba(126, 231, 135, 0.2);
+        }
+
+        .ai-input::placeholder {
+            color: #8b8b9f;
+        }
+
+        .generate-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #7ee787, #56d364);
+            border: none;
+            border-radius: 50px;
+            color: #0d1117;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(126, 231, 135, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .ai-status.success {
+            background: rgba(126, 231, 135, 0.1);
+            border: 1px solid rgba(126, 231, 135, 0.3);
+            color: #7ee787;
+        }
+
+        .ai-status.error {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            color: #f85149;
+        }
+
+        .ai-status.info {
+            background: rgba(79, 140, 255, 0.1);
+            border: 1px solid rgba(79, 140, 255, 0.3);
+            color: #4f8cff;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7ee787, #56d364);
+            color: #0d1117;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(126, 231, 135, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(42, 45, 62, 0.8);
+            color: #e6e6e6;
+            border: 1px solid #3a3b5a;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(58, 59, 90, 0.8);
+            border-color: #5a5d6e;
+        }
+
+        .hero-image {
+            position: relative;
+            margin-top: 40px;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .hero-main-image {
+            width: 100%;
+            max-width: 1400px;
+            height: 700px;
+            object-fit: cover;
+            border-radius: 24px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            margin: 0 auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-main-image:hover {
+            transform: scale(1.02);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 24px;
+        }
+
+        .stats-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 24px 28px;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            min-width: 160px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.15);
+        }
+
+        .stats-card.top-left {
+            top: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-card.top-right {
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-card.bottom-left {
+            bottom: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-card.bottom-right {
+            bottom: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #25282b;
+            margin-bottom: 6px;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+        
+        .stats-label {
+            font-size: 13px;
+            color: #52575c;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Estilos para o campo estilo ChatGPT */
+        .chatgpt-style-input {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e5;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 12px;
+        }
+
+        .chatgpt-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+            background: transparent;
+            resize: none;
+            min-height: 24px;
+            max-height: 120px;
+            line-height: 1.5;
+        }
+
+        .chatgpt-input::placeholder {
+            color: #8b8b9f;
+        }
+
+        .chatgpt-send-btn {
+            background: #10a37f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .chatgpt-send-btn:hover {
+            background: #0d8c6f;
+            transform: scale(1.05);
+        }
+
+        .chatgpt-send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chatgpt-send-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .stats-card.bottom-right {
+            bottom: 24px;
+            right: 24px;
+            background: rgba(44, 44, 44, 0.1);
+            color: white;
+        }
+
+        .stats-number {
+            font-size: 32px;
+            font-weight: 700;
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
+        .stats-label {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.3;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Sections */
+        .section {
+            padding: 64px 0;
+        }
+
+        .section-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 64px;
+        }
+
+        .section-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--primary-color);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .card-description {
+            color: var(--secondary-color);
+            line-height: 1.6;
+        }
+
+
+
+        /* Features */
+        .features-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .features-header .section-subtitle {
+            font-size: 18px;
+            color: var(--secondary-color);
+            margin-top: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid var(--gray-100);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 20px 60px rgba(240, 116, 62, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon-wrapper {
+            margin-bottom: 32px;
+        }
+
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--blue-lighter) 0%, var(--blue-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(155, 179, 213, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-icon svg {
+            width: 48px;
+            height: 48px;
+            color: var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(155, 179, 213, 0.4);
+        }
+
+        .feature-card:hover .feature-icon svg {
+            transform: scale(1.1);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .feature-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            line-height: 1.3;
+        }
+
+        .feature-description {
+            color: var(--secondary-color);
+            line-height: 1.7;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Benefits Section Styles */
+        .benefits-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .benefits-text {
+            flex: 1;
+            position: relative;
+        }
+
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .benefit-item {
+            background: white;
+            border: 2px solid var(--gray-100);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .benefit-item:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .benefit-item.active {
+            border-color: var(--accent-color);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .benefit-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item.active .benefit-header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-dark) 100%);
+            color: white;
+        }
+
+        .benefit-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            color: var(--accent-color);
+            border: 1px solid rgba(240, 116, 62, 0.1);
+        }
+
+        .benefit-icon svg {
+            width: 24px;
+            height: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item.active .benefit-icon {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #e66a35 100%);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(240, 116, 62, 0.3);
+            border: 1px solid rgba(240, 116, 62, 0.2);
+        }
+
+        .benefit-item:hover .benefit-icon {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .benefit-title {
+            flex: 1;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+            line-height: 1.2;
+            max-width: 100%;
+        }
+
+        .benefit-item.active .benefit-title {
+            color: white;
+        }
+
+        .benefit-arrow {
+            font-size: 16px;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item.active .benefit-arrow {
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        .benefit-description {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            background: var(--gray-50);
+        }
+
+        .benefit-item.active .benefit-description {
+            max-height: 300px;
+            padding: 24px;
+        }
+
+        .benefit-description p {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--secondary-color);
+        }
+
+        .benefit-description p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .benefits-image {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .benefit-photo {
+            width: 100%;
+            max-width: 350px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-photo:hover {
+            transform: scale(1.02);
+        }
+
+        /* Responsive adjustments for benefits */
+        @media (max-width: 768px) {
+            .benefits-layout {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .benefits-text {
+                order: 2;
+            }
+            
+            .benefits-image {
+                order: 1;
+            }
+            
+            .benefit-photo {
+                max-width: 100%;
+                height: 400px;
+            }
+            
+            .benefit-header {
+                padding: 20px;
+            }
+            
+            .benefit-title {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+            
+            .benefit-item.active .benefit-description {
+                padding: 20px;
+            }
+
+            /* Features responsive */
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 0 20px;
+            }
+
+            .feature-card {
+                padding: 32px 24px;
+            }
+
+            .feature-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+
+            .feature-title {
+                font-size: 20px;
+            }
+
+            .features-header .section-subtitle {
+                font-size: 16px;
+                padding: 0 20px;
+            }
+        }
+
+
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--primary-color);
+            color: white;
+            padding: 48px 0 40px 0;
+        }
+
+        .cta-header {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+        }
+
+        .cta-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .cta-subtitle {
+            font-size: 20px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .cta-features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px;
+            color: var(--accent-color);
+        }
+
+        .cta-plans-container {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            color: var(--primary-color);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            flex: 1;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .pricing-card:hover::before {
+            left: 100%;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border-color: rgba(240, 116, 62, 0.2);
+        }
+
+        .pricing-card.free-plan {
+            border: 2px solid #10B981;
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+            background: linear-gradient(145deg, #ffffff, #fafafa);
+            padding-top: 50px;
+        }
+
+        .pricing-card.free-plan:hover {
+            transform: scale(1.02) translateY(-8px);
+            box-shadow: 0 30px 60px rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .pricing-card.premium-plan {
+            border: 2px solid var(--accent-color);
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(240, 116, 62, 0.15);
+            background: linear-gradient(145deg, #ffffff, #fafafa);
+            padding-top: 50px;
+        }
+
+        .pricing-card.premium-plan:hover {
+            transform: scale(1.02) translateY(-8px);
+            box-shadow: 0 30px 60px rgba(240, 116, 62, 0.25);
+        }
+
+        .pricing-card.premium-plan::after {
+            content: '⭐ MAIS POPULAR';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-color), #e0652e);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(240, 116, 62, 0.3);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pricing-badge {
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .pricing-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .pricing-badge.free {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .pricing-badge.premium {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .pricing-price {
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .price-amount {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--accent-color);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover .price-amount {
+            transform: scale(1.05);
+        }
+
+        .price-period {
+            font-size: 14px;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+
+        .pricing-after {
+            font-size: 13px;
+            opacity: 0.8;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .cta-form {
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--gray-100);
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            color: var(--primary-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--accent-color), #e0652e);
+            color: white;
+            border: none;
+            padding: 18px 32px;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 20px rgba(240, 116, 62, 0.25);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(135deg, #e0652e, #cc5a29);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(240, 116, 62, 0.4);
+        }
+
+        .cta-button:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .cta-button.premium {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            font-size: 16px;
+            padding: 20px 32px;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .cta-button.premium:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            box-shadow: 0 18px 40px rgba(245, 158, 11, 0.5);
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .premium-features, .free-features {
+            margin: 28px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .premium-features .feature-item, .free-features .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 0;
+            font-size: 14px;
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .premium-features .feature-item:hover, .free-features .feature-item:hover {
+            color: var(--primary-color);
+            transform: translateX(4px);
+            background: rgba(240, 116, 62, 0.05);
+            padding-left: 8px;
+        }
+
+        .feature-check {
+            font-size: 16px;
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .premium-features .feature-check {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .button-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .button-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .pricing-footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin-top: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pricing-disclaimer {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .security-note {
+            font-size: 11px;
+            opacity: 0.8;
+            color: #10b981;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            margin: 0 auto;
+            max-width: fit-content;
+            transition: all 0.3s ease;
+        }
+
+        .security-note:hover {
+            background: rgba(16, 185, 129, 0.15);
+            transform: scale(1.02);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 48px 0 24px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            color: var(--gray-100);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--gray-300);
+            padding-top: 24px;
+            color: var(--gray-100);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .header-content {
+                padding: 0 16px;
+            }
+            
+            .nav {
+                gap: 24px;
+                margin-right: 20px;
+            }
+            
+            .nav-link {
+                font-size: 14px;
+            }
+            
+            .cta-buttons {
+                gap: 10px;
+            }
+            
+            .btn-primary {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+
+            .hero-content {
+                padding: 0 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .header {
+                padding: 12px 0;
+            }
+
+            .header-content {
+                padding: 0 16px;
+            }
+
+            .logo {
+                font-size: 20px;
+                gap: 8px;
+            }
+
+            .logo-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 14px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .cta-buttons {
+                gap: 8px;
+            }
+
+            .btn-secondary {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .btn-primary {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .btn-enroll {
+                transform: scale(0.9);
+            }
+
+            .btn-enroll-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .btn-enroll-text {
+                padding: 10px 16px 10px 12px;
+                font-size: 13px;
+            }
+
+            .hero-content {
+                padding: 0 16px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-title .sparkle-icon {
+                top: -4px;
+                right: -18px;
+                font-size: 18px;
+            }
+
+            .section-content {
+                padding: 0 20px;
+            }
+
+            .cards-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+
+            .hero {
+                padding: 60px 0 40px;
+            }
+
+            .section {
+                padding: 48px 0;
+            }
+
+
+
+            .cta-header {
+                margin-bottom: 24px;
+            }
+
+            .cta-features {
+                flex-direction: column;
+                gap: 16px;
+                align-items: center;
+            }
+
+            .feature-item {
+                width: fit-content;
+            }
+
+            .cta-plans-container {
+                flex-direction: column;
+                max-width: 100%;
+                gap: 24px;
+            }
+
+            .pricing-card.premium-plan {
+                transform: none;
+                order: -1;
+            }
+
+            .cta-title {
+                font-size: 36px;
+            }
+
+            .cta-subtitle {
+                font-size: 18px;
+            }
+
+            .pricing-card {
+                padding: 24px;
+            }
+
+            .price-amount {
+                font-size: 36px;
+            }
+
+            .plan-selection {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .stats-card {
+                padding: 16px 20px;
+                min-width: 120px;
+            }
+
+            .stats-card.top-left {
+                top: 16px;
+                left: 16px;
+            }
+
+            .stats-card.bottom-right {
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px 0;
+            }
+
+            .header-content {
+                padding: 0 12px;
+            }
+
+            .logo {
+                font-size: 18px;
+                gap: 6px;
+            }
+
+            .logo-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            .cta-buttons {
+                gap: 6px;
+            }
+
+            .btn-secondary {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .btn-primary {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
+            .btn-enroll {
+                transform: scale(0.8);
+            }
+
+            .btn-enroll-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .btn-enroll-text {
+                padding: 8px 12px 8px 10px;
+                font-size: 12px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .stats-card {
+                padding: 12px 16px;
+                min-width: 100px;
+            }
+
+            .stats-number {
+                font-size: 20px;
+            }
+
+            .stats-label {
+                font-size: 11px;
+            }
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .accordion-item {
+            background: white;
+            border: 2px solid var(--gray-100);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .accordion-item:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .accordion-item.active {
+            border-color: var(--accent-color);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.22);
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 24px 28px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-item.active .accordion-header {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .step-number {
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--accent-color);
+            min-width: 48px;
+        }
+
+        .accordion-item.active .step-number {
+            color: white;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            flex: 1;
+        }
+
+        .accordion-item.active .step-title {
+            color: white;
+        }
+
+        .accordion-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            color: var(--accent-color);
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+            color: white;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: white;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 220px;
+        }
+
+        .accordion-content p {
+            padding: 0 28px 28px;
+            margin: 0;
+            color: var(--secondary-color);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Webhook Section */
+        .webhook-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+
+        /* Lectio Divina Section */
+        .lectio-container {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .lectio-content {
+            flex: 1;
+            max-width: 450px;
+        }
+
+        .lectio-image {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lectio-image img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .lectio-container {
+                flex-direction: column;
+                gap: 40px;
+                margin-top: 40px;
+                align-items: center;
+            }
+
+            .lectio-content {
+                max-width: 100%;
+            }
+
+            .lectio-image img {
+                max-width: 250px;
+            }
+
+            .accordion-header {
+                padding: 20px 24px;
+            }
+
+            .step-number {
+                font-size: 22px;
+                min-width: 44px;
+            }
+
+            .step-title {
+                font-size: 18px;
+            }
+
+            .accordion-content p {
+                font-size: 14px;
+                padding: 0 24px 24px;
+            }
+        }
+
+        .webhook-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-100);
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .webhook-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .webhook-input::placeholder {
+            color: var(--secondary-color);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .webhook-submit {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .webhook-submit:hover {
+            background: #1a1a1a;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .webhook-submit svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Authentication Modal */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 24px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--secondary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-modal:hover {
+            background: var(--gray-100);
+            color: var(--primary-color);
+        }
+
+        .auth-form {
+            padding: 48px 40px;
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .auth-subtitle {
+            color: var(--secondary-color);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-100);
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .auth-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+        }
+
+        .auth-input.error {
+            border-color: #e74c3c;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--secondary-color);
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--gray-200);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkmark {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .forgot-password {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .auth-button.primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .auth-button.primary:hover {
+            background: #e0652e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
+        }
+
+        .auth-button.google {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--gray-200);
+        }
+
+        .auth-button.google:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .auth-divider {
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gray-200);
+        }
+
+        .auth-divider span {
+            background: white;
+            padding: 0 16px;
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
+        .auth-switch {
+            text-align: center;
+            font-size: 14px;
+            color: var(--secondary-color);
+        }
+
+        .auth-switch a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .terms-link {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--gray-200);
+            overflow: hidden;
+        }
+
+        .password-strength::before {
+            content: '';
+            display: block;
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .password-strength.weak::before {
+            width: 25%;
+            background: #e74c3c;
+        }
+
+        .password-strength.fair::before {
+            width: 50%;
+            background: #f39c12;
+        }
+
+        .password-strength.good::before {
+            width: 75%;
+            background: #f1c40f;
+        }
+
+        .password-strength.strong::before {
+            width: 100%;
+            background: #27ae60;
+        }
+
+        /* Notification animations */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* User menu styles */
+        .user-menu {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .user-menu-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .user-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-menu-item:hover {
+            background: var(--gray-50);
+        }
+
+        @media (max-width: 768px) {
+            .webhook-container {
+                max-width: 100%;
+                margin: 0 auto 32px;
+            }
+            
+            .auth-container {
+                margin: 20px;
+                max-width: calc(100% - 40px);
+            }
+            
+            .auth-form {
+                padding: 32px 24px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .auth-title {
+                font-size: 24px;
+            }
+            
+            .auth-subtitle {
+                font-size: 14px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .pricing-card.free-plan {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .pricing-card.premium-plan {
+            animation: slideInRight 0.8s ease-out 0.2s both;
+        }
+
+        /* Responsive improvements for cards */
+        @media (max-width: 768px) {
+            .cta-plans-container {
+                flex-direction: column;
+                gap: 24px;
+                padding: 0 16px;
+            }
+            
+            .pricing-card {
+                padding: 24px;
+                border-radius: 16px;
+            }
+            
+            .pricing-card.premium-plan {
+                transform: none;
+                order: -1;
+            }
+            
+            .pricing-card.free-plan {
+                animation: fadeInUp 0.6s ease-out;
+            }
+            
+            .pricing-card.premium-plan {
+                animation: fadeInUp 0.6s ease-out 0.2s both;
+            }
+            
+            .price-amount {
+                font-size: 32px;
+            }
+            
+            .cta-button {
+                padding: 16px 24px;
+                font-size: 14px;
+            }
+            
+            .premium-features .feature-item, .free-features .feature-item {
+                padding: 10px 0;
+                font-size: 13px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                        <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z"/>
+                        <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z"/>
+                    </svg>
+                </div>
+                Ora et Medita
+            </a>
+            
+            <nav class="nav">
+                <!-- Navegação removida conforme solicitado -->
+            </nav>
+            
+            <div class="cta-buttons">
+                <button class="btn-enroll" onclick="openLoginModal()">
+                    <div class="btn-enroll-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                    <span class="btn-enroll-text">Login</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Ora et Medita</h1>
+                <p class="hero-subtitle">Descubra a paz interior através da meditação cristã</p>
+                
+
+                
+                <!-- Campo de input estilo ChatGPT -->
+                <div class="chatgpt-style-input">
+                    <div class="input-container">
+                        <input type="text" class="chatgpt-input" placeholder="Digite o assunto católico que deseja meditar hoje" id="chatgpt-meditation-topic">
+                                        <button class="chatgpt-send-btn" onclick="generateChatGPTMeditations()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                    </div>
+                </div>
+                
+                <!-- Imagem grande de herói estilo ProLingo -->
+                <div class="hero-image">
+                    <img src="x5fPsaMhzzvrUSdrZC04EenS2KM.avif" alt="Meditação Cristã" class="hero-main-image">
+                    <div class="hero-overlay"></div>
+                    
+                    <!-- Cards de estatísticas sobrepostos estilo ProLingo -->
+                    <div class="stats-card top-left">
+                        <div class="stats-number">10.000+</div>
+                        <div class="stats-label">Meditações</div>
+                    </div>
+                    
+                    <div class="stats-card top-right">
+                        <div class="stats-number">5.000+</div>
+                        <div class="stats-label">Usuários</div>
+                    </div>
+                    
+                    <div class="stats-card bottom-left">
+                        <div class="stats-number">100%</div>
+                        <div class="stats-label">Católico</div>
+                    </div>
+                    
+                    <div class="stats-card bottom-right">
+                        <div class="stats-number">24/7</div>
+                        <div class="stats-label">Disponível</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Lectio Divina Section -->
+    <section class="section">
+        <div class="section-content">
+            <h2 class="section-title">Roteiro da Lectio Divina</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 48px; font-size: 18px; color: var(--secondary-color);">Descubra os quatro passos essenciais para uma leitura orante da Sagrada Escritura</p>
+            
+            <div class="lectio-container">
+                <div class="lectio-content">
+                    <div class="accordion">
+                        <div class="accordion-item active" onclick="toggleAccordion(0)">
+                            <div class="accordion-header">
+                                <span class="step-number">01</span>
+                                <span class="step-title">Leitura</span>
+                                <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Leia atentamente e repetidamente o texto bíblico, deixando que as palavras penetrem em seu coração. Esta é a base de toda a Lectio Divina.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item" onclick="toggleAccordion(1)">
+                            <div class="accordion-header">
+                                <span class="step-number">02</span>
+                                <span class="step-title">Meditação</span>
+                                <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Reflita sobre o que foi lido, perguntando-se: "O que Deus está me dizendo através desta passagem?"</p>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item" onclick="toggleAccordion(2)">
+                            <div class="accordion-header">
+                                <span class="step-number">03</span>
+                                <span class="step-title">Oração</span>
+                                <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Responda ao que Deus falou através da Escritura. Ore com suas próprias palavras, conversando com Deus.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item" onclick="toggleAccordion(3)">
+                            <div class="accordion-header">
+                                <span class="step-number">04</span>
+                                <span class="step-title">Contemplação</span>
+                                <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Repouse na presença de Deus, simplesmente contemplando e deixando-se ser contemplado por Ele.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lectio-image">
+                    <img src="ChatGPT Image 17 de jul. de 2025, 15_49_59.png" alt="Igreja">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Paths Section -->
+    <section class="section">
+        <div class="section-content">
+            <h2 class="section-title">Você sente que sua vida espiritual precisa de mais profundidade?</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <img src="65E1t78GKsIkhhn2S2xBvVlICc.avif" alt="Conexão com Deus" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                                <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z"/>
+                                <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z"/>
+                            </svg>
+                            Dificuldade para encontrar momentos de verdadeira conexão com Deus
+                        </h3>
+                        <p class="card-description">Entre as responsabilidades do dia a dia, sua oração se tornou mecânica? Sente que precisa de mais do que apenas rezar o terço ou ir à missa?</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <img src="IiXb5aPhUPYrYB67wQ5rUolNj0E.avif" alt="Paz Interior" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                                <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z"/>
+                                <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z"/>
+                            </svg>
+                            Busca por paz interior autêntica
+                        </h3>
+                        <p class="card-description">O estresse da vida moderna está afetando sua serenidade? Deseja encontrar a paz que Cristo prometeu, mas não sabe como alcançá-la?</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <img src="Kgf14KVr2LCtbKOhFcIOamF18.avif" alt="Crescimento Espiritual" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                                <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z"/>
+                                <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z"/>
+                            </svg>
+                            Desejo de crescimento espiritual fundamentado
+                        </h3>
+                        <p class="card-description">Quer aprofundar sua fé, mas com práticas que respeitem a doutrina católica? Busca orientação espiritual séria, não apenas técnicas de relaxamento?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="section">
+        <div class="section-content">
+            <h2 class="section-title">Imagine como seria sua vida com uma espiritualidade mais profunda e autêntica:</h2>
+            
+            <div class="benefits-layout">
+                <div class="benefits-text">
+                    <div class="benefits-list">
+                        <div class="benefit-item" data-benefit="paz">
+                            <div class="benefit-header">
+                                <div class="benefit-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                                        <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z" fill="currentColor"/>
+                                        <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <div class="benefit-title">Paz que o mundo não pode dar</div>
+                                <div class="benefit-arrow">▼</div>
+                            </div>
+                            <div class="benefit-description">
+                                <p>Descubra a verdadeira paz interior que vem de Deus, uma serenidade que transcende as circunstâncias da vida. Esta paz não depende de condições externas, mas de uma conexão profunda com o Criador através da meditação e oração.</p>
+                                <p>Jesus disse: "Deixo-vos a paz, a minha paz vos dou; não vo-la dou como o mundo a dá" (João 14:27).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item" data-benefit="relacionamento">
+                            <div class="benefit-header">
+                                <div class="benefit-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <div class="benefit-title">Relacionamento mais íntimo com Jesus</div>
+                                <div class="benefit-arrow">▼</div>
+                            </div>
+                            <div class="benefit-description">
+                                <p>Desenvolva uma amizade profunda e pessoal com Jesus Cristo. Através da meditação católica, você aprenderá a ouvir Sua voz no silêncio do coração e a responder ao Seu amor com uma vida de virtude e santidade.</p>
+                                <p>Como diz São João da Cruz: "Onde não há amor, ponha amor e colherá amor."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item" data-benefit="crescimento">
+                            <div class="benefit-header">
+                                <div class="benefit-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                                        <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z" fill="currentColor"/>
+                                        <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z" fill="currentColor"/>
+                                        <path d="M12 18L12.5 20L15 20.5L12.5 21L12 23L11.5 21L9 20.5L11.5 20L12 18Z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <div class="benefit-title">Crescimento como pessoa e católico</div>
+                                <div class="benefit-arrow">▼</div>
+                            </div>
+                            <div class="benefit-description">
+                                <p>Transforme sua vida através do desenvolvimento das virtudes cristãs. A meditação católica o ajudará a crescer em humildade, caridade, paciência e todas as virtudes que nos tornam mais semelhantes a Cristo.</p>
+                                <p>Como ensina São Paulo: "Já não sou eu que vivo, mas é Cristo que vive em mim" (Gálatas 2:20).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item" data-benefit="serenidade">
+                            <div class="benefit-header">
+                                <div class="benefit-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                                        <path d="M12 1v6M12 17v6M23 12h-6M7 12H1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M20.66 3.34l-4.24 4.24M7.58 16.42l-4.24 4.24M16.42 7.58l4.24-4.24M3.34 20.66l4.24-4.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="benefit-title">Acordar todas as manhãs com serenidade interior</div>
+                                <div class="benefit-arrow">▼</div>
+                            </div>
+                            <div class="benefit-description">
+                                <p>Comece cada dia com uma paz interior que sustenta você durante todas as atividades. A meditação matinal estabelece um fundamento espiritual que transforma sua perspectiva sobre os desafios diários.</p>
+                                <p>Como diz o Salmo 5: "De manhã, Senhor, ouves a minha voz; de manhã te apresento a minha oração e fico aguardando."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item" data-benefit="autenticidade">
+                            <div class="benefit-header">
+                                <div class="benefit-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                                        <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z" fill="currentColor"/>
+                                        <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z" fill="currentColor"/>
+                                        <path d="M12 18L12.5 20L15 20.5L12.5 21L12 23L11.5 21L9 20.5L11.5 20L12 18Z" fill="currentColor"/>
+                                        <path d="M16 6L16.5 8L19 8.5L16.5 9L16 11L15.5 9L13 8.5L15.5 8L16 6Z" fill="currentColor"/>
+                                        <path d="M8 6L8.5 8L11 8.5L8.5 9L8 11L7.5 9L5 8.5L7.5 8L8 6Z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <div class="benefit-title">Viver os valores católicos com mais autenticidade</div>
+                                <div class="benefit-arrow">▼</div>
+                            </div>
+                            <div class="benefit-description">
+                                <p>Integre os valores católicos de forma natural e autêntica em sua vida cotidiana. A meditação ajuda a internalizar os ensinamentos da Igreja, tornando-os parte de quem você é, não apenas do que você faz.</p>
+                                <p>Como ensina São Francisco de Sales: "A santidade não consiste em fazer coisas extraordinárias, mas em fazer coisas ordinárias de forma extraordinária."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="benefits-image">
+                    <img src="x5fPsaMhzzvrUSdrZC04EenS2KM.avif" alt="Pessoa em oração e meditação" class="benefit-photo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Features Section -->
+    <section class="section">
+        <div class="section-content">
+            <div class="features-header">
+                <h2 class="section-title">Nossa plataforma oferece o que você não encontra em outros lugares</h2>
+                <p class="section-subtitle">Desenvolvida com base na tradição milenar da Igreja e tecnologia de ponta</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                                <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z"/>
+                                <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="feature-title">Meditação 100% Católica</h3>
+                    <p class="feature-description">Práticas baseadas nos ensinamentos dos Santos Padres, reflexões bíblicas e litúrgicas, orientação de sacerdotes e teólogos.</p>
+                    <div class="feature-badge">Tradição</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3v18h18"/>
+                                <path d="m19 9-5 5-4-4-3 3"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="feature-title">Método Progressivo e Estruturado</h3>
+                    <p class="feature-description">Desde iniciantes até contemplativos avançados, cronograma personalizado conforme seu ritmo, acompanhamento espiritual contínuo.</p>
+                    <div class="feature-badge">Personalizado</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="feature-title">Biblioteca de Meditações Guiadas</h3>
+                    <p class="feature-description">Mais de 200 sessões de diferentes durações (5 a 60 minutos), temas baseados no Ano Litúrgico, meditações para ocasiões especiais.</p>
+                    <div class="feature-badge">Completo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <!-- CTA Header -->
+            <div class="cta-header">
+                <h2 class="cta-title">Transforme sua vida espiritual em 7 dias</h2>
+                <p class="cta-subtitle">Experimente meditações personalizadas baseadas na tradição católica</p>
+            </div>
+
+            <!-- Plans Cards -->
+            <div class="cta-plans-container">
+                    <!-- Plano Gratuito -->
+                    <div class="pricing-card free-plan">
+                        <div class="pricing-header">
+                            <div class="pricing-badge free">7 DIAS GRÁTIS</div>
+                            <div class="pricing-price">
+                                <span class="price-amount">R$ 0</span>
+                                <span class="price-period">/primeira semana</span>
+                            </div>
+                            <div class="pricing-after">
+                                Depois R$ 9,90/mês
+                            </div>
+                        </div>
+                        
+                        <div class="free-features">
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>7 dias de acesso gratuito</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>3 meditações personalizadas por mês</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Evangelho do dia diariamente</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Acesso biblioteca básica</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Sem cartão de crédito</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="openRegisterModal()" class="cta-button">
+                            <span class="button-text">CADASTRAR GRATUITAMENTE</span>
+                            <span class="button-subtitle">Sem cartão de crédito</span>
+                        </button>
+                        
+                        <div class="pricing-footer">
+                            <p class="pricing-disclaimer">
+                                *Após 7 dias, será redirecionado para pagamento de R$ 9,90/mês.
+                            </p>
+                            <p class="security-note">
+                                🔒 Seus dados estão seguros conosco
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Plano Premium -->
+                    <div class="pricing-card premium-plan">
+                        <div class="pricing-header">
+                            <div class="pricing-badge premium">💎 PREMIUM</div>
+                            <div class="pricing-price">
+                                <span class="price-amount">R$ 9,90</span>
+                                <span class="price-period">/mês</span>
+                            </div>
+                            <div class="pricing-after">
+                                Acesso completo imediato
+                            </div>
+                        </div>
+                        
+                        <div class="premium-features">
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Meditações ilimitadas por IA</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Biblioteca completa (200+ meditações)</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Acesso prioritário</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Suporte especializado</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-check">✅</span>
+                                <span>Sem limitações</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="showRegistrationModal()" class="cta-button premium">
+                            <span class="button-text">ASSINAR PREMIUM</span>
+                            <span class="button-subtitle">Pagamento seguro</span>
+                        </button>
+                        
+                        <div class="pricing-footer">
+                            <p class="pricing-disclaimer">
+                                *Cobrança recorrente mensal. Cancele quando quiser.
+                            </p>
+                            <p class="security-note">
+                                🔒 Pagamento 100% seguro via Kiwify
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <a href="#" class="logo" style="color: white;">
+                        <div class="logo-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                                <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z"/>
+                                <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z"/>
+                            </svg>
+                        </div>
+                        Ora et Medita
+                    </a>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacidade</a>
+                    <a href="#" class="footer-link">Termos</a>
+                    <a href="#" class="footer-link">Suporte</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Ora et Medita. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login/Cadastro Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-container">
+            <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <div class="auth-header">
+                    <div style="background: #10B981; color: white; padding: 8px 16px; border-radius: 20px; display: inline-block; font-size: 12px; font-weight: 600; margin-bottom: 16px;">
+                        7 DIAS GRÁTIS
+                    </div>
+                    <h3 class="auth-title">Bem-vindo de volta</h3>
+                    <p class="auth-subtitle">Entre com suas credenciais para acessar suas meditações</p>
+                </div>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" class="auth-input" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" class="auth-input" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="checkmark"></span>
+                            Lembrar de mim
+                        </label>
+                        <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                    </div>
+                    
+                    <button type="submit" class="auth-button primary">Entrar</button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>ou</span>
+                </div>
+                
+                <button class="auth-button google" onclick="loginWithGoogle()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Continuar com Google
+                </button>
+                
+                <p class="auth-switch">
+                    Não tem uma conta? 
+                    <a href="#" onclick="switchToRegister()">Cadastre-se gratuitamente</a>
+                </p>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form">
+                <div class="auth-header">
+                    <h3 class="auth-title">Crie sua conta</h3>
+                    <p class="auth-subtitle">Cadastre-se gratuitamente e tenha acesso completo por 7 dias às meditações personalizadas</p>
+                    <p style="color: #666; font-size: 13px; margin-top: 8px; text-align: center;">
+                        ✓ Sem cartão de crédito • ✓ Cancelamento a qualquer momento
+                    </p>
+                </div>
+                
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="registerName">Nome</label>
+                            <input type="text" id="registerName" class="auth-input" placeholder="Seu nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerSurname">Sobrenome</label>
+                            <input type="text" id="registerSurname" class="auth-input" placeholder="Seu sobrenome" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail</label>
+                        <input type="email" id="registerEmail" class="auth-input" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword">Senha</label>
+                        <input type="password" id="registerPassword" class="auth-input" placeholder="Mínimo 8 caracteres" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirmar Senha</label>
+                        <input type="password" id="registerConfirmPassword" class="auth-input" placeholder="Confirmo sua senha" required>
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="terms-row" style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                          <input type="checkbox" id="agreeTerms" required>
+                          <label for="agreeTerms" style="margin: 0;">
+                            Concordo com os <a href="#" style="color: #ff6600;">Termos de Uso</a> e <a href="#" style="color: #ff6600;">Política de Privacidade</a>
+                          </label>
+                        </div>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter">
+                            <span class="checkmark"></span>
+                            Receber novidades e meditações por e-mail
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="auth-button primary">Criar conta gratuita</button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>ou</span>
+                </div>
+                
+                <button class="auth-button google" onclick="registerWithGoogle()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Cadastrar com Google
+                </button>
+                
+                <p class="auth-switch">
+                    Já tem uma conta? 
+                    <a href="#" onclick="switchToLogin()">Faça login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carregar configurações da API -->
+    <script src="api-config.js"></script>
+    <script src="chatgpt-api.js"></script>
+    <script src="session-manager.js"></script>
+    <script src="supabase-config.js"></script>
+    
+    <script>
+
+
+
+        
+        // CTA Form handling
+        function handleCTARegister(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const name = document.getElementById('ctaName').value;
+            const email = document.getElementById('ctaEmail').value;
+            const password = document.getElementById('ctaPassword').value;
+            
+            if (!name || !email || !password) {
+                showNotification('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showNotification('A senha deve ter pelo menos 8 caracteres.', 'error');
+                return;
+            }
+            
+            // Simulate registration process
+            showNotification('Criando sua conta...', 'info');
+            
+            setTimeout(() => {
+                // Save user data to localStorage (multiple users support)
+                const newUserData = {
+                    id: 'user_' + Date.now(),
+                    name: name,
+                    email: email,
+                    registrationDate: new Date().toISOString(),
+                    trialExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+                    planType: 'trial',
+                    lastActivity: new Date().toISOString()
+                };
+                
+                // Usar a função centralizada para gerenciar usuários
+                const result = manageUsers(newUserData);
+                if (result.success) {
+                    console.log('✅ Usuário gerenciado com sucesso');
+                    console.log('🆔 ID do usuário:', result.userId);
+                    console.log('📊 Total de usuários:', result.totalUsers);
+                } else {
+                    console.error('❌ Erro ao gerenciar usuário:', result.error);
+                    if (result.emailExists) {
+                        showNotification('❌ Este email já está cadastrado! Use um email diferente.', 'error');
+                        return;
+                    }
+                }
+                
+                // Manter compatibilidade com userData para o usuário atual
+                console.log('💾 Salvando userData no localStorage (registro):', newUserData);
+                localStorage.setItem('userData', JSON.stringify(newUserData));
+                
+                // Verificar se foi salvo corretamente
+                const savedUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                console.log('🔍 Verificação: userData salvo (registro):', savedUserData);
+                
+                showNotification('Conta criada com sucesso! Você tem 7 dias de acesso gratuito.', 'success');
+                form.reset();
+                
+                // Update UI to show logged in state
+                updateUIForLoggedInUser();
+                
+                // Show premium upgrade modal with payment link
+                setTimeout(() => {
+                    showPremiumUpgradeModal(userData);
+                }, 1500);
+            }, 2000);
+        }
+        
+        // Função para gerenciar usuários - SEMPRE criar novo usuário
+        async function manageUsers(newUserData) {
+            console.log('🔄 Função manageUsers chamada com:', newUserData);
+            
+            // Carregar usuários existentes
+            let existingUsers = [];
+            try {
+                const usersData = localStorage.getItem('users');
+                if (usersData) {
+                    existingUsers = JSON.parse(usersData);
+                    console.log('📋 Usuários carregados do localStorage:', existingUsers.length);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar usuários:', error);
+                existingUsers = [];
+            }
+            
+            // Verificar se o email já existe (case-insensitive)
+            const emailExists = existingUsers.some(user => 
+                user.email.toLowerCase() === newUserData.email.toLowerCase()
+            );
+            
+            if (emailExists) {
+                console.log('❌ Email já existe:', newUserData.email);
+                return { 
+                    success: false, 
+                    error: 'Este email já está cadastrado! Use um email diferente.',
+                    emailExists: true 
+                };
+            }
+            
+            // SEMPRE criar um novo usuário com ID único
+            const timestamp = Date.now();
+            const randomId = Math.random().toString(36).substr(2, 9);
+            const uniqueId = `user_${timestamp}_${randomId}`;
+            
+            const newUser = {
+                ...newUserData,
+                id: uniqueId,
+                createdAt: new Date().toISOString(),
+                lastActivity: new Date().toISOString(),
+                userNumber: existingUsers.length + 1 // Número sequencial do usuário
+            };
+            
+            console.log('🆔 Criando novo usuário com ID:', uniqueId);
+            console.log('📊 Número do usuário:', newUser.userNumber);
+            
+            // Adicionar à lista de usuários
+            existingUsers.push(newUser);
+            
+            // Salvar array atualizado
+            try {
+                localStorage.setItem('users', JSON.stringify(existingUsers));
+                console.log('✅ Novo usuário adicionado com sucesso. Total:', existingUsers.length);
+                
+                // Sincronizar com Supabase se disponível
+                if (window.supabaseManager) {
+                    try {
+                        console.log('🔄 Sincronizando com Supabase...');
+                        const supabaseUser = {
+                            email: newUser.email,
+                            name: newUser.name,
+                            password_hash: 'user-created', // Hash temporário
+                            is_active: true
+                        };
+                        
+                        const createdUser = await window.supabaseManager.createUser(supabaseUser);
+                        console.log('✅ Usuário criado no Supabase:', createdUser);
+                        
+                        // Atualizar o ID local com o ID do Supabase
+                        if (createdUser && createdUser[0]) {
+                            newUser.id = createdUser[0].id;
+                            localStorage.setItem('users', JSON.stringify(existingUsers));
+                            console.log('🔄 ID atualizado com ID do Supabase:', newUser.id);
+                        }
+                    } catch (supabaseError) {
+                        console.error('⚠️ Erro ao sincronizar com Supabase:', supabaseError);
+                        console.log('ℹ️ Usuário salvo apenas localmente');
+                    }
+                } else {
+                    console.log('ℹ️ Supabase Manager não disponível - usuário salvo apenas localmente');
+                }
+                
+                // Verificar se foi salvo corretamente
+                const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+                console.log('🔍 Verificação: usuários salvos:', savedUsers.length);
+                
+                return { success: true, userId: uniqueId, totalUsers: existingUsers.length };
+            } catch (error) {
+                console.error('❌ Erro ao salvar usuários:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        // Function to show premium upgrade modal
+        function showPremiumUpgradeModal(userData) {
+            const modal = document.createElement('div');
+            modal.className = 'auth-modal active';
+            modal.innerHTML = `
+                <div class="auth-container" style="max-width: 520px;">
+                    <button class="close-modal" onclick="this.closest('.auth-modal').remove(); window.location.href='dashboard.html'">&times;</button>
+                    <div class="auth-form active" style="padding: 48px 40px;">
+                        <div class="auth-header">
+                            <h3 class="auth-title">🎉 Bem-vindo, ${userData.name}!</h3>
+                            <p class="auth-subtitle">Sua conta foi criada com sucesso. Você tem <strong>7 dias de acesso gratuito</strong> a todas as funcionalidades.</p>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%); border-radius: 16px; padding: 24px; margin: 24px 0; border: 1px solid #e1f0ff;">
+                            <h4 style="color: #2563eb; margin-bottom: 16px; font-size: 18px;">🚀 Após o período gratuito:</h4>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                <span style="background: #f0743e; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold;">💎</span>
+                                <div>
+                                    <p style="margin: 0; font-weight: 600; color: #1f2937;">Plano Premium - R$ 9,90/mês</p>
+                                    <p style="margin: 0; font-size: 14px; color: #6b7280;">Acesso completo a todas as meditações e funcionalidades</p>
+                                </div>
+                            </div>
+                            <ul style="margin: 16px 0; padding-left: 20px; color: #374151;">
+                                <li>✅ Meditações personalizadas ilimitadas</li>
+                                <li>✅ Biblioteca completa de 200+ meditações</li>
+                                <li>✅ Acesso em todos os dispositivos</li>
+                                <li>✅ Suporte prioritário</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="display: flex; gap: 12px;">
+                            <button onclick="window.open('https://pay.kiwify.com.br/T99yn3D', '_blank')" 
+                                    class="auth-button primary" style="flex: 1;">
+                                Garantir Acesso Premium
+                            </button>
+                            <button onclick="this.closest('.auth-modal').remove(); window.location.href='dashboard.html'" 
+                                    class="auth-button" style="flex: 1; background: #f3f4f6; color: #374151;">
+                                Continuar com Trial
+                            </button>
+                        </div>
+                        
+                        <p style="text-align: center; font-size: 12px; color: #6b7280; margin-top: 16px;">
+                            💡 Você pode cancelar a qualquer momento. Sem compromisso.
+                        </p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Plan selection
+        function selectPlan(plan) {
+            document.querySelectorAll('.plan-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Webhook functionality
+        const webhookInput = document.getElementById('webhookInput');
+        const webhookSubmit = document.getElementById('webhookSubmit');
+
+        if (webhookInput && webhookSubmit) {
+            webhookInput.addEventListener('input', function() {
+                if (this.value.trim().length > 0) {
+                    webhookSubmit.style.display = 'flex';
+                } else {
+                    webhookSubmit.style.display = 'none';
+                }
+            });
+
+            webhookSubmit.addEventListener('click', function() {
+                if (webhookInput.value.trim()) {
+                    openAuthModal();
+                }
+            });
+
+            webhookInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    openAuthModal();
+                }
+            });
+        }
+
+        // Authentication functions
+        function openAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openRegisterModal() {
+            // Abrir o modal de autenticação
+            document.getElementById('authModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Garantir que o formulário de cadastro esteja ativo
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchToRegister() {
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.add('active');
+        }
+
+        function switchToLogin() {
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('loginForm').classList.add('active');
+        }
+
+        function openLoginModal() {
+            openAuthModal();
+            switchToLogin();
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            console.log('🔐 handleLogin chamado para:', email);
+            
+            if (!email || !password) {
+                showNotification('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+            
+            // Simulate login process
+            showNotification('Entrando...', 'info');
+            
+            setTimeout(async () => {
+                console.log('✅ Login simulado com sucesso para:', email);
+                showNotification('Login realizado com sucesso!', 'success');
+                closeAuthModal();
+                
+                // Clear form
+                event.target.reset();
+                
+                // Criar dados do usuário para login
+                const userData = {
+                    id: 'user_' + Date.now(),
+                    name: email.split('@')[0], // Usar parte do email como nome
+                    email: email,
+                    password: password,
+                    lastLogin: new Date().toISOString()
+                };
+                
+                // Salvar no localStorage temporariamente
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                // Fazer login via SessionManager
+                if (window.sessionManager) {
+                    try {
+                        await window.sessionManager.loginUser(userData);
+                        console.log('✅ Login via SessionManager realizado');
+                    } catch (error) {
+                        console.error('❌ Erro no login via SessionManager:', error);
+                    }
+                }
+                
+                // Processar login bem-sucedido
+                console.log('🔄 Chamando processSuccessfulLogin...');
+                processSuccessfulLogin();
+            }, 1500);
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const surname = document.getElementById('registerSurname').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+
+            // NOVO: Verificar se já existe usuário cadastrado com mesmo nome ou email
+            const existingUser = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (existingUser && (existingUser.email === email || (existingUser.name && existingUser.name.split(' ')[0] === name))) {
+                showNotification('Usuário já cadastrado. Faça login para acessar sua conta.', 'error');
+                return;
+            }
+            
+            if (!name || !surname || !email || !password || !confirmPassword) {
+                showNotification('Por favor, preencha todos os campos obrigatórios.', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('As senhas não coincidem.', 'error');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showNotification('A senha deve ter pelo menos 8 caracteres.', 'error');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                showNotification('Você deve concordar com os termos de uso.', 'error');
+                return;
+            }
+            
+            // Verificar se é cadastro premium
+            const isPremiumRegistration = window.premiumRegistration === true;
+            
+            // Simulate registration process
+            const loadingMessage = isPremiumRegistration ? 'Criando sua conta premium...' : 'Criando sua conta...';
+            showNotification(loadingMessage, 'info');
+            
+            setTimeout(() => {
+                // Save user data to localStorage (same location for both free and premium)
+                const userData = {
+                    name: `${name} ${surname}`,
+                    email: email,
+                    password: password, // Salvar senha para cadastros premium (opcional)
+                    registrationDate: new Date().toISOString(),
+                    planType: isPremiumRegistration ? 'premium_pending' : 'trial'
+                };
+                
+                // Para cadastros gratuitos, adicionar data de expiração do trial
+                if (!isPremiumRegistration) {
+                    userData.trialExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days from now
+                }
+                
+                // Salvar no mesmo local (userData) para ambos os tipos
+                const newUserData = {
+                    id: 'user_' + Date.now(),
+                    name: userData.name,
+                    email: userData.email,
+                    registrationDate: userData.registrationDate,
+                    planType: userData.planType,
+                    trialExpiry: userData.trialExpiry,
+                    lastActivity: new Date().toISOString()
+                };
+                
+                // Usar a função centralizada para gerenciar usuários
+                const result = manageUsers(newUserData);
+                if (result.success) {
+                    console.log('✅ Usuário gerenciado com sucesso (segunda ocorrência)');
+                    console.log('🆔 ID do usuário:', result.userId);
+                    console.log('📊 Total de usuários:', result.totalUsers);
+                } else {
+                    console.error('❌ Erro ao gerenciar usuário (segunda ocorrência):', result.error);
+                    if (result.emailExists) {
+                        showNotification('❌ Este email já está cadastrado! Use um email diferente.', 'error');
+                        return;
+                    }
+                }
+                
+                // Usar SessionManager para fazer login
+                console.log('🔐 Iniciando login via SessionManager...');
+                window.sessionManager.loginUser(newUserData).then(sessionUserData => {
+                    console.log('✅ Login via SessionManager concluído:', sessionUserData.name);
+                }).catch(error => {
+                    console.error('❌ Erro no login via SessionManager:', error);
+                    // Fallback para método antigo
+                    localStorage.setItem('userData', JSON.stringify(newUserData));
+                });
+                
+                const successMessage = isPremiumRegistration ? 'Conta premium criada! Redirecionando para pagamento...' : 'Conta criada com sucesso!';
+                showNotification(successMessage, 'success');
+                closeAuthModal();
+                
+                // Clear form
+                event.target.reset();
+                
+                // Limpar flag de premium
+                window.premiumRegistration = false;
+                
+                if (isPremiumRegistration) {
+                    // Para cadastros premium, redirecionar para pagamento
+                    setTimeout(() => {
+                        window.open('https://pay.kiwify.com.br/T99yn3D', '_blank');
+                    }, 2000);
+                } else {
+                    // Para cadastros gratuitos, processar login normal
+                    setTimeout(() => {
+                        processSuccessfulLogin();
+                    }, 500);
+                }
+            }, 2000);
+        }
+
+        function loginWithGoogle() {
+            showNotification('Redirecionando para o Google...', 'info');
+            // Here you would integrate with Google OAuth
+        }
+
+        function registerWithGoogle() {
+            showNotification('Redirecionando para o Google...', 'info');
+            // Here you would integrate with Google OAuth
+        }
+
+        function updateUIForLoggedInUser() {
+            // Update header buttons
+            const ctaButtons = document.querySelector('.cta-buttons');
+            ctaButtons.innerHTML = `
+                <button class="btn-primary" onclick="goToDashboard()">Minhas Meditações</button>
+            `;
+        }
+
+        function showUserMenu() {
+            // Create user dropdown menu
+            const menu = document.createElement('div');
+            menu.className = 'user-menu';
+            menu.innerHTML = `
+                <div class="user-menu-item">Minhas Meditações</div>
+                <div class="user-menu-item">Configurações</div>
+                <div class="user-menu-item" onclick="logout()">Sair</div>
+            `;
+            
+            // Position and show menu
+            const button = document.querySelector('.btn-primary');
+            const rect = button.getBoundingClientRect();
+            menu.style.position = 'absolute';
+            menu.style.top = rect.bottom + 8 + 'px';
+            menu.style.right = '20px';
+            menu.style.background = 'white';
+            menu.style.border = '1px solid var(--gray-200)';
+            menu.style.borderRadius = '8px';
+            menu.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            menu.style.zIndex = '1000';
+            
+            document.body.appendChild(menu);
+            
+            // Close menu when clicking outside
+            setTimeout(() => {
+                document.addEventListener('click', function closeMenu(e) {
+                    if (!menu.contains(e.target) && !button.contains(e.target)) {
+                        menu.remove();
+                        document.removeEventListener('click', closeMenu);
+                    }
+                });
+            }, 0);
+        }
+
+        function goToDashboard() {
+            console.log('🔄 goToDashboard chamado');
+            showNotification('Redirecionando para suas meditações...', 'info');
+            setTimeout(() => {
+                console.log('📍 Executando redirecionamento do goToDashboard...');
+                console.log('📍 URL atual:', window.location.href);
+                console.log('🔗 URL de destino:', window.location.origin + '/minhas-meditacoes.html');
+                
+                try {
+                    console.log('🚀 Tentando redirecionamento do goToDashboard...');
+                    window.location.href = 'minhas-meditacoes.html';
+                    console.log('✅ Redirecionamento executado');
+                } catch (error) {
+                    console.error('❌ Erro no redirecionamento:', error);
+                    window.location.replace('minhas-meditacoes.html');
+                }
+            }, 1000);
+        }
+
+        function logout() {
+            showNotification('Saindo...', 'info');
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+            `;
+            
+            const colors = {
+                success: '#27ae60',
+                error: '#e74c3c',
+                info: '#3498db',
+                warning: '#f39c12'
+            };
+            
+            notification.style.background = colors[type];
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Password strength checker
+        const registerPassword = document.getElementById('registerPassword');
+        if (registerPassword) {
+            registerPassword.addEventListener('input', function() {
+                const password = this.value;
+                const strengthBar = document.getElementById('passwordStrength');
+                
+                if (strengthBar) {
+                    let strength = 0;
+                    if (password.length >= 8) strength++;
+                    if (/[a-z]/.test(password)) strength++;
+                    if (/[A-Z]/.test(password)) strength++;
+                    if (/[0-9]/.test(password)) strength++;
+                    if (/[^A-Za-z0-9]/.test(password)) strength++;
+                    
+                    strengthBar.className = 'password-strength';
+                    if (strength <= 2) strengthBar.classList.add('weak');
+                    else if (strength <= 3) strengthBar.classList.add('fair');
+                    else if (strength <= 4) strengthBar.classList.add('good');
+                    else strengthBar.classList.add('strong');
+                }
+            });
+        }
+
+        // Close modal when clicking outside
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeAuthModal();
+                }
+            });
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAuthModal();
+            }
+        });
+
+        // Accordion functionality
+        function toggleAccordion(index) {
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            const clickedItem = accordionItems[index];
+            
+            // Close all other items
+            accordionItems.forEach((item, i) => {
+                if (i !== index) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Toggle clicked item
+            clickedItem.classList.toggle('active');
+        }
+
+        // Initialize first accordion item as active
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstAccordionItem = document.querySelector('.accordion-item');
+            if (firstAccordionItem) {
+                firstAccordionItem.classList.add('active');
+            }
+            
+            // Verificar e limpar dados de usuários anteriores
+            const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+            const topicUserId = localStorage.getItem('topic_user_id');
+            
+            if (topicUserId && topicUserId !== currentUser.id) {
+                console.log('🧹 Limpando dados de usuário anterior na página inicial:', topicUserId, '->', currentUser.id);
+                localStorage.removeItem('topic_user_id');
+                localStorage.removeItem('pending_topic');
+            }
+        });
+
+        // Benefits functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const benefitItems = document.querySelectorAll('.benefit-item');
+            
+            benefitItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const isActive = this.classList.contains('active');
+                    
+                    // Close all other items
+                    benefitItems.forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                    });
+                    
+                    // Toggle clicked item
+                    if (!isActive) {
+                        this.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Gerar meditações apenas com ChatGPT
+        async function generateMeditations(topic) {
+            console.log('🎯 Iniciando geração de meditações com ChatGPT para:', topic);
+            
+            try {
+                // Verificar se a API do ChatGPT está disponível
+                console.log('🔍 Verificando status da API do ChatGPT...');
+                const apiStatus = await chatGPTAPI.checkAPIStatus();
+                console.log('📡 Status da API:', apiStatus);
+                
+                if (apiStatus.status !== 'success') {
+                    console.error('❌ API do ChatGPT não está disponível:', apiStatus.message);
+                    throw new Error(`API do ChatGPT não está disponível: ${apiStatus.message}`);
+                }
+                
+                console.log('🤖 Gerando meditações com ChatGPT...');
+                
+                // Gerar meditações com ChatGPT
+                const result = await chatGPTAPI.generateMeditations(topic);
+                
+                if (result && result.meditations && result.meditations.length > 0) {
+                    console.log('✅ Meditações geradas com ChatGPT com sucesso!');
+                    console.log('📊 Resultado:', {
+                        category: result.category,
+                        total: result.total,
+                        meditationsCount: result.meditations.length
+                    });
+                    return result;
+                } else {
+                    console.error('❌ Resposta vazia do ChatGPT:', result);
+                    throw new Error('Resposta vazia do ChatGPT');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao gerar meditações:', error);
+                throw error;
+            }
+        }
+
+        // Função para carregar documentos católicos
+        async function loadCatholicDocuments() {
+            const documents = [
+                {
+                    title: "Bíblia Sagrada - Evangelhos",
+                    source: "Sagrada Escritura",
+                    content: "Os Evangelhos de Mateus, Marcos, Lucas e João contêm os ensinamentos de Jesus Cristo, suas parábolas, milagres e o exemplo de sua vida. Jesus ensinou sobre humildade, amor ao próximo, oração e as bem-aventuranças. 'Bem-aventurados os pobres de espírito, porque deles é o reino dos céus' (Mt 5,3). 'Aprendei de mim, que sou manso e humilde de coração' (Mt 11,29)."
+                },
+                {
+                    title: "Catecismo da Igreja Católica - Virtudes",
+                    source: "Magistério da Igreja",
+                    content: "O Catecismo ensina sobre as virtudes teologais (fé, esperança e caridade) e as virtudes cardeais (prudência, justiça, fortaleza e temperança). A humildade é a base de todas as virtudes. 'A oração é a elevação da alma a Deus ou o pedido a Deus dos bens convenientes' (CIC 2559). 'A pobreza de espírito é a atitude de abertura e disponibilidade diante de Deus' (CIC 2546)."
+                },
+                {
+                    title: "Encíclica Lumen Fidei",
+                    source: "Papa Francisco",
+                    content: "A fé é luz que vem de Deus e é capaz de iluminar toda a existência do homem. A fé não é uma luz que dissipa todas as nossas trevas, mas uma lâmpada que guia nossos passos na noite. A humildade é essencial para receber a luz da fé."
+                },
+                {
+                    title: "Imitação de Cristo - Tomás de Kempis",
+                    source: "Tradição Espiritual",
+                    content: "'Seguir a Cristo é renunciar a si mesmo, tomar a cruz e imitar a vida de Cristo' (Livro II, Cap. 12). 'A humildade é a base de todas as virtudes' (Livro I, Cap. 2). 'Quem se humilha será exaltado' (Livro III, Cap. 7)."
+                },
+                {
+                    title: "Exercícios Espirituais - Santo Inácio",
+                    source: "Santo Inácio de Loyola",
+                    content: "O objetivo dos exercícios espirituais é ajudar a pessoa a encontrar a vontade de Deus em sua vida e a responder generosamente a essa vontade. A humildade e a oração são fundamentais neste processo de discernimento espiritual."
+                },
+                {
+                    title: "Suma Teológica - Santo Tomás de Aquino",
+                    source: "Doutor da Igreja",
+                    content: "A caridade é a virtude teologal pela qual amamos a Deus sobre todas as coisas por si mesmo, e ao próximo como a nós mesmos por amor de Deus. A humildade é a virtude que nos faz reconhecer nossa dependência de Deus."
+                }
+            ];
+            
+            return documents;
+        }
+
+
+
+
+
+
+
+        // Função para pesquisar nos documentos católicos reais
+        async function searchCatholicDocuments(topic) {
+            console.log(`🔍 Pesquisando documentos católicos sobre: ${topic}`);
+            
+            // Base de dados de documentos católicos EXCLUSIVAMENTE da pasta documents
+            const catholicDocuments = [
+                {
+                    title: 'Bíblia Sagrada - Evangelho de João',
+                    source: 'documents/biblia/',
+                    content: `"Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna." (João 3:16) [Bíblia Sagrada] "Eu sou o caminho, a verdade e a vida. Ninguém vem ao Pai senão por mim." (João 14:6) [Bíblia Sagrada]`
+                },
+                {
+                    title: 'Catecismo da Igreja Católica - A Fé',
+                    source: 'documents/catecismo/',
+                    content: `A fé é uma virtude teologal pela qual cremos em Deus e em tudo o que Ele nos disse e revelou. [Catecismo da Igreja Católica, nn. 1814-1816] A fé é um dom de Deus, uma virtude sobrenatural infundida por Ele. [Catecismo da Igreja Católica, nn. 153-165]`
+                },
+                {
+                    title: 'Encíclica Lumen Fidei',
+                    source: 'documents/enciclicas/',
+                    content: `A fé é luz que vem de Deus e é capaz de iluminar toda a existência do homem. [Encíclica Lumen Fidei, nn. 1-4] A fé não é uma luz que dissipa todas as nossas trevas, mas uma lâmpada que guia nossos passos na noite. [Encíclica Lumen Fidei, nn. 57-58]`
+                },
+                {
+                    title: 'Imitação de Cristo - Tomás de Kempis',
+                    source: 'documents/santos/',
+                    content: `"Seguir a Cristo é renunciar a si mesmo, tomar a cruz e imitar a vida de Cristo. [Imitação de Cristo, Livro II, Cap. 12] A humildade é a base de todas as virtudes." [Imitação de Cristo, Livro I, Cap. 2]`
+                },
+                {
+                    title: 'Suma Teológica - Santo Tomás de Aquino',
+                    source: 'documents/teologia/',
+                    content: `A caridade é a virtude teologal pela qual amamos a Deus sobre todas as coisas por si mesmo, e ao próximo como a nós mesmos por amor de Deus. [Suma Teológica, II-II, q. 23, a. 1]`
+                },
+                {
+                    title: 'Exercícios Espirituais - Santo Inácio',
+                    source: 'documents/santos/',
+                    content: `O objetivo dos exercícios espirituais é ajudar a pessoa a encontrar a vontade de Deus em sua vida e a responder generosamente a essa vontade. [Exercícios Espirituais, nn. 1-20]`
+                },
+                {
+                    title: 'Constituição Dogmática Lumen Gentium',
+                    source: 'documents/enciclicas/',
+                    content: `A Igreja é o sacramento universal da salvação, ou seja, sinal e instrumento da união íntima com Deus e da unidade de todo o gênero humano. [Lumen Gentium, nn. 1-8]`
+                }
+            ];
+            
+            // Filtrar documentos relevantes ao tópico
+            const relevantDocuments = catholicDocuments.filter(doc => {
+                const topicLower = topic.toLowerCase();
+                const docContent = (doc.title + ' ' + doc.content).toLowerCase();
+                
+                // Palavras-chave relacionadas ao tópico
+                const keywords = {
+                    'amor': ['amor', 'caridade', 'bondade', 'misericórdia'],
+                    'fé': ['fé', 'crença', 'confiança', 'esperança'],
+                    'esperança': ['esperança', 'confiança', 'fé', 'futuro'],
+                    'caridade': ['caridade', 'amor', 'bondade', 'misericórdia'],
+                    'oração': ['oração', 'rezar', 'contemplação', 'meditação'],
+                    'humildade': ['humildade', 'modéstia', 'simplicidade'],
+                    'paz': ['paz', 'tranquilidade', 'serenidade', 'calma'],
+                    'perdão': ['perdão', 'misericórdia', 'reconciliação'],
+                    'gratidão': ['gratidão', 'agradecimento', 'reconhecimento'],
+                    'paciência': ['paciência', 'perseverança', 'constância']
+                };
+                
+                const topicKeywords = keywords[topicLower] || [topicLower];
+                
+                return topicKeywords.some(keyword => docContent.includes(keyword));
+            });
+            
+            // Se não encontrar documentos específicos, usar documentos gerais
+            const finalDocuments = relevantDocuments.length > 0 ? relevantDocuments : catholicDocuments.slice(0, 3);
+            
+            // Simular tempo de processamento (reduzido para 100ms)
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            console.log(`✅ Encontrados ${finalDocuments.length} documentos relevantes para "${topic}"`);
+            return finalDocuments;
+        }
+
+
+
+
+
+        // SOLUÇÃO DEFINITIVA - Função para gerar meditações estilo ChatGPT
+        async function generateChatGPTMeditations() {
+            const topicInput = document.getElementById('chatgpt-meditation-topic');
+            if (!topicInput) {
+                console.error('❌ Elemento chatgpt-meditation-topic não encontrado');
+                showNotification('Erro: Campo de tópico não encontrado.', 'error');
+                return;
+            }
+            
+            const topic = topicInput.value.trim();
+            
+            if (!topic) {
+                showNotification('Por favor, digite um assunto católico para gerar as meditações.', 'error');
+                return;
+            }
+            
+            console.log('🎯 Tópico selecionado:', topic);
+            
+            // Obter usuário atual (se já estiver logado)
+            const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+            const currentUserId = currentUser.id || null;
+            
+            // Salvar o tópico para usar após o cadastro
+            localStorage.setItem('pending_topic', topic);
+            // Salvar o ID do usuário que digitou o assunto (se houver)
+            if (currentUserId) {
+                localStorage.setItem('topic_user_id', currentUserId);
+                console.log('👤 Usuário atual que digitou o assunto:', currentUser.name, 'ID:', currentUserId);
+            } else {
+                localStorage.removeItem('topic_user_id');
+                console.log('👤 Nenhum usuário logado quando digitou o assunto');
+            }
+            // Marcar que o login será feito através do fluxo de cadastro
+            localStorage.setItem('login_from_registration', 'true');
+            console.log('💾 Tópico salvo no localStorage:', topic);
+            console.log('🏷️ Login será feito através do fluxo de cadastro');
+            
+            // Abrir modal de cadastro diretamente
+            openRegisterModal();
+        }
+
+        // Função para carregar dados do usuário do admin
+        async function loadUserDataFromAdmin(email) {
+            try {
+                console.log('🔍 Carregando dados do usuário do admin para:', email);
+                
+                // Carregar dados dos usuários do admin
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                console.log('📊 Usuários encontrados no admin:', users.length);
+                console.log('📋 Lista de emails no admin:', users.map(u => u.email));
+                
+                // Procurar usuário pelo email
+                const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+                console.log('🔍 Busca por email:', email.toLowerCase());
+                console.log('✅ Usuário encontrado:', user ? 'SIM' : 'NÃO');
+                
+                if (user) {
+                    console.log('✅ Usuário encontrado no admin:', user);
+                    
+                    // Buscar meditações personalizadas do usuário
+                    const personalizedMeditations = JSON.parse(localStorage.getItem('personalized_meditations_history') || '[]');
+                    const userPersonalizedData = personalizedMeditations.filter(m => m.userId === user.id);
+                    console.log('📚 Meditações personalizadas encontradas:', userPersonalizedData.length);
+                    
+                    // Buscar agendamentos do usuário
+                    const userSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                    const userSchedulesData = userSchedules.filter(s => s.userId === user.id);
+                    console.log('📅 Agendamentos encontrados:', userSchedulesData.length);
+                    
+                    // Buscar estatísticas específicas do usuário
+                    const userStats = JSON.parse(localStorage.getItem('user_meditation_stats') || '{}');
+                    const userStatsData = userStats[user.id] || {};
+                    console.log('📊 Estatísticas encontradas:', userStatsData);
+                    
+                    // Retornar dados completos do usuário
+                    return {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        userNumber: user.userNumber,
+                        createdAt: user.createdAt,
+                        lastLogin: new Date().toISOString(),
+                        // Adicionar campos específicos do dashboard se existirem
+                        preferences: user.preferences || {},
+                        stats: {
+                            ...user.stats,
+                            ...userStatsData,
+                            totalPersonalized: userPersonalizedData.length,
+                            totalSchedules: userSchedulesData.length,
+                            consecutiveDays: user.stats?.consecutiveDays || userStatsData.consecutiveDays || 0,
+                            completedMeditations: user.stats?.completedMeditations || userStatsData.completedMeditations || 0,
+                            totalTime: user.stats?.totalTime || userStatsData.totalTime || '0h 0min',
+                            totalMeditations: user.stats?.totalMeditations || userStatsData.totalMeditations || 0,
+                            inProgressMeditations: user.stats?.inProgressMeditations || userStatsData.inProgressMeditations || 0
+                        },
+                        personalizedMeditations: userPersonalizedData,
+                        schedules: userSchedulesData
+                    };
+                } else {
+                    console.log('⚠️ Usuário não encontrado no admin, criando novo...');
+                    
+                    // Criar novo usuário no admin
+                    const newUser = {
+                        id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        name: email.split('@')[0], // Usar parte do email como nome
+                        email: email,
+                        userNumber: users.length + 1,
+                        createdAt: new Date().toISOString(),
+                        lastLogin: new Date().toISOString(),
+                        preferences: {},
+                        stats: {
+                            consecutiveDays: 0,
+                            completedMeditations: 0,
+                            totalTime: '0h 0min',
+                            totalMeditations: 0,
+                            inProgressMeditations: 0,
+                            totalPersonalized: 0,
+                            totalSchedules: 0
+                        },
+                        personalizedMeditations: [],
+                        schedules: []
+                    };
+                    
+                    // Adicionar à lista de usuários
+                    users.push(newUser);
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    console.log('✅ Novo usuário criado no admin:', newUser);
+                    return newUser;
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar dados do usuário do admin:', error);
+                throw error;
+            }
+        }
+
+        // SOLUÇÃO DEFINITIVA - Função para processar login bem-sucedido
+        async function processSuccessfulLogin() {
+            try {
+                console.log('🔄 Processando login bem-sucedido...');
+                
+                // Verificar se SessionManager está disponível
+                if (!window.sessionManager) {
+                    console.error('❌ SessionManager não está disponível');
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+                
+                // Obter dados do usuário atual via SessionManager
+                let currentUser = window.sessionManager.getCurrentUser();
+                console.log('👤 Usuário atual via SessionManager:', currentUser);
+                
+                if (!currentUser || !currentUser.email) {
+                    console.error('❌ Usuário não encontrado no SessionManager');
+                    console.log('🔍 Tentando buscar dados do localStorage...');
+                    
+                    // Fallback: buscar dados do localStorage
+                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    if (userData && userData.email) {
+                        console.log('✅ Dados encontrados no localStorage:', userData);
+                        // Tentar fazer login via SessionManager
+                        await window.sessionManager.loginUser(userData);
+                        currentUser = window.sessionManager.getCurrentUser();
+                        if (currentUser && currentUser.email) {
+                            console.log('✅ Login via SessionManager realizado com sucesso');
+                        } else {
+                            console.error('❌ Falha ao fazer login via SessionManager');
+                            window.location.href = 'dashboard.html';
+                            return;
+                        }
+                    } else {
+                        console.error('❌ Nenhum dado de usuário encontrado');
+                        window.location.href = 'dashboard.html';
+                        return;
+                    }
+                }
+                
+                console.log('✅ Usuário já está logado via SessionManager:', currentUser.name);
+                
+                // BUSCAR DADOS COMPLETOS DO USUÁRIO NO ADMIN PANEL
+                console.log('🔍 Buscando dados completos do usuário no admin panel...');
+                const completeUserData = await loadUserDataFromAdmin(currentUser.email);
+                
+                if (completeUserData) {
+                    console.log('✅ Dados completos encontrados:', completeUserData);
+                    
+                    // Atualizar dados do usuário com informações completas do admin
+                    const updatedUserData = {
+                        ...currentUser,
+                        ...completeUserData,
+                        stats: completeUserData.stats || currentUser.stats || {}
+                    };
+                    
+                    // Salvar dados atualizados
+                    localStorage.setItem('userData', JSON.stringify(updatedUserData));
+                    
+                    // Atualizar SessionManager com dados completos
+                    if (window.sessionManager) {
+                        window.sessionManager.loginUser(updatedUserData);
+                    }
+                    
+                    console.log('✅ Dados do usuário atualizados com informações do admin');
+                } else {
+                    console.log('⚠️ Dados completos não encontrados, usando dados básicos');
+                }
+                
+                // Verificar se há um tópico pendente
+                const pendingTopic = localStorage.getItem('pending_topic');
+                console.log('📋 Tópico pendente:', pendingTopic);
+                
+                if (pendingTopic) {
+                    // Limpar o tópico pendente e o ID do usuário
+                    localStorage.removeItem('pending_topic');
+                    localStorage.removeItem('topic_user_id');
+                    console.log('🧹 Tópico pendente e ID do usuário removidos');
+                    
+                    // Gerar as meditações personalizadas
+                    console.log('🚀 Iniciando geração de meditações...');
+                    generateMeditationsAfterLogin(pendingTopic);
+                } else {
+                    // Limpar flag de login do fluxo de cadastro se não há tópico pendente
+                    localStorage.removeItem('login_from_registration');
+                    console.log('🧹 Flag de login do fluxo de cadastro removida');
+                    
+                    // Redirecionar para dashboard após login
+                    console.log('📊 Redirecionando para dashboard...');
+                    setTimeout(() => {
+                        // Forçar recarregamento completo do dashboard e limpar cache
+                        window.location.href = 'dashboard.html?t=' + Date.now() + '&clear_cache=true';
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('❌ Erro em processSuccessfulLogin:', error);
+                // Redirecionar para dashboard mesmo com erro
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        // SOLUÇÃO DEFINITIVA - Função para gerar meditações após login
+        async function generateMeditationsAfterLogin(topic) {
+            console.log('🚀 Iniciando geração de meditação após login para:', topic);
+            
+            try {
+                // Mostrar loading com imagem
+                showLoadingWithImage('Gerando sua meditação personalizada...');
+                
+                // Verificar se a API está disponível
+                console.log('🔍 Verificando status da API...');
+                const apiStatus = await checkAPIStatus();
+                
+                if (!apiStatus.status || apiStatus.status !== 'success') {
+                    throw new Error('API do ChatGPT não está disponível');
+                }
+                
+                // Gerar com ChatGPT
+                console.log('🤖 Gerando com ChatGPT...');
+                const result = await generateMeditations(topic);
+                
+                if (result && result.meditations && result.meditations.length > 0) {
+                    console.log('✅ Meditação gerada:', result.meditations[0].title);
+                    
+                    // Obter usuário atual (verificar se mudou desde que digitou o assunto)
+                    const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+                    const userId = currentUser.id || 'anonymous';
+                    
+                    console.log('👤 Usuário atual na geração:', currentUser.name, 'ID:', userId);
+                    
+                    // Verificar se o usuário mudou desde que digitou o assunto
+                    const topicUser = localStorage.getItem('topic_user_id');
+                    if (topicUser && topicUser !== userId) {
+                        console.log('⚠️ Usuário mudou desde que digitou o assunto:', topicUser, '->', userId);
+                        // Limpar o assunto do usuário anterior
+                        localStorage.removeItem('current_topic');
+                        localStorage.removeItem('topic_user_id');
+                        showNotification('Usuário mudou. Por favor, digite o assunto novamente.', 'warning');
+                        return;
+                    }
+                    
+                    // Salvar meditação personalizada no formato simplificado com ID do usuário
+                    const existingPersonalized = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                    
+                    const meditation = result.meditations[0];
+                    const meditationWithMeta = {
+                        id: meditation.id,
+                        title: meditation.title,
+                        topic: result.category,
+                        content: meditation.content,
+                        duration: meditation.duration || '15 min',
+                        status: 'pending',
+                        createdAt: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        source: 'chatgpt',
+                        type: 'simple',
+                        userId: userId, // ID do usuário que gerou a meditação
+                        userName: currentUser.name || 'Usuário' // Nome do usuário para referência
+                    };
+                    
+                    // Adicionar nova meditação ao array existente
+                    const updatedMeditations = existingPersonalized.concat([meditationWithMeta]);
+                    localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                    
+                    // Também salvar no histórico
+                    addToPersonalizedHistory({
+                        category: result.category,
+                        meditations: [meditationWithMeta],
+                        total: 1,
+                        createdAt: new Date().toISOString(),
+                        userId: userId, // ID do usuário que gerou
+                        userName: currentUser.name || 'Usuário' // Nome do usuário
+                    });
+                    
+                    console.log('✅ Meditação salva, redirecionando...');
+                    
+                    // Esconder loading
+                    hideLoading();
+                    
+                    // Mostrar sucesso
+                    showNotification('Meditação gerada com sucesso!', 'success');
+                    
+                    // Verificar se o login foi feito através do fluxo de cadastro
+                    const isFromRegistrationFlow = localStorage.getItem('login_from_registration') === 'true';
+                    
+                    if (!isFromRegistrationFlow) {
+                        // Mostrar modal de boas-vindas apenas se não for do fluxo de cadastro
+                        setTimeout(() => {
+                            // Limpar flag de login do fluxo de cadastro
+                            localStorage.removeItem('login_from_registration');
+                            console.log('🧹 Flag de login do fluxo de cadastro removida');
+                            showWelcomeModal();
+                        }, 2000);
+                    } else {
+                        // Redirecionar diretamente para minhas meditações se for do fluxo de cadastro
+                        setTimeout(() => {
+                            // Limpar flag de login do fluxo de cadastro
+                            localStorage.removeItem('login_from_registration');
+                            console.log('🧹 Flag de login do fluxo de cadastro removida');
+                            window.location.href = 'minhas-meditacoes.html';
+                        }, 2000);
+                    }
+                    
+                } else {
+                    throw new Error('Falha na geração: resultado vazio ou inválido');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro na geração:', error);
+                
+                // Esconder loading
+                hideLoading();
+                
+                // Mostrar erro e redirecionar (sem loop)
+                showNotification('Erro ao gerar meditações. Redirecionando...', 'error');
+                
+                // Redirecionar após 3 segundos (sem tentar novamente)
+                setTimeout(() => {
+                    console.log('🔄 Redirecionando devido ao erro...');
+                    window.location.href = 'minhas-meditacoes.html';
+                }, 3000);
+            }
+        }
+
+        // Função para mostrar loading com imagem
+        function showLoadingWithImage(message = 'Gerando suas meditações...') {
+            console.log('⏳ Loading com imagem:', message);
+            
+            // Criar overlay de loading
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'loading-overlay';
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+                color: white;
+                font-family: Arial, sans-serif;
+            `;
+            
+            // Criar container do loading
+            const loadingContainer = document.createElement('div');
+            loadingContainer.style.cssText = `
+                text-align: center;
+                padding: 40px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            `;
+            
+            // Criar imagem de loading (ícone de oração)
+            const loadingImage = document.createElement('div');
+            loadingImage.innerHTML = `
+                <div style="font-size: 80px; margin-bottom: 20px; animation: pulse 2s infinite;">
+                    🙏
+                </div>
+            `;
+            
+            // Criar texto de loading
+            const loadingText = document.createElement('div');
+            loadingText.innerHTML = `
+                <h3 style="margin: 0 0 10px 0; font-size: 24px;">${message}</h3>
+                <p style="margin: 0; font-size: 16px; opacity: 0.8;">Aguarde enquanto o ChatGPT cria suas meditações personalizadas...</p>
+                <div style="margin-top: 20px;">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite;"></div>
+                </div>
+            `;
+            
+            // Adicionar CSS para animações
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.1); }
+                    100% { transform: scale(1); }
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            
+            // Montar o loading
+            loadingContainer.appendChild(loadingImage);
+            loadingContainer.appendChild(loadingText);
+            loadingOverlay.appendChild(loadingContainer);
+            document.head.appendChild(style);
+            document.body.appendChild(loadingOverlay);
+        }
+
+        // Função para esconder loading
+        function hideLoading() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.remove();
+            }
+        }
+
+        // Verificar se há tópico pendente ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            const pendingTopic = localStorage.getItem('pending_topic');
+            if (pendingTopic) {
+                // Preencher o campo de input com o tópico pendente
+                const inputField = document.getElementById('chatgpt-meditation-topic');
+                if (inputField) {
+                    inputField.value = pendingTopic;
+                    inputField.placeholder = `Regenerando meditações sobre: ${pendingTopic}`;
+                } else {
+                    console.warn('⚠️ Campo chatgpt-meditation-topic não encontrado para preencher tópico pendente');
+                }
+            }
+            
+            // Verificar se há flag de cadastro premium
+            const premiumFlag = localStorage.getItem('premium_registration_flag');
+            if (premiumFlag === 'true') {
+                // Limpar a flag
+                localStorage.removeItem('premium_registration_flag');
+                
+                // Abrir modal de cadastro em modo premium
+                setTimeout(() => {
+                    showRegistrationModal();
+                }, 500);
+            }
+            
+            // Verificar se foi redirecionado via hash
+            if (window.location.hash === '#premium-register') {
+                // Limpar o hash
+                history.replaceState(null, null, ' ');
+                
+                // Se não houver flag, criar uma
+                if (!premiumFlag) {
+                    setTimeout(() => {
+                        showRegistrationModal();
+                    }, 500);
+                }
+            }
+        });
+
+        // Função para mostrar loading
+        function showLoading(message = 'Carregando...') {
+            console.log('⏳ Loading:', message);
+            // Aqui você pode implementar uma UI de loading se necessário
+        }
+
+        // Função para adicionar meditações ao histórico
+        function addToPersonalizedHistory(newMeditations) {
+            try {
+                console.log('📝 Adicionando ao histórico:', newMeditations);
+                
+                // Verificar se newMeditations é válido
+                if (!newMeditations || typeof newMeditations !== 'object') {
+                    throw new Error('Dados de meditações inválidos');
+                }
+                
+                // Obter histórico existente
+                let history = JSON.parse(localStorage.getItem('personalized_meditations_history') || '[]');
+                
+                // Verificar se já existe uma categoria com o mesmo nome para o mesmo usuário
+                const existingIndex = history.findIndex(item => 
+                    item.category === newMeditations.category && 
+                    item.userId === newMeditations.userId
+                );
+                
+                if (existingIndex !== -1) {
+                    // Atualizar categoria existente
+                    history[existingIndex] = {
+                        ...newMeditations,
+                        lastUpdated: new Date().toISOString(),
+                        totalGenerated: (history[existingIndex].totalGenerated || 0) + 1
+                    };
+                } else {
+                    // Adicionar nova categoria
+                    history.push({
+                        ...newMeditations,
+                        createdAt: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        totalGenerated: 1
+                    });
+                }
+                
+                // Salvar histórico atualizado
+                localStorage.setItem('personalized_meditations_history', JSON.stringify(history));
+                
+                console.log('✅ Histórico de meditações personalizadas atualizado:', history);
+            } catch (error) {
+                console.error('❌ Erro ao salvar no histórico:', error);
+                console.error('❌ Stack trace:', error.stack);
+            }
+        }
+
+        // Permitir gerar meditações com Enter no campo ChatGPT
+        const chatgptTopicInput = document.getElementById('chatgpt-meditation-topic');
+        if (chatgptTopicInput) {
+            chatgptTopicInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    generateChatGPTMeditations();
+                }
+            });
+        }
+
+
+
+    // Função para mostrar modal de cadastro Premium
+    function showRegistrationModal() {
+        // Marcar que é um cadastro premium
+        window.premiumRegistration = true;
+        
+        // Abrir o modal de cadastro existente
+        openRegisterModal();
+        
+        // Modificar a aparência para indicar que é premium
+        setTimeout(() => {
+            const authHeader = document.querySelector('#registerForm .auth-header');
+            const authTitle = document.querySelector('#registerForm .auth-title');
+            const authSubtitle = document.querySelector('#registerForm .auth-subtitle');
+            const submitButton = document.querySelector('#registerForm .auth-button.primary');
+            
+            if (authHeader) {
+                // Adicionar badge premium
+                const premiumBadge = document.createElement('div');
+                premiumBadge.style.cssText = `
+                    background: linear-gradient(135deg, #E97E00 0%, #F59E0B 100%);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    display: inline-block;
+                    font-size: 12px;
+                    font-weight: 600;
+                    margin-bottom: 16px;
+                `;
+                premiumBadge.textContent = '💎 PREMIUM';
+                
+                // Remover badge gratuito se existir
+                const freeBadge = authHeader.querySelector('div');
+                if (freeBadge && freeBadge.textContent.includes('GRÁTIS')) {
+                    freeBadge.remove();
+                }
+                
+                authHeader.insertBefore(premiumBadge, authTitle);
+            }
+            
+            if (authTitle) {
+                authTitle.textContent = 'Cadastro Premium';
+            }
+            
+            if (authSubtitle) {
+                authSubtitle.innerHTML = `
+                    Complete seu cadastro para finalizar sua assinatura Premium
+                    <br><small style="color: #E97E00; font-weight: 600;">Acesso ilimitado + Conteúdo exclusivo</small>
+                `;
+            }
+            
+            if (submitButton) {
+                submitButton.innerHTML = `
+                    🔐 FINALIZAR CADASTRO E PAGAR
+                    <br><small style="font-weight: normal; opacity: 0.9; font-size: 0.8em;">Redirecionando para pagamento seguro</small>
+                `;
+                submitButton.style.background = 'linear-gradient(135deg, #E97E00 0%, #F59E0B 100%)';
+            }
+        }, 100);
+    }
+
+    // Função para mostrar modal de boas-vindas
+    function showWelcomeModal() {
+        // Obter dados do usuário
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const firstName = userData.name ? userData.name.split(' ')[0] : 'Usuário';
+        const lastName = userData.name ? userData.name.split(' ').slice(1).join(' ') : '';
+        const fullName = `${firstName} ${lastName}`.trim();
+
+        // Criar modal
+        const modal = document.createElement('div');
+        modal.className = 'welcome-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        `;
+
+        modal.innerHTML = `
+            <div class="welcome-content" style="
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                max-width: 400px;
+                width: 100%;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                position: relative;
+                animation: slideInUp 0.4s ease-out;
+            ">
+                <button onclick="this.closest('.welcome-modal').remove()" style="
+                    position: absolute;
+                    top: 15px;
+                    right: 20px;
+                    background: none;
+                    border: none;
+                    font-size: 28px;
+                    color: #9ca3af;
+                    cursor: pointer;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.background='#f3f4f6'; this.style.color='#374151';" onmouseout="this.style.background='none'; this.style.color='#9ca3af';">×</button>
+
+                <div style="font-size: 60px; margin-bottom: 20px;">🎉</div>
+                
+                <h2 style="color: #1f2937; margin-bottom: 16px; font-size: 24px; font-weight: 700;">
+                    Bem-vindo, ${fullName}!
+                </h2>
+                
+                <p style="color: #6b7280; margin-bottom: 30px; font-size: 16px; line-height: 1.5;">
+                    Sua conta foi criada com sucesso. Você tem <strong style="color: #059669;">7 dias de acesso gratuito</strong> a todas as funcionalidades.
+                </p>
+
+                <div style="
+                    background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
+                    border-radius: 16px;
+                    padding: 24px;
+                    margin: 24px 0;
+                    border: 1px solid #bfdbfe;
+                ">
+                    <h4 style="color: #1e40af; margin-bottom: 16px; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        🚀 Após o período gratuito:
+                    </h4>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; justify-content: center;">
+                        <div style="
+                            background: #ea580c;
+                            color: white;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 20px;
+                        ">💎</div>
+                        <div style="text-align: left;">
+                            <div style="font-weight: 700; color: #1f2937; font-size: 18px;">Plano Premium - R$ 9,90/mês</div>
+                            <p style="margin: 0; font-size: 14px; color: #6b7280;">Acesso completo a todas as meditações e funcionalidades</p>
+                        </div>
+                    </div>
+
+                    <ul style="margin: 16px 0; padding: 0; list-style: none; color: #374151; text-align: left;">
+                        <li style="margin: 8px 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #059669; font-size: 16px;">✅</span>
+                            <span>Meditações personalizadas ilimitadas</span>
+                        </li>
+                        <li style="margin: 8px 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #059669; font-size: 16px;">✅</span>
+                            <span>Biblioteca completa de 200+ meditações</span>
+                        </li>
+                        <li style="margin: 8px 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #059669; font-size: 16px;">✅</span>
+                            <span>Acesso em todos os dispositivos</span>
+                        </li>
+                        <li style="margin: 8px 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #059669; font-size: 16px;">✅</span>
+                            <span>Suporte prioritário</span>
+                        </li>
+                    </ul>
+
+                    <p style="text-align: center; font-size: 12px; color: #6b7280; margin-top: 16px;">
+                        *Cobrança recorrente mensal. Cancele quando quiser.
+                    </p>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 30px;">
+                    <button onclick="upgradeToPremium()" style="
+                        flex: 1;
+                        background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+                        color: white;
+                        border: none;
+                        padding: 16px 24px;
+                        border-radius: 12px;
+                        font-weight: 600;
+                        font-size: 16px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(234, 88, 12, 0.4)';" onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='0 4px 12px rgba(234, 88, 12, 0.3)';">
+                        Garantir Acesso Premium
+                    </button>
+                    
+                    <button onclick="continueWithTrial()" style="
+                        flex: 1;
+                        background: white;
+                        color: #6b7280;
+                        border: 2px solid #e5e7eb;
+                        padding: 16px 24px;
+                        border-radius: 12px;
+                        font-weight: 600;
+                        font-size: 16px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.borderColor='#d1d5db'; this.style.color='#374151';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#6b7280';">
+                        Continuar com Trial
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Adicionar animação CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInUp {
+                from {
+                    transform: translateY(100px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Adicionar ao DOM
+        document.body.appendChild(modal);
+
+        // Animar entrada
+        setTimeout(() => {
+            modal.style.opacity = '1';
+        }, 10);
+    }
+
+    // Função para upgrade para premium
+    function upgradeToPremium() {
+        // Fechar modal
+        const modal = document.querySelector('.welcome-modal');
+        if (modal) {
+            modal.remove();
+        }
+        
+        // Abrir página de pagamento
+        window.open('https://pay.kiwify.com.br/T99yn3D', '_blank');
+        
+        // Redirecionar para minhas meditações
+        setTimeout(() => {
+            window.location.href = 'minhas-meditacoes.html';
+        }, 1000);
+    }
+
+    // Função para continuar com trial
+    function continueWithTrial() {
+        // Fechar modal
+        const modal = document.querySelector('.welcome-modal');
+        if (modal) {
+            modal.remove();
+        }
+        
+        // Mostrar notificação
+        showNotification('Aproveitando período gratuito! Redirecionando...', 'success');
+        
+        // Redirecionar para minhas meditações
+        setTimeout(() => {
+            window.location.href = 'minhas-meditacoes.html';
+        }, 1500);
+    }
+
+    // No final do arquivo, adicionar o JS para fechar o modal:
+    document.addEventListener('DOMContentLoaded', function() {
+      var closeBtn = document.getElementById('closeWelcomeModal');
+      if (closeBtn) {
+        closeBtn.onclick = function() {
+          document.getElementById('welcomeModal').style.display = 'none';
+        };
+      }
+    });
+
+    </script>
+</body>
+</html> 

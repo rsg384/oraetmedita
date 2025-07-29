@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Sincronização de Progresso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .button.success {
+            background: #28a745;
+        }
+        .button.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .button.danger {
+            background: #dc3545;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #23243a;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #a3a8c9;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste - Sincronização de Progresso</h1>
+    
+    <div class="test-section">
+        <h2>1. Dados Reais do Usuário "Rodrigo Silva Goes"</h2>
+        <div class="stats-display">
+            <div class="stat-card">
+                <div class="stat-number" id="realCompleted">2</div>
+                <div class="stat-label">Meditações Completadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="realConsecutive">2</div>
+                <div class="stat-label">Dias Consecutivos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="realTime">30min</div>
+                <div class="stat-label">Tempo Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="realInProgress">1</div>
+                <div class="stat-label">Andamento</div>
+            </div>
+        </div>
+        <p><strong>Usuário:</strong> rodrigo silva goes (RSG)</p>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Verificar Scripts</h2>
+        <button class="button" onclick="checkScripts()">🔍 Verificar Scripts</button>
+        <div id="scriptsStatus"></div>
+        <pre id="scriptsInfo"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Criar Usuário de Teste</h2>
+        <button class="button" onclick="createRodrigoUser()">👤 Criar Usuário Rodrigo Silva Goes</button>
+        <button class="button warning" onclick="createOtherUser()">👤 Criar Outro Usuário</button>
+        <button class="button danger" onclick="clearUser()">🗑️ Limpar Usuário</button>
+        <div id="userStatus"></div>
+        <pre id="userInfo"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Testar Sincronização</h2>
+        <button class="button" onclick="forceSyncProgress()">🔄 Forçar Sincronização</button>
+        <button class="button" onclick="checkAndFixDataConsistency()">🔍 Verificar Consistência</button>
+        <button class="button" onclick="updateProgressStats()">📊 Atualizar Estatísticas</button>
+        <div id="syncStatus"></div>
+        <pre id="syncInfo"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Navegar para Páginas</h2>
+        <p>Após criar o usuário e sincronizar, navegue para as páginas para verificar:</p>
+        <button class="button success" onclick="window.open('http://localhost:3171/dashboard.html', '_blank')">🚀 Abrir Dashboard</button>
+        <button class="button success" onclick="window.open('http://localhost:3171/progresso.html', '_blank')">📊 Abrir Progresso</button>
+        <button class="button" onclick="window.open('http://localhost:3171/index.html', '_blank')">🏠 Abrir Página Inicial</button>
+    </div>
+
+    <!-- Scripts necessários -->
+    <script src="session-manager.js"></script>
+    <script src="progress-sync.js"></script>
+
+    <script>
+        function checkScripts() {
+            const statusDiv = document.getElementById('scriptsStatus');
+            const infoDiv = document.getElementById('scriptsInfo');
+            
+            const info = {
+                sessionManager: typeof window.sessionManager !== 'undefined',
+                syncProgressData: typeof window.syncProgressData === 'function',
+                forceSyncProgress: typeof window.forceSyncProgress === 'function',
+                updateProgressStats: typeof window.updateProgressStats === 'function',
+                checkAndFixDataConsistency: typeof window.checkAndFixDataConsistency === 'function',
+                timestamp: new Date().toISOString()
+            };
+            
+            if (info.sessionManager && info.syncProgressData) {
+                statusDiv.innerHTML = '<div class="status success">✅ Scripts carregados corretamente</div>';
+            } else {
+                statusDiv.innerHTML = '<div class="status error">❌ Scripts não encontrados</div>';
+            }
+            
+            infoDiv.textContent = JSON.stringify(info, null, 2);
+        }
+
+        function createRodrigoUser() {
+            const statusDiv = document.getElementById('userStatus');
+            const infoDiv = document.getElementById('userInfo');
+            
+            try {
+                // Criar usuário "rodrigo silva goes"
+                const rodrigoUser = {
+                    id: 'rodrigo_silva_goes_' + Date.now(),
+                    name: 'rodrigo silva goes',
+                    email: 'rodrigo@teste.com',
+                    userNumber: 1,
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString(),
+                    preferences: {},
+                    stats: {
+                        completedMeditations: 2,
+                        consecutiveDays: 2,
+                        totalTime: '30min',
+                        inProgressMeditations: 1
+                    }
+                };
+                
+                // Salvar no localStorage
+                localStorage.setItem('userData', JSON.stringify(rodrigoUser));
+                
+                // Fazer login via SessionManager
+                if (window.sessionManager) {
+                    window.sessionManager.loginUser(rodrigoUser);
+                }
+                
+                statusDiv.innerHTML = '<div class="status success">✅ Usuário Rodrigo Silva Goes criado com dados reais</div>';
+                infoDiv.textContent = JSON.stringify(rodrigoUser, null, 2);
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Erro ao criar usuário</div>';
+                infoDiv.textContent = error.message;
+            }
+        }
+
+        function createOtherUser() {
+            const statusDiv = document.getElementById('userStatus');
+            const infoDiv = document.getElementById('userInfo');
+            
+            try {
+                // Criar outro usuário
+                const otherUser = {
+                    id: 'other_user_' + Date.now(),
+                    name: 'João Silva',
+                    email: 'joao@teste.com',
+                    userNumber: 2,
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString(),
+                    preferences: {},
+                    stats: {
+                        completedMeditations: 5,
+                        consecutiveDays: 3,
+                        totalTime: '1h 15min',
+                        inProgressMeditations: 2
+                    }
+                };
+                
+                // Salvar no localStorage
+                localStorage.setItem('userData', JSON.stringify(otherUser));
+                
+                // Fazer login via SessionManager
+                if (window.sessionManager) {
+                    window.sessionManager.loginUser(otherUser);
+                }
+                
+                statusDiv.innerHTML = '<div class="status info">ℹ️ Outro usuário criado (não será sincronizado)</div>';
+                infoDiv.textContent = JSON.stringify(otherUser, null, 2);
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Erro ao criar usuário</div>';
+                infoDiv.textContent = error.message;
+            }
+        }
+
+        function clearUser() {
+            const statusDiv = document.getElementById('userStatus');
+            const infoDiv = document.getElementById('userInfo');
+            
+            try {
+                localStorage.removeItem('userData');
+                if (window.sessionManager) {
+                    window.sessionManager.logoutUser();
+                }
+                
+                statusDiv.innerHTML = '<div class="status info">🗑️ Usuário removido</div>';
+                infoDiv.textContent = 'Dados do usuário foram limpos';
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Erro ao limpar usuário</div>';
+                infoDiv.textContent = error.message;
+            }
+        }
+
+        // Sobrescrever funções para mostrar status
+        const originalForceSyncProgress = window.forceSyncProgress;
+        window.forceSyncProgress = function() {
+            const statusDiv = document.getElementById('syncStatus');
+            const infoDiv = document.getElementById('syncInfo');
+            
+            statusDiv.innerHTML = '<div class="status info">🔄 Executando sincronização...</div>';
+            
+            try {
+                originalForceSyncProgress();
+                statusDiv.innerHTML = '<div class="status success">✅ Sincronização forçada concluída</div>';
+                
+                // Mostrar dados atuais
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                infoDiv.textContent = JSON.stringify(userData, null, 2);
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Erro na sincronização</div>';
+                infoDiv.textContent = error.message;
+            }
+        };
+
+        const originalCheckAndFixDataConsistency = window.checkAndFixDataConsistency;
+        window.checkAndFixDataConsistency = function() {
+            const statusDiv = document.getElementById('syncStatus');
+            const infoDiv = document.getElementById('syncInfo');
+            
+            statusDiv.innerHTML = '<div class="status info">🔍 Verificando consistência...</div>';
+            
+            try {
+                originalCheckAndFixDataConsistency();
+                statusDiv.innerHTML = '<div class="status success">✅ Verificação de consistência concluída</div>';
+                
+                // Mostrar dados atuais
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                infoDiv.textContent = JSON.stringify(userData, null, 2);
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Erro na verificação</div>';
+                infoDiv.textContent = error.message;
+            }
+        };
+
+        const originalUpdateProgressStats = window.updateProgressStats;
+        window.updateProgressStats = function() {
+            const statusDiv = document.getElementById('syncStatus');
+            const infoDiv = document.getElementById('syncInfo');
+            
+            statusDiv.innerHTML = '<div class="status info">📊 Atualizando estatísticas...</div>';
+            
+            try {
+                originalUpdateProgressStats();
+                statusDiv.innerHTML = '<div class="status success">✅ Estatísticas atualizadas</div>';
+                
+                // Mostrar dados atuais
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                infoDiv.textContent = JSON.stringify(userData, null, 2);
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Erro ao atualizar estatísticas</div>';
+                infoDiv.textContent = error.message;
+            }
+        };
+
+        // Verificar scripts ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                checkScripts();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

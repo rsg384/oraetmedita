@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Admin Panel + Supabase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Admin Panel + Supabase</h1>
+        
+        <div class="test-section">
+            <h3>Verificações</h3>
+            <button class="btn" onclick="checkSupabaseManager()">Verificar Supabase Manager</button>
+            <button class="btn" onclick="testCategoryForm()">Simular Formulário de Categoria</button>
+            <button class="btn success" onclick="testUpdateCategory()">Testar updateCategory</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Logs</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <!-- Supabase Manager -->
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        function checkSupabaseManager() {
+            log('🔍 Verificando Supabase Manager...');
+            
+            if (typeof window.supabaseManager !== 'undefined') {
+                log('✅ Supabase Manager está disponível');
+                log('📋 Métodos disponíveis:');
+                log('- getCategories: ' + (typeof window.supabaseManager.getCategories));
+                log('- createCategory: ' + (typeof window.supabaseManager.createCategory));
+                log('- updateCategory: ' + (typeof window.supabaseManager.updateCategory));
+                log('- deleteCategory: ' + (typeof window.supabaseManager.deleteCategory));
+            } else {
+                log('❌ Supabase Manager NÃO está disponível');
+                log('💡 Verifique se o script supabase-config.js foi carregado');
+            }
+        }
+
+        function testCategoryForm() {
+            log('🧪 Simulando formulário de categoria...');
+            
+            // Simular dados do formulário
+            const formData = new FormData();
+            formData.append('name', 'Categoria de Teste');
+            formData.append('icon', '📝');
+            formData.append('description', 'Descrição de teste');
+            formData.append('color', '#ff0000');
+            formData.append('status', 'active');
+            
+            const editingId = 'test-uuid-1234-5678-9012-345678901234'; // UUID de teste
+            const categoryData = {
+                name: formData.get('name'),
+                icon: formData.get('icon'),
+                description: formData.get('description'),
+                color: formData.get('color'),
+                status: formData.get('status')
+            };
+            
+            log('📝 Editing ID:', editingId);
+            log('📝 Category Data:', JSON.stringify(categoryData, null, 2));
+            
+            // Simular a lógica do admin-panel
+            if (editingId) {
+                log('✏️ Modo de edição detectado');
+                
+                if (window.supabaseManager) {
+                    log('✅ Supabase Manager disponível para sincronização');
+                    
+                    // Verificar se é UUID do Supabase
+                    if (editingId.includes('-') && editingId.length === 36) {
+                        log('✅ ID é UUID do Supabase, pode atualizar diretamente');
+                        
+                        const supabaseCategoryData = {
+                            name: categoryData.name,
+                            description: categoryData.description,
+                            icon: categoryData.icon || '',
+                            color: categoryData.color || '#7ee787',
+                            is_active: categoryData.status === 'active',
+                            sort_order: 0
+                        };
+                        
+                        log('📋 Dados para Supabase:', JSON.stringify(supabaseCategoryData, null, 2));
+                        
+                        // Testar a atualização
+                        window.supabaseManager.updateCategory(editingId, supabaseCategoryData)
+                            .then(result => {
+                                log('✅ Atualização simulada bem-sucedida');
+                                log('📋 Resultado:', JSON.stringify(result, null, 2));
+                            })
+                            .catch(error => {
+                                log('❌ Erro na atualização simulada: ' + error.message);
+                            });
+                    } else {
+                        log('⚠️ ID não é UUID do Supabase');
+                    }
+                } else {
+                    log('❌ Supabase Manager não disponível');
+                }
+            } else {
+                log('📝 Modo de criação detectado');
+            }
+        }
+
+        async function testUpdateCategory() {
+            log('🧪 Testando updateCategory diretamente...');
+            
+            try {
+                // Buscar categorias primeiro
+                const categories = await window.supabaseManager.getCategories();
+                log(`📊 Categorias encontradas: ${categories.length}`);
+                
+                if (categories.length === 0) {
+                    log('❌ Nenhuma categoria para testar');
+                    return;
+                }
+                
+                const testCategory = categories[0];
+                log(`📝 Testando com categoria: ${testCategory.name} (${testCategory.id})`);
+                
+                const updateData = {
+                    name: testCategory.name + ' - TESTE ' + Date.now(),
+                    description: 'Descrição de teste atualizada',
+                    icon: '🧪',
+                    color: '#ff0000',
+                    is_active: true
+                };
+                
+                log('📋 Dados para atualização:', JSON.stringify(updateData, null, 2));
+                
+                const result = await window.supabaseManager.updateCategory(testCategory.id, updateData);
+                log('📋 Resultado da atualização:', JSON.stringify(result, null, 2));
+                
+                log('✅ Teste de updateCategory concluído');
+                
+            } catch (error) {
+                log(`❌ Erro no teste: ${error.message}`);
+            }
+        }
+
+        // Carregar quando a página carregar
+        window.addEventListener('load', function() {
+            log('🚀 Página carregada. Iniciando testes...');
+            checkSupabaseManager();
+        });
+    </script>
+</body>
+</html> 

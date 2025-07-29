@@ -1,0 +1,32 @@
+# 🚀 COMANDOS PARA COPIAR E COLAR NO TERMINAL
+
+# 1. Abrir Terminal (Cmd + Space, digite "Terminal")
+
+# 2. Navegar para o projeto
+cd "/Users/rodrigogoes/Desktop/Projeto-OraetMedita 5"
+
+# 3. Configurar Git
+git config --global user.name "Rodrigo Silva Goes"
+git config --global user.email "rodrigo@oraetmedita.com"
+
+# 4. Inicializar repositório
+git init
+
+# 5. Adicionar arquivos
+git add .
+
+# 6. Fazer primeiro commit
+git commit -m "🎉 Initial commit: Ora et Medita - Sistema de Meditações Católicas"
+
+# 7. Conectar com GitHub
+git remote add origin https://github.com/rsg384/oraetemedita.git
+
+# 8. Enviar para GitHub
+git branch -M main
+git push -u origin main
+
+# 9. Verificar se funcionou
+# Acesse: https://github.com/rsg384/oraetemedita
+
+# 10. Para futuros deploys
+./cursor-deploy.sh 

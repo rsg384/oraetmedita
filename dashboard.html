@@ -1,0 +1,4780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ora et Medita</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ora et Medita">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            --background-dark: #0F0F23;
+            --background-card: #1A1A2E;
+            --background-light: #2A2A3E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --accent-green: #10B981;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --border-color: #374151;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Modo Claro */
+        :root[data-theme="light"] {
+            --background-dark: #F8FAFC;
+            --background-card: #FFFFFF;
+            --background-light: #F1F5F9;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border-color: #E2E8F0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Garantir que não haja overflow horizontal */
+        html, body, .dashboard-container, .main-content {
+            overflow-x: hidden;
+        }
+
+        /* Espaçamento entre títulos e cards */
+        .espaco-entre-titulo-e-cards {
+            height: 1.5rem;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 100vw;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--background-card);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .sidebar-nav {
+            padding: 2rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 1.5rem 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border-left-color: var(--accent-blue);
+        }
+
+        .nav-item.active {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border-left-color: var(--accent-blue);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 1.5rem;
+            max-width: calc(100vw - 260px);
+            overflow-x: hidden;
+            position: relative;
+            z-index: 1;
+            background: var(--background-dark);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+
+
+
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .theme-icon {
+            transition: all 0.3s ease;
+        }
+
+        .theme-icon.sun-icon {
+            display: block;
+        }
+
+        .theme-icon.moon-icon {
+            display: none;
+        }
+
+        :root[data-theme="light"] .theme-icon.sun-icon {
+            display: none;
+        }
+
+        :root[data-theme="light"] .theme-icon.moon-icon {
+            display: block;
+        }
+
+        .notification-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative; /* Added for notification badge */
+        }
+
+        .notification-btn:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            background: rgba(37, 40, 43, 0.9);
+            border: 1px solid rgba(82, 87, 92, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .user-profile:hover {
+            background: rgba(37, 40, 43, 1);
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .section-icon {
+            font-size: 1.2em;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 0.5rem 0.5rem 1rem 0.5rem;
+            position: relative;
+            max-width: 100%;
+        }
+
+        /* Cards de Progresso por Categoria */
+        .progress-card {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            width: 100%;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .progress-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .progress-percentage {
+            font-weight: 700;
+            color: var(--accent-green);
+            font-size: 1.1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--background-card);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        /* Card "Ver + categorias" */
+        .view-more-card {
+            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-card) 100%);
+            border: 2px dashed var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .view-more-card:hover {
+            border-color: var(--accent-blue);
+            background: linear-gradient(135deg, var(--background-card) 0%, var(--background-light) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .view-more-card .progress-title {
+            color: var(--accent-blue);
+        }
+
+        .view-more-card .progress-percentage {
+            color: var(--accent-blue) !important;
+        }
+
+        .view-more-card .progress-text {
+            color: var(--accent-blue) !important;
+        }
+
+        .progress-card {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .progress-percentage {
+            font-size: 1rem;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+
+
+        @media (max-width: 1024px) {
+            .progress-grid,
+            .my-meditations-grid,
+            .schedule-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .progress-grid,
+            .my-meditations-grid,
+            .schedule-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .my-meditations-section {
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+        .my-meditations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 0.5rem 0.5rem 1rem 0.5rem;
+            position: relative;
+            max-width: 100%;
+        }
+
+
+
+        .view-all-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            color: var(--accent-green-hover);
+            transform: translateX(2px);
+        }
+
+
+
+
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: var(--background-dark);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-green-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #23243a;
+            color: #f5f6fa;
+            border: 1px solid #3a3b5a;
+        }
+
+        .btn-secondary:hover {
+            background: #3a3b5a;
+            border-color: #7ee787;
+        }
+
+
+
+
+
+        /* Estilo para botões "Ver mais" */
+        .more-button {
+            background: linear-gradient(135deg, #23243a 0%, #2a2d3e 100%);
+            border: 2px dashed #7ee787;
+            opacity: 0.8;
+            width: 280px;
+            min-width: 280px;
+            flex-shrink: 0;
+        }
+
+        /* Estilo para botão "Ver mais meditações" dentro dos cards */
+        .more-meditations-btn {
+            background: linear-gradient(135deg, #23243a 0%, #2a2d3e 100%);
+            border: 2px dashed #7ee787 !important;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .more-meditations-btn:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(126, 231, 135, 0.2);
+        }
+
+        .more-button:hover {
+            opacity: 1;
+            border-color: #7ee787;
+            background: linear-gradient(135deg, #2a2d3e 0%, #3a3b5a 100%);
+        }
+
+        /* Cards de Meditações */
+        .meditation-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: visible;
+            width: 100%;
+            height: 160px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .meditation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+            z-index: 100;
+        }
+
+        .meditation-card-content {
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border-radius: 16px;
+        }
+
+        .meditation-card-content:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .meditation-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meditation-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .meditation-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .meditation-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+        }
+
+        .meditation-topic {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .meditation-card-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: auto;
+        }
+
+        .meditation-duration,
+        .meditation-date {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Estado vazio para meditações */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--background-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            font-size: 1.125rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Estilos para o campo estilo ChatGPT */
+        .chatgpt-style-input {
+            max-width: 600px;
+            margin: 1rem auto;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 12px;
+        }
+
+        .chatgpt-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: var(--text-primary);
+            background: transparent;
+            resize: none;
+            min-height: 24px;
+            max-height: 120px;
+            line-height: 1.5;
+        }
+
+        .chatgpt-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .chatgpt-send-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .chatgpt-send-btn:hover {
+            background: #059669;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .chatgpt-style-input:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
+        }
+
+        /* Dashboard Schedules Section */
+        .dashboard-schedules-section {
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .dashboard-schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--background-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-schedule-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-schedule-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .dashboard-schedule-time {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .dashboard-schedule-category {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .dashboard-schedule-days {
+            display: flex;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .dashboard-day-badge {
+            background: var(--background-card);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .dashboard-schedule-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dashboard-action-btn {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .dashboard-action-btn:hover {
+            background: var(--background-light);
+            color: var(--text-primary);
+        }
+
+        .dashboard-action-btn.delete:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+
+        .chatgpt-send-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chatgpt-send-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+
+        .btn-secondary:hover {
+            background: var(--background-card);
+        }
+
+        .more-button .category-title {
+            color: #7ee787;
+            font-weight: 600;
+        }
+
+        .more-button .category-description {
+            color: #a3a8c9;
+            font-style: italic;
+        }
+
+        .progress-card.more-button {
+            background: linear-gradient(135deg, #23243a 0%, #2a2d3e 100%);
+            border: 2px dashed #7ee787;
+        }
+
+        .progress-card.more-button:hover {
+            background: linear-gradient(135deg, #2a2d3e 0%, #3a3b5a 100%);
+            border-color: #7ee787;
+        }
+
+        .progress-card.more-button .progress-title {
+            color: #7ee787;
+        }
+
+        .progress-card.more-button .progress-fill {
+            background: linear-gradient(90deg, #7ee787 0%, #5acd6a 100%);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .category-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-gradient);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .category-count {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .category-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .method-indicator {
+            background: var(--background-light);
+            color: var(--text-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border-color);
+            cursor: help;
+        }
+
+        .method-text {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .meditation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .meditation-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, var(--background-light) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: visible;
+            cursor: pointer;
+        }
+
+        .meditation-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .meditation-item-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .meditation-item-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .meditation-status {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .start-meditation-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-meditation-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .meditation-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            opacity: 0.8;
+        }
+
+        .meditation-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .meditation-count {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .meditation-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8B5CF6 0%, #3B82F6 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .meditation-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .meditation-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .meditation-item.more-item {
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .meditation-item.more-item:hover {
+            background: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
+        }
+
+        .meditation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .meditation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .meditation-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .meditation-duration {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .meditation-date {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .meditation-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            color: #10B981;
+        }
+
+        .status-pending {
+            color: #3B82F6;
+        }
+
+        .status-locked {
+            color: #6B7280;
+        }
+
+        .status-available {
+            color: #8B5CF6;
+        }
+
+        .meditation-type-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .type-free {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .type-premium {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+            color: #8B5CF6;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        /* Schedule Section */
+        .schedule-section {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-schedule-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-schedule-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Cards de agendamento simplificados */
+
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--background-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .schedule-time {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .schedule-category {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .schedule-days {
+            display: flex;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .day-badge {
+            background: var(--background-card);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .schedule-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .action-btn:hover {
+            background: var(--background-light);
+            color: var(--text-primary);
+        }
+
+        .action-btn.delete:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+
+        /* Modal de Agendamento */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--background-card);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--background-light);
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-select,
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-light);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .weekdays {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .weekday-btn {
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .weekday-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .weekday-btn:hover {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .schedule-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .schedule-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .schedule-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .schedule-card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .schedule-action-btn {
+            width: 28px;
+            height: 28px;
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-action-btn:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .schedule-action-btn.delete:hover {
+            background: #ef4444;
+        }
+
+        .schedule-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .schedule-card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .schedule-card-time {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .time-icon {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .time-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .schedule-card-days {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            margin-top: auto;
+        }
+
+        .day-badge {
+            background: var(--accent-blue);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Card "Ver mais" */
+        .schedule-card.more-card {
+            border: 2px dashed var(--accent-blue);
+            background: var(--background-card);
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        .schedule-card.more-card:hover {
+            opacity: 1;
+            border-color: var(--accent-blue);
+        }
+
+        .schedule-card.more-card .schedule-card-title {
+            color: var(--accent-green);
+        }
+
+        .schedule-card-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .schedule-card-explore {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .explore-icon {
+            color: var(--accent-green);
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .explore-text {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .schedule-days {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .day-badge {
+            padding: 0.25rem 0.5rem;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 280px; /* Espaço para o menu lateral */
+            width: calc(100% - 280px); /* Largura total menos o menu */
+            height: 100vh;
+            background: var(--background-primary);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            background: var(--background-primary);
+            border-radius: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 3rem;
+            margin-bottom: 0;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--background-card);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-select,
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .weekdays {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .weekday-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            background: var(--background-light);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .weekday-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            /* Modal responsivo */
+            .modal {
+                left: 0;
+                width: 100%;
+            }
+            
+            .modal-header {
+                padding: 1.5rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+
+
+            .progress-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section {
+                padding: 1.5rem;
+            }
+
+            .hero-greeting {
+                font-size: 1.4rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+
+            .stat-item {
+                min-width: 80px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+                display: block;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+                text-align: center;
+            }
+
+
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        /* CSS para cards de agendamentos no dashboard */
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--background-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-item.more-button {
+            cursor: pointer;
+            border: 2px dashed var(--accent-blue);
+            opacity: 0.8;
+        }
+
+        .schedule-item.more-button:hover {
+            opacity: 1;
+            border-color: var(--accent-blue);
+        }
+
+
+
+        .schedule-days {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .day-badge {
+            padding: 0.25rem 0.5rem;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                            <path d="M19 15L19.5 17L22 17.5L19.5 18L19 20L18.5 18L16 17.5L18.5 17L19 15Z"/>
+                            <path d="M5 15L5.5 17L8 17.5L5.5 18L5 20L4.5 18L2 17.5L4.5 17L5 15Z"/>
+                        </svg>
+                    </div>
+                    Ora et Medita
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Navegação</div>
+                    <a href="#" class="nav-item active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9,22 9,12 15,12 15,22"/>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="minhas-meditacoes.html" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                        Minhas meditações
+                    </a>
+                    <a href="categorias.html" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="15" rx="2" ry="2"/>
+                            <line x1="9" y1="9" x2="15" y2="9"/>
+                            <line x1="9" y1="12" x2="15" y2="12"/>
+                            <line x1="9" y1="15" x2="12" y2="15"/>
+                        </svg>
+                        Categorias
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Progresso</div>
+                    <a href="progresso.html" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        Progresso
+                    </a>
+                    <a href="agendamentos.html" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                        Agendamentos
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Comunidade</div>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        Comunidade
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Direção Espiritual
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Conta</div>
+                    <a href="#" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Configurações
+                    </a>
+                    <a href="#" class="nav-item" id="logoutButton" onclick="logout(); return false;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16,17 21,12 16,7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Sair
+                    </a>
+                </div>
+
+
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+                    <div class="top-bar">
+            <div class="page-title">
+                <h1>Dashboard</h1>
+            </div>
+            <div class="user-menu">
+                <button class="theme-toggle-btn" onclick="toggleTheme()" title="Alternar tema">
+                    <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <button class="notification-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">--</div>
+                    <span class="user-name" id="userName">Carregando...</span>
+                </div>
+            </div>
+            </div>
+
+
+
+            <!-- Progress Section -->
+            <section class="progress-section">
+                <h3 class="section-title">
+                    Seu Progresso Espiritual
+                </h3>
+                <div class="espaco-entre-titulo-e-cards"></div>
+                <div class="progress-grid" id="dashboardProgressGrid">
+                    <!-- Os cards de progresso por categoria serão carregados dinamicamente -->
+                </div>
+            </section>
+
+            <!-- Minhas Meditações Geradas por IA Section -->
+            <section class="my-meditations-section">
+                <div class="section-header">
+                    <h3 class="section-title">Minhas Meditações Geradas por IA</h3>
+                </div>
+                
+                <!-- Campo de input estilo ChatGPT -->
+                <div class="chatgpt-style-input">
+                    <div class="input-container">
+                        <input type="text" class="chatgpt-input" placeholder="Digite o assunto católico que deseja meditar hoje" id="dashboard-meditation-topic">
+                        <button class="chatgpt-send-btn" onclick="generateDashboardMeditation()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="my-meditations-grid" id="my-meditations-grid">
+                    <!-- As meditações personalizadas serão carregadas aqui -->
+                </div>
+            </section>
+
+
+
+        </main>
+    </div>
+
+    <!-- Dashboard Schedule Modal -->
+    <div class="modal" id="dashboardScheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Agendar Meditação</h3>
+                <button class="close-btn" onclick="closeDashboardScheduleModal()">&times;</button>
+            </div>
+            <div style="padding: 3rem; background: var(--background-card); margin: 1rem 2rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                <form id="dashboardScheduleForm">
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <!-- Opções serão carregadas dinamicamente via JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Dias da Semana</label>
+                        <div class="weekdays">
+                            <button type="button" class="weekday-btn" data-day="seg">S</button>
+                            <button type="button" class="weekday-btn" data-day="ter">T</button>
+                            <button type="button" class="weekday-btn" data-day="qua">Q</button>
+                            <button type="button" class="weekday-btn" data-day="qui">Q</button>
+                            <button type="button" class="weekday-btn" data-day="sex">S</button>
+                            <button type="button" class="weekday-btn" data-day="sab">S</button>
+                            <button type="button" class="weekday-btn" data-day="dom">D</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Horário</label>
+                        <input name="time" type="time" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notificações</label>
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+                            <input name="notifications" type="checkbox" id="dashboardNotifications" checked>
+                            <label for="dashboardNotifications">Ativar lembretes</label>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeDashboardScheduleModal()">Cancelar</button>
+                        <button type="submit" class="btn-primary">Salvar Agenda</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Dados do usuário
+        let currentUser = {
+            name: 'João Silva',
+            email: 'joao@exemplo.com',
+            streak: 15,
+            totalMeditations: 127,
+            totalTime: '8h 30min',
+            avatar: 'JS'
+        };
+
+        // Dados das categorias e meditações - Carregados do localStorage
+        let categories = {};
+        
+        // Dados dos agendamentos do dashboard
+        let dashboardSchedules = [];
+
+        // Função para carregar dados do localStorage
+        function loadDataFromStorage() {
+            console.log('=== loadDataFromStorage called ===');
+            
+            // Carregar dados do localStorage
+            let adminMeditations = [];
+            let storedCategories = [];
+            
+            try {
+                // Carregar dados do admin
+                adminMeditations = JSON.parse(localStorage.getItem('meditations')) || [];
+                storedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+                
+                console.log('✅ Dados carregados do localStorage:');
+                console.log('- Admin Meditations:', adminMeditations.length, 'items');
+                console.log('- Stored Categories:', storedCategories.length, 'items');
+                
+                // Debug: mostrar conteúdo dos dados
+                if (adminMeditations.length > 0) {
+                    console.log('📋 Primeira meditação do admin:', adminMeditations[0]);
+                }
+                if (storedCategories.length > 0) {
+                    console.log('📋 Primeira categoria do admin:', storedCategories[0]);
+                }
+                
+                // Verificar se os dados são válidos
+                if (!Array.isArray(adminMeditations)) {
+                    console.warn('⚠️ adminMeditations não é um array, corrigindo...');
+                    adminMeditations = [];
+                }
+                if (!Array.isArray(storedCategories)) {
+                    console.warn('⚠️ storedCategories não é um array, corrigindo...');
+                    storedCategories = [];
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar dados do localStorage:', error);
+                adminMeditations = [];
+                storedCategories = [];
+            }
+            
+            // Inicializar categorias
+            categories = {};
+            
+            // PRIORIDADE 1: Se há dados do admin, usar apenas eles
+            if (adminMeditations.length > 0) {
+                console.log('✅ Dados do admin encontrados, processando...');
+                console.log('📊 Meditações do admin:', adminMeditations.length);
+                
+                // Agrupar meditações por categoria
+                const meditationsByCategory = {};
+                adminMeditations.forEach(meditation => {
+                    const categoryName = meditation.category || meditation.categoryId || 'Sem Categoria';
+                    if (!meditationsByCategory[categoryName]) {
+                        meditationsByCategory[categoryName] = [];
+                    }
+                    meditationsByCategory[categoryName].push(meditation);
+                });
+                
+                console.log('📂 Categorias encontradas:', Object.keys(meditationsByCategory));
+                
+                // Criar categorias baseadas nas meditações do admin
+                Object.keys(meditationsByCategory).forEach((categoryName, index) => {
+                    const categoryMeditations = meditationsByCategory[categoryName];
+                    const categoryKey = categoryName.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+                    
+                    categories[categoryKey] = {
+                        id: `admin_cat_${index + 1}`,
+                        name: categoryName,
+                        icon: '📖',
+                        total: categoryMeditations.length,
+                        completed: categoryMeditations.filter(m => m.status === 'completed').length,
+                        inProgress: categoryMeditations.filter(m => m.status === 'pending' || m.status === 'in_progress').length,
+                        locked: categoryMeditations.filter(m => m.status === 'locked').length,
+                        meditations: categoryMeditations.map(meditation => ({
+                            id: meditation.id,
+                            title: meditation.title,
+                            duration: meditation.duration || '15 min',
+                            status: meditation.status || 'pending',
+                            // Incluir campos de conteúdo para debug
+                            lectio: meditation.lectio || '',
+                            meditatio: meditation.meditatio || '',
+                            oratio: meditation.oratio || '',
+                            contemplatio: meditation.contemplatio || ''
+                        }))
+                    };
+                    
+                    console.log(`✅ Categoria "${categoryName}" criada com ${categoryMeditations.length} meditações`);
+                });
+                
+                console.log('✅ Processamento dos dados do admin concluído');
+                console.log('📊 Total de categorias criadas:', Object.keys(categories).length);
+                
+                // Atualizar estatísticas imediatamente
+                updateDashboardStats();
+                updateProgressStatsRow();
+                
+                // Carregar meditações personalizadas
+                loadPersonalizedMeditations();
+                
+                return; // Sair da função após processar dados do admin
+            }
+            
+            // PRIORIDADE 2: Se não há dados do admin, usar categorias padrão
+            console.log('⚠️ Nenhum dado do admin encontrado, usando categorias padrão');
+            
+            categories = {
+                'principios': {
+                    id: 'cat_1',
+                    name: 'Princípios da Vida Sobrenatural',
+                    icon: '✨',
+                    total: 24,
+                    completed: 19,
+                    inProgress: 5,
+                    locked: 0,
+                    meditations: [
+                        { id: 1, title: 'A Vida Interior', duration: '15 min', status: 'completed' },
+                        { id: 2, title: 'A Graça Santificante', duration: '18 min', status: 'completed' },
+                        { id: 3, title: 'A Oração Mental', duration: '20 min', status: 'pending' }
+                    ]
+                },
+                'imitacao': {
+                    id: 'cat_2',
+                    name: 'Imitação de Cristo',
+                    icon: '✝️',
+                    total: 20,
+                    completed: 8,
+                    inProgress: 12,
+                    locked: 0,
+                    meditations: [
+                        { id: 1, title: 'Humildade Cristã', duration: '12 min', status: 'completed' },
+                        { id: 2, title: 'Desapego das Coisas Mundanas', duration: '15 min', status: 'pending' },
+                        { id: 3, title: 'A Paz Interior', duration: '18 min', status: 'locked' }
+                    ]
+                },
+                'evangelho': {
+                    id: 'cat_3',
+                    name: 'Evangelho do Dia',
+                    icon: '📖',
+                    total: 15,
+                    completed: 5,
+                    inProgress: 10,
+                    locked: 0,
+                    meditations: [
+                        { id: 1, title: 'A Parábola do Semeador', duration: '15 min', status: 'completed' },
+                        { id: 2, title: 'O Bom Samaritano', duration: '18 min', status: 'pending' },
+                        { id: 3, title: 'A Oração do Pai Nosso', duration: '20 min', status: 'locked' }
+                    ]
+                },
+                'salmos': {
+                    id: 'cat_4',
+                    name: 'Salmos',
+                    icon: '🎵',
+                    total: 12,
+                    completed: 3,
+                    inProgress: 9,
+                    locked: 0,
+                    meditations: [
+                        { id: 1, title: 'Salmo 1 - O Homem Bem-Aventurado', duration: '15 min', status: 'completed' },
+                        { id: 2, title: 'Salmo 23 - O Senhor é meu Pastor', duration: '18 min', status: 'pending' },
+                        { id: 3, title: 'Salmo 51 - Miserere', duration: '20 min', status: 'locked' }
+                    ]
+                }
+            };
+            
+            console.log('✅ Categorias padrão carregadas');
+            
+            // Carregar meditações personalizadas
+            loadPersonalizedMeditations();
+        }
+
+        // Função para carregar meditações na seção "Minhas Meditações Geradas por IA"
+        function loadMyMeditations() {
+            try {
+                console.log('🔄 Carregando seção Minhas Meditações Geradas por IA...');
+                const myMeditationsGrid = document.getElementById('my-meditations-grid');
+                
+                if (!myMeditationsGrid) {
+                    console.log('❌ Grid de Minhas Meditações Geradas por IA não encontrado');
+                    return;
+                }
+
+                // Carregar meditações personalizadas do usuário atual
+                const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+                console.log('📊 Meditações personalizadas do usuário encontradas:', personalizedMeditations.length);
+
+                if (personalizedMeditations.length === 0) {
+                    myMeditationsGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary); background: var(--background-card); border-radius: 16px; border: 1px solid var(--border-color);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📖</div>
+                            <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">Nenhuma meditação personalizada ainda</h3>
+                            <p style="margin-bottom: 1.5rem;">Crie suas primeiras meditações personalizadas usando nossa IA</p>
+                            <button onclick="window.location.href='minhas-meditacoes.html'" style="background: var(--primary-gradient); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                Criar Primeira Meditação
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Agrupar meditações por tópico
+                const groupedMeditations = {};
+                personalizedMeditations.forEach(meditation => {
+                    const topic = meditation.topic || 'Meditações Gerais';
+                    if (!groupedMeditations[topic]) {
+                        groupedMeditations[topic] = [];
+                    }
+                    groupedMeditations[topic].push(meditation);
+                });
+
+                // Gerar HTML para cada grupo
+                const htmlContent = Object.entries(groupedMeditations).map(([topic, meditations]) => {
+                    const totalMeditations = meditations.length;
+                    const firstMeditation = meditations[0];
+                    const formattedDate = formatDate(firstMeditation.createdAt);
+
+                    return `
+                        <div class="category-card" onclick="viewMyMeditationCategory('${topic}')">
+                            <div class="category-header">
+                                <h4 class="category-title">
+                                    ${topic}
+                                </h4>
+                                <span class="category-count">${totalMeditations} meditação${totalMeditations > 1 ? 'ões' : ''}</span>
+                            </div>
+                            <p class="category-description">Criado em ${formattedDate} • Gerado com IA</p>
+                            <div class="meditation-list">
+                                ${meditations.slice(0, 3).map(meditation => `
+                                    <div class="meditation-item" onclick="event.stopPropagation(); openPersonalizedMeditation('${meditation.id}')">
+                                        <div class="meditation-item-header">
+                                            <span class="meditation-title">${meditation.title}</span>
+                                            <span class="meditation-status">✅ Concluída</span>
+                                        </div>
+                                        <div class="meditation-item-description">
+                                            <p>Meditação espiritual para crescimento na fé</p>
+                                        </div>
+                                        <div class="meditation-item-footer">
+                                            <button class="start-meditation-btn" onclick="event.stopPropagation(); openPersonalizedMeditation('${meditation.id}')">
+                                                Iniciar Meditação
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                                ${totalMeditations > 3 ? `
+                                    <div class="meditation-item more-item" onclick="event.stopPropagation(); viewMyMeditationCategory('${topic}')">
+                                        <span class="meditation-title">Ver mais ${totalMeditations - 3} meditação${totalMeditations - 3 > 1 ? 'ões' : ''}...</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                myMeditationsGrid.innerHTML = htmlContent;
+                console.log('✅ Seção Minhas Meditações Geradas por IA carregada com sucesso');
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar Minhas Meditações Geradas por IA:', error);
+                const myMeditationsGrid = document.getElementById('my-meditations-grid');
+                if (myMeditationsGrid) {
+                    myMeditationsGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-secondary); background: var(--background-card); border-radius: 16px; border: 1px solid var(--border-color);">
+                            <p>Erro ao carregar meditações personalizadas</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Função para abrir meditação personalizada
+        function openPersonalizedMeditation(meditationId) {
+            try {
+                const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+                const meditation = personalizedMeditations.find(m => m.id === meditationId);
+                
+                if (!meditation) {
+                    showNotification('Meditação não encontrada', 'error');
+                    return;
+                }
+
+                // Usar a mesma função que já existe para abrir o modal
+                if (typeof openMeditationWithAccessCheck === 'function') {
+                    openMeditationWithAccessCheck(meditation);
+                } else {
+                    // Fallback para abrir na página de meditações
+                    window.location.href = 'minhas-meditacoes.html';
+                }
+
+            } catch (error) {
+                console.error('❌ Erro ao abrir meditação personalizada:', error);
+                showNotification('Erro ao abrir meditação', 'error');
+            }
+        }
+
+        // Função para visualizar categoria de meditações personalizadas
+        function viewMyMeditationCategory(topic) {
+            // Redirecionar para a página de minhas meditações com o tópico específico
+            window.location.href = `minhas-meditacoes.html?category=${encodeURIComponent(topic)}`;
+        }
+
+        // Função para carregar meditações personalizadas
+        function loadPersonalizedMeditations() {
+            try {
+                // Carregar histórico completo de meditações personalizadas
+                const historyData = localStorage.getItem('personalized_meditations_history');
+                const currentData = localStorage.getItem('personalized_meditations');
+                
+                const personalizedSection = document.getElementById('personalized-meditations-section');
+                const personalizedGrid = document.getElementById('personalized-categories-grid');
+                
+                if (!personalizedSection || !personalizedGrid) {
+                    console.warn('Elementos da seção personalizada não encontrados');
+                    return;
+                }
+                
+                let allPersonalizedCategories = [];
+                
+                // Adicionar dados do histórico
+                if (historyData) {
+                    try {
+                        const history = JSON.parse(historyData);
+                        allPersonalizedCategories = [...history];
+                    } catch (error) {
+                        console.error('Erro ao carregar histórico:', error);
+                    }
+                }
+                
+                // Adicionar dados atuais se não estiver no histórico
+                if (currentData) {
+                    try {
+                        const current = JSON.parse(currentData);
+                        const existsInHistory = allPersonalizedCategories.some(cat => cat.category === current.category);
+                        
+                        if (!existsInHistory) {
+                            allPersonalizedCategories.push({
+                                ...current,
+                                createdAt: new Date().toISOString(),
+                                lastUpdated: new Date().toISOString(),
+                                totalGenerated: 1
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Erro ao carregar dados atuais:', error);
+                    }
+                }
+                
+                // Adicionar meditações individuais geradas pelo ChatGPT (filtradas por usuário)
+                const individualMeditations = getPersonalizedMeditationsForCurrentUser();
+                if (individualMeditations.length > 0) {
+                    // Agrupar por tópico/categoria
+                    const groupedByTopic = {};
+                    individualMeditations.forEach(med => {
+                        const topic = med.topic || 'Meditações Personalizadas';
+                        if (!groupedByTopic[topic]) {
+                            groupedByTopic[topic] = [];
+                        }
+                        groupedByTopic[topic].push(med);
+                    });
+                    
+                    // Criar categorias para cada grupo
+                    Object.entries(groupedByTopic).forEach(([topic, meditations]) => {
+                        const existsInHistory = allPersonalizedCategories.some(cat => cat.category === topic);
+                        
+                        if (!existsInHistory) {
+                            allPersonalizedCategories.push({
+                                category: topic,
+                                meditations: meditations,
+                                total: meditations.length,
+                                icon: '✨',
+                                createdAt: meditations[0]?.createdAt || new Date().toISOString(),
+                                lastUpdated: meditations[meditations.length - 1]?.createdAt || new Date().toISOString(),
+                                totalGenerated: meditations.length,
+                                method: 'chatgpt',
+                                source: 'individual'
+                            });
+                        }
+                    });
+                }
+                
+                // Mostrar seção se houver dados
+                if (allPersonalizedCategories.length > 0) {
+                    personalizedSection.style.display = 'block';
+                    
+                    // Criar cards para todas as categorias
+                    const categoryCards = allPersonalizedCategories.map(data => {
+                        const date = new Date(data.lastUpdated || data.createdAt);
+                        const formattedDate = date.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        
+                        // Determinar método usado
+                        const method = data.method || 'templates';
+                        const methodIcon = method === 'chatgpt' ? '🤖' : '📝';
+                        const methodText = method === 'chatgpt' ? 'IA' : 'Templates';
+                        
+                        return `
+                            <div class="category-card" onclick="openPersonalizedCategoryModal('${data.category}')">
+                                <div class="category-header">
+                                    <h4 class="category-title">
+                                        ${data.category}
+                                    </h4>
+                                    <div class="category-meta">
+                                        <span class="category-count">${data.total} meditações</span>
+                                        <span class="method-indicator" title="Gerado com ${methodText}">
+                                            ${methodIcon}
+                                        </span>
+                                    </div>
+                                </div>
+                                <p class="category-description">
+                                    Criado em ${formattedDate}
+                                    ${data.totalGenerated > 1 ? ` • ${data.totalGenerated} gerações` : ''}
+                                    <span class="method-text">• ${methodText}</span>
+                                </p>
+                                <div class="meditation-list">
+                                    ${data.meditations.slice(0, 3).map(meditation => `
+                                        <div class="meditation-item" onclick="startPersonalizedMeditation('${data.category}', ${meditation.id})">
+                                            <span class="meditation-title">${meditation.title}</span>
+                                            <div class="meditation-status status-${meditation.status || 'pending'}">
+                                                <span>${getStatusIcon(meditation.status)}</span>
+                                                <span>${meditation.duration}</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    personalizedGrid.innerHTML = categoryCards;
+                } else {
+                    // Mostrar mensagem quando não há meditações
+                    personalizedSection.style.display = 'block';
+                    personalizedGrid.innerHTML = `
+                        <div class="empty-state" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
+                            <h4>Nenhuma meditação personalizada ainda</h4>
+                            <p>Digite um assunto na página inicial para criar suas primeiras meditações personalizadas</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar meditações personalizadas:', error);
+            }
+        }
+
+        // Função para criar card de meditação personalizada
+        function createPersonalizedMeditationCard(topic, meditations) {
+            console.log(`🔧 Criando card para ${topic} com ${meditations.length} meditações`);
+            
+            const card = document.createElement('div');
+            card.className = 'category-card';
+            
+            const completedCount = meditations.filter(m => m.status === 'completed').length;
+            const totalCount = meditations.length;
+            
+            // Mostrar apenas as primeiras 3 meditações por padrão
+            const visibleMeditations = meditations.slice(0, 3);
+            
+            console.log(`📋 Meditações visíveis:`, visibleMeditations.map(m => m.title));
+            
+            card.innerHTML = `
+                <div class="category-header">
+                    <h4 class="category-title">
+                        ${topic}
+                    </h4>
+                    <span class="category-count">${totalCount} meditações</span>
+                </div>
+                <p class="category-description">Meditações personalizadas criadas especialmente para você</p>
+                <div class="meditation-list">
+                    ${visibleMeditations.map((meditation, index) => `
+                        <div class="meditation-item" onclick="startPersonalizedMeditation('${topic}', ${index})">
+                            <span class="meditation-title">${meditation.title || 'Meditação sem título'}</span>
+                            <div class="meditation-status status-${meditation.status || 'pending'}">
+                                <span>${getStatusIcon(meditation.status)}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                    ${totalCount > 3 ? `
+                        <div class="meditation-item more-item" onclick="showAllPersonalizedMeditations('${topic}')">
+                            <span class="meditation-title">Ver mais ${totalCount - 3} meditações...</span>
+                            <div class="meditation-status">
+                                <span>📖</span>
+                                <span>Ver todas</span>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            console.log(`✅ Card criado para ${topic}`);
+            return card;
+        }
+
+        // Função para mostrar todas as meditações de uma categoria
+        function showAllPersonalizedMeditations(topic) {
+            try {
+                const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+                const meditations = personalizedMeditations.filter(m => m.topic === topic);
+                
+                // Salvar dados para navegação
+                const categoryData = {
+                    name: topic,
+                    meditations: meditations.map((meditation, index) => ({
+                        title: meditation.title,
+                        status: meditation.status || 'pending',
+                        duration: meditation.duration || '15 min',
+                        index: index
+                    }))
+                };
+                
+                localStorage.setItem('current_category', JSON.stringify(categoryData));
+                
+                // Navegar para a página de minhas meditações com a categoria específica
+                window.location.href = `minhas-meditacoes.html?category=${encodeURIComponent(topic)}`;
+                
+            } catch (error) {
+                console.error('❌ Erro ao mostrar todas as meditações:', error);
+                showNotification('Erro ao carregar meditações', 'error');
+            }
+        }
+
+        // Função para iniciar meditação personalizada
+        function startPersonalizedMeditation(topic, index) {
+            try {
+                const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+                const meditations = personalizedMeditations.filter(m => m.topic === topic);
+                
+                if (meditations[index]) {
+                    const meditation = meditations[index];
+                    
+                    // Salvar dados da meditação para a página de meditação
+                    const meditationData = {
+                        category: topic,
+                        title: meditation.title,
+                        reading: meditation.lectio || '',
+                        meditation: meditation.meditatio || '',
+                        prayer: meditation.oratio || '',
+                        contemplation: meditation.contemplatio || '',
+                        duration: meditation.duration || '15 min',
+                        status: meditation.status || 'pending',
+                        source: 'personalized'
+                    };
+                    
+                    localStorage.setItem('current_meditation', JSON.stringify(meditationData));
+                    
+                    // Navegar para a página de meditação
+                    window.location.href = 'meditacao.html?from=dashboard';
+                }
+            } catch (error) {
+                console.error('❌ Erro ao iniciar meditação personalizada:', error);
+                showNotification('Erro ao carregar meditação', 'error');
+            }
+        }
+
+        // Função para obter ícone de status
+        function getStatusIcon(status) {
+            switch (status) {
+                case 'completed': return '✅';
+                case 'in_progress': return '⏳';
+                case 'locked': return '🔒';
+                default: return '⏳';
+            }
+        }
+
+        // Função para carregar agendamentos do localStorage
+        function loadSchedulesFromStorage() {
+            try {
+                // Usar a função helper para obter agendamentos do usuário atual
+                schedules = getSchedulesForCurrentUser();
+                console.log('✅ Agendamentos carregados para o usuário atual:', schedules.length);
+                
+                // Migrar agendamentos antigos que não têm campos obrigatórios
+                let needsUpdate = false;
+                schedules = schedules.map(schedule => {
+                    if (!schedule.title || !schedule.date || !schedule.createdAt) {
+                        needsUpdate = true;
+                        return {
+                            ...schedule,
+                            title: schedule.title || `Meditação ${schedule.category}`,
+                            date: schedule.date || new Date().toISOString().split('T')[0],
+                            duration: schedule.duration || 15,
+                            status: schedule.status || 'agendado',
+                            createdAt: schedule.createdAt || new Date().toISOString(),
+                            description: schedule.description || `Agendamento para ${schedule.category} às ${schedule.time}`
+                        };
+                    }
+                    return schedule;
+                });
+                
+                if (needsUpdate) {
+                    // Salvar apenas os agendamentos do usuário atual
+                    const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                    const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+                    const userId = currentUser ? currentUser.id : 'anonymous';
+                    
+                    // Atualizar apenas os agendamentos do usuário atual
+                    const updatedAllSchedules = allSchedules.map(schedule => {
+                        if (schedule.userId === userId) {
+                            const updatedSchedule = schedules.find(s => s.id === schedule.id);
+                            return updatedSchedule || schedule;
+                        }
+                        return schedule;
+                    });
+                    
+                    localStorage.setItem('user_schedules', JSON.stringify(updatedAllSchedules));
+                    console.log('🔄 Agendamentos migrados com sucesso');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar agendamentos:', error);
+                schedules = [];
+            }
+        }
+
+        // Notificações
+        let notifications = [
+            { id: 1, message: 'Hora da sua meditação matinal!', time: '07:00', read: false },
+            { id: 2, message: 'Você completou 15 dias consecutivos!', time: '09:30', read: false },
+            { id: 3, message: 'Nova meditação disponível: "A Contemplação"', time: '14:00', read: true }
+        ];
+
+        // Função para gerar meditação a partir do dashboard
+        window.generateDashboardMeditation = async function() {
+            console.log('🚀 Função generateDashboardMeditation chamada');
+            console.log('🔍 Verificando Supabase Manager no início da função...');
+            console.log('📝 window.supabaseManager:', window.supabaseManager);
+            console.log('📝 typeof window.supabaseManager:', typeof window.supabaseManager);
+            
+            const topicInput = document.getElementById('dashboard-meditation-topic');
+            if (!topicInput) {
+                console.error('❌ Campo dashboard-meditation-topic não encontrado');
+                alert('Erro: Campo de tópico não encontrado');
+                return;
+            }
+            
+            const topic = topicInput.value.trim();
+            console.log('📝 Tópico digitado:', topic);
+            
+            if (!topic) {
+                alert('Por favor, digite um assunto para a meditação');
+                return;
+            }
+
+            // Verificar se as funções da API estão disponíveis
+            if (typeof checkAPIStatus !== 'function') {
+                console.error('❌ checkAPIStatus não está disponível. Verificando chatGPTAPI...');
+                if (typeof chatGPTAPI !== 'undefined' && typeof chatGPTAPI.checkAPIStatus === 'function') {
+                    console.log('✅ Usando chatGPTAPI.checkAPIStatus');
+                    window.checkAPIStatus = chatGPTAPI.checkAPIStatus.bind(chatGPTAPI);
+                } else {
+                    console.error('❌ chatGPTAPI não está disponível');
+                    alert('Erro: API não está disponível. Verifique se o arquivo chatgpt-api.js foi carregado corretamente.');
+                    return;
+                }
+            }
+
+            if (typeof generateMeditations !== 'function') {
+                console.error('❌ generateMeditations não está disponível. Verificando chatGPTAPI...');
+                if (typeof chatGPTAPI !== 'undefined' && typeof chatGPTAPI.generateMeditations === 'function') {
+                    console.log('✅ Usando chatGPTAPI.generateMeditations');
+                    window.generateMeditations = chatGPTAPI.generateMeditations.bind(chatGPTAPI);
+                } else {
+                    console.error('❌ chatGPTAPI não está disponível');
+                    alert('Erro: API não está disponível. Verifique se o arquivo chatgpt-api.js foi carregado corretamente.');
+                    return;
+                }
+            }
+
+            try {
+                // Verificar status da API
+                const apiStatus = await checkAPIStatus();
+                if (apiStatus.status !== 'success') {
+                    console.error('❌ API não está disponível:', apiStatus.message);
+                    alert('Erro: API não está disponível. Tente novamente mais tarde.');
+                    return;
+                }
+
+                console.log('✅ API disponível, gerando meditação...');
+                
+                // Gerar meditação usando a API
+                const meditationData = await generateMeditations(topic);
+                
+                if (!meditationData || !meditationData.meditations || !meditationData.meditations.length) {
+                    console.error('❌ Nenhuma meditação foi gerada');
+                    alert('Erro ao gerar meditação. Tente novamente.');
+                    return;
+                }
+
+                const meditation = meditationData.meditations[0];
+                meditation.userId = JSON.parse(localStorage.getItem('userData') || '{}').id || 'anonymous';
+                meditation.userName = JSON.parse(localStorage.getItem('userData') || '{}').name || 'Usuário';
+                meditation.createdAt = new Date().toISOString();
+                
+                // Salvar meditação
+                const existingMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                existingMeditations.push(meditation);
+                localStorage.setItem('personalized_meditations', JSON.stringify(existingMeditations));
+                
+                // Sincronizar com Supabase se disponível
+                console.log('🔄 === INÍCIO DA SINCRONIZAÇÃO SUPABASE ===');
+                console.log('🔄 Verificando Supabase Manager no dashboard...');
+                console.log('📝 window.supabaseManager:', window.supabaseManager);
+                console.log('📝 typeof window.supabaseManager:', typeof window.supabaseManager);
+                
+                if (window.supabaseManager) {
+                    try {
+                        console.log('📤 Sincronizando meditação do dashboard com Supabase...');
+                        console.log('📝 Dados da meditação:', meditation);
+                        console.log('📝 meditationData:', meditationData);
+                        
+                        const supabaseMeditationData = {
+                            meditation_id: meditation.id,
+                            title: meditation.title,
+                            topic: meditationData.category || topic,
+                            content: meditation.content,
+                            duration: meditation.duration || '15 min',
+                            status: 'pending',
+                            source: 'chatgpt',
+                            type: 'simple',
+                            user_id: meditation.userId,
+                            user_name: meditation.userName,
+                            created_at: meditation.createdAt,
+                            last_updated: meditation.createdAt
+                        };
+                        
+                        console.log('📝 Dados para Supabase:', supabaseMeditationData);
+                        console.log('📝 Método createPersonalizedMeditation:', typeof window.supabaseManager.createPersonalizedMeditation);
+                        
+                        const supabaseResult = await window.supabaseManager.createPersonalizedMeditation(supabaseMeditationData);
+                        console.log('✅ Meditação do dashboard sincronizada com Supabase:', supabaseResult);
+                        
+                    } catch (supabaseError) {
+                        console.error('⚠️ Erro ao sincronizar com Supabase:', supabaseError);
+                        console.error('⚠️ Stack trace:', supabaseError.stack);
+                        console.log('ℹ️ Meditação salva apenas localmente');
+                    }
+                } else {
+                    console.log('ℹ️ Supabase Manager não disponível - meditação salva apenas localmente');
+                }
+                
+                // Limpar campo
+                document.getElementById('dashboard-meditation-topic').value = '';
+                
+                // Atualizar cards
+                if (window.updateDashboardMeditationCards) {
+                    window.updateDashboardMeditationCards();
+                }
+
+                console.log('✅ Meditação criada via API:', meditation);
+                showNotification('Meditação gerada com sucesso!', 'success');
+                
+            } catch (error) {
+                console.error('❌ Erro ao gerar meditação:', error);
+                alert('Erro ao gerar meditação: ' + error.message);
+            }
+        };
+
+
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+                background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+
+
+
+
+
+
+
+
+        function setupDashboardWeekdayButtons() {
+            const weekdayButtons = document.querySelectorAll('#dashboardScheduleModal .weekday-btn');
+            weekdayButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+        }
+
+
+
+        // Modal de notificações
+        function openNotificationsModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'modal-content';
+            content.style.cssText = `
+                background: var(--background-card);
+                border-radius: 16px;
+                padding: 2rem;
+                width: 90%;
+                max-width: 500px;
+                border: 1px solid var(--border-color);
+                max-height: 80vh;
+                overflow-y: auto;
+            `;
+
+            content.innerHTML = `
+                <div class="modal-header">
+                    <h3 class="modal-title">Notificações</h3>
+                    <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+                </div>
+                <div class="notifications-list">
+                    ${notifications.map(notification => `
+                        <div class="notification-item" style="
+                            padding: 1rem;
+                            border-bottom: 1px solid var(--border-color);
+                            ${!notification.read ? 'background: rgba(59, 130, 246, 0.1);' : ''}
+                        ">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 0.25rem;">${notification.message}</div>
+                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${notification.time}</div>
+                                </div>
+                                ${!notification.read ? '<div style="width: 8px; height: 8px; background: #3B82F6; border-radius: 50%;"></div>' : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+
+            // Marcar como lidas
+            notifications.forEach(n => n.read = true);
+            updateNotificationBadge();
+        }
+
+        // Atualizar badge de notificações
+        function updateNotificationBadge() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            const notificationBtn = document.querySelector('.notification-btn');
+            
+            // Remover badge existente
+            const existingBadge = notificationBtn.querySelector('.notification-badge');
+            if (existingBadge) existingBadge.remove();
+            
+            if (unreadCount > 0) {
+                const badge = document.createElement('div');
+                badge.className = 'notification-badge';
+                badge.textContent = unreadCount;
+                badge.style.cssText = `
+                    position: absolute;
+                    top: -5px;
+                    right: -5px;
+                    background: #EF4444;
+                    color: white;
+                    border-radius: 50%;
+                    width: 18px;
+                    height: 18px;
+                    font-size: 0.75rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 600;
+                `;
+                notificationBtn.style.position = 'relative';
+                notificationBtn.appendChild(badge);
+            }
+        }
+
+
+
+
+
+
+
+        // Gerenciar meditações
+        function startMeditation(categoryId, meditationId) {
+            const category = categories[categoryId];
+            // Converter meditationId para string para comparação mais flexível
+            const meditation = category.meditations.find(m => String(m.id) === String(meditationId));
+            
+            if (!meditation) {
+                showNotification('Meditação não encontrada', 'error');
+                return;
+            }
+            
+            if (meditation.status === 'locked') {
+                showNotification('Esta meditação ainda não está disponível', 'error');
+                return;
+            }
+
+            showNotification(`Iniciando meditação: ${meditation.title}`, 'success');
+
+            // Padronizar campos das 4 etapas
+            const leitura = meditation.reading || meditation.lectio || '';
+            const meditacao = meditation.meditation || meditation.meditatio || '';
+            const oracao = meditation.prayer || meditation.oratio || '';
+            const contemplacao = meditation.contemplation || meditation.contemplatio || '';
+
+            // Salvar dados da meditação atual no localStorage com todos os nomes de campos
+            localStorage.setItem('meditacao-atual', JSON.stringify({
+                categoryId: categoryId,
+                meditationId: meditationId,
+                title: meditation.title,
+                category: category.name,
+                duration: meditation.duration,
+                status: meditation.status,
+                // Salvar ambos os nomes
+                reading: leitura,
+                lectio: leitura,
+                meditation: meditacao,
+                meditatio: meditacao,
+                prayer: oracao,
+                oratio: oracao,
+                contemplation: contemplacao,
+                contemplatio: contemplacao,
+                icon: meditation.icon || category.icon || '📖'
+            }));
+
+            // Salvar também no formato esperado pela página de meditação
+            const meditationData = {
+                category: category.name,
+                meditations: [{
+                    id: meditationId,
+                    title: meditation.title,
+                    duration: meditation.duration,
+                    status: meditation.status,
+                    // Salvar ambos os nomes
+                    reading: leitura,
+                    lectio: leitura,
+                    meditation: meditacao,
+                    meditatio: meditacao,
+                    prayer: oracao,
+                    oratio: oracao,
+                    contemplation: contemplacao,
+                    contemplatio: contemplacao,
+                    icon: meditation.icon || category.icon || '📖'
+                }]
+            };
+
+            localStorage.setItem('current_meditations', JSON.stringify(meditationData));
+            localStorage.setItem('current_category', category.name);
+
+            setTimeout(() => {
+                window.location.href = 'meditacao.html?from=dashboard';
+            }, 1000);
+        }
+
+        function updateProgress() {
+            // Atualizar estatísticas do usuário
+            let totalCompleted = 0;
+            let totalMeditations = 0;
+            
+            // Usar função centralizada para dados
+            const realCategories = getCategoriesData();
+            realCategories.forEach(category => {
+                totalCompleted += category.completed;
+                totalMeditations += category.total;
+            });
+
+            currentUser.totalMeditations = totalCompleted;
+            
+            // Atualizar display
+            document.querySelector('.stat-number').textContent = totalCompleted;
+            
+            // Atualizar barras de progresso
+            realCategories.forEach(category => {
+                const percentage = Math.round((category.completed / category.total) * 100);
+                const progressCard = document.querySelector(`[data-category="${category.id}"]`);
+                if (progressCard) {
+                    progressCard.querySelector('.progress-percentage').textContent = `${percentage}%`;
+                    progressCard.querySelector('.progress-fill').style.width = `${percentage}%`;
+                    progressCard.querySelector('.progress-text').textContent = 
+                        `${category.completed} de ${category.total} meditações completadas`;
+                }
+            });
+        }
+
+        function updateCategoriesDisplay() {
+            const categoriesGrid = document.querySelector('.categories-grid');
+            if (!categoriesGrid) {
+                console.error('❌ Categories grid element not found!');
+                return;
+            }
+            
+            console.log('🔄 Updating categories display with admin data...');
+            
+            // Usar função centralizada para dados
+            const realCategories = getCategoriesData();
+            
+            if (!realCategories || realCategories.length === 0) {
+                console.warn('⚠️ No categories to display');
+                categoriesGrid.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Nenhuma categoria encontrada</p>';
+                return;
+            }
+            
+            const htmlContent = realCategories.map(category => {
+                console.log(`  📂 Processing category: ${category.name} (${category.sampleMeditations.length} sample meditations)`);
+                
+                return `
+                    <div class="category-card" onclick="openCategoryModal('${category.id}')">
+                        <div class="category-header">
+                            <h4 class="category-title">
+                                ${category.name}
+                            </h4>
+                            <span class="category-count">${category.total} meditações</span>
+                        </div>
+                        <p class="category-description">${category.description}</p>
+                        <div class="meditation-list">
+                            ${category.sampleMeditations.slice(0, 3).map(meditation => `
+                                <div class="meditation-item" onclick="event.stopPropagation(); startMeditationWithAccessCheck('${meditation.id}')">
+                                    <span class="meditation-title">${meditation.title}</span>
+                                    <span class="meditation-count">${meditation.count}min</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log('✅ Generated HTML content for', realCategories.length, 'categories');
+            categoriesGrid.innerHTML = htmlContent;
+            
+            const gridChildren = categoriesGrid.children;
+            console.log('✅ Categories grid updated. Children count:', gridChildren.length);
+            
+            // Log the titles of displayed categories
+            Array.from(gridChildren).forEach((child, index) => {
+                const title = child.querySelector('.category-title')?.textContent?.trim();
+                console.log(`  ${index + 1}. ${title}`);
+            });
+            
+            console.log('=== updateCategoriesDisplay completed ===');
+        }
+
+        function getCategoryDescription(key) {
+            const descriptions = {
+                'principios': 'Fundamentos da espiritualidade cristã e vida interior',
+                'imitacao': 'Reflexões baseadas na obra clássica de Tomás de Kempis',
+                'evangelho': 'Meditações diárias sobre os evangelhos da liturgia',
+                'jaculatorias': 'Orações breves e fervorosas para momentos do dia',
+                'vida_sobrenatural': 'Meditações sobre a vida sobrenatural e graça divina',
+                'oracao': 'Reflexões sobre a oração e vida espiritual',
+                'virtudes': 'Meditações sobre as virtudes cristãs',
+                'santos': 'Reflexões sobre a vida dos santos',
+                'mariologia': 'Meditações sobre Nossa Senhora e mariologia',
+                'salmos': 'Meditações sobre os Salmos da Bíblia Sagrada'
+            };
+            return descriptions[key] || 'Meditações espirituais para crescimento na fé';
+        }
+
+        function getCategoryIcon(key) {
+            const icons = {
+                'principios': '✨',
+                'imitacao': '✝️',
+                'evangelho': '📖',
+                'jaculatorias': '🙏',
+                'vida_sobrenatural': '✨',
+                'oracao': '🙏',
+                'virtudes': '✝️',
+                'santos': '👼',
+                'mariologia': '🌹',
+                'salmos': '🎵'
+            };
+            return icons[key] || '📖';
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'completed': '✅',
+                'pending': '⏳',
+                'locked': '🔒',
+                'available': '📖'
+            };
+            return icons[status] || '📖';
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                'completed': 'Concluída',
+                'pending': 'Pendente',
+                'locked': 'Bloqueada',
+                'available': 'Disponível'
+            };
+            return texts[status] || 'Disponível';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '22/07/2025';
+            
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+            } catch (error) {
+                return '22/07/2025';
+            }
+        }
+
+        // Modal de categoria
+        function openCategoryModal(categoryId) {
+            // Usar a mesma fonte de dados que renderCategoriesGrid
+            const realCategories = getCategoriesData();
+            const category = realCategories.find(c => c.id === categoryId);
+            
+            if (!category) {
+                console.error('❌ Categoria não encontrada:', categoryId);
+                console.log('📋 Categorias disponíveis:', realCategories.map(c => c.id));
+                showNotification('Erro: Categoria não encontrada', 'error');
+                return;
+            }
+            
+            console.log('📋 Abrindo modal para categoria:', categoryId);
+            console.log('📋 Dados da categoria:', category);
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 280px;
+                width: calc(100% - 280px);
+                height: 100vh;
+                background: var(--background-primary);
+                z-index: 1000;
+                display: block;
+                overflow-y: auto;
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'modal-content';
+            content.style.cssText = `
+                background: var(--background-primary);
+                border-radius: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+            `;
+
+            // Buscar meditações da categoria no localStorage
+            const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            const meditations = adminMeditations.filter(med => med.categoryId === categoryId);
+            console.log('📋 Meditações encontradas:', meditations.length);
+            console.log('📋 Meditações:', meditations);
+
+            content.innerHTML = `
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        ${category.name}
+                    </h3>
+                    <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+                </div>
+                <div style="padding: 3rem; background: var(--background-card); margin: 1rem 2rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                    <div style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1rem;">
+                        ${category.description || getCategoryDescription(categoryId)}
+                    </div>
+                    <div class="meditation-list" style="gap: 0.75rem;">
+                        ${meditations.length > 0 ? meditations.map(meditation => `
+                            <div class="meditation-item" onclick="startMeditationFromModal('${categoryId}', '${meditation.id}', '${meditation.title}')" style="cursor: pointer;">
+                                <span class="meditation-title">${meditation.title}</span>
+                                <span class="meditation-count">${meditation.duration || '15'} min</span>
+                            </div>
+                        `).join('') : '<p style="color: var(--text-secondary);">Nenhuma meditação encontrada para esta categoria.</p>'}
+                    </div>
+                </div>
+            `;
+
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+        }
+
+        // Função para iniciar meditação a partir do modal
+        function startMeditationFromModal(categoryId, meditationId, meditationTitle) {
+            console.log('🎭 Iniciando meditação do modal:', { categoryId, meditationId, meditationTitle });
+            
+            // Fechar o modal atual
+            const modal = document.querySelector('.modal.active');
+            if (modal) {
+                modal.remove();
+            }
+            
+            // Buscar dados da meditação no localStorage
+            const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            const meditation = adminMeditations.find(med => med.id === meditationId && med.categoryId === categoryId);
+            
+            if (!meditation) {
+                showNotification('Meditação não encontrada', 'error');
+                return;
+            }
+            
+            // Buscar dados da categoria
+            const realCategories = getCategoriesData();
+            const category = realCategories.find(c => c.id === categoryId);
+            
+            if (!category) {
+                showNotification('Categoria não encontrada', 'error');
+                return;
+            }
+            
+            console.log('📋 Dados da meditação:', meditation);
+            console.log('📋 Dados da categoria:', category);
+            
+            // Preparar dados para a página de meditação
+            const meditationData = {
+                categoryId: categoryId,
+                meditationId: meditationId,
+                title: meditation.title,
+                category: category.name,
+                duration: meditation.duration || 15,
+                status: meditation.status || 'available',
+                // Dados da Lectio Divina
+                reading: meditation.reading || meditation.lectio || '',
+                lectio: meditation.reading || meditation.lectio || '',
+                meditation: meditation.meditation || meditation.meditatio || '',
+                meditatio: meditation.meditation || meditation.meditatio || '',
+                prayer: meditation.prayer || meditation.oratio || '',
+                oratio: meditation.prayer || meditation.oratio || '',
+                contemplation: meditation.contemplation || meditation.contemplatio || '',
+                contemplatio: meditation.contemplation || meditation.contemplatio || '',
+                icon: meditation.icon || category.icon || '📖'
+            };
+            
+            // Salvar dados no localStorage
+            localStorage.setItem('meditacao-atual', JSON.stringify(meditationData));
+            
+            // Salvar também no formato esperado pela página de meditação
+            const currentMeditationsData = {
+                category: category.name,
+                meditations: [meditationData]
+            };
+            
+            localStorage.setItem('current_meditations', JSON.stringify(currentMeditationsData));
+            localStorage.setItem('current_category', category.name);
+            
+            // Mostrar notificação e redirecionar
+            showNotification(`Iniciando meditação: ${meditation.title}`, 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'meditacao.html?from=dashboard';
+            }, 1000);
+        }
+
+        // Navegação
+        function navigateTo(page) {
+            showNotification(`Navegando para: ${page}`, 'info');
+            // Aqui você implementaria a navegação real
+        }
+
+
+
+        // Logout melhorado
+        window.logout = function logout() {
+            console.log('🔍 Função logout chamada');
+            
+            if (confirm('Tem certeza que deseja sair?')) {
+                console.log('✅ Usuário confirmou logout');
+                
+                try {
+                    showNotification('Saindo...', 'info');
+                    console.log('✅ Notificação mostrada');
+                } catch (error) {
+                    console.error('❌ Erro ao mostrar notificação:', error);
+                }
+                
+                // Limpar dados do usuário
+                try {
+                    localStorage.removeItem('userData');
+                    localStorage.removeItem('current_user');
+                    localStorage.removeItem('current_session');
+                    localStorage.removeItem('currentSessionId');
+                    sessionStorage.clear();
+                    console.log('✅ Dados do usuário limpos');
+                } catch (error) {
+                    console.error('❌ Erro ao limpar dados:', error);
+                }
+                
+                // Fazer logout via SessionManager se disponível
+                if (window.sessionManager && typeof window.sessionManager.logoutUser === 'function') {
+                    try {
+                        window.sessionManager.logoutUser();
+                        console.log('✅ Logout realizado via SessionManager');
+                    } catch (error) {
+                        console.error('❌ Erro no SessionManager:', error);
+                    }
+                } else {
+                    console.warn('⚠️ SessionManager não encontrado ou método logoutUser não disponível');
+                }
+                
+                // Aguardar um pouco antes de redirecionar para garantir que tudo foi limpo
+                setTimeout(() => {
+                    console.log('🔄 Redirecionando para página inicial...');
+                    window.location.href = 'index.html';
+                }, 500);
+            } else {
+                console.log('❌ Usuário cancelou logout');
+            }
+        }
+
+        // Event listener específico para o botão Sair
+        function setupLogoutButton() {
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                console.log('🔧 Configurando event listener para botão Sair');
+                
+                // Remover event listeners anteriores
+                logoutButton.removeEventListener('click', handleLogoutClick);
+                
+                // Adicionar novo event listener
+                logoutButton.addEventListener('click', handleLogoutClick);
+                
+                console.log('✅ Event listener configurado para botão Sair');
+            } else {
+                console.warn('⚠️ Botão Sair não encontrado');
+            }
+        }
+
+        // Handler para o clique no botão Sair
+        function handleLogoutClick(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            console.log('🖱️ Botão Sair clicado');
+            logout();
+        }
+
+        // Função para carregar meditações personalizadas
+        function loadPersonalizedMeditations() {
+            try {
+                // Carregar histórico completo de meditações personalizadas
+                const historyData = localStorage.getItem('personalized_meditations_history');
+                const currentData = localStorage.getItem('personalized_meditations');
+                
+                const personalizedSection = document.getElementById('personalized-meditations-section');
+                const personalizedGrid = document.getElementById('personalized-categories-grid');
+                
+                if (!personalizedSection || !personalizedGrid) {
+                    console.warn('Elementos da seção personalizada não encontrados');
+                    return;
+                }
+                
+                let allPersonalizedCategories = [];
+                
+                // Adicionar dados do histórico
+                if (historyData) {
+                    try {
+                        const history = JSON.parse(historyData);
+                        allPersonalizedCategories = [...history];
+                    } catch (error) {
+                        console.error('Erro ao carregar histórico:', error);
+                    }
+                }
+                
+                // Adicionar dados atuais se não estiver no histórico
+                if (currentData) {
+                    try {
+                        const current = JSON.parse(currentData);
+                        const existsInHistory = allPersonalizedCategories.some(cat => cat.category === current.category);
+                        
+                        if (!existsInHistory) {
+                            allPersonalizedCategories.push({
+                                ...current,
+                                createdAt: new Date().toISOString(),
+                                lastUpdated: new Date().toISOString(),
+                                totalGenerated: 1
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Erro ao carregar dados atuais:', error);
+                    }
+                }
+                
+                // Adicionar meditações individuais geradas pelo ChatGPT (filtradas por usuário)
+                const individualMeditations = getPersonalizedMeditationsForCurrentUser();
+                if (individualMeditations.length > 0) {
+                    // Agrupar por tópico/categoria
+                    const groupedByTopic = {};
+                    individualMeditations.forEach(med => {
+                        const topic = med.topic || 'Meditações Personalizadas';
+                        if (!groupedByTopic[topic]) {
+                            groupedByTopic[topic] = [];
+                        }
+                        groupedByTopic[topic].push(med);
+                    });
+                    
+                    // Criar categorias para cada grupo
+                    Object.entries(groupedByTopic).forEach(([topic, meditations]) => {
+                        const existsInHistory = allPersonalizedCategories.some(cat => cat.category === topic);
+                        
+                        if (!existsInHistory) {
+                            allPersonalizedCategories.push({
+                                category: topic,
+                                meditations: meditations,
+                                total: meditations.length,
+                                icon: '✨',
+                                createdAt: meditations[0]?.createdAt || new Date().toISOString(),
+                                lastUpdated: meditations[meditations.length - 1]?.createdAt || new Date().toISOString(),
+                                totalGenerated: meditations.length,
+                                method: 'chatgpt',
+                                source: 'individual'
+                            });
+                        }
+                    });
+                }
+                
+                // Mostrar seção se houver dados
+                if (allPersonalizedCategories.length > 0) {
+                    personalizedSection.style.display = 'block';
+                    
+                    // Criar cards para todas as categorias
+                    const categoryCards = allPersonalizedCategories.map(data => {
+                        const date = new Date(data.lastUpdated || data.createdAt);
+                        const formattedDate = date.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        
+                        // Determinar método usado
+                        const method = data.method || 'templates';
+                        const methodIcon = method === 'chatgpt' ? '🤖' : '📝';
+                        const methodText = method === 'chatgpt' ? 'IA' : 'Templates';
+                        
+                        return `
+                            <div class="category-card" onclick="openPersonalizedCategoryModal('${data.category}')">
+                                <div class="category-header">
+                                    <h4 class="category-title">
+                                        ${data.category}
+                                    </h4>
+                                    <div class="category-meta">
+                                        <span class="category-count">${data.total} meditações</span>
+                                        <span class="method-indicator" title="Gerado com ${methodText}">
+                                            ${methodIcon}
+                                        </span>
+                                    </div>
+                                </div>
+                                <p class="category-description">
+                                    Criado em ${formattedDate}
+                                    ${data.totalGenerated > 1 ? ` • ${data.totalGenerated} gerações` : ''}
+                                    <span class="method-text">• ${methodText}</span>
+                                </p>
+                                <div class="meditation-list">
+                                    ${data.meditations.slice(0, 3).map(meditation => `
+                                        <div class="meditation-item" onclick="startPersonalizedMeditation('${data.category}', ${meditation.id})">
+                                            <span class="meditation-title">${meditation.title}</span>
+                                            <div class="meditation-status status-${meditation.status}">
+                                                <span>${getStatusIcon(meditation.status)}</span>
+                                                <span>${meditation.duration}</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    personalizedGrid.innerHTML = categoryCards;
+                } else {
+                    // Mostrar mensagem quando não há meditações
+                    personalizedSection.style.display = 'block';
+                    personalizedGrid.innerHTML = `
+                        <div class="empty-state" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
+                            <h4>Nenhuma meditação personalizada ainda</h4>
+                            <p>Digite um assunto na página inicial para criar suas primeiras meditações personalizadas</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar meditações personalizadas:', error);
+            }
+        }
+
+        // Função para abrir modal da categoria personalizada
+        function openPersonalizedCategoryModal(categoryName) {
+            // Buscar dados no histórico
+            const historyData = localStorage.getItem('personalized_meditations_history');
+            let personalizedData = null;
+            
+            if (historyData) {
+                try {
+                    const history = JSON.parse(historyData);
+                    personalizedData = history.find(item => item.category === categoryName);
+                } catch (error) {
+                    console.error('Erro ao buscar no histórico:', error);
+                }
+            }
+            
+            // Se não encontrou no histórico, buscar nos dados atuais
+            if (!personalizedData) {
+                const currentData = localStorage.getItem('personalized_meditations');
+                if (currentData) {
+                    try {
+                        const current = JSON.parse(currentData);
+                        if (current.category === categoryName) {
+                            personalizedData = current;
+                        }
+                    } catch (error) {
+                        console.error('Erro ao buscar dados atuais:', error);
+                    }
+                }
+            }
+            
+            if (!personalizedData) {
+                console.error('Categoria personalizada não encontrada:', categoryName);
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: var(--background-card);
+                border-radius: 12px;
+                padding: 2rem;
+                width: 90%;
+                max-width: 600px;
+                border: 1px solid var(--border-color);
+                max-height: 80vh;
+                overflow-y: auto;
+            `;
+
+            const date = new Date(personalizedData.lastUpdated || personalizedData.createdAt);
+            const formattedDate = date.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            content.innerHTML = `
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        ${personalizedData.category}
+                    </h3>
+                    <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+                </div>
+                <div style="margin-bottom: 1rem; color: var(--text-secondary);">
+                    Criado em ${formattedDate}
+                    ${personalizedData.totalGenerated > 1 ? ` • ${personalizedData.totalGenerated} gerações` : ''}
+                </div>
+                <div class="meditation-list" style="gap: 0.75rem;">
+                    ${personalizedData.meditations.map(meditation => `
+                        <div class="meditation-item" onclick="startPersonalizedMeditation('${personalizedData.category}', ${meditation.id})" style="cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 0.25rem;">${meditation.title}</div>
+                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${meditation.duration}</div>
+                                </div>
+                                <div class="meditation-status status-${meditation.status}">
+                                    <span>${getStatusIcon(meditation.status)}</span>
+                                    <span>${meditation.duration}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <button onclick="regeneratePersonalizedMeditations('${categoryName}')" style="background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-right: 8px;">
+                        🔄 Regenerar
+                    </button>
+                    <button onclick="exportPersonalizedCategory('${categoryName}')" style="background: var(--accent-green); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-right: 8px;">
+                        📤 Exportar
+                    </button>
+                    <button onclick="deletePersonalizedCategory('${categoryName}')" style="background: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
+                        🗑️ Excluir
+                    </button>
+                </div>
+            `;
+
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+        }
+
+        // Função para iniciar meditação personalizada
+        function startPersonalizedMeditation(categoryName, meditationId) {
+            // Buscar dados no histórico
+            const historyData = localStorage.getItem('personalized_meditations_history');
+            let personalizedData = null;
+            
+            if (historyData) {
+                try {
+                    const history = JSON.parse(historyData);
+                    personalizedData = history.find(item => item.category === categoryName);
+                } catch (error) {
+                    console.error('Erro ao buscar no histórico:', error);
+                }
+            }
+            
+            // Se não encontrou no histórico, buscar nos dados atuais
+            if (!personalizedData) {
+                const currentData = localStorage.getItem('personalized_meditations');
+                if (currentData) {
+                    try {
+                        const current = JSON.parse(currentData);
+                        if (current.category === categoryName) {
+                            personalizedData = current;
+                        }
+                    } catch (error) {
+                        console.error('Erro ao buscar dados atuais:', error);
+                    }
+                }
+            }
+            
+            if (!personalizedData) {
+                console.error('Categoria personalizada não encontrada:', categoryName);
+                return;
+            }
+
+            const meditation = personalizedData.meditations.find(m => m.id === meditationId);
+            if (!meditation) {
+                console.error('Meditação não encontrada:', meditationId);
+                return;
+            }
+
+            // Salvar dados da meditação atual no localStorage
+            localStorage.setItem('current_meditation', JSON.stringify({
+                category: categoryName,
+                meditation: meditation,
+                type: 'personalized'
+            }));
+
+            // Salvar também os dados completos da categoria para compatibilidade
+            localStorage.setItem('current_meditations', JSON.stringify(personalizedData));
+            localStorage.setItem('current_category', categoryName);
+
+            // Redirecionar para a página de meditação
+            window.location.href = 'meditacao.html?from=dashboard';
+        }
+
+        // Função para regenerar meditações personalizadas
+        function regeneratePersonalizedMeditations(categoryName) {
+            // Fechar modal atual
+            const modal = document.querySelector('.modal');
+            if (modal) modal.remove();
+            
+            // Salvar o tópico para regeneração
+            localStorage.setItem('pending_topic', categoryName);
+            
+            // Redirecionar para a página inicial para regenerar
+            window.location.href = 'index.html';
+        }
+
+
+
+        // Função para exportar categoria personalizada
+        function exportPersonalizedCategory(categoryName) {
+            try {
+                if (exportManager) {
+                    const success = exportManager.exportCategory(categoryName);
+                    if (success) {
+                        showNotification(`Categoria "${categoryName}" exportada com sucesso!`, 'success');
+                    } else {
+                        showNotification('Erro ao exportar categoria', 'error');
+                    }
+                } else {
+                    showNotification('Sistema de exportação não disponível', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao exportar categoria:', error);
+                showNotification('Erro ao exportar categoria', 'error');
+            }
+        }
+
+        // Função para excluir categoria personalizada
+        function deletePersonalizedCategory(categoryName) {
+            if (confirm(`Tem certeza que deseja excluir a categoria "${categoryName}" e todas as suas meditações?`)) {
+                try {
+                    // Remover do histórico
+                    const historyData = localStorage.getItem('personalized_meditations_history');
+                    if (historyData) {
+                        const history = JSON.parse(historyData);
+                        const filteredHistory = history.filter(item => item.category !== categoryName);
+                        localStorage.setItem('personalized_meditations_history', JSON.stringify(filteredHistory));
+                    }
+                    
+                    // Remover dados atuais se for a mesma categoria
+                    const currentData = localStorage.getItem('personalized_meditations');
+                    if (currentData) {
+                        const current = JSON.parse(currentData);
+                        if (current.category === categoryName) {
+                            localStorage.removeItem('personalized_meditations');
+                        }
+                    }
+                    
+                    // Fechar modal e recarregar
+                    const modal = document.querySelector('.modal');
+                    if (modal) modal.remove();
+                    
+                    // Recarregar a seção
+                    loadPersonalizedMeditations();
+                    
+                    // Mostrar notificação
+                    showNotification(`Categoria "${categoryName}" excluída com sucesso!`, 'success');
+                } catch (error) {
+                    console.error('Erro ao excluir categoria:', error);
+                    showNotification('Erro ao excluir categoria', 'error');
+                }
+            }
+        }
+
+
+
+        // Funções do painel de administração
+        function createBackup() {
+            if (backupManager) {
+                const success = backupManager.createBackup();
+                if (success) {
+                    showNotification('Backup criado com sucesso!', 'success');
+                } else {
+                    showNotification('Erro ao criar backup', 'error');
+                }
+            }
+        }
+
+        function restoreBackup(timestamp) {
+            if (confirm('Tem certeza que deseja restaurar este backup? Os dados atuais serão substituídos.')) {
+                if (backupManager) {
+                    const success = backupManager.restoreBackup(timestamp);
+                    if (success) {
+                        showNotification('Backup restaurado com sucesso!', 'success');
+                        // Recarregar página
+                        setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                        showNotification('Erro ao restaurar backup', 'error');
+                    }
+                }
+            }
+        }
+
+        function clearBackups() {
+            if (confirm('Tem certeza que deseja limpar todos os backups?')) {
+                try {
+                    localStorage.removeItem(API_CONFIG.BACKUP.STORAGE_KEY);
+                    showNotification('Backups limpos com sucesso!', 'success');
+                } catch (error) {
+                    showNotification('Erro ao limpar backups', 'error');
+                }
+            }
+        }
+
+        function clearCache() {
+            if (meditationCache) {
+                meditationCache.clear();
+                showNotification('Cache limpo com sucesso!', 'success');
+            }
+        }
+
+        function showCacheStats() {
+            if (meditationCache) {
+                const stats = {
+                    size: meditationCache.cache.size,
+                    maxSize: API_CONFIG.CACHE.MAX_SIZE,
+                    ttl: API_CONFIG.CACHE.TTL / (1000 * 60 * 60) // em horas
+                };
+                
+                showNotification(`Cache: ${stats.size}/${stats.maxSize} itens, TTL: ${stats.ttl}h`, 'info');
+            }
+        }
+
+        function validateAllContent() {
+            if (contentValidator) {
+                // Validar meditações personalizadas
+                const historyData = localStorage.getItem('personalized_meditations_history');
+                if (historyData) {
+                    const history = JSON.parse(historyData);
+                    let totalErrors = 0;
+                    
+                    history.forEach(category => {
+                        category.meditations.forEach(meditation => {
+                            const validation = contentValidator.validateMeditation(meditation);
+                            if (!validation.isValid) {
+                                totalErrors += validation.errors.length;
+                            }
+                        });
+                    });
+                    
+                    if (totalErrors === 0) {
+                        showNotification('Todo o conteúdo está válido!', 'success');
+                    } else {
+                        showNotification(`Encontrados ${totalErrors} problemas de validação`, 'warning');
+                    }
+                } else {
+                    showNotification('Nenhum conteúdo para validar', 'info');
+                }
+            }
+        }
+
+        // Função para atualizar informações do usuário
+        function updateUserProfile() {
+            try {
+                console.log('🔄 Iniciando atualização do perfil do usuário...');
+                
+                // Verificar se SessionManager existe
+                if (!window.sessionManager) {
+                    console.error('❌ SessionManager não encontrado');
+                    return;
+                }
+                
+                // Obter dados do usuário via SessionManager
+                const userData = window.sessionManager.getCurrentUser();
+                console.log('📊 Dados do usuário via SessionManager:', userData);
+                
+                // Fallback: tentar obter dados do localStorage diretamente
+                if (!userData) {
+                    console.log('⚠️ Tentando fallback para localStorage...');
+                    const localStorageUserData = localStorage.getItem('userData');
+                    if (localStorageUserData) {
+                        try {
+                            const parsedUserData = JSON.parse(localStorageUserData);
+                            console.log('📊 Dados do localStorage:', parsedUserData);
+                            if (parsedUserData && parsedUserData.name) {
+                                console.log('✅ Usando dados do localStorage como fallback');
+                                updateUserProfileElements(parsedUserData);
+                                return;
+                            }
+                        } catch (error) {
+                            console.error('❌ Erro ao parsear dados do localStorage:', error);
+                        }
+                    }
+                    console.log('⚠️ Nenhum usuário logado encontrado');
+                    return;
+                }
+                
+                // Atualizar elementos com os dados do SessionManager
+                updateUserProfileElements(userData);
+                
+            } catch (error) {
+                console.error('❌ Erro ao atualizar perfil do usuário:', error);
+            }
+        }
+        
+        // Função auxiliar para atualizar elementos do perfil
+        function updateUserProfileElements(userData) {
+            try {
+                console.log('🔧 Atualizando elementos do perfil com dados:', userData);
+                
+                // Verificar se há dados de usuário anterior que precisam ser limpos
+                const topicUserId = localStorage.getItem('topic_user_id');
+                if (topicUserId && topicUserId !== userData.id) {
+                    console.log('🧹 Limpando dados de usuário anterior:', topicUserId, '->', userData.id);
+                    localStorage.removeItem('topic_user_id');
+                    localStorage.removeItem('pending_topic');
+                }
+                
+                if (userData.name) {
+                    console.log('👤 Atualizando nome do usuário:', userData.name);
+                    
+                    // Extrair nome e sobrenome
+                    const nameParts = userData.name.trim().split(' ');
+                    const firstName = nameParts[0];
+                    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+                    
+                    // Gerar iniciais
+                    let initials = firstName.charAt(0).toUpperCase();
+                    if (lastName) {
+                        initials += lastName.charAt(0).toUpperCase();
+                    }
+                    
+                    console.log('🆔 Iniciais geradas:', initials);
+                    
+                    // Atualizar avatar - FORÇAR ATUALIZAÇÃO
+                    const userAvatar = document.getElementById('userAvatar');
+                    console.log('🔍 userAvatar encontrado:', !!userAvatar);
+                    if (userAvatar) {
+                        userAvatar.textContent = initials;
+                        console.log('✅ Avatar atualizado com iniciais:', initials);
+                    } else {
+                        console.warn('⚠️ Elemento userAvatar não encontrado');
+                    }
+                    
+                    // Atualizar nome - FORÇAR ATUALIZAÇÃO
+                    const userName = document.getElementById('userName');
+                    console.log('🔍 userName encontrado:', !!userName);
+                    if (userName) {
+                        userName.textContent = userData.name;
+                        console.log('✅ Nome atualizado:', userData.name);
+                    } else {
+                        console.warn('⚠️ Elemento userName não encontrado');
+                    }
+                    
+                    // Atualizar saudação - FORÇAR ATUALIZAÇÃO
+                    const heroGreeting = document.getElementById('heroGreeting');
+                    console.log('🔍 heroGreeting encontrado:', !!heroGreeting);
+                    if (heroGreeting) {
+                        const now = new Date();
+                        const hour = now.getHours();
+                        let greeting = '🌅 Bom dia';
+                        
+                        if (hour >= 12 && hour < 18) {
+                            greeting = '☀️ Boa tarde';
+                        } else if (hour >= 18) {
+                            greeting = '🌙 Boa noite';
+                        }
+                        
+                        heroGreeting.textContent = `${greeting}, ${firstName}!`;
+                        console.log('✅ Saudação atualizada:', `${greeting}, ${firstName}!`);
+                    } else {
+                        console.warn('⚠️ Elemento heroGreeting não encontrado');
+                    }
+                    
+                    // Atualizar estatísticas do hero
+                    updateHeroStats(userData);
+                    
+                    console.log('✅ Perfil do usuário atualizado:', userData.name);
+                } else {
+                    console.log('⚠️ Nome do usuário não encontrado nos dados');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao atualizar elementos do perfil:', error);
+            }
+        }
+
+        // Função para atualizar estatísticas do hero
+        function updateHeroStats(userData = null) {
+            try {
+                // Obter dados de progresso das categorias (fonte centralizada)
+                const realCategories = getCategoriesData();
+                let totalCompleted = 0;
+                let totalTime = 0; // em minutos
+                
+                // Somar meditações completadas e tempo total baseado nos dados reais
+                realCategories.forEach(category => {
+                    totalCompleted += category.completed;
+                    // Duração média estimada por categoria
+                    const avgDuration = category.id === 'principios' ? 15 :
+                                      category.id === 'imitacao' ? 12 :
+                                      category.id === 'evangelho' ? 10 :
+                                      category.id === 'jaculatorias' ? 5 : 15;
+                    totalTime += category.completed * avgDuration;
+                });
+                
+                // Adicionar meditações personalizadas do usuário atual
+                const personalizedMeditations = getPersonalizedMeditationsForCurrentUser();
+                const completedPersonalized = personalizedMeditations.filter(m => m.status === 'completed').length;
+                totalCompleted += completedPersonalized;
+                totalTime += completedPersonalized * 15; // assumindo 15min por meditação personalizada
+                
+                // Usar dados do admin se disponíveis, senão calcular
+                let consecutiveDays = 0;
+                
+                if (userData && userData.stats) {
+                    // Usar estatísticas do admin
+                    consecutiveDays = userData.stats.consecutiveDays || 0;
+                    totalCompleted = userData.stats.completedMeditations || totalCompleted;
+                    totalTime = userData.stats.totalTime || totalTime;
+                } else {
+                    // Calcular dias consecutivos (simulado por agora)
+                    const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    
+                    if (currentUserData.createdAt) {
+                        const registrationDate = new Date(currentUserData.createdAt);
+                        const today = new Date();
+                        const daysDiff = Math.floor((today - registrationDate) / (1000 * 60 * 60 * 24));
+                        
+                        // Simular dias consecutivos baseado no tempo de cadastro e atividade
+                        if (totalCompleted > 0) {
+                            consecutiveDays = Math.min(daysDiff, Math.floor(totalCompleted / 3)); // aproximadamente 1 dia a cada 3 meditações
+                        }
+                    }
+                }
+                
+                // Converter tempo total para formato legível
+                const hours = Math.floor(totalTime / 60);
+                const minutes = totalTime % 60;
+                let timeString = '';
+                
+                if (hours > 0) {
+                    timeString = `${hours}h`;
+                    if (minutes > 0) {
+                        timeString += ` ${minutes}min`;
+                    }
+                } else {
+                    timeString = `${minutes}min`;
+                }
+                
+                // Atualizar elementos DOM
+                const consecutiveDaysElement = document.getElementById('consecutiveDays');
+                const completedMeditationsElement = document.getElementById('completedMeditations');
+                
+                if (consecutiveDaysElement) {
+                    consecutiveDaysElement.textContent = consecutiveDays;
+                }
+                
+                if (completedMeditationsElement) {
+                    completedMeditationsElement.textContent = totalCompleted;
+                }
+                
+                console.log('✅ Estatísticas do hero atualizadas:', {
+                    consecutiveDays,
+                    totalCompleted,
+                    timeString
+                });
+                
+            } catch (error) {
+                console.error('❌ Erro ao atualizar estatísticas do hero:', error);
+            }
+        }
+
+        // ========== DADOS CENTRALIZADOS DAS CATEGORIAS ==========
+        // Fonte única de verdade para todas as seções
+        function getCategoriesData() {
+            try {
+                let adminCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+                // Se não houver categorias, criar exemplos
+                if (!adminCategories || adminCategories.length === 0) {
+                    adminCategories = [
+                        { id: 'principios', name: 'Princípios Básicos', completed: 0, total: 10 },
+                        { id: 'evangelho', name: 'Evangelho', completed: 0, total: 8 },
+                        { id: 'imitacao', name: 'Imitação de Cristo', completed: 0, total: 12 },
+                        { id: 'jaculatorias', name: 'Jaculatórias', completed: 0, total: 6 }
+                    ];
+                    localStorage.setItem('categories', JSON.stringify(adminCategories));
+                }
+                return adminCategories;
+            } catch (error) {
+                console.error('❌ Erro ao carregar categorias:', error);
+                return [];
+            }
+        }
+
+        // Função para atualizar select de categorias
+        function updateCategorySelect() {
+            const categorySelect = document.querySelector('select[name="category"]');
+            if (!categorySelect) return;
+
+            const categories = getCategoriesData();
+            // Limpar e recriar options
+            categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+            if (categories.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Nenhuma categoria disponível';
+                option.disabled = true;
+                categorySelect.appendChild(option);
+            } else {
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            }
+        }
+
+        // ========== FUNÇÕES PARA A SEÇÃO DE AGENDAMENTOS ==========
+        
+
+
+
+
+
+
+        // Função para mostrar notificação
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+                background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Inicializar a seção de agendamentos quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 DOMContentLoaded - Dashboard inicializando...');
+            
+            // Aguardar um pouco para garantir que os scripts externos carregaram
+            setTimeout(async () => {
+                console.log('⏰ Verificando sessionManager...');
+                console.log('🔍 window.sessionManager:', window.sessionManager);
+                
+                if (window.sessionManager) {
+                    console.log('✅ SessionManager encontrado');
+                    
+                    // Primeiro, verificar se há dados no localStorage
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    console.log('👥 Usuários no localStorage:', users.length);
+                    
+                    if (users.length === 0) {
+                        console.log('📦 Nenhum usuário encontrado, carregando dados do backup...');
+                        await loadBackupData();
+                    }
+                    
+                    const user = window.sessionManager.getCurrentUser();
+                    console.log('👤 Usuário atual:', user);
+                    
+                    if (user && user.id) {
+                        console.log('✅ Usuário logado encontrado:', user.name);
+                        // Atualizar dados do usuário no dashboard
+                        updateUserData(user);
+                    } else {
+                        console.warn('⚠️ Nenhum usuário logado encontrado');
+                        // Tentar fazer login automático com dados existentes
+                        await tryAutoLogin();
+                    }
+                } else {
+                    console.error('❌ SessionManager não encontrado');
+                    // Criar usuário padrão
+                    createDefaultUser();
+                }
+                
+
+                
+                // Forçar carregamento das seções do dashboard
+                setTimeout(() => {
+                    console.log('🔄 Forçando carregamento das seções do dashboard...');
+                    
+                    // Carregar seções de meditações
+                    if (typeof renderDashboardMeditationCards === 'function') {
+                        console.log('📖 Carregando seção de meditações...');
+                        renderDashboardMeditationCards();
+                    }
+                    
+                    // Carregar seções de progresso
+                    if (typeof renderDashboardProgressCards === 'function') {
+                        console.log('📊 Carregando seção de progresso...');
+                        renderDashboardProgressCards();
+                    }
+                    
+
+                    
+                    console.log('✅ Carregamento das seções concluído');
+                }, 1000);
+            }, 1000);
+        });
+        
+        // Função para atualizar dados do usuário no dashboard
+        function updateUserData(user) {
+            try {
+                console.log('📊 Atualizando dados do usuário no dashboard...');
+                console.log('👤 Dados do usuário:', user);
+                
+                // Atualizar nome do usuário
+                const userNameElement = document.getElementById('userName');
+                if (userNameElement) {
+                    userNameElement.textContent = user.name || 'Usuário';
+                    console.log('✅ Nome do usuário atualizado:', user.name);
+                } else {
+                    console.log('⚠️ Elemento userName não encontrado');
+                }
+                
+                // Atualizar estatísticas
+                const stats = user.stats || {};
+                console.log('📊 Estatísticas do usuário:', stats);
+                
+                const streakElement = document.getElementById('consecutiveDays');
+                const completedElement = document.getElementById('completedMeditations');
+                
+                if (streakElement) {
+                    streakElement.textContent = stats.consecutiveDays || 0;
+                    console.log('✅ Dias consecutivos atualizados:', stats.consecutiveDays);
+                } else {
+                    console.log('⚠️ Elemento consecutiveDays não encontrado');
+                }
+                
+                if (completedElement) {
+                    completedElement.textContent = stats.completedMeditations || 0;
+                    console.log('✅ Meditações completadas atualizadas:', stats.completedMeditations);
+                } else {
+                    console.log('⚠️ Elemento completedMeditations não encontrado');
+                }
+                
+                console.log('✅ Dados do usuário atualizados com sucesso');
+                
+            } catch (error) {
+                console.error('❌ Erro ao atualizar dados do usuário:', error);
+            }
+        }
+        
+        // Função para tentar login automático
+        async function tryAutoLogin() {
+            try {
+                console.log('🔐 Tentando login automático...');
+                
+                // Verificar se há dados de usuário no localStorage
+                const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                
+                console.log('📊 Usuários disponíveis:', users.length);
+                console.log('📧 Dados de usuário salvos:', userData);
+                
+                if (userData && userData.email) {
+                    console.log('📧 Encontrado email salvo:', userData.email);
+                    
+                    // Tentar fazer login com o email salvo
+                    const loginResult = await window.sessionManager.loginUser({
+                        email: userData.email
+                    });
+                    
+                    if (loginResult) {
+                        console.log('✅ Login automático realizado:', loginResult.name);
+                        updateUserData(loginResult);
+                        return;
+                    }
+                }
+                
+                // Se não há dados salvos, verificar se há usuários no sistema
+                if (users.length > 0) {
+                    console.log('👥 Encontrados usuários no sistema:', users.length);
+                    const firstUser = users[0];
+                    console.log('🔑 Tentando login com primeiro usuário:', firstUser.email);
+                    
+                    const loginResult = await window.sessionManager.loginUser({
+                        email: firstUser.email
+                    });
+                    
+                    if (loginResult) {
+                        console.log('✅ Login automático realizado:', loginResult.name);
+                        updateUserData(loginResult);
+                        return;
+                    }
+                }
+                
+                console.log('⚠️ Nenhum usuário encontrado para login automático');
+                createDefaultUser();
+                
+            } catch (error) {
+                console.error('❌ Erro no login automático:', error);
+                createDefaultUser();
+            }
+        }
+        
+        // Função para carregar dados do backup
+        async function loadBackupData() {
+            try {
+                console.log('📦 Carregando dados do backup...');
+                
+                const backupData = {
+                    "users": [
+                        {
+                            "id": "user_1753519273275_vo9clmtxv",
+                            "name": "Rodrigo Silva Goes",
+                            "email": "rodrigo@exemplo.com",
+                            "userNumber": 1,
+                            "createdAt": "2025-07-26T08:00:00.000Z",
+                            "lastLogin": "2025-07-26T08:00:00.000Z",
+                            "preferences": {
+                                "theme": "dark",
+                                "notifications": true,
+                                "language": "pt-BR"
+                            },
+                            "stats": {
+                                "consecutiveDays": 5,
+                                "completedMeditations": 12,
+                                "totalTime": "2h 30min",
+                                "totalMeditations": 15,
+                                "inProgressMeditations": 3
+                            }
+                        }
+                    ],
+                    "meditations": [
+                        {
+                            "id": "1",
+                            "title": "Princípios da Vida Sobrenatural",
+                            "category": "vida-sobrenatural",
+                            "duration": 12,
+                            "scriptureReference": "João 15:1-8",
+                            "scriptureText": "Eu sou a videira verdadeira, e meu Pai é o agricultor...",
+                            "icon": "📖",
+                            "lectio": "Neste texto, Jesus se apresenta como a videira verdadeira...",
+                            "meditatio": "Reflita sobre o que significa 'permanecer em Cristo'...",
+                            "oratio": "Senhor Jesus, videira verdadeira, eu quero permanecer em ti...",
+                            "contemplatio": "Permaneça em silêncio na presença de Jesus...",
+                            "createdAt": "2024-01-15T10:00:00.000Z",
+                            "updatedAt": "2024-01-15T10:00:00.000Z"
+                        }
+                    ],
+                    "categories": [
+                        {
+                            "id": "vida-sobrenatural",
+                            "name": "Vida Sobrenatural",
+                            "description": "Meditações sobre a vida espiritual e a graça de Deus",
+                            "icon": "📖",
+                            "color": "#8B5CF6",
+                            "meditationCount": 1
+                        },
+                        {
+                            "id": "mariologia",
+                            "name": "Mariologia",
+                            "description": "Meditações sobre Nossa Senhora e sua devoção",
+                            "icon": "💝",
+                            "color": "#EC4899",
+                            "meditationCount": 1
+                        },
+                        {
+                            "id": "oracao",
+                            "name": "Oração",
+                            "description": "Meditações sobre a vida de oração e intimidade com Deus",
+                            "icon": "🙏",
+                            "color": "#3B82F6",
+                            "meditationCount": 1
+                        }
+                    ]
+                };
+                
+                // Salvar dados no localStorage
+                localStorage.setItem('users', JSON.stringify(backupData.users));
+                localStorage.setItem('meditations', JSON.stringify(backupData.meditations));
+                localStorage.setItem('categories', JSON.stringify(backupData.categories));
+                
+                console.log('✅ Dados do backup carregados com sucesso');
+                console.log('👥 Usuários carregados:', backupData.users.length);
+                console.log('📖 Meditações carregadas:', backupData.meditations.length);
+                console.log('📂 Categorias carregadas:', backupData.categories.length);
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar dados do backup:', error);
+            }
+        }
+        
+        // Função para criar usuário padrão
+        function createDefaultUser() {
+            try {
+                console.log('👤 Criando usuário padrão...');
+                
+                const defaultUser = {
+                    id: 'user_' + Date.now(),
+                    name: 'Usuário',
+                    email: 'user@example.com',
+                    userNumber: 1,
+                    createdAt: new Date().toISOString(),
+                    stats: {
+                        consecutiveDays: 0,
+                        completedMeditations: 0,
+                        totalTime: '0h 0min',
+                        totalMeditations: 0,
+                        inProgressMeditations: 0
+                    }
+                };
+                
+                // Salvar no localStorage
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                users.push(defaultUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('userData', JSON.stringify(defaultUser));
+                
+                console.log('✅ Usuário padrão criado:', defaultUser.name);
+                
+                // Atualizar dados no dashboard
+                updateUserData(defaultUser);
+                
+            } catch (error) {
+                console.error('❌ Erro ao criar usuário padrão:', error);
+            }
+        }
+
+
+
+        // Função para abrir categoria
+        function openCategory(categoryId) {
+            console.log('🔍 Abrindo página para categoria:', categoryId);
+            window.location.href = `meditacoes-categoria.html?category=${categoryId}`;
+        }
+
+        // Funções para o modal de agendamento do dashboard
+        function openDashboardScheduleModal() {
+            const modal = document.getElementById('dashboardScheduleModal');
+            if (modal) {
+                modal.classList.add('show');
+                loadCategoriesForDashboardSchedule();
+            }
+        }
+
+        function closeDashboardScheduleModal() {
+            const modal = document.getElementById('dashboardScheduleModal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        function loadCategoriesForDashboardSchedule() {
+            const select = document.querySelector('#dashboardScheduleForm select[name="category"]');
+            if (!select) return;
+
+            // Limpar opções existentes
+            select.innerHTML = '<option value="">Selecione uma categoria</option>';
+
+            // Carregar categorias do localStorage
+            const categories = JSON.parse(localStorage.getItem('categories')) || [];
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.name;
+                option.textContent = category.name;
+                select.appendChild(option);
+            });
+        }
+
+        function saveDashboardSchedule() {
+            const form = document.getElementById('dashboardScheduleForm');
+            const formData = new FormData(form);
+            
+            const selectedDays = [];
+            document.querySelectorAll('#dashboardScheduleModal .weekday-btn.active').forEach(btn => {
+                selectedDays.push(btn.dataset.day);
+            });
+
+            const schedule = {
+                id: Date.now(),
+                category: formData.get('category'),
+                time: formData.get('time'),
+                days: selectedDays,
+                notifications: formData.get('notifications') === 'on',
+                userId: getCurrentUserId()
+            };
+
+            // Salvar no localStorage
+            const schedules = JSON.parse(localStorage.getItem('user_schedules')) || [];
+            schedules.push(schedule);
+            localStorage.setItem('user_schedules', JSON.stringify(schedules));
+
+            // Fechar modal e limpar formulário
+            form.reset();
+            document.querySelectorAll('#dashboardScheduleModal .weekday-btn.active').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+
+
+
+
+        // Função para obter ID do usuário atual
+        function getCurrentUserId() {
+            const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            return currentUser ? currentUser.id : 'anonymous';
+        }
+
+        // Event listeners para o modal
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listener para os botões de dia da semana
+            document.querySelectorAll('#dashboardScheduleModal .weekday-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+
+            // Event listener para o formulário
+            const form = document.getElementById('dashboardScheduleForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveDashboardSchedule();
+                });
+            }
+
+            // Event listener para fechar modal ao clicar fora
+            document.getElementById('dashboardScheduleModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeDashboardScheduleModal();
+                }
+            });
+
+            // Carregar lista de agendamentos
+            // (Aqui pode ser adicionado o carregamento real, se necessário)
+        });
+
+        // Função para renderizar categorias no dashboard
+
+    </script>
+
+            <!-- Scripts externos -->
+        <script src="session-manager.js"></script>
+        <script src="api-config.js"></script>
+        <script src="chatgpt-api.js"></script>
+        <script src="supabase-config.js"></script>
+        <script src="schedule-functions.js"></script>
+        <script src="debug-dashboard-loading.js"></script>
+        <script src="test-dashboard-sections.js"></script>
+
+        <script src="dashboard-meditations-cards.js"></script>
+        <script src="dashboard-progress-cards.js"></script>
+
+        <script>
+            // Verificar se as funções necessárias estão disponíveis
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('🔍 Verificando disponibilidade das funções no dashboard...');
+                console.log('checkAPIStatus disponível:', typeof checkAPIStatus);
+                console.log('generateMeditations disponível:', typeof generateMeditations);
+                console.log('chatGPTAPI disponível:', typeof chatGPTAPI);
+                console.log('supabaseManager disponível:', typeof window.supabaseManager);
+
+                if (typeof checkAPIStatus === 'undefined') {
+                    console.error('❌ Função checkAPIStatus não está disponível no dashboard');
+                }
+
+                if (typeof generateMeditations === 'undefined') {
+                    console.error('❌ Função generateMeditations não está disponível no dashboard');
+                }
+
+                if (typeof chatGPTAPI === 'undefined') {
+                    console.error('❌ chatGPTAPI não está disponível no dashboard');
+                }
+
+                if (typeof window.supabaseManager === 'undefined') {
+                    console.error('❌ Supabase Manager não está disponível no dashboard');
+                } else {
+                    console.log('✅ Supabase Manager disponível no dashboard');
+                    console.log('📝 Métodos disponíveis:', Object.keys(window.supabaseManager));
+                }
+            });
+        </script>
+
+</body>
+</html>

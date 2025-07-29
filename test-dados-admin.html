@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Dados Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: white; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #333; border-radius: 8px; }
+        .success { color: #10B981; }
+        .error { color: #EF4444; }
+        .warning { color: #F59E0B; }
+        pre { background: #2a2a2a; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        button { background: #3B82F6; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #2563EB; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Teste de Dados Admin</h1>
+    
+    <div class="test-section">
+        <h2>1. Verificar localStorage</h2>
+        <button onclick="checkLocalStorage()">Verificar Dados</button>
+        <div id="localStorage-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Testar getCategoriesData()</h2>
+        <button onclick="testGetCategoriesData()">Testar Função</button>
+        <div id="categories-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Adicionar Dados de Teste</h2>
+        <button onclick="addTestData()">Adicionar Categoria de Teste</button>
+        <button onclick="clearTestData()">Limpar Dados</button>
+        <div id="test-data-results"></div>
+    </div>
+
+    <script>
+        function checkLocalStorage() {
+            const results = document.getElementById('localStorage-results');
+            let html = '<h3>Dados no localStorage:</h3>';
+            
+            const categories = localStorage.getItem('categories');
+            const meditations = localStorage.getItem('meditations');
+            
+            html += `<p><strong>categories:</strong> ${categories ? '✅ Existe' : '❌ Não existe'}</p>`;
+            html += `<p><strong>meditations:</strong> ${meditations ? '✅ Existe' : '❌ Não existe'}</p>`;
+            
+            if (categories) {
+                try {
+                    const parsedCategories = JSON.parse(categories);
+                    html += `<p class="success">Categorias encontradas: ${parsedCategories.length}</p>`;
+                    html += '<pre>' + JSON.stringify(parsedCategories, null, 2) + '</pre>';
+                } catch (e) {
+                    html += `<p class="error">Erro ao analisar categorias: ${e.message}</p>`;
+                }
+            }
+            
+            if (meditations) {
+                try {
+                    const parsedMeditations = JSON.parse(meditations);
+                    html += `<p class="success">Meditações encontradas: ${parsedMeditations.length}</p>`;
+                    html += '<pre>' + JSON.stringify(parsedMeditations, null, 2) + '</pre>';
+                } catch (e) {
+                    html += `<p class="error">Erro ao analisar meditações: ${e.message}</p>`;
+                }
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        function getCategoriesData() {
+            try {
+                const adminCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+                const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+                
+                console.log('🔍 VERIFICANDO DADOS ADMIN:');
+                console.log('- adminCategories:', adminCategories);
+                console.log('- adminMeditations:', adminMeditations);
+                
+                if (adminCategories.length > 0) {
+                    console.log('✅ USANDO CATEGORIAS DO PAINEL ADMIN:', adminCategories.length);
+                    
+                    return adminCategories.map(category => {
+                        const categoryMeditations = adminMeditations.filter(med => 
+                            med.categoryId === category.id
+                        );
+                        
+                        const total = categoryMeditations.length;
+                        const completed = categoryMeditations.filter(m => m.status === 'completed').length;
+                        const inProgress = categoryMeditations.filter(m => m.status === 'pending' || m.status === 'in_progress').length;
+                        const locked = categoryMeditations.filter(m => m.status === 'locked').length;
+                        
+                        const sampleMeditations = categoryMeditations.slice(0, 3).map(med => ({
+                            title: med.title,
+                            count: parseInt(med.duration) || 15
+                        }));
+                        
+                        if (sampleMeditations.length === 0) {
+                            sampleMeditations.push({ title: 'Aguardando meditações...', count: 0 });
+                        }
+                        
+                        return {
+                            id: category.id,
+                            name: category.name,
+                            description: category.description || 'Categoria criada pelo administrador',
+                            icon: category.icon || '📖',
+                            color: category.color || '#6B7280',
+                            total: total,
+                            completed: completed,
+                            inProgress: inProgress,
+                            locked: locked,
+                            sampleMeditations: sampleMeditations
+                        };
+                    });
+                }
+                
+                console.log('📊 Usando categorias padrão (fallback)');
+                return [
+                    {
+                        id: 'principios',
+                        name: 'Princípios da Vida Sobrenatural',
+                        description: 'Fundamentos da espiritualidade cristã e vida interior',
+                        icon: '✨',
+                        color: '#8B5CF6',
+                        total: 24,
+                        completed: 19,
+                        inProgress: 3,
+                        locked: 2,
+                        sampleMeditations: [
+                            { title: 'A Vida Interior', count: 15 },
+                            { title: 'A Graça Santificante', count: 18 },
+                            { title: 'A Oração Mental', count: 20 }
+                        ]
+                    }
+                ];
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar dados das categorias:', error);
+                return [];
+            }
+        }
+        
+        function testGetCategoriesData() {
+            const results = document.getElementById('categories-results');
+            
+            try {
+                const categories = getCategoriesData();
+                let html = `<h3>Resultado de getCategoriesData():</h3>`;
+                html += `<p class="success">Categorias retornadas: ${categories.length}</p>`;
+                
+                categories.forEach((cat, index) => {
+                    html += `<p><strong>${index + 1}. ${cat.name}</strong> (${cat.total} meditações)</p>`;
+                });
+                
+                html += '<pre>' + JSON.stringify(categories, null, 2) + '</pre>';
+                results.innerHTML = html;
+            } catch (error) {
+                results.innerHTML = `<p class="error">Erro: ${error.message}</p>`;
+            }
+        }
+        
+        function addTestData() {
+            const testCategory = {
+                id: 'test_' + Date.now(),
+                name: 'Categoria de Teste',
+                description: 'Esta é uma categoria criada para teste',
+                icon: '🧪',
+                color: '#10B981',
+                status: 'available',
+                createdAt: new Date().toISOString()
+            };
+            
+            const testMeditation = {
+                id: 'med_' + Date.now(),
+                title: 'Meditação de Teste',
+                categoryId: testCategory.id,
+                duration: '15',
+                status: 'available',
+                type: 'free',
+                icon: '🧪',
+                reading: 'Texto de leitura de teste',
+                meditation: 'Texto de meditação de teste',
+                prayer: 'Texto de oração de teste',
+                contemplation: 'Texto de contemplação de teste',
+                createdAt: new Date().toISOString()
+            };
+            
+            // Salvar no localStorage
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            
+            categories.push(testCategory);
+            meditations.push(testMeditation);
+            
+            localStorage.setItem('categories', JSON.stringify(categories));
+            localStorage.setItem('meditations', JSON.stringify(meditations));
+            
+            document.getElementById('test-data-results').innerHTML = 
+                `<p class="success">✅ Dados de teste adicionados!</p>
+                 <p>Categoria: ${testCategory.name}</p>
+                 <p>Meditação: ${testMeditation.title}</p>`;
+        }
+        
+        function clearTestData() {
+            localStorage.removeItem('categories');
+            localStorage.removeItem('meditations');
+            document.getElementById('test-data-results').innerHTML = 
+                `<p class="warning">⚠️ Todos os dados foram limpos!</p>`;
+        }
+        
+        // Verificar automaticamente ao carregar
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLocalStorage();
+            testGetCategoriesData();
+        });
+    </script>
+</body>
+</html> 

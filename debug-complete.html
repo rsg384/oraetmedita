@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Completo - Ora et Medita</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a2e; color: white; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section { background: #2a2a3e; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        button { padding: 10px 20px; margin: 5px; background: #8B5CF6; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .log { background: #0F0F23; padding: 15px; margin: 10px 0; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; }
+        .success { color: #10B981; }
+        .error { color: #EF4444; }
+        .warning { color: #F59E0B; }
+        .info { color: #3B82F6; }
+        input { padding: 10px; width: 300px; margin: 10px; border-radius: 4px; border: 1px solid #374151; background: #1A1A2E; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Debug Completo - Ora et Medita</h1>
+        
+        <div class="section">
+            <h2>1. Teste de Configuração</h2>
+            <button onclick="testConfig()">Verificar Configuração da API</button>
+            <button onclick="testLocalStorage()">Verificar LocalStorage</button>
+            <button onclick="clearAllData()">Limpar Todos os Dados</button>
+            <div id="config-log" class="log"></div>
+        </div>
+
+        <div class="section">
+            <h2>2. Teste de Geração</h2>
+            <input type="text" id="test-topic" placeholder="Digite um tema (ex: Amor de Deus)" value="Amor de Deus">
+            <button onclick="testGeneration()">Testar Geração de Meditações</button>
+            <button onclick="testGenerationWithDelay()">Testar com Delay (3s)</button>
+            <div id="generation-log" class="log"></div>
+        </div>
+
+        <div class="section">
+            <h2>3. Teste de Redirecionamento</h2>
+            <button onclick="testRedirect()">Testar Redirecionamento</button>
+            <button onclick="testRedirectWithData()">Testar Redirecionamento com Dados</button>
+            <div id="redirect-log" class="log"></div>
+        </div>
+
+        <div class="section">
+            <h2>4. Teste de Carregamento</h2>
+            <button onclick="testLoadMeditations()">Testar Carregamento de Meditações</button>
+            <button onclick="simulateFullFlow()">Simular Fluxo Completo</button>
+            <div id="load-log" class="log"></div>
+        </div>
+
+        <div class="section">
+            <h2>5. Dados Atuais</h2>
+            <button onclick="showCurrentData()">Mostrar Dados Atuais</button>
+            <div id="data-log" class="log"></div>
+        </div>
+    </div>
+
+    <script src="api-config.js"></script>
+    <script src="chatgpt-api.js"></script>
+    <script>
+        function log(elementId, message, type = 'info') {
+            const logElement = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'info';
+            logElement.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // 1. Teste de Configuração
+        async function testConfig() {
+            const logId = 'config-log';
+            log(logId, '🔧 Iniciando teste de configuração...', 'info');
+            
+            try {
+                // Verificar se a API está carregada
+                if (typeof chatGPTAPI === 'undefined') {
+                    throw new Error('chatGPTAPI não está definida');
+                }
+                log(logId, '✅ chatGPTAPI carregada com sucesso', 'success');
+                
+                // Verificar configuração
+                if (!chatGPTAPI.config.API_KEY) {
+                    throw new Error('API_KEY não configurada');
+                }
+                log(logId, '✅ API_KEY configurada', 'success');
+                
+                // Verificar se os documentos estão carregados
+                const documents = await chatGPTAPI.loadDocuments();
+                log(logId, `✅ ${documents.length} documentos carregados`, 'success');
+                
+                log(logId, '✅ Configuração OK!', 'success');
+                
+            } catch (error) {
+                log(logId, `❌ Erro na configuração: ${error.message}`, 'error');
+            }
+        }
+
+        function testLocalStorage() {
+            const logId = 'config-log';
+            log(logId, '🔧 Verificando localStorage...', 'info');
+            
+            try {
+                const keys = ['personalized_meditations', 'personalized_meditations_history', 'current_topic', 'generation_date'];
+                
+                keys.forEach(key => {
+                    const value = localStorage.getItem(key);
+                    if (value) {
+                        log(logId, `✅ ${key}: ${value.length} caracteres`, 'success');
+                    } else {
+                        log(logId, `⚠️ ${key}: não encontrado`, 'warning');
+                    }
+                });
+                
+            } catch (error) {
+                log(logId, `❌ Erro no localStorage: ${error.message}`, 'error');
+            }
+        }
+
+        function clearAllData() {
+            const logId = 'config-log';
+            log(logId, '🧹 Limpando todos os dados...', 'info');
+            
+            try {
+                localStorage.removeItem('personalized_meditations');
+                localStorage.removeItem('personalized_meditations_history');
+                localStorage.removeItem('current_topic');
+                localStorage.removeItem('generation_date');
+                localStorage.removeItem('pending_topic');
+                
+                log(logId, '✅ Todos os dados removidos', 'success');
+                
+            } catch (error) {
+                log(logId, `❌ Erro ao limpar dados: ${error.message}`, 'error');
+            }
+        }
+
+        // 2. Teste de Geração
+        async function testGeneration() {
+            const logId = 'generation-log';
+            const topic = document.getElementById('test-topic').value || 'Amor de Deus';
+            
+            log(logId, `🚀 Iniciando geração para: "${topic}"`, 'info');
+            
+            try {
+                const startTime = Date.now();
+                const result = await chatGPTAPI.generateMeditations(topic);
+                const endTime = Date.now();
+                
+                log(logId, `✅ Geração concluída em ${endTime - startTime}ms`, 'success');
+                log(logId, `📊 Resultado: ${result.meditations.length} meditações`, 'success');
+                log(logId, `📝 Categoria: ${result.category}`, 'success');
+                
+                // Verificar estrutura
+                result.meditations.forEach((med, index) => {
+                    log(logId, `📖 Meditação ${index + 1}: ${med.title}`, 'info');
+                });
+                
+                // Salvar no localStorage
+                localStorage.setItem('personalized_meditations', JSON.stringify(result));
+                log(logId, '💾 Dados salvos no localStorage', 'success');
+                
+            } catch (error) {
+                log(logId, `❌ Erro na geração: ${error.message}`, 'error');
+                log(logId, `📋 Stack: ${error.stack}`, 'error');
+            }
+        }
+
+        async function testGenerationWithDelay() {
+            const logId = 'generation-log';
+            log(logId, '⏳ Aguardando 3 segundos antes da geração...', 'info');
+            
+            setTimeout(async () => {
+                await testGeneration();
+            }, 3000);
+        }
+
+        // 3. Teste de Redirecionamento
+        function testRedirect() {
+            const logId = 'redirect-log';
+            log(logId, '🔄 Testando redirecionamento...', 'info');
+            
+            try {
+                log(logId, `📍 URL atual: ${window.location.href}`, 'info');
+                log(logId, `🔗 URL de destino: ${window.location.origin}/minhas-meditacoes.html`, 'info');
+                
+                // Testar se a página existe
+                fetch('minhas-meditacoes.html')
+                    .then(response => {
+                        log(logId, `✅ Página encontrada: ${response.status}`, 'success');
+                        log(logId, '🚀 Redirecionando...', 'info');
+                        window.location.href = 'minhas-meditacoes.html';
+                    })
+                    .catch(error => {
+                        log(logId, `❌ Erro ao acessar página: ${error.message}`, 'error');
+                    });
+                
+            } catch (error) {
+                log(logId, `❌ Erro no redirecionamento: ${error.message}`, 'error');
+            }
+        }
+
+        function testRedirectWithData() {
+            const logId = 'redirect-log';
+            log(logId, '🔄 Testando redirecionamento com dados...', 'info');
+            
+            // Criar dados de teste
+            const testData = {
+                category: 'Teste Debug',
+                total: 7,
+                meditations: [
+                    {
+                        id: 1,
+                        title: 'Meditação de Teste 1',
+                        duration: '20 min',
+                        status: 'completed',
+                        reading: 'Texto de leitura de teste',
+                        meditation: 'Texto de meditação de teste',
+                        prayer: 'Texto de oração de teste',
+                        contemplation: 'Texto de contemplação de teste',
+                        references: 'Referências de teste',
+                        createdAt: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString()
+                    }
+                ],
+                createdAt: new Date().toISOString(),
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('personalized_meditations', JSON.stringify(testData));
+            log(logId, '💾 Dados de teste salvos', 'success');
+            
+            setTimeout(() => {
+                log(logId, '🚀 Redirecionando com dados...', 'info');
+                window.location.href = 'minhas-meditacoes.html';
+            }, 1000);
+        }
+
+        // 4. Teste de Carregamento
+        function testLoadMeditations() {
+            const logId = 'load-log';
+            log(logId, '📖 Testando carregamento de meditações...', 'info');
+            
+            try {
+                const data = localStorage.getItem('personalized_meditations');
+                if (!data) {
+                    log(logId, '⚠️ Nenhum dado encontrado no localStorage', 'warning');
+                    return;
+                }
+                
+                const parsed = JSON.parse(data);
+                log(logId, `✅ Dados carregados: ${parsed.meditations.length} meditações`, 'success');
+                log(logId, `📝 Categoria: ${parsed.category}`, 'success');
+                
+                parsed.meditations.forEach((med, index) => {
+                    log(logId, `📖 ${index + 1}. ${med.title}`, 'info');
+                });
+                
+            } catch (error) {
+                log(logId, `❌ Erro ao carregar: ${error.message}`, 'error');
+            }
+        }
+
+        async function simulateFullFlow() {
+            const logId = 'load-log';
+            log(logId, '🎭 Simulando fluxo completo...', 'info');
+            
+            try {
+                // 1. Gerar meditações
+                log(logId, '1️⃣ Gerando meditações...', 'info');
+                const result = await chatGPTAPI.generateMeditations('Amor de Deus');
+                
+                // 2. Salvar no localStorage
+                log(logId, '2️⃣ Salvando no localStorage...', 'info');
+                localStorage.setItem('personalized_meditations', JSON.stringify(result));
+                
+                // 3. Aguardar um pouco
+                log(logId, '3️⃣ Aguardando 2 segundos...', 'info');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // 4. Redirecionar
+                log(logId, '4️⃣ Redirecionando...', 'info');
+                window.location.href = 'minhas-meditacoes.html';
+                
+            } catch (error) {
+                log(logId, `❌ Erro no fluxo: ${error.message}`, 'error');
+            }
+        }
+
+        // 5. Mostrar Dados Atuais
+        function showCurrentData() {
+            const logId = 'data-log';
+            log(logId, '📊 Dados atuais no localStorage:', 'info');
+            
+            const keys = ['personalized_meditations', 'personalized_meditations_history', 'current_topic', 'generation_date', 'pending_topic'];
+            
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                if (value) {
+                    try {
+                        const parsed = JSON.parse(value);
+                        log(logId, `✅ ${key}: ${JSON.stringify(parsed, null, 2)}`, 'success');
+                    } catch {
+                        log(logId, `📝 ${key}: ${value}`, 'info');
+                    }
+                } else {
+                    log(logId, `⚠️ ${key}: não encontrado`, 'warning');
+                }
+            });
+        }
+
+        // Auto-executar teste de configuração
+        window.addEventListener('load', () => {
+            log('config-log', '🚀 Página de debug carregada', 'success');
+            testConfig();
+        });
+    </script>
+</body>
+</html> 

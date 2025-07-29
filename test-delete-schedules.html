@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Exclusão de Agendamentos</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .btn:hover {
+            background: #2ea043;
+        }
+        .btn-danger {
+            background: #da3633;
+        }
+        .btn-danger:hover {
+            background: #f85149;
+        }
+        .btn-secondary {
+            background: #21262d;
+            border: 1px solid #30363d;
+        }
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+        .schedule-item {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .schedule-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .schedule-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .action-btn:hover {
+            background: #30363d;
+        }
+        .action-btn.delete {
+            color: #f85149;
+        }
+        .action-btn.delete:hover {
+            background: #da3633;
+            color: white;
+        }
+        .status {
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        .status.success {
+            background: #0c2d6b;
+            color: #58a6ff;
+            border: 1px solid #1f6feb;
+        }
+        .status.error {
+            background: #da3633;
+            color: #ff7b72;
+            border: 1px solid #f85149;
+        }
+        .status.info {
+            background: #1c1f23;
+            color: #8b949e;
+            border: 1px solid #30363d;
+        }
+        .log {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Exclusão de Agendamentos</h1>
+        
+        <div class="test-section">
+            <h3>📊 Status dos Scripts</h3>
+            <div id="scriptStatus"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Controles de Teste</h3>
+            <button class="btn" onclick="createTestSchedules()">📝 Criar Agendamentos de Teste</button>
+            <button class="btn btn-secondary" onclick="clearAllSchedules()">🗑️ Limpar Todos os Agendamentos</button>
+            <button class="btn" onclick="loadAndDisplaySchedules()">🔄 Carregar e Exibir</button>
+            <button class="btn btn-secondary" onclick="checkSchedulesData()">🔍 Verificar Dados</button>
+            <button class="btn btn-secondary" onclick="testDeleteFunction()">🧪 Testar Função Delete</button>
+            <a href="agendamentos.html" class="btn btn-secondary">📅 Ir para Agendamentos</a>
+        </div>
+
+        <div class="test-section">
+            <h3>📅 Agendamentos Atuais</h3>
+            <div id="schedulesList">
+                <!-- Agendamentos serão exibidos aqui -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 Log de Operações</h3>
+            <div id="logOutput" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        let schedules = [];
+        let logOutput = [];
+
+        // Função para adicionar log
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            logOutput.push(logEntry);
+            
+            const logElement = document.getElementById('logOutput');
+            if (logElement) {
+                logElement.textContent = logOutput.join('\n');
+                logElement.scrollTop = logElement.scrollHeight;
+            }
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Verificar status dos scripts
+        function checkScriptStatus() {
+            const statusDiv = document.getElementById('scriptStatus');
+            const scripts = [
+                'session-manager.js'
+            ];
+            
+            let statusHTML = '';
+            scripts.forEach(script => {
+                const exists = typeof window[script.replace('.js', '').replace('-', '_')] !== 'undefined';
+                statusHTML += `
+                    <div class="status ${exists ? 'success' : 'error'}">
+                        ${exists ? '✅' : '❌'} ${script}: ${exists ? 'Carregado' : 'Não encontrado'}
+                    </div>
+                `;
+            });
+            
+            statusDiv.innerHTML = statusHTML;
+        }
+
+        // Criar agendamentos de teste
+        function createTestSchedules() {
+            addLog('📝 Criando agendamentos de teste...');
+            
+            const testSchedules = [
+                {
+                    id: 'test_1_' + Date.now(),
+                    title: 'Meditação Salmos',
+                    time: '08:00',
+                    category: 'Salmos',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 15,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: 'Agendamento para Salmos às 08:00',
+                    userId: 'test_user_1',
+                    userName: 'Usuário Teste 1'
+                },
+                {
+                    id: 'test_2_' + Date.now(),
+                    title: 'Meditação Jaculatórias',
+                    time: '12:00',
+                    category: 'Jaculatórias',
+                    days: ['ter', 'qui'],
+                    notifications: false,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 10,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: 'Agendamento para Jaculatórias às 12:00',
+                    userId: 'test_user_1',
+                    userName: 'Usuário Teste 1'
+                },
+                {
+                    id: 'test_3_' + Date.now(),
+                    title: 'Meditação Evangelho',
+                    time: '18:00',
+                    category: 'Evangelho do dia',
+                    days: ['dom'],
+                    notifications: true,
+                    date: new Date().toISOString().split('T')[0],
+                    duration: 20,
+                    status: 'agendado',
+                    createdAt: new Date().toISOString(),
+                    description: 'Agendamento para Evangelho às 18:00',
+                    userId: 'test_user_1',
+                    userName: 'Usuário Teste 1'
+                }
+            ];
+
+            // Salvar no localStorage
+            localStorage.setItem('user_schedules', JSON.stringify(testSchedules));
+            addLog(`✅ ${testSchedules.length} agendamentos de teste criados`);
+            
+            loadAndDisplaySchedules();
+        }
+
+        // Limpar todos os agendamentos
+        function clearAllSchedules() {
+            localStorage.removeItem('user_schedules');
+            schedules = [];
+            addLog('🗑️ Todos os agendamentos removidos');
+            loadAndDisplaySchedules();
+        }
+
+        // Verificar dados dos agendamentos
+        function checkSchedulesData() {
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            
+            addLog(`📊 Total de agendamentos no localStorage: ${allSchedules.length}`);
+            addLog(`👤 Usuário atual: ${currentUser ? currentUser.name : 'N/A'}`);
+            addLog(`🆔 ID do usuário: ${currentUser ? currentUser.id : 'N/A'}`);
+            
+            if (allSchedules.length > 0) {
+                addLog('📋 Detalhes dos agendamentos:');
+                allSchedules.forEach((schedule, index) => {
+                    addLog(`  ${index + 1}. ${schedule.title} (ID: ${schedule.id}, UserID: ${schedule.userId})`);
+                });
+            }
+        }
+
+        // Carregar e exibir agendamentos
+        function loadAndDisplaySchedules() {
+            try {
+                // Simular a função getSchedulesForCurrentUser
+                const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+                const userId = currentUser ? currentUser.id : 'test_user_1'; // Fallback para teste
+                
+                const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                schedules = allSchedules.filter(schedule => schedule.userId === userId);
+                
+                addLog(`📅 Carregados ${schedules.length} agendamentos para usuário ${userId}`);
+                displaySchedules();
+                
+            } catch (error) {
+                addLog(`❌ Erro ao carregar agendamentos: ${error.message}`, 'error');
+            }
+        }
+
+        // Exibir agendamentos
+        function displaySchedules() {
+            const schedulesList = document.getElementById('schedulesList');
+            
+            if (schedules.length === 0) {
+                schedulesList.innerHTML = `
+                    <div class="status info">
+                        📅 Nenhum agendamento encontrado
+                    </div>
+                `;
+                return;
+            }
+
+            schedulesList.innerHTML = schedules.map(schedule => `
+                <div class="schedule-item">
+                    <div class="schedule-info">
+                        <span>🕐 ${schedule.time}</span>
+                        <span>📖 ${schedule.category}</span>
+                        <span>📅 ${schedule.days.join(', ')}</span>
+                        <span>👤 ${schedule.userName}</span>
+                    </div>
+                    <div class="schedule-actions">
+                        <button class="action-btn" onclick="editSchedule('${schedule.id}')">✏️</button>
+                        <button class="action-btn delete" onclick="deleteSchedule('${schedule.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Função de exclusão corrigida
+        function deleteSchedule(scheduleId) {
+            addLog(`🗑️ Tentando excluir agendamento: ${scheduleId}`);
+            
+            if (confirm('Tem certeza que deseja excluir este agendamento?')) {
+                try {
+                    // Obter dados do usuário atual
+                    const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+                    const userId = currentUser ? currentUser.id : 'test_user_1';
+                    
+                    addLog(`👤 Usuário atual: ${userId}`);
+                    
+                    // Remover do array local
+                    const originalLength = schedules.length;
+                    schedules = schedules.filter(s => s.id !== scheduleId);
+                    
+                    if (schedules.length === originalLength) {
+                        addLog(`⚠️ Agendamento não encontrado no array local`, 'error');
+                    } else {
+                        addLog(`✅ Agendamento removido do array local`);
+                    }
+                    
+                    // Salvar no localStorage - preservar agendamentos de outros usuários
+                    const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                    
+                    // Remover agendamentos antigos do usuário atual
+                    const otherUsersSchedules = allSchedules.filter(schedule => 
+                        schedule.userId !== userId
+                    );
+                    
+                    // Adicionar os agendamentos atualizados do usuário atual
+                    const updatedAllSchedules = [...otherUsersSchedules, ...schedules];
+                    
+                    localStorage.setItem('user_schedules', JSON.stringify(updatedAllSchedules));
+                    addLog(`✅ Agendamento deletado e localStorage atualizado`);
+                    
+                    // Atualizar exibição
+                    displaySchedules();
+                    
+                    addLog(`✅ Exclusão concluída com sucesso!`);
+                    
+                } catch (error) {
+                    addLog(`❌ Erro ao deletar agendamento: ${error.message}`, 'error');
+                }
+            } else {
+                addLog(`❌ Exclusão cancelada pelo usuário`);
+            }
+        }
+
+        // Função de edição (simulada)
+        function editSchedule(scheduleId) {
+            addLog(`✏️ Função de edição chamada para: ${scheduleId}`);
+            alert(`Função de edição para agendamento: ${scheduleId}`);
+        }
+
+        // Testar função de exclusão
+        function testDeleteFunction() {
+            addLog('🧪 Testando função de exclusão...');
+            
+            if (schedules.length === 0) {
+                addLog('⚠️ Nenhum agendamento para testar', 'error');
+                return;
+            }
+            
+            const testSchedule = schedules[0];
+            addLog(`🧪 Testando exclusão do agendamento: ${testSchedule.title} (ID: ${testSchedule.id})`);
+            
+            // Simular exclusão sem confirmação
+            const currentUser = window.sessionManager ? window.sessionManager.getCurrentUser() : null;
+            const userId = currentUser ? currentUser.id : 'test_user_1';
+            
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            const otherUsersSchedules = allSchedules.filter(schedule => 
+                schedule.userId !== userId
+            );
+            
+            const updatedSchedules = schedules.filter(s => s.id !== testSchedule.id);
+            const updatedAllSchedules = [...otherUsersSchedules, ...updatedSchedules];
+            
+            localStorage.setItem('user_schedules', JSON.stringify(updatedAllSchedules));
+            schedules = updatedSchedules;
+            
+            addLog(`✅ Teste de exclusão concluído. Agendamentos restantes: ${schedules.length}`);
+            displaySchedules();
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🚀 Página de teste carregada');
+            checkScriptStatus();
+            loadAndDisplaySchedules();
+        });
+    </script>
+</body>
+</html> 

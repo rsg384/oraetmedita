@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Exclusão de Categorias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn.danger {
+            background: #dc3545;
+        }
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        .category-list {
+            margin: 10px 0;
+        }
+        .category-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .category-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .category-id {
+            font-size: 12px;
+            color: #666;
+        }
+        .category-description {
+            font-size: 12px;
+            color: #888;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Teste - Exclusão de Categorias</h1>
+        
+        <div class="test-section">
+            <h3>Ações Disponíveis</h3>
+            <button class="btn" onclick="loadCategories()">Carregar Categorias</button>
+            <button class="btn" onclick="createTestCategory()">Criar Categoria de Teste</button>
+            <button class="btn danger" onclick="testDeleteAll()">Testar Exclusão de Todas</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Categorias no Supabase</h3>
+            <div id="categoriesList" class="category-list"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Logs</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <!-- Supabase Manager -->
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        async function loadCategories() {
+            log('📖 Carregando categorias do Supabase...');
+            
+            try {
+                const categories = await window.supabaseManager.getCategories();
+                log(`📊 Total de categorias: ${categories.length}`);
+                
+                const listElement = document.getElementById('categoriesList');
+                listElement.innerHTML = '';
+                
+                if (categories.length === 0) {
+                    listElement.innerHTML = '<p>Nenhuma categoria encontrada.</p>';
+                    return;
+                }
+                
+                categories.forEach(category => {
+                    const item = document.createElement('div');
+                    item.className = 'category-item';
+                    item.innerHTML = `
+                        <div class="category-name">${category.name}</div>
+                        <div class="category-description">${category.description || 'Sem descrição'}</div>
+                        <div class="category-id">ID: ${category.id}</div>
+                        <div class="category-id">Ícone: ${category.icon || 'N/A'} | Cor: ${category.color || 'N/A'}</div>
+                        <button class="btn danger" onclick="deleteCategory('${category.id}', '${category.name}')">Excluir</button>
+                    `;
+                    listElement.appendChild(item);
+                });
+                
+                log('✅ Categorias carregadas com sucesso');
+            } catch (error) {
+                log(`❌ Erro ao carregar categorias: ${error.message}`);
+            }
+        }
+
+        async function createTestCategory() {
+            log('🚀 Criando categoria de teste...');
+            
+            try {
+                const categoryData = {
+                    name: 'Categoria de Teste - ' + Date.now(),
+                    description: 'Esta é uma categoria de teste para verificar a exclusão.',
+                    icon: '📝',
+                    color: '#ff6b6b',
+                    is_active: true,
+                    sort_order: 999
+                };
+                
+                log('📝 Dados:', JSON.stringify(categoryData, null, 2));
+                
+                const result = await window.supabaseManager.createCategory(categoryData);
+                log('📋 Resultado:', JSON.stringify(result, null, 2));
+                
+                if (result && result[0]) {
+                    log('✅ Categoria criada com sucesso!');
+                    log(`🆔 ID: ${result[0].id}`);
+                    
+                    // Recarregar lista
+                    setTimeout(loadCategories, 1000);
+                } else {
+                    log('❌ Categoria não foi criada');
+                }
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        async function deleteCategory(id, name) {
+            log(`🗑️ Tentando excluir categoria: ${name} (ID: ${id})`);
+            
+            if (!confirm(`Tem certeza que deseja excluir a categoria "${name}"?`)) {
+                log('❌ Exclusão cancelada pelo usuário');
+                return;
+            }
+            
+            try {
+                log('🔄 Chamando deleteCategory no Supabase...');
+                const result = await window.supabaseManager.deleteCategory(id);
+                log('📋 Resultado da exclusão:', JSON.stringify(result, null, 2));
+                
+                log('✅ Categoria excluída com sucesso!');
+                
+                // Recarregar lista
+                setTimeout(loadCategories, 1000);
+                
+            } catch (error) {
+                log(`❌ Erro ao excluir categoria: ${error.message}`);
+            }
+        }
+
+        async function testDeleteAll() {
+            log('⚠️ Testando exclusão de todas as categorias...');
+            
+            try {
+                const categories = await window.supabaseManager.getCategories();
+                log(`📊 Encontradas ${categories.length} categorias`);
+                
+                if (categories.length === 0) {
+                    log('ℹ️ Nenhuma categoria para excluir');
+                    return;
+                }
+                
+                for (const category of categories) {
+                    log(`🗑️ Excluindo: ${category.name} (${category.id})`);
+                    try {
+                        await window.supabaseManager.deleteCategory(category.id);
+                        log(`✅ ${category.name} excluída`);
+                    } catch (error) {
+                        log(`❌ Erro ao excluir ${category.name}: ${error.message}`);
+                    }
+                }
+                
+                log('✅ Processo de exclusão concluído');
+                setTimeout(loadCategories, 1000);
+                
+            } catch (error) {
+                log(`❌ Erro no teste de exclusão: ${error.message}`);
+            }
+        }
+
+        // Carregar categorias quando a página carregar
+        window.addEventListener('load', function() {
+            log('🚀 Página carregada. Carregando categorias...');
+            loadCategories();
+        });
+    </script>
+</body>
+</html> 

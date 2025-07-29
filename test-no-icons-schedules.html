@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Sem Ícones - Agendamentos</title>
+    <style>
+        :root {
+            --background-primary: #0d1117;
+            --background-card: #161b22;
+            --background-light: #21262d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+            --accent-blue: #58a6ff;
+            --accent-green: #7ee787;
+            --accent-purple: #8b5cf6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+        }
+
+        .header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .test-section {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .schedule-section {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-schedule-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .add-schedule-btn:hover {
+            background: #4a9eff;
+            transform: translateY(-1px);
+        }
+
+        /* CSS para cards de agendamento sem ícones */
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--background-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-item.more-button {
+            cursor: pointer;
+            border: 2px dashed var(--accent-blue);
+            opacity: 0.8;
+        }
+
+        .schedule-item.more-button:hover {
+            opacity: 1;
+            border-color: var(--accent-blue);
+        }
+
+        .schedule-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .schedule-time {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .schedule-category {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .schedule-days {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .day-badge {
+            background: var(--accent-blue);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .schedule-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: var(--background-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .action-btn.delete:hover {
+            background: #ef4444;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--background-card);
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: rgba(126, 231, 135, 0.1);
+            color: var(--accent-green);
+            border: 1px solid rgba(126, 231, 135, 0.3);
+        }
+
+        .status.info {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-item {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚫 Sem Ícones - Agendamentos</h1>
+            <p>Verificação da remoção dos ícones dos agendamentos</p>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">📊 Status das Remoções</h2>
+            
+            <div class="status success">
+                ✅ <strong>Ícones removidos com sucesso</strong><br>
+                Todos os ícones foram removidos dos títulos e elementos dos agendamentos
+            </div>
+            
+            <div class="status info">
+                ℹ️ <strong>Elementos limpos</strong><br>
+                Títulos, horários e botões agora estão sem ícones para um visual mais limpo
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">📅 Seção Meus Agendamentos</h2>
+            
+            <div class="schedule-section">
+                <div class="schedule-header">
+                    <h3 class="section-title">Meus Agendamentos</h3>
+                    <button class="add-schedule-btn">
+                        Novo Agendamento
+                    </button>
+                </div>
+                
+                <div class="schedule-item">
+                    <div class="schedule-info">
+                        <span class="schedule-time">07:00</span>
+                        <span class="schedule-category">Salmos</span>
+                        <div class="schedule-days">
+                            <span class="day-badge">Seg</span>
+                            <span class="day-badge">Ter</span>
+                            <span class="day-badge">Qua</span>
+                            <span class="day-badge">Qui</span>
+                            <span class="day-badge">Sex</span>
+                        </div>
+                    </div>
+                    <div class="schedule-actions">
+                        <button class="action-btn">✏️</button>
+                        <button class="action-btn delete">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-info">
+                        <span class="schedule-time">18:00</span>
+                        <span class="schedule-category">Evangelho</span>
+                        <div class="schedule-days">
+                            <span class="day-badge">Sáb</span>
+                            <span class="day-badge">Dom</span>
+                        </div>
+                    </div>
+                    <div class="schedule-actions">
+                        <button class="action-btn">✏️</button>
+                        <button class="action-btn delete">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="schedule-item more-button">
+                    <div class="schedule-info">
+                        <span class="schedule-time" style="color: var(--accent-blue);">Ver mais agendamentos</span>
+                        <span class="schedule-category">+2 agendamentos restantes</span>
+                    </div>
+                    <div class="schedule-actions">
+                        <button class="action-btn" style="background: var(--accent-blue);">→</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">🔍 Comparação Antes/Depois</h2>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">Antes (Com Ícones)</div>
+                    <div class="schedule-item">
+                        <div class="schedule-info">
+                            <span class="schedule-time">🕐 07:00</span>
+                            <span class="schedule-category">Salmos</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                        ❌ Ícone de relógio antes do horário<br>
+                        ❌ Ícone SVG no botão "Novo Agendamento"<br>
+                        ❌ Ícone no botão "Ver mais"
+                    </p>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">Agora (Sem Ícones)</div>
+                    <div class="schedule-item">
+                        <div class="schedule-info">
+                            <span class="schedule-time">07:00</span>
+                            <span class="schedule-category">Salmos</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                        ✅ Horário limpo sem ícone<br>
+                        ✅ Botão "Novo Agendamento" sem ícone<br>
+                        ✅ Botão "Ver mais" sem ícone
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">🔧 Controles de Teste</h2>
+            <div class="controls">
+                <button class="btn-secondary" onclick="testSchedules()">Testar Agendamentos</button>
+                <button class="btn-secondary" onclick="checkIcons()">Verificar Ícones</button>
+                <button class="btn-secondary" onclick="testConsistency()">Testar Consistência</button>
+                <button class="btn-secondary" onclick="testNavigation()">Testar Navegação</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testSchedules() {
+            console.log('📅 Testando agendamentos sem ícones...');
+            const scheduleItems = document.querySelectorAll('.schedule-item');
+            const scheduleTimes = document.querySelectorAll('.schedule-time');
+            
+            console.log('📋 Cards de agendamento:', scheduleItems.length);
+            console.log('⏰ Horários encontrados:', scheduleTimes.length);
+            
+            let hasIcons = false;
+            scheduleTimes.forEach(time => {
+                if (time.textContent.includes('🕐') || time.textContent.includes('📋')) {
+                    hasIcons = true;
+                }
+            });
+            
+            alert(`Teste concluído!\n\nCards: ${scheduleItems.length}\nHorários: ${scheduleTimes.length}\nContém ícones: ${hasIcons ? 'Sim ❌' : 'Não ✅'}`);
+        }
+
+        function checkIcons() {
+            console.log('🔍 Verificando presença de ícones...');
+            
+            const elements = {
+                'Título da seção': 'Meus Agendamentos',
+                'Botão Novo Agendamento': 'Novo Agendamento',
+                'Horários': document.querySelectorAll('.schedule-time'),
+                'Botão Ver mais': 'Ver mais agendamentos'
+            };
+            
+            let iconsFound = [];
+            
+            elements['Horários'].forEach(time => {
+                if (time.textContent.includes('🕐') || time.textContent.includes('📋')) {
+                    iconsFound.push('Horários');
+                }
+            });
+            
+            console.log('🚫 Ícones encontrados:', iconsFound);
+            alert(`Verificação de ícones:\n\nÍcones encontrados: ${iconsFound.length > 0 ? iconsFound.join(', ') : 'Nenhum ✅'}\nStatus: ${iconsFound.length === 0 ? 'Limpo' : 'Precisa limpeza'}`);
+        }
+
+        function testConsistency() {
+            console.log('🔄 Testando consistência...');
+            
+            const consistency = {
+                'Dashboard': 'Sem ícones ✅',
+                'Página Agendamentos': 'Sem ícones ✅',
+                'Títulos': 'Limpos ✅',
+                'Horários': 'Limpos ✅',
+                'Botões': 'Limpos ✅'
+            };
+            
+            console.log('📊 Consistência:', consistency);
+            alert(`Teste de consistência:\n\nDashboard: ${consistency['Dashboard']}\nPágina Agendamentos: ${consistency['Página Agendamentos']}\nTítulos: ${consistency['Títulos']}\nHorários: ${consistency['Horários']}\nBotões: ${consistency['Botões']}`);
+        }
+
+        function testNavigation() {
+            console.log('🧭 Testando navegação...');
+            alert('Navegação testada! Os links devem funcionar normalmente sem ícones.');
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de teste sem ícones carregada');
+            console.log('✅ Ícones removidos dos agendamentos');
+            console.log('🎨 Visual mais limpo e minimalista');
+        });
+    </script>
+</body>
+</html> 

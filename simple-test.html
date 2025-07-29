@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples</title>
+</head>
+<body>
+    <h1>Teste Simples de Redirecionamento</h1>
+    
+    <p>Esta página irá redirecionar automaticamente para minhas-meditacoes.html em 3 segundos.</p>
+    
+    <p>Se não redirecionar, clique no botão abaixo:</p>
+    
+    <button onclick="redirect()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+        Ir para Minhas Meditações
+    </button>
+    
+    <script>
+        function redirect() {
+            console.log('Redirecionando...');
+            window.location.href = 'minhas-meditacoes.html';
+        }
+        
+        // Redirecionamento automático
+        setTimeout(() => {
+            console.log('Redirecionamento automático...');
+            redirect();
+        }, 3000);
+    </script>
+</body>
+</html> 

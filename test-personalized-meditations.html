@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Meditações Personalizadas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+        .meditation-list {
+            margin: 10px 0;
+        }
+        .meditation-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .meditation-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .meditation-id {
+            font-size: 12px;
+            color: #666;
+        }
+        .meditation-content {
+            font-size: 12px;
+            color: #888;
+            margin: 5px 0;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧘 Teste - Meditações Personalizadas</h1>
+        
+        <div class="test-section">
+            <h3>Ações Disponíveis</h3>
+            <button class="btn" onclick="loadPersonalizedMeditations()">Carregar Meditações</button>
+            <button class="btn" onclick="createTestMeditation()">Criar Meditação de Teste</button>
+            <button class="btn success" onclick="testByTopic()">Testar por Tópico</button>
+            <button class="btn" onclick="testByUser()">Testar por Usuário</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Meditações Personalizadas no Supabase</h3>
+            <div id="meditationsList" class="meditation-list"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Logs</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <!-- Supabase Manager -->
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        async function loadPersonalizedMeditations() {
+            log('📖 Carregando meditações personalizadas do Supabase...');
+            
+            try {
+                const meditations = await window.supabaseManager.getPersonalizedMeditations();
+                log(`📊 Total de meditações: ${meditations.length}`);
+                
+                const listElement = document.getElementById('meditationsList');
+                listElement.innerHTML = '';
+                
+                if (meditations.length === 0) {
+                    listElement.innerHTML = '<p>Nenhuma meditação personalizada encontrada.</p>';
+                    return;
+                }
+                
+                meditations.forEach(meditation => {
+                    const item = document.createElement('div');
+                    item.className = 'meditation-item';
+                    item.innerHTML = `
+                        <div class="meditation-title">${meditation.title}</div>
+                        <div class="meditation-content">${meditation.content ? meditation.content.substring(0, 150) + '...' : 'Sem conteúdo'}</div>
+                        <div class="meditation-id">ID: ${meditation.id}</div>
+                        <div class="meditation-id">Meditation ID: ${meditation.meditation_id}</div>
+                        <div class="meditation-id">Tópico: ${meditation.topic || 'N/A'} | Status: ${meditation.status || 'N/A'}</div>
+                        <div class="meditation-id">Usuário: ${meditation.user_name || meditation.user_id}</div>
+                        <div class="meditation-id">Duração: ${meditation.duration || 'N/A'} | Fonte: ${meditation.source || 'N/A'}</div>
+                    `;
+                    listElement.appendChild(item);
+                });
+                
+                log('✅ Meditações personalizadas carregadas com sucesso');
+            } catch (error) {
+                log(`❌ Erro ao carregar meditações: ${error.message}`);
+            }
+        }
+
+        async function createTestMeditation() {
+            log('🚀 Criando meditação personalizada de teste...');
+            
+            try {
+                const meditationData = {
+                    meditation_id: 'meditation-test-' + Date.now(),
+                    title: 'Meditação Personalizada de Teste - ' + Date.now(),
+                    topic: 'teste',
+                    content: 'Esta é uma meditação personalizada de teste para verificar a funcionalidade da tabela.',
+                    duration: '15 min',
+                    status: 'pending',
+                    source: 'chatgpt',
+                    type: 'simple',
+                    user_id: 'user_test_' + Date.now(),
+                    user_name: 'Usuário de Teste',
+                    metadata: {
+                        test: true,
+                        created_via: 'test-page'
+                    }
+                };
+                
+                log('📝 Dados:', JSON.stringify(meditationData, null, 2));
+                
+                const result = await window.supabaseManager.createPersonalizedMeditation(meditationData);
+                log('📋 Resultado:', JSON.stringify(result, null, 2));
+                
+                if (result && result[0]) {
+                    log('✅ Meditação personalizada criada com sucesso!');
+                    log(`🆔 ID: ${result[0].id}`);
+                    
+                    // Recarregar lista
+                    setTimeout(loadPersonalizedMeditations, 1000);
+                } else {
+                    log('❌ Meditação personalizada não foi criada');
+                }
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        async function testByTopic() {
+            log('🔍 Testando busca por tópico...');
+            
+            try {
+                const meditations = await window.supabaseManager.getPersonalizedMeditationsByTopic('paz');
+                log(`📊 Meditações encontradas para tópico 'paz': ${meditations.length}`);
+                
+                if (meditations.length > 0) {
+                    log('📝 Primeira meditação encontrada:');
+                    log(JSON.stringify(meditations[0], null, 2));
+                }
+                
+            } catch (error) {
+                log(`❌ Erro na busca por tópico: ${error.message}`);
+            }
+        }
+
+        async function testByUser() {
+            log('👤 Testando busca por usuário...');
+            
+            try {
+                const meditations = await window.supabaseManager.getPersonalizedMeditations('user_1753739115816');
+                log(`📊 Meditações encontradas para usuário: ${meditations.length}`);
+                
+                if (meditations.length > 0) {
+                    log('📝 Primeira meditação do usuário:');
+                    log(JSON.stringify(meditations[0], null, 2));
+                }
+                
+            } catch (error) {
+                log(`❌ Erro na busca por usuário: ${error.message}`);
+            }
+        }
+
+        // Carregar meditações quando a página carregar
+        window.addEventListener('load', function() {
+            log('🚀 Página carregada. Carregando meditações personalizadas...');
+            loadPersonalizedMeditations();
+        });
+    </script>
+</body>
+</html> 

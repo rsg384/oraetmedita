@@ -1,0 +1,583 @@
+{
+  "exportDate": "2025-07-28T22:20:09.822Z",
+  "version": "1.0",
+  "categories": [
+    {
+      "id": "cat_1752986948399",
+      "name": "Salmos",
+      "icon": "",
+      "description": "Orações inspiradas que elevam a alma e ensinam a confiar e louvar ao Senhor.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1752986987075",
+      "name": "Jaculatórias",
+      "icon": "",
+      "description": "Meditações breves e cheias de fé para elevar o coração a Deus ao longo do dia.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753323258712",
+      "name": "Evangelho do dia",
+      "icon": "",
+      "description": "Medite o Evangelho e conheça a vida, mistérios e milagres da vida de Jesus. ",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753323309409",
+      "name": "Imitação de Cristo",
+      "icon": "",
+      "description": "A obra de Tomás Kempis e desperte em você o desejo de imitar a Cristo.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753323377929",
+      "name": "Amigos de Cristo",
+      "icon": "",
+      "description": "Medite todos os dias grandes ensinamentos católicos.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753323550970",
+      "name": "A vida espiritual",
+      "icon": "",
+      "description": "Conheça e medite os alicerces da nossa vida espritual.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753358753250",
+      "name": "A perfeição cristã",
+      "icon": "",
+      "description": "Aprofundar e meditar o caminho da perfeição cristã.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753358797976",
+      "name": "Virtudes Morais",
+      "icon": "",
+      "description": "Meditar as virtudes que retira os obstáculos para amar a Deus.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753358853595",
+      "name": "Virtudes Teologais",
+      "icon": "",
+      "description": "A fé, a esperança e o amor como as principais virtudes para a santidade.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    },
+    {
+      "id": "cat_1753358924212",
+      "name": "Os dons do Espírito Santo",
+      "icon": "",
+      "description": "Os dons do Espírito Santo para receber as inspirações do Espírito.",
+      "color": "#7ee787",
+      "status": "active",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    }
+  ],
+  "meditations": [
+    {
+      "id": "med_1752988137336",
+      "title": "Salmo 1",
+      "categoryId": "cat_1752986948399",
+      "duration": "12",
+      "status": "completed",
+      "reading": "<p><div style=\"text-align: justify;\"><em>1. Bem-aventurado o homem que não anda segundo o conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda da maldade.</p><p>2. Mas o seu prazer está na lei do Senhor, e na sua lei medita de dia e de noite.</p><p>3. E ele será como uma árvore plantada junto a ribeiros de águas, a qual dará o seu fruto no seu tempo, e a sua folha não murchará; e tudo o que fizer prosperará.</em></p><p>4. Não são assim os ímpios, não são assim, mas são como o pó que o vento levanta da face da terra.</p><p>5. Portanto os ímpios não se levantarão no juízo, nem os pecadores no conselho dos justos.</p><p>6. Porque o Senhor conhece o caminho dos justos, mas o caminho dos ímpios perecerá.*</div></p>",
+      "meditation": "<p><div style=\"text-align: justify;\"><div style=\"text-align: justify;\"><div style=\"text-align: justify;\"><em>1. Bem-aventurado o homem que não anda segundo o conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda da maldade.<br>2. Mas o seu prazer está na lei do Senhor, e na sua lei medita de dia e de noite.<br>3. E ele será como uma árvore plantada junto a ribeiros de águas, a qual dará o seu fruto no seu tempo, e a sua folha não murchará; e tudo o que fizer prosperará.</em></p><p><strong>Meditando:</strong> A oração do Salmo 1 convida a continuar a leitura do Livro dos Salmos, pois é nele que encontramos os sentimentos de louvor, gratidão e veneração que o povo eleito é chamado a cultivar diante da Lei de Deus, junto com o apelo para conhecê-la, meditá-la e vivê-la concretamente. É um convite a viver segundo a Lei Divina. O homem justo se distingue, sobretudo, por sua conduta, ao contrário dos que desprezam a Lei do Senhor. As palavras “andar”, “deter” e “assentar” indicam três estágios sucessivos de afastamento do caminho reto. As possibilidades do caminho do pecado se apresentam em etapas: primeiro, seguir o conselho dos ímpios; depois, imitar seu exemplo; e por fim, participar da zombaria contra o que é sagrado. A imagem da árvore frondosa representa a prosperidade e o verdadeiro bem-estar. O verdadeiro prazer está em cumprir a vontade de Deus; meditar constantemente sobre seus mandamentos é o bem mais desejável da vida. O homem daquele tempo não possuía uma vontade divina clara e fixa como guia, por isso encontrava felicidade na Lei. Também nós devemos nos submeter continuamente à vontade de Deus, deixando que ela nos penetre até se tornar uma segunda natureza, preenchendo toda a nossa existência. É preciso estar abertos à vontade divina, através da oração, pois nela nasce a verdadeira felicidade, e por meio dela a vida encontra o sentido e o valor que Deus deseja para nós. Quem busca a vontade divina e obedece à Lei do Senhor tem a confiança de que tudo o que empreender será bem-sucedido. Não se trata de uma fé calculista em recompensas, nem de uma busca por retornos humanos ou materiais, mas da alegria superior de estar em comunhão com Deus. </p><p><em>4. Não são assim os ímpios, não são assim, mas são como o pó que o vento levanta da face da terra.<br>5. Portanto os ímpios não se levantarão no juízo, nem os pecadores no conselho dos justos.<br>6. Porque o Senhor conhece o caminho dos justos, mas o caminho dos ímpios perecerá.</em></p><p><strong>Meditando:</strong> Sem Deus, a vida é vazia e sem valor, como a palha levada pelo vento. Deus é tudo, e tudo o mais que a vida possa oferecer, por mais atraente aos olhos humanos, não é nada em comparação com Ele. Deus está presente em tudo o que acontece segundo a Sua vontade; é Ele, e não o homem, quem dá existência às coisas. Aquilo que acontece sem Deus se desfaz e desaparece. Fé e obediência são o conteúdo mais elevado da vida da comunidade justa, os fundamentos duradouros da verdadeira religião. Na Lei, encontramos a vontade de Deus expressa como ordenamento divino que abrange toda a existência. Nela se revela o sentido e o valor sagrado da vida. É a Lei que, no fim, decide sobre o ser ou o não ser. Para Jesus, a Lei é o alicerce do Evangelho, o ponto de partida quando afirma: “Eu não vim abolir a Lei, mas levá-la à perfeição”.</div></div></div></p>",
+      "prayer": "<p><div style=\"text-align: justify;\"><em>1. Bem-aventurado o homem que não anda segundo o conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda da maldade.<br>2. Mas o seu prazer está na lei do Senhor, e na sua lei medita de dia e de noite.<br>3. E ele será como uma árvore plantada junto a ribeiros de águas, a qual dará o seu fruto no seu tempo, e a sua folha não murchará; e tudo o que fizer prosperará.</em></p><p><strong>Meditando:</strong> A oração do Salmo 1 convida a continuar a leitura do Livro dos Salmos, pois é nele que encontramos os sentimentos de louvor, gratidão e veneração que o povo eleito é chamado a cultivar diante da Lei de Deus, junto com o apelo para conhecê-la, meditá-la e vivê-la concretamente. É um convite a viver segundo a Lei Divina. O homem justo se distingue, sobretudo, por sua conduta, ao contrário dos que desprezam a Lei do Senhor. As palavras “andar”, “deter” e “assentar” indicam três estágios sucessivos de afastamento do caminho reto. As possibilidades do caminho do pecado se apresentam em etapas: primeiro, seguir o conselho dos ímpios; depois, imitar seu exemplo; e por fim, participar da zombaria contra o que é sagrado. A imagem da árvore frondosa representa a prosperidade e o verdadeiro bem-estar. O verdadeiro prazer está em cumprir a vontade de Deus; meditar constantemente sobre seus mandamentos é o bem mais desejável da vida. O homem daquele tempo não possuía uma vontade divina clara e fixa como guia, por isso encontrava felicidade na Lei. Também nós devemos nos submeter continuamente à vontade de Deus, deixando que ela nos penetre até se tornar uma segunda natureza, preenchendo toda a nossa existência. É preciso estar abertos à vontade divina, através da oração, pois nela nasce a verdadeira felicidade, e por meio dela a vida encontra o sentido e o valor que Deus deseja para nós. Quem busca a vontade divina e obedece à Lei do Senhor tem a confiança de que tudo o que empreender será bem-sucedido. Não se trata de uma fé calculista em recompensas, nem de uma busca por retornos humanos ou materiais, mas da alegria superior de estar em comunhão com Deus. </p><p><strong>Orando: </strong>Senhor, não quero trilhar o caminho do pecado. Ajuda-me a afastar-me do mal e daqueles que possam me levar a pecar. Peço perdão pelos meus pecados e por ter andado tanto tempo longe dos teus caminhos. Desejo descobrir, a cada dia, o prazer e a verdadeira alegria de viver segundo tua vontade, sendo transformado por tua palavra, meu Deus.</p><p><em>4. Não são assim os ímpios, não são assim, mas são como o pó que o vento levanta da face da terra.<br>5. Portanto os ímpios não se levantarão no juízo, nem os pecadores no conselho dos justos.<br>6. Porque o Senhor conhece o caminho dos justos, mas o caminho dos ímpios perecerá.</em></p><p><strong>Meditando:</strong> Sem Deus, a vida é vazia e sem valor, como a palha levada pelo vento. Deus é tudo, e tudo o mais que a vida possa oferecer, por mais atraente aos olhos humanos, não é nada em comparação com Ele. Deus está presente em tudo o que acontece segundo a Sua vontade; é Ele, e não o homem, quem dá existência às coisas. Aquilo que acontece sem Deus se desfaz e desaparece. Fé e obediência são o conteúdo mais elevado da vida da comunidade justa, os fundamentos duradouros da verdadeira religião. Na Lei, encontramos a vontade de Deus expressa como ordenamento divino que abrange toda a existência. Nela se revela o sentido e o valor sagrado da vida. É a Lei que, no fim, decide sobre o ser ou o não ser. Para Jesus, a Lei é o alicerce do Evangelho, o ponto de partida quando afirma: “Eu não vim abolir a Lei, mas levá-la à perfeição”.</p><p><strong>Orando:</strong> Concede-me a graça Senhor da oração e da meditação, pois quero alimentar-me da Tua Palavra e dar muitos frutos para Ti. Creio, Senhor, que não serei decepcionado, que encontrarei em Ti a felicidade e tudo o que preciso para viver. Aumenta minha fé e meu amor pela Tua vontade, meu Deus.  Senhor, concede-me o conhecimento cada vez mais profundo da Tua Palavra. Dá-me amor pelas Santas Escrituras. Creio firmemente que nelas encontro a vida, a verdade e o caminho que devo seguir. Quero ser transformado no homem justo, moldado pelo poder da Tua Palavra. Ajuda-me a viver na justiça e na santidade, para que eu esteja pronto para meu encontro definitivo Contigo. Não permitas que eu me perca no caminho do pecado e da injustiça, mas sustenta-me com Ta mão generosa no caminho da santidade.</div></p>",
+      "contemplation": "<p><div style=\"text-align: justify;\">Silencie alguns minutos diante de Deus. Escute Deus te falando... Deixe sua Palavra ressoar dentro do seu coração. Lance curtas e afetuosas orações para Ele. Deixe ele te amar. Experimente o seu amor.</div></p>",
+      "createdAt": "2025-07-20T05:08:57.336Z",
+      "updatedAt": "2025-07-22T04:04:51.521Z",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0,
+      "lastViewed": "2025-07-28T04:12:00.611Z",
+      "completedAt": "2025-07-25T13:42:47.200Z"
+    },
+    {
+      "id": "med_1752988473036",
+      "title": "Salmo 2",
+      "categoryId": "cat_1752986948399",
+      "duration": "12",
+      "status": "available",
+      "reading": "<p><em>1. Salmo de Davi. Por que as nações se enfurecem e os povos planejam coisas vãs?</em></p><p><em>2.Os reis da terra se levantaram, e os governantes se ajuntaram contra o Senhor e contra o seu ungido.</em></p><p><em>3. Rompamos as suas ataduras e sacudamos de nós o seu jugo.</em></p><p><em>4. Aquele que habita no céu se rirá deles, e o Senhor zombará deles.</em></p><p><em>5. Então ele falará com eles em sua ira e os perturbará em sua fúria.</em></p><p><em>6. Mas eu fui constituído rei por ele em Sião, seu santo monte, para pregar seus mandamentos.</em></p><p><em>7. O Senhor me disse: \"Tu és meu filho; hoje te gerei.\"</em></p><p><em>8. Pede-me, e eu te darei as nações por herança e as extremidades da terra por tua possessão.</em></p><p><em>9. Tu os regerás com vara de ferro e os quebrarás como a um vaso de oleiro.</em></p>",
+      "meditation": "<p><em>1. Salmo de Davi. Por que as nações se enfurecem e os povos planejam coisas vãs?<br>2.Os reis da terra se levantaram, e os governantes se ajuntaram contra o Senhor e contra o seu ungido.<br>3. Rompamos as suas ataduras e sacudamos de nós o seu jugo.</em></p><p><strong>Meditação: </strong>Os versículos 1-3, apresenta a rebelião das nações contra Deus e seu Ungido, expressando perplexidade diante da insensatez humana: “Por que se amotinam as nações?” (Sl 2,1). Essa revolta, segundo a tradição, aponta para o rei de Israel como representante de Deus (cf. 1Sm 16,13) e, à luz cristã, se refere ao Messias, Jesus Cristo. São Josemaria Escrivá comenta: “Se opunham a Cristo antes de que nascesse… o perseguiram depois e agora” (Es Cristo que passa, n. 185), mostrando a continuidade da rejeição ao Ungido ao longo da história. Teologicamente, trata-se de uma tentativa inútil de romper o domínio de Deus, pois os planos dos homens “não passam de tentativas vãs” (cf. Sl 2,1-3). Meditar esse salmo hoje é reconhecer que as mesmas forças de oposição a Deus continuam atuando em nossa cultura, estruturas sociais e até mesmo em nossos corações. As palavras de Escrivá nos ajudam a não nos escandalizarmos com a perseguição, mas a vê-la como um eco de algo que “nada tem de novo”: o ódio ao Cristo. Contudo, a esperança permanece. O salmo é, ao mesmo tempo, denúncia da rebelião e anúncio da vitória do Ungido. Ele nos convida a sair do tumulto das vozes humanas e escutar, no silêncio da fé, a palavra firme de Deus que unge e sustenta Seu Rei — e com Ele, todos os que Nele confiam.</p><p>4. Aquele que habita no céu se rirá deles, e o Senhor zombará deles.<br>5. Então ele falará com eles em sua ira e os perturbará em sua fúria.<br>6. Mas eu fui constituído rei por ele em Sião, seu santo monte, para pregar seus mandamentos.</p><p><strong>Meditação: </strong>Os versículos 4 a 6 do Salmo 2, contemplamos a resposta divina do alto dos céus. Deus “ri, zomba” dos poderosos da terra (Sl 2,4), não por desprezo, mas como expressão da Sua absoluta soberania. A liturgia interpreta essa reação como o reflexo da fé diante do caos: “a soberana tranquilidade do céu” contrasta com a ansiedade dos homens. Deus fala com ira e estabelece seu Rei em Sião (v. 6), expressão da vontade soberana de entronizar aquele que Ele mesmo ungiu. Trata-se de uma declaração pública da eleição divina, com profundas implicações teológicas: o poder do Ungido não vem de si mesmo, mas do decreto do Senhor. Essa cena litúrgica simboliza a entronização do rei messiânico, mas, para a fé cristã, aponta para Cristo, elevado à direita do Pai e constituído Senhor de todas as coisas (cf. At 2,34-36). É o próprio Deus quem diz: “Eu consagrei o meu Rei sobre Sião, meu santo monte” (Sl 2,6). Meditar esses versículos é aprender a confiar na providência e na soberania divina, mesmo em meio às perturbações do mundo. A fé nos faz ver o trono de Deus acima das nuvens da história. É “a certeza do transcendente” que sustenta o fiel e lhe dá paz: Deus reina. Ele não é ausente, mas observa e age no tempo oportuno, desmascarando a ilusão do poder humano. Rezar com esses versículos é aprender a descansar na segurança de que o Senhor tem a última palavra e que Cristo reina já desde agora em meio a nós.</p><p><em>7. O Senhor me disse: \"Tu és meu filho; hoje te gerei.\"<br>8. Pede-me, e eu te darei as nações por herança e as extremidades da terra por tua possessão.<br>9. Tu os regerás com vara de ferro e os quebrarás como a um vaso de oleiro.</em></p><p><strong>Meditação:</strong> Os versículos 7 a 9 do Salmo 2 revelam a proclamação do decreto divino: “Tu és meu Filho, hoje te gerei”. Esta fórmula, inspirada em tradições reais do Oriente Próximo, legitima a entronização do rei como filho adotivo de Deus, símbolo da sua eleição e autoridade espiritual. Essa filiação não implica geração física, mas uma adoção ritual com base no “decreto do Senhor” (v. 7), que outorga ao rei sua missão divina. O “hoje” exprime o momento da coroação e do início de sua função régia. No Novo Testamento, essa promessa se cumpre em plenitude em Cristo: no batismo (Mt 3,17), na transfiguração (Mt 17,5) e na ressurreição (At 13,32-33), quando Deus proclama Jesus como o Filho em quem se compraz. Além disso, Deus promete ao Filho as nações como herança e os confins da terra como domínio (v. 8), não por conquista bélica, mas como fruto da fidelidade ao plano divino. Orígenes comenta que o Filho deve pedir, pois só recebe quem suplica com humildade (cf. In Evangelium Ioannis 13,3). Cada cristão é chamado a escutar essas palavras como dirigidas também a si, na medida em que se une a Cristo. São Josemaría Escrivá nos recorda: “Tu és meu filho. Dirige-se a Cristo e dirige-se a ti e a mim, se decidirmos ser outro Cristo” (Cristo que Passa, n.º 185)). Esse chamado à filiação é ao mesmo tempo graça e missão: sermos filhos no Filho, herdeiros com Ele, participantes de Seu reinado. Meditar esses versículos é renovar a consciência da nossa identidade em Cristo. Deus nos olha e diz: “Tu és meu filho”. Não somos estranhos, nem apenas criaturas, mas acolhidos em Sua casa, ungidos com dignidade e enviados com autoridade para testemunhar Sua realeza no mundo. A oração se torna então filial: com confiança pedimos, pois sabemos que o Pai não nega nada ao Filho, e a nós, que Nele estamos. Esse trecho do salmo nos convida a viver como quem já participa do Reino e a desejar que todos os povos venham a reconhecer o Senhor como Rei.</p><p><br><em>10. Agora, pois, ó reis, entendei e instruí-vos, vós que julgais a terra.<br>11. Servi ao Senhor com temor e alegrai-vos nele com tremor.<br>12. Tomem cuidado para que o Senhor não se irrite e vocês não pereçam no caminho da justiça.<br>13. Quando a sua ira se inflama num momento, bem-aventurados são todos os que nele confiam.</em></p><p><strong>Meditação: </strong>A quarta estrofe do Salmo 2 (vv. 10-12) é uma solene advertência aos reis e juízes da terra: todos, mesmo os poderosos, são chamados a submeter-se ao verdadeiro Rei, pois atrás do trono de Sião está o próprio Deus, Senhor de toda a história. O salmo não fecha com um convite à violência, mas sim com uma conclamação à reverência: “Servi ao Senhor com temor e exultai com tremor” (v. 11). A imagem de “beijar os pés” ou “o filho” é, segundo o contexto, um gesto simbólico de rendição, adoração e homenagem, comum na prática de submissão aos soberanos do Antigo Oriente. A ênfase recai na atitude interior de obediência e no reconhecimento da soberania de Deus. A advertência é clara: os que O desprezam conhecerão sua justiça, mas sua misericórdia acolhe com alegria aqueles que se refugiam Nele (v. 12). No fim, a mensagem do salmo é escatológica: não há vida fora da reverência ao Senhor do mundo. O Novo Testamento reconhece em Jesus o Filho que reina em Sião, tornando este convite um apelo atual à conversão, confiança e adoração.</p>",
+      "prayer": "<p><em>1. Salmo de Davi. Por que as nações se enfurecem e os povos planejam coisas vãs?<br>2.Os reis da terra se levantaram, e os governantes se ajuntaram contra o Senhor e contra o seu ungido.<br>3. Rompamos as suas ataduras e sacudamos de nós o seu jugo.</em></p><p><strong>Meditação: </strong>Os versículos 1-3, apresenta a rebelião das nações contra Deus e seu Ungido, expressando perplexidade diante da insensatez humana: “Por que se amotinam as nações?” (Sl 2,1). Essa revolta, segundo a tradição, aponta para o rei de Israel como representante de Deus (cf. 1Sm 16,13) e, à luz cristã, se refere ao Messias, Jesus Cristo. São Josemaria Escrivá comenta: “Se opunham a Cristo antes de que nascesse… o perseguiram depois e agora” (Es Cristo que passa, n. 185), mostrando a continuidade da rejeição ao Ungido ao longo da história. Teologicamente, trata-se de uma tentativa inútil de romper o domínio de Deus, pois os planos dos homens “não passam de tentativas vãs” (cf. Sl 2,1-3). Meditar esse salmo hoje é reconhecer que as mesmas forças de oposição a Deus continuam atuando em nossa cultura, estruturas sociais e até mesmo em nossos corações. As palavras de Escrivá nos ajudam a não nos escandalizarmos com a perseguição, mas a vê-la como um eco de algo que “nada tem de novo”: o ódio ao Cristo. Contudo, a esperança permanece. O salmo é, ao mesmo tempo, denúncia da rebelião e anúncio da vitória do Ungido. Ele nos convida a sair do tumulto das vozes humanas e escutar, no silêncio da fé, a palavra firme de Deus que unge e sustenta Seu Rei — e com Ele, todos os que Nele confiam.</p><p><strong>Oração: </strong>Senhor, dá-me força para resistir às forças que se levantam contra Ti e contra mim. Concede-me a graça de discernir tudo aquilo que se opõe à minha fé e coragem para rejeitar, com firmeza e paz, o que me afasta de Ti. Tu és meu Deus, a quem hoje, mais uma vez, escolho seguir com fidelidade. Diante das perseguições, dá-me humildade para não retribuir com violência e sabedoria para agir com o coração unido ao Teu. Sustenta-me na luta contra o mundo, o pecado e minhas próprias tentações. Em meio ao tumulto das vozes humanas, faze-me escutar, no silêncio da fé, a Tua palavra firme. Eu Te amo e confio no Teu poder e na Tua proteção, meu Senhor e meu Rei. Amém.</p><p>4. Aquele que habita no céu se rirá deles, e o Senhor zombará deles.<br>5. Então ele falará com eles em sua ira e os perturbará em sua fúria.<br>6. Mas eu fui constituído rei por ele em Sião, seu santo monte, para pregar seus mandamentos.</p><p><strong>Meditação: </strong>Os versículos 4 a 6 do Salmo 2, contemplamos a resposta divina do alto dos céus. Deus “ri, zomba” dos poderosos da terra (Sl 2,4), não por desprezo, mas como expressão da Sua absoluta soberania. A liturgia interpreta essa reação como o reflexo da fé diante do caos: “a soberana tranquilidade do céu” contrasta com a ansiedade dos homens. Deus fala com ira e estabelece seu Rei em Sião (v. 6), expressão da vontade soberana de entronizar aquele que Ele mesmo ungiu. Trata-se de uma declaração pública da eleição divina, com profundas implicações teológicas: o poder do Ungido não vem de si mesmo, mas do decreto do Senhor. Essa cena litúrgica simboliza a entronização do rei messiânico, mas, para a fé cristã, aponta para Cristo, elevado à direita do Pai e constituído Senhor de todas as coisas (cf. At 2,34-36). É o próprio Deus quem diz: “Eu consagrei o meu Rei sobre Sião, meu santo monte” (Sl 2,6). Meditar esses versículos é aprender a confiar na providência e na soberania divina, mesmo em meio às perturbações do mundo. A fé nos faz ver o trono de Deus acima das nuvens da história. É “a certeza do transcendente” que sustenta o fiel e lhe dá paz: Deus reina. Ele não é ausente, mas observa e age no tempo oportuno, desmascarando a ilusão do poder humano. Rezar com esses versículos é aprender a descansar na segurança de que o Senhor tem a última palavra e que Cristo reina já desde agora em meio a nós.</p><p><strong>Oração: </strong>Senhor, eu creio na Tua soberania e na Tua providência que governa tudo com sabedoria e poder. Acolho com fé e amor Jesus, Teu Ungido, Teu Filho unigênito, como meu Rei e meu Senhor. Que o Teu trono esteja sempre diante dos meus olhos, e que meu coração encontre em Ti o único refúgio verdadeiro. Glorifico-Te, ó Deus Altíssimo, porque reina acima de toda agitação da terra e ris das vãs pretensões dos homens (cf. Sl 2,4). Tu estás presente na minha vida e na história, silencioso mas soberano, firme mas compassivo. Confio em Ti mesmo quando tudo parece desordenado ao meu redor. Em Tuas mãos me entrego e descanso, pois sei que és meu Senhor, meu Rei em Sião, minha força e proteção eterna. Amém.</p><p><em>7. O Senhor me disse: \"Tu és meu filho; hoje te gerei.\"<br>8. Pede-me, e eu te darei as nações por herança e as extremidades da terra por tua possessão.<br>9. Tu os regerás com vara de ferro e os quebrarás como a um vaso de oleiro.</em></p><p><strong>Meditação:</strong> Os versículos 7 a 9 do Salmo 2 revelam a proclamação do decreto divino: “Tu és meu Filho, hoje te gerei”. Esta fórmula, inspirada em tradições reais do Oriente Próximo, legitima a entronização do rei como filho adotivo de Deus, símbolo da sua eleição e autoridade espiritual. Essa filiação não implica geração física, mas uma adoção ritual com base no “decreto do Senhor” (v. 7), que outorga ao rei sua missão divina. O “hoje” exprime o momento da coroação e do início de sua função régia. No Novo Testamento, essa promessa se cumpre em plenitude em Cristo: no batismo (Mt 3,17), na transfiguração (Mt 17,5) e na ressurreição (At 13,32-33), quando Deus proclama Jesus como o Filho em quem se compraz. Além disso, Deus promete ao Filho as nações como herança e os confins da terra como domínio (v. 8), não por conquista bélica, mas como fruto da fidelidade ao plano divino. Orígenes comenta que o Filho deve pedir, pois só recebe quem suplica com humildade (cf. In Evangelium Ioannis 13,3). Cada cristão é chamado a escutar essas palavras como dirigidas também a si, na medida em que se une a Cristo. São Josemaría Escrivá nos recorda: “Tu és meu filho. Dirige-se a Cristo e dirige-se a ti e a mim, se decidirmos ser outro Cristo” (Cristo que Passa, n.º 185)). Esse chamado à filiação é ao mesmo tempo graça e missão: sermos filhos no Filho, herdeiros com Ele, participantes de Seu reinado. Meditar esses versículos é renovar a consciência da nossa identidade em Cristo. Deus nos olha e diz: “Tu és meu filho”. Não somos estranhos, nem apenas criaturas, mas acolhidos em Sua casa, ungidos com dignidade e enviados com autoridade para testemunhar Sua realeza no mundo. A oração se torna então filial: com confiança pedimos, pois sabemos que o Pai não nega nada ao Filho, e a nós, que Nele estamos. Esse trecho do salmo nos convida a viver como quem já participa do Reino e a desejar que todos os povos venham a reconhecer o Senhor como Rei.</p><p><strong>Oração: </strong>Senhor Deus, Pai eterno, eu Te agradeço por ter nos dado Teu Filho Jesus, o Ungido, para cumprir plenamente a Tua missão de amor e salvação. Obrigado, Jesus, por seres nosso Rei, nosso Salvador, nossa esperança segura. Ensina-me a pedir com fé e humildade aquilo de que mais preciso: o céu, Tuas graças, e um coração que viva em conformidade com a Tua vontade. Faz-me compreender e acolher com gratidão a dignidade de ser Teu filho. Dá-me um espírito filial, cheio de confiança, capaz de me dirigir a Ti como um filho que sabe que o Pai nada lhe nega. Quero, como Jesus, anunciar Teu Reino com a vida, viver no Teu amor e confiar plenamente no Teu governo sobre todas as coisas. Amém.</p><p><em>10. Agora, pois, ó reis, entendei e instruí-vos, vós que julgais a terra.<br>11. Servi ao Senhor com temor e alegrai-vos nele com tremor.<br>12. Tomem cuidado para que o Senhor não se irrite e vocês não pereçam no caminho da justiça.<br>13. Quando a sua ira se inflama num momento, bem-aventurados são todos os que nele confiam.</em></p><p><strong>Meditação: </strong>A quarta estrofe do Salmo 2 (vv. 10-12) é uma solene advertência aos reis e juízes da terra: todos, mesmo os poderosos, são chamados a submeter-se ao verdadeiro Rei, pois atrás do trono de Sião está o próprio Deus, Senhor de toda a história. O salmo não fecha com um convite à violência, mas sim com uma conclamação à reverência: “Servi ao Senhor com temor e exultai com tremor” (v. 11). A imagem de “beijar os pés” ou “o filho” é, segundo o contexto, um gesto simbólico de rendição, adoração e homenagem, comum na prática de submissão aos soberanos do Antigo Oriente. A ênfase recai na atitude interior de obediência e no reconhecimento da soberania de Deus. A advertência é clara: os que O desprezam conhecerão sua justiça, mas sua misericórdia acolhe com alegria aqueles que se refugiam Nele (v. 12). No fim, a mensagem do salmo é escatológica: não há vida fora da reverência ao Senhor do mundo. O Novo Testamento reconhece em Jesus o Filho que reina em Sião, tornando este convite um apelo atual à conversão, confiança e adoração.</p><p><strong>Oração:</strong> Senhor, hoje eu decido afastar-me do pecado e voltar o meu coração inteiramente a Ti. Tem piedade de mim e acolhe minha decisão com Tua misericórdia. Reconheço-Te como meu único Rei e Senhor, digno de toda obediência e temor reverente. Quero beijar-Te com o amor sincero da minha alma, rendendo-Te meu afeto, minha adoração e minha vida. Ensina-me a servir-Te com alegria e a exultar com santo temor. Dá-me um coração dócil para obedecer à Tua vontade em todas as coisas. Que eu jamais despreze Tua Palavra, mas encontre em Ti meu refúgio seguro, hoje e sempre. Amém.</p>",
+      "contemplation": "<p>Silencie diante de Deus e busque contemplar o seu poder e sua glória. Perceba o poder de Deus que age em sua alma. Desfrute da glória de Deus que te envolve. Escute Ele te falar. Ame-o e deixe ser amado.</p>",
+      "createdAt": "2025-07-20T05:14:33.036Z",
+      "updatedAt": "2025-07-22T04:05:22.727Z",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0,
+      "lastViewed": "2025-07-28T19:05:53.765Z"
+    },
+    {
+      "id": "med_1753309057864",
+      "title": "Para falarmos com Deus Pai",
+      "categoryId": "cat_1752986987075",
+      "duration": "12",
+      "status": "in_progress",
+      "type": "premium",
+      "icon": "📖",
+      "reading": "<p><span style=\"font-size: 20px;\"><span style=\"font-size: 20px;\"><div style=\"text-align: center;\">“Pai, eu Te amo.<br>Toda honra e<br>glória sejam<br>dadas a Ti.<br>Livra-nos de<br>todo o mal, hoje<br>e sempre.”</div></span></span></p>",
+      "meditation": "<p><div style=\"text-align: justify;\">Essa jaculatória quer ser uma ponte que nos conduz a lembrar e a falar com Deus Pai. Depois de rezá-la, recite também o Pai-Nosso e converse espontaneamente com o Pai. No Pai-Nosso, descobrimos quem somos: filhos muito amados, chamados a viver no amor e na confiança. </p><p>Nesta jaculatória temos a  oportunidade de realizar um ato de amor, de louvor e de súplica ao Pai, para crescermos em intimidade e devoção a Ele.  Ao rezarmos, no Pai Nosso, “santificado seja o vosso nome”, deixemos que Sua santidade habite em nós. E também, que o Seu Reino venha e transforme nossa vida aqui, agora. Pedir o pão de cada dia é confiar tudo ao Pai: as necessidades do corpo e da alma. </p><p>E ao suplicarmos o perdão, abramos o coração para também perdoar. Que não guardemos mágoas — o perdão abre espaço para a graça permanecer. E quando pedirmos que Ele nos livre do mal, reconheçamos: sem Ele, somos fracos.</div></p>",
+      "prayer": "<p><span style=\"font-size: 20px;\"><span style=\"font-size: 20px;\"><div style=\"text-align: center;\">“Pai, eu Te amo.<br>Toda honra e<br>glória sejam<br>dadas a Ti.<br>Livra-nos de<br>todo o mal, hoje<br>e sempre.”</div></span></span></p>",
+      "contemplation": "<p>Contemple ao seu redor a beleza e da perfeição das coisas e das pessoas, reflexo da beleza de Deus. Escute a voz de Deus nas coisas simples que acontece durante o seu dia. Aproveite para dizer algumas vezes esta jaculatória buscando falar com nosso Pai dos céus.</p>",
+      "createdAt": "2025-07-23T22:17:37.864Z",
+      "updatedAt": "2025-07-23T22:37:33.233Z",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0,
+      "lastViewed": "2025-07-28T19:06:51.036Z"
+    },
+    {
+      "id": "med_1753323846585",
+      "title": "Para honrar Maria e pedir sua intercessão",
+      "categoryId": "cat_1752986987075",
+      "duration": "12",
+      "status": "completed",
+      "type": "premium",
+      "icon": "📖",
+      "reading": "<p>[a<span style=\"font-size: 32px;\">lign=center]“Maria, minha Mãe,<br>intercede por nós.<br>Eu me consagro a<br>Ti, sou todo Teu.<br>Cuida de mim, Mãe<br>de Deus e</span> minha<br>Mãe.”[/align]</p>",
+      "meditation": "<p>Esta jaculatória ajuda-nos a lembrar de nossa Mãe e da oração da Ave Maria. Cada vez que a pronunciamos com amor, oferecemos a Ela uma rosa espiritual de<br>louvor, afeto e súplica, reconhecendo-a como nossa Mãe do Céu. </p><p>Ao dizermos “Ave Maria, cheia de graça”, somos conduzidos ao mistério de Maria, mediadora de toda graça. Ela nos escuta com ternura, como verdadeira Mãe,<br>intercedendo por nós diante de Deus.</p><p>Seu nome, Maria, significa “Senhora da luz”, pois é fonte de sabedoria e brilho para os que a invocam com fé. E ao dizer<br>“bendita sois vós entre as mulheres”, recordamos a misericórdia que a escolheu como a mais feliz das criaturas.</p><p>Ao exaltarmos o “fruto do vosso ventre, Jesus”, glorificamos também a Jesus nosso Salvador. Com esta jaculatória, queremos manter viva a lembrança de<br>Maria, invocando sua poderosa intercessão, consagrando-nos a ela e despertando em nós um maior desejo de rezar com fé e devoção a oração da Ave Maria.</p>",
+      "prayer": "<p>[a<span style=\"font-size: 32px;\">lign=center]“Maria, minha Mãe,<br>intercede por nós.<br>Eu me consagro a<br>Ti, sou todo Teu.<br>Cuida de mim, Mãe<br>de Deus e</span> minha<br>Mãe.”[/align]</p>",
+      "contemplation": "<p>Se coloque diante de Deus como Maria, em um produndo silencio adorador. Una-se com nossa Mãe Maria, para aprendermos com ela a contemplarmos a Deus e assim fazermos aquilo que faremos um dia eternamente no céu. Adore ao Senhor. Escute sua voz. Se proponha hoje a fazer aquilo que Ele te pede. Ame-o com todo seu coração.</p>",
+      "createdAt": "2025-07-24T02:24:06.585Z",
+      "updatedAt": "2025-07-24T02:24:06.585Z",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0,
+      "lastViewed": "2025-07-26T23:44:19.268Z",
+      "completedAt": "2025-07-26T23:44:22.414Z"
+    },
+    {
+      "id": "med_1753359250068",
+      "title": "Para adorar a Deus com os anjos e santos",
+      "categoryId": "cat_1752986987075",
+      "duration": "12",
+      "status": "available",
+      "type": "premium",
+      "icon": "📖",
+      "reading": "<p>“Santo, Santo, Santo<br>é o Senhor,<br>Deus do universo!<br>[a<span style=\"font-size: 32px;\">lign=center]O céu e a terra<br>proclamam<br>A vossa glória.<br>Hosana nas alturas!<br>Bendito o que vem em<br>Nome do Senhor!<br>Hosana n</span>as alturas!”[/align]</p>",
+      "meditation": "<p>Os anjos que cercam o trono do Deus Uno e Trino jamais cessam de cantar: “Santo, Santo, Santo” (cfr. Is 6,3; Ap 4,8). Nós, que aspiramos a viver como os anjos no Céu, somos chamados a aprender, já nesta vida, essa oração de louvor. </p><p>A repetição da palavra “santo” enfatiza a santidade e a pureza de Deus, que é distinto e separado de todas as coisas criadas. “Deus do universo”: reconhece a onisciência e o poder de Deus sobre todasas coisas. “O céu e a terra proclamam a vossa glória”: indica que a glória de Deus é reconhecida e proclamada tanto no céucomo na terra. </p><p>“Hosana nas alturas”: uma exclamação de louvor e adoração. “Bendito o que vem em nome do Senhor”: uma referência a Jesus Cristo. Ao entoarmos essa proclamação, unimo-nos ao louvor eterno, antecipando a adoração que um dia viveremos na glória divina, mantendo nossos corações voltados para o essencial: amar e glorificar a Deus sem cessar.</p><p>Ao entoarmos essa proclamação, unimo-nos ao louvor eterno, antecipando a adoração que um dia viveremos na glória divina, mantendo nossos corações voltados para o essencial: amar e glorificar a Deus sem cessar.</p>",
+      "prayer": "<p>“Santo, Santo, Santo<br>é o Senhor,<br>Deus do universo!<br>[a<span style=\"font-size: 32px;\">lign=center]O céu e a terra<br>proclamam<br>A vossa glória.<br>Hosana nas alturas!<br>Bendito o que vem em<br>Nome do Senhor!<br>Hosana n</span>as alturas!”[/align]</p>",
+      "contemplation": "<p>Se coloque na presença de Deus, silencie o seu coração e perceba a presença de Deus. No silêncio podemos perceber mais profundamente nossas qualidades e nossos más inclinações para podermos ordenar tudo em Deus. No silêncio ouvimos mais nitidamente a voz de Deus para podermos orientar nossas vidas. Silencie, adore, ame ao nosso Deus.</p>",
+      "createdAt": "2025-07-24T12:14:10.068Z",
+      "updatedAt": "2025-07-24T12:14:10.068Z",
+      "total": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "locked": 0
+    }
+  ],
+  "personalized_meditations": [
+    {
+      "id": "meditation-1753739328247-zj3fw1ix6",
+      "title": "A Paz que Transcende Todo Entendimento",
+      "topic": "paz",
+      "content": "Em meio ao tumulto da vida cotidiana, encontramos um convite divino à paz, uma paz que não é apenas a ausência de conflitos, mas uma presença viva que nos envolve e nos transforma. Jesus, o Príncipe da Paz, nos oferece a sua serenidade, como está escrito: “Deixo-vos a paz, a minha paz vos dou; não a dou como o mundo a dá” (Jo 14,27). Que belo é saber que a verdadeira paz brota do coração de Deus e se irradia em nossas almas!\nAo contemplar esta paz, somos chamados a entrar em um estado de quietude interior. Feche os olhos e respire profundamente. Sinta o ar entrar e sair, como um fluxo de graça que purifica suas preocupações e medos. Medite sobre as palavras do Salmo: “Em Deus está a minha salvação e a minha glória; a rocha da minha força, em Deus está a minha confiança” (Sl 62,7). Através dessa confiança, encontramos um abrigo seguro, um lugar onde a agitação do mundo não pode nos alcançar.\nA paz também nos convida à reconciliação. À medida que nos aproximamos do Senhor em oração, somos chamados a perdoar e a deixar ir as mágoas que nos aprisionam. “Bem-aventurados os pacificadores, porque serão chamados filhos de Deus” (Mt 5,9). Que possamos ser instrumentos de paz em nossas famílias, comunidades e entre os que nos cercam. Cada ato de amor e perdão é um passo na construção do Reino de Deus.\nQue, ao longo do dia, possamos recordar que esta paz é um dom que deve ser cultivado. A oração é a chave que abre o nosso coração para recebê-la. “A paz de Deus, que excede todo entendimento, guardará os vossos corações e as vossas mentes em Cristo Jesus” (Fl 4,7). Assim, ao nos entregarmos à oração, deixamo-nos envolver por essa paz divina, que nos fortalece e nos guia.\nPermita que a luz da paz de Cristo ilumine suas decisões e seus caminhos. Que a cada amanhecer, ao sairmos para o mundo, possamos ser reflexos da paz que recebemos do Senhor, contagindo os outros com a doçura de sua presença. Que nossa vida seja um hino à paz, ecoando a harmonia do céu na terra. Amém.",
+      "duration": "15 min",
+      "status": "completed",
+      "createdAt": "2025-07-28T21:48:48.248Z",
+      "lastUpdated": "2025-07-28T21:48:48.248Z",
+      "source": "chatgpt",
+      "type": "simple",
+      "userId": "user_1753739115816",
+      "userName": "rodrigo silva goes",
+      "lastViewed": "2025-07-28T22:14:00.629Z",
+      "completedAt": "2025-07-28T22:14:02.724Z"
+    },
+    {
+      "id": "meditation-1753739445247-t85ox6gcx",
+      "title": "A Luz da Esperança",
+      "topic": "esperança",
+      "content": "Na caminhada da vida, a esperança é como uma luz que brilha nas trevas, guiando-nos por caminhos incertos. É o dom que Deus nos oferece, sustentando nossas almas em meio às tempestades e desafios. Quando olhamos para a cruz, vemos a plenitude da esperança que brota do amor incondicional de Cristo por nós. Ele nos ensina que, mesmo nas horas mais sombrias, podemos confiar na promessa de Sua ressurreição e na vida eterna. \"A esperança não decepciona\" (Romanos 5,5), pois é um presente do Espírito Santo que habita em nossos corações, fortalecendo-nos e nos encorajando a prosseguir.\nMeditemos sobre as palavras do Senhor que nos dizem: \"Não temas, porque eu estou contigo\" (Isaías 41,10). Que essas palavras penetrem profundamente em nosso ser, lembrando-nos de que nunca estamos sozinhos. Ele nos convida a lançar sobre Ele todas as nossas ansiedades e preocupações, pois a esperança é a âncora de nossa alma, firme e segura (Hebreus 6,19). \nEm momentos de desilusão, quando o futuro parece incerto, voltemo-nos para a oração e a Palavra de Deus, que nos reanimam e renovam. A esperança é alimentada pela fé e pela confiança em Deus, que nunca falha em Suas promessas. Como está escrito: \"Porque eu sei os planos que tenho para vocês, diz o Senhor\" (Jeremias 29,11). Ele nos chama a confiar em Seu plano, mesmo quando não conseguimos ver o caminho à frente.\nQue a nossa esperança seja um testemunho vivo do amor de Cristo, refletindo Sua luz para aqueles que nos rodeiam. Ao enfrentarmos as adversidades, lembremo-nos de que a esperança é um ato de fé que nos leva a acreditar que, após a noite, sempre vem a luz do dia. Que a nossa vida seja um eco da esperança que encontramos em Jesus, e que, através de nós, muitos possam conhecer a alegria de viver na confiança em um Deus que é fiel. Assim, firmemos nossos corações na esperança, pois ela é a certeza de que o melhor ainda está por vir. Que a paz de Cristo nos envolva e nos guie sempre.",
+      "duration": "15 min",
+      "status": "pending",
+      "createdAt": "2025-07-28T21:50:45.247Z",
+      "lastUpdated": "2025-07-28T21:50:45.247Z",
+      "source": "chatgpt",
+      "type": "simple",
+      "userId": "user_1753739115816",
+      "userName": "rodrigo silva goes",
+      "lastViewed": "2025-07-28T22:02:11.031Z"
+    },
+    {
+      "id": "meditation-1753739847958-xtuqvkko6",
+      "title": "O Abraço do Perdão",
+      "topic": "perdao",
+      "content": "O perdão é um dom que nos é oferecido por Deus, um convite a libertar o coração das correntes do rancor e da amargura. Ao refletirmos sobre a profundidade desse ato, somos chamados a entrar no mistério do amor divino, que nos ensina que perdoar não é apenas uma ação, mas uma transformação interior. Jesus nos mostrou, em Seu exemplo, que o perdão é um ato de coragem, onde renunciamos ao desejo de vingança e acolhemos a graça que cura. Ele nos disse: \"Perdoai, e sereis perdoados\" (Lc 6,37). Esta é uma promessa que nos convida a viver em plenitude.\nAo olharmos para nossas próprias feridas, percebemos que o perdão é um bálsamo necessário. É na oração e na contemplação que encontramos a força para liberar aqueles que nos ofenderam, assim como Deus nos perdoa continuamente. Ao dizer \"Pai, perdoa-lhes, porque não sabem o que fazem\" (Lc 23,34), Jesus nos ensina que o perdão deve ir além das nossas limitações humanas. Através da Lectio Divina, somos chamados a meditar sobre as Escrituras e a abrir nossos corações para a ação do Espírito Santo, que nos capacita a perdoar verdadeiramente.\nNeste caminho, é fundamental lembrar que o perdão é um processo. Não é uma questão de esquecer, mas de escolher não ser mais prisioneiro da dor. Como nos ensina o Catecismo, \"o perdão é a resposta que devemos dar ao amor de Deus que se manifestou na cruz\" [Catecismo da Igreja Católica, n. 2842]. Assim, ao perdoarmos, participamos da obra redentora de Cristo em nossas vidas e na vida dos outros.\nQue possamos nos permitir viver o perdão, não apenas como um ato isolado, mas como um estilo de vida, refletindo a misericórdia de Deus em nossas ações diárias. Que, ao nos voltarmos para Deus em oração, possamos sentir a leveza que o perdão traz, e que nossos corações se abram para a paz que excede todo entendimento. O perdão nos liberta, nos transforma e nos aproxima de Deus, que é amor. Que este amor nos inspire a sermos instrumentos de paz, levando a mensagem do perdão ao mundo que tanto precisa.",
+      "duration": "15 min",
+      "status": "completed",
+      "createdAt": "2025-07-28T21:57:27.958Z",
+      "lastUpdated": "2025-07-28T21:57:27.958Z",
+      "source": "chatgpt",
+      "type": "simple",
+      "userId": "user_1753739115816",
+      "userName": "rodrigo silva goes"
+    }
+  ],
+  "personalized_meditations_history": [
+    {
+      "category": "Amor de Deus",
+      "meditations": [
+        {
+          "id": "meditation-1753573235524-q36n39a45",
+          "title": "O Abraço do Amor Divino",
+          "topic": "Amor de Deus",
+          "content": "O amor de Deus é um mistério profundo que nos envolve e nos transforma. Ao contemplarmos a criação ao nosso redor, percebemos a expressão desse amor em cada detalhe. Desde a vastidão do céu estrelado até a simplicidade de uma flor, Deus nos sussurra sua ternura. Ele nos criou à sua imagem e semelhança, infundindo em nós uma centelha de seu próprio ser, unindo-nos a Ele em um laço eterno de amor e confiança. \nNa Sagrada Escritura, encontramos testemunhos desse amor que não se cansa de nos buscar. O Senhor mesmo nos diz: “Com amor eterno eu te amei” (Jeremias 31, 3). Esse amor é inabalável, não se deixa abalar por nossos erros ou fraquezas. Ao contrário, ele nos abraça em nossas misérias, oferecendo-nos perdão e renovação. Assim como o pai misericordioso do evangelho, Ele aguarda ansiosamente nosso retorno, pronto para nos receber de braços abertos, como um sinal de sua infinita compaixão.\nA vida de Jesus Cristo é a maior manifestação desse amor. Ele se fez homem, caminhou entre nós, e entregou sua vida na cruz, mostrando-nos que o amor verdadeiro é sacrificial. Em cada lágrima que derramamos, em cada dor que sentimos, Ele se faz presente, solidário em nossa jornada. “Ninguém tem maior amor do que aquele que dá a vida pelos seus amigos” (João 15, 13). Essa entrega é um convite a vivermos em amor, a sermos instrumentos de paz e reconciliação no mundo.\nEm nossa oração, somos chamados a abrir nossos corações para receber esse amor. Ele nos transforma, nos purifica e nos faz novos. Ao nos deixarmos tocar por Ele, somos chamados a refletir esse amor em nossas vidas, a amar nosso próximo como a nós mesmos. O Catecismo nos ensina que “a caridade é a forma mais alta de amor” e que devemos vivê-la em todas as nossas ações [Catecismo da Igreja Católica, n. 1822]. Que possamos, assim, ser luz nas trevas, refletindo o amor de Deus em cada encontro e em cada gesto.\nAo final de nossa meditação, que possamos nos perguntar: como posso ser um canal desse amor divino no meu dia a dia? Que o amor de Deus nos una e nos inspire a viver a plenitude da vida em Cristo, hoje e sempre.",
+          "duration": "15 min",
+          "status": "pending",
+          "createdAt": "2025-07-26T23:40:35.526Z",
+          "lastUpdated": "2025-07-26T23:40:35.526Z",
+          "source": "chatgpt",
+          "type": "simple",
+          "userId": "user_1753573225211_wwoeuc7zg",
+          "userName": "rodrigo silva goes"
+        }
+      ],
+      "total": 1,
+      "createdAt": "2025-07-26T23:40:35.534Z",
+      "userId": "user_1753573225211_wwoeuc7zg",
+      "userName": "rodrigo silva goes",
+      "lastUpdated": "2025-07-26T23:40:35.534Z",
+      "totalGenerated": 1
+    },
+    {
+      "category": "perdão",
+      "meditations": [
+        {
+          "id": "meditation-1753573325016-ikrh81be4",
+          "title": "O Abraço do Perdão",
+          "topic": "perdão",
+          "content": "O perdão é um dos maiores dons que podemos oferecer e receber. Ele é o bálsamo divino que cura as feridas da alma e restabelece as relações. À luz do Evangelho, somos convidados a refletir sobre a profundidade deste ato tão sublime. Jesus nos ensina que o perdão não é apenas uma obrigação, mas uma expressão do amor que devemos cultivar em nossos corações. “Perdoai, e sereis perdoados” (Lc 6,37) ressoa como um chamado à conversão interior.\nAo meditarmos sobre o sacramento da Reconciliação, somos confrontados com a verdade de que, assim como Deus nos perdoa, somos chamados a perdoar. O Catecismo nos lembra que “o perdão de Deus faz renascer o homem, que tinha morrido pela culpa” [Catecismo da Igreja Católica, n. 1468]. Este renascimento é um convite à transformação. Cada ato de perdão que oferecemos a alguém é uma expressão da nossa própria libertação.\nFeche os olhos e imagine-se diante da cruz, onde o perdão se manifesta em sua forma mais pura. Jesus, mesmo em Sua dor, clamou: “Pai, perdoa-lhes, pois não sabem o que fazem” (Lc 23,34). Que exemplo poderoso de amor! Ao meditar sobre estas palavras, somos chamados a perguntar: quem precisamos perdoar em nossas vidas? Que ressentimentos temos guardado que nos impedem de experimentar a paz?\nPerdoar não significa esquecer, mas sim liberar o peso que carregamos. Através do perdão, encontramos a verdadeira liberdade e a capacidade de amar. Como diz o Catecismo, “perdoar é uma graça” [Catecismo da Igreja Católica, n. 2842]. Ao abrirmos nossos corações para esse dom, nos tornamos instrumentos de paz na vida dos outros. \nAo final desta meditação, que possamos levantar nossos olhos ao céu e pedir a Deus a graça de perdoar e de sermos perdoados. Que o Espírito Santo nos guie nessa jornada de reconciliação, permitindo que o perdão flua como um rio de amor em nossas vidas. Lembremo-nos sempre: o perdão é o caminho que leva à verdadeira unidade e à paz interior.",
+          "duration": "15 min",
+          "status": "pending",
+          "createdAt": "2025-07-26T23:42:05.017Z",
+          "lastUpdated": "2025-07-26T23:42:05.017Z",
+          "source": "chatgpt",
+          "type": "simple",
+          "userId": "user_1753573315007_ldclofxad",
+          "userName": "Wanessa Amaral"
+        }
+      ],
+      "total": 1,
+      "createdAt": "2025-07-26T23:42:05.018Z",
+      "userId": "user_1753573315007_ldclofxad",
+      "userName": "Wanessa Amaral",
+      "lastUpdated": "2025-07-26T23:42:05.018Z",
+      "totalGenerated": 1
+    },
+    {
+      "category": "O amor de Deus",
+      "meditations": [
+        {
+          "id": "meditation-1753575753273-7z2tfi6zk",
+          "title": "O Amor Infinito de Deus",
+          "topic": "O amor de Deus",
+          "content": "Em cada batida do nosso coração, ressoa a grande verdade do amor de Deus. Ele é a fonte de todo amor, o criador que, em sua infinita bondade, nos deu a vida e nos acolheu com os braços abertos. Ao contemplarmos as maravilhas da criação, percebemos que cada flor, cada estrela e cada ser humano são expressão do seu amor. É um amor que não se limita, que não conhece fronteiras e que se renova a cada amanhecer.\nQuando pensamos na cruz, somos lembrados do amor supremo que se entregou por nós. O sacrifício de Jesus nos revela a profundidade desse amor, um amor que se faz carne, que se faz presente em cada Eucaristia, onde Ele se dá plenamente a nós. \"Deus é amor\" (1Jo 4,8) é uma afirmação que nos convida a permitir que esse amor transforme nossas vidas. Através da oração e da contemplação, somos chamados a mergulhar na intimidade desse amor, a experimentar a paz que ele traz e a alegria que brota de um coração que se entrega.\nEm momentos de solidão e dor, lembremo-nos de que nunca estamos sós. O amor de Deus nos acompanha, nos sustenta e nos consola. Ele é o amigo fiel, sempre pronto a ouvir nossas súplicas e a nos envolver com sua graça. “Eu estarei convosco todos os dias, até o fim do mundo” (Mt 28,20). Que essa promessa nos traga esperança e renovação, mesmo nas horas mais sombrias.\nConvidemos o Espírito Santo a nos guiar na experiência desse amor. Que possamos, a cada dia, nos abrir mais para receber e compartilhar esse amor, tornando-nos instrumentos de sua paz e alegria. Assim, viveremos plenamente a nossa vocação, refletindo o amor de Deus em nossos relacionamentos, em nossas ações e em nossos pensamentos. Que a luz desse amor ilumine o nosso caminho e nos conduza à plenitude da vida em Cristo.\nDeus nos ama de maneira incondicional, e essa verdade deve ressoar em nossos corações, levando-nos a amar também os outros. Ao vivermos em amor, cumprimos o mandamento que nos foi deixado: “Amarás o teu próximo como a ti mesmo” (Mt 22,39). Que possamos ser verdadeiros testemunhos desse amor, mostrando ao mundo a beleza de uma vida vivida em comunhão com o Criador e com os irmãos. Que assim seja, amém.",
+          "duration": "15 min",
+          "status": "pending",
+          "createdAt": "2025-07-27T00:22:33.273Z",
+          "lastUpdated": "2025-07-27T00:22:33.273Z",
+          "source": "chatgpt",
+          "type": "simple",
+          "userId": "user_1753575275626_rs5slmfit",
+          "userName": "rodrigosilva7805"
+        }
+      ],
+      "total": 1,
+      "createdAt": "2025-07-27T00:22:33.274Z",
+      "userId": "user_1753575275626_rs5slmfit",
+      "userName": "rodrigosilva7805",
+      "lastUpdated": "2025-07-27T00:22:33.274Z",
+      "totalGenerated": 1
+    },
+    {
+      "category": "perdão",
+      "meditations": [
+        {
+          "id": "meditation-1753584209432-0f25sx7ff",
+          "title": "A Luz do Perdão",
+          "topic": "perdão",
+          "content": "O perdão é um dos pilares fundamentais da nossa fé cristã, um convite divino que nos chama a refletir sobre a misericórdia que recebemos de Deus. Quando olhamos para a cruz, vemos o amor de Cristo expresso em sua entrega total e incondicional. Ele nos ensinou que perdoar é um ato de amor, um caminho de libertação tanto para quem perdoa quanto para quem é perdoado. É na oração que encontramos a força necessária para perdoar, um espaço sagrado onde o coração se abre e acolhe a graça divina.\nEm Mateus 6, 14-15, Jesus nos lembra: “Se perdoardes aos homens as suas ofensas, também vosso Pai celeste vos perdoará; mas se não perdoardes aos homens, tampouco vosso Pai perdoará as vossas ofensas.” Essas palavras ressoam profundamente em nosso ser, desafiando-nos a olhar além das feridas e das mágoas. O perdão não é esquecer, mas é escolher não deixar que a dor nos defina. É um ato de coragem que nos aproxima do coração de Deus.\nAo meditar sobre o perdão, somos convidados a contemplar a história do filho pródigo. O pai, cheio de compaixão, corre ao encontro do filho que se afastou, abraçando-o com amor. Assim é o nosso Deus, sempre pronto a nos acolher de volta, independentemente de nossas falhas. Ele nos chama a fazer o mesmo: a estender a mão ao próximo, mesmo quando é difícil, mesmo quando a dor é intensa.\nNa vida cotidiana, o perdão se manifesta em pequenos gestos, em palavras de reconciliação, em um olhar compreensivo. A cada ato de perdão, tornamo-nos mais semelhantes a Cristo, que nos ensinou a amar até os inimigos. A prática do perdão é um exercício diário, um convite a deixar que a luz de Deus entre em nossos corações e nos transforme.\nMergulhe em oração e peça ao Espírito Santo que ilumine as áreas em que o perdão ainda não foi plenamente vivido. Que Ele te conceda a graça de perdoar e de ser perdoado, para que possas viver na plenitude da paz e da alegria que somente o amor de Deus pode oferecer. Lembre-se sempre de que “o perdão é a chave que abre a porta da paz” e, ao perdoar, você se torna um instrumento da misericórdia divina em um mundo que tanto precisa de amor e reconciliação.",
+          "duration": "15 min",
+          "status": "pending",
+          "createdAt": "2025-07-27T02:43:29.433Z",
+          "lastUpdated": "2025-07-27T02:43:29.433Z",
+          "source": "chatgpt",
+          "type": "simple",
+          "userId": "user_1753583112423_vl5xqteqe",
+          "userName": "rodrigosilva7805"
+        }
+      ],
+      "total": 1,
+      "createdAt": "2025-07-27T02:43:29.434Z",
+      "userId": "user_1753583112423_vl5xqteqe",
+      "userName": "rodrigosilva7805",
+      "lastUpdated": "2025-07-27T02:43:29.434Z",
+      "totalGenerated": 1
+    },
+    {
+      "category": "o amor de deus",
+      "meditations": [
+        {
+          "id": "meditation-1753584284918-9aubw7133",
+          "title": "O Amor Infinito de Deus",
+          "topic": "o amor de deus",
+          "content": "O amor de Deus é um mistério profundo e sublime, que nos envolve como uma brisa suave que acaricia a alma. Ao contemplarmos a criação, percebemos que cada flor, cada estrela e cada ser humano é uma expressão desse amor divino que nos foi dado sem medida. “Deus é amor” (1 Jo 4, 8), nos ensina a Escritura, e essa verdade ressoa em nossos corações, convidando-nos a abrir-nos para a sua luz transformadora.\nQuando meditamos sobre o amor de Deus, somos chamados a reconhecer que Ele nos ama não por causa de nossas virtudes, mas apesar de nossas fraquezas. É um amor que se fez carne em Jesus Cristo, que nos mostrou a verdadeira face do Pai. Em cada gesto de bondade e misericórdia, encontramos um reflexo desse amor que cura e renova. “A misericórdia é o traço distintivo do amor de Deus” [Catecismo da Igreja Católica, n. 1846]. \nEm meio às tribulações da vida, podemos nos sentir sozinhos ou abandonados, mas é nesse exato momento que devemos recordar que o amor de Deus nunca nos abandona. Ele nos acompanha em cada passo, como um pai amoroso que guia seus filhos. “Porque eu sei os planos que tenho para vocês, diz o Senhor, planos de prosperidade e não de calamidade, para lhes dar um futuro e uma esperança” (Jeremias 29, 11). Assim podemos confiar que mesmo em meio às tempestades, a sua presença é um abrigo seguro.\nAo nos aproximarmos de Deus em oração, somos convidados a abrir nossos corações e a deixar que esse amor entre em nós. Ele nos chama a ser testemunhas desse amor no mundo, a amar como Ele ama, sem reservas. “Amar ao próximo como a si mesmo” (Mt 22, 39) é o mandamento que nos liga uns aos outros, fazendo de nós instrumentos da sua paz e alegria.\nNeste momento de meditação, vamos permitir que as palavras de São João nos penetrem: “Nós amamos porque ele nos amou primeiro” (1 Jo 4, 19). Que possamos reconhecer o amor de Deus em nossa vida, permitindo que ele nos transforme, nos inspire e nos faça viver em plenitude, irradiando este amor ao nosso redor. Que assim seja, amém.",
+          "duration": "15 min",
+          "status": "pending",
+          "createdAt": "2025-07-27T02:44:44.919Z",
+          "lastUpdated": "2025-07-27T02:44:44.919Z",
+          "source": "chatgpt",
+          "type": "simple",
+          "userId": "user_1753583112423_vl5xqteqe",
+          "userName": "rodrigosilva7805"
+        }
+      ],
+      "total": 1,
+      "createdAt": "2025-07-27T02:44:44.920Z",
+      "userId": "user_1753583112423_vl5xqteqe",
+      "userName": "rodrigosilva7805",
+      "lastUpdated": "2025-07-27T02:44:44.920Z",
+      "totalGenerated": 1
+    },
+    {
+      "category": "Espirito Santo",
+      "meditations": [
+        {
+          "id": "meditation-1753584675302-sp8u6i38x",
+          "title": "A Presença Consoladora do Espírito Santo",
+          "topic": "Espirito Santo",
+          "content": "Vinde, Espírito Santo, e enchei os corações dos vossos fiéis. A cada respiração, sentimos a suave brisa da Tua presença, que nos guia e ilumina. Em momentos de incerteza, é o Teu sopro que nos dá coragem e força. Que possamos, em nossa oração, abrir os nossos corações para acolher a Tua luz que dissipa as sombras do medo e da dúvida. \nO Espírito Santo é o amor que une o Pai e o Filho, é a força que transforma o nosso ser. Ele nos ensina a verdade em meio às mentiras do mundo e nos mostra o caminho que leva à vida eterna. Em cada sacramento, Sua presença se torna real, e em cada Eucaristia, somos nutridos por esse amor divino que nos impulsiona a amar. “O Espírito Santo é a alma da Igreja, e a sua missão é fazer com que os homens conheçam o amor de Deus” [Catecismo da Igreja Católica, n. 737].\nAo meditarmos sobre o Espírito Santo, somos convidados a contemplar os Seus dons: sabedoria, entendimentos, conselho, fortaleza, ciência, piedade e temor de Deus. Que possamos pedir diariamente por esses dons, permitindo que eles floresçam em nossas vidas e nos conduzam a um amor mais profundo e verdadeiro. O Espírito nos transforma, fazendo de nós novas criaturas em Cristo, e nos chama a ser luz para o mundo.\nNa quietude do nosso coração, podemos escutar a Sua voz suave e constante. Ele nos encoraja a viver uma vida de testemunho e serviço, refletindo o amor de Deus em nossas ações. “O Espírito Santo está sempre presente na Igreja, e nos guia em nossa jornada de fé” [Catecismo da Igreja Católica, n. 797]. Que possamos ser instrumentos de paz e unidade, espalhando a alegria que vem da Sua presença.\nAo encerrarmos nossa meditação, elevemos nossa prece: Vinde, Espírito Santo, e renovei a face da terra. Que cada um de nós possa ser um canal do Teu amor, levando esperança e luz a todos ao nosso redor. Amém.",
+          "duration": "15 min",
+          "status": "pending",
+          "createdAt": "2025-07-27T02:51:15.302Z",
+          "lastUpdated": "2025-07-27T02:51:15.302Z",
+          "source": "chatgpt",
+          "type": "simple",
+          "userId": "user_1753583112423_vl5xqteqe",
+          "userName": "rodrigosilva7805"
+        }
+      ],
+      "total": 1,
+      "createdAt": "2025-07-27T02:51:15.304Z",
+      "userId": "user_1753583112423_vl5xqteqe",
+      "userName": "rodrigosilva7805",
+      "lastUpdated": "2025-07-27T02:51:15.304Z",
+      "totalGenerated": 1
+    },
+    {
+      "id": "meditation-1753664272064-wfykkz2ir",
+      "title": "O Abraço do Amor Divino",
+      "topic": "O amor de Deus",
+      "content": "O amor de Deus é um mistério profundo que nos envolve e nos transforma. À luz da fé, somos convidados a contemplar esse amor que não conhece limites, que se revela em cada amanhecer, em cada batida do nosso coração. Deus nos ama com um amor paterno, que é paciente e compreensivo, e que nos chama a viver em plena comunhão com Ele. Em 1 João 4,16, encontramos a certeza: “Deus é amor; e aquele que permanece no amor, permanece em Deus, e Deus, nele.” Estas palavras ressoam em nosso ser, nos lembrando que somos feitos à imagem e semelhança de um Deus que ama infinitamente.\nMeditar sobre o amor de Deus é abrir-se à sua presença constante em nossa vida. Ele nos ama não pelo que fazemos, mas pelo que somos. Cada um de nós é um filho amado, destinado a viver a plenitude de sua graça. O próprio Cristo, na cruz, nos mostrou o maior ato de amor: \"Ninguém tem maior amor do que este: de dar alguém a sua vida pelos seus amigos\" (Jo 15,13). Ao contemplarmos a cruz, somos chamados a reconhecer a profundidade desse amor, que vai além de nossa compreensão.\nEm nossa jornada espiritual, a oração é o caminho que nos aproxima desse amor. O Catecismo nos ensina que “a oração é a elevação da alma a Deus” [Catecismo da Igreja Católica, n. 2559]. É nesse diálogo sincero que podemos experimentar a ternura do amor divino. Ao nos voltarmos para Ele, encontramos consolo, força e renovação para enfrentar os desafios da vida. Cada oração é uma oportunidade de nos deixarmos abraçar por esse amor que cura e restaura.\nAlém disso, somos chamados a amar como Ele ama. Em nossa vivência diária, cada gesto de bondade, cada palavra de perdão, cada ato de compaixão é um reflexo desse amor que recebemos. O amor de Deus em nós se traduz em amor ao próximo, em um compromisso com a justiça e a paz. Assim, ao vivermos essa dinâmica, nos tornamos instrumentos de Sua graça no mundo.\nPor fim, que esta meditação nos inspire a abrir o coração para receber o amor de Deus. Que possamos nos entregar a Ele, confiantes de que somos amados e que esse amor nos transforma. Ao acolhermos esse afeto divino, que possamos também ser canais desse amor, irradiando luz e esperança em um mundo que tanto precisa. Que o amor de Deus nos envolva e nos guie em todos os nossos dias.",
+      "duration": "15 min",
+      "status": "pending",
+      "createdAt": "2025-07-28T00:57:52.065Z",
+      "lastUpdated": "2025-07-28T00:57:52.065Z",
+      "source": "chatgpt",
+      "type": "simple",
+      "userId": "user_1753663902298_j4cr1buq2",
+      "userName": "rodrigo silva goes",
+      "generatedAt": "2025-07-28T00:57:52.067Z",
+      "generationMethod": "dashboard"
+    },
+    {
+      "id": "meditation-1753664300983-2ig7lxcdj",
+      "title": "A Luz que Transforma: Reflexões sobre o Pecado",
+      "topic": "O Pecado",
+      "content": "O pecado, na sua essência, é a separação do amor de Deus, um desvio do caminho que Ele nos traçou. É uma sombra que se interpõe entre nós e a luz divina, levando-nos a momentos de escuridão e solidão. No entanto, é fundamental lembrar que, mesmo nas nossas fraquezas, Deus nos oferece sempre a possibilidade de conversão e perdão. Jesus, o Bom Pastor, nos chama a voltar ao Seu coração misericordioso, onde encontramos acolhimento e renovação.\nAo meditarmos sobre o pecado, é essencial reconhecer que ele não é apenas uma transgressão, mas uma ferida na nossa relação com o Criador. Cada escolha que nos afasta do amor divino nos convida a uma reflexão profunda sobre as nossas motivações e desejos. Como o Catecismo nos ensina, \"o pecado é uma ofensa a Deus\" e \"destrói a comunhão com Ele\" [Catecismo da Igreja Católica, n. 1440]. Ao tomarmos consciência disso, somos levados a um estado de humildade, onde reconhecemos nossa vulnerabilidade e a necessidade de Sua graça.\nA beleza do sacramento da Reconciliação nos revela que o pecado não é o fim, mas um chamado à transformação. Quando nos aproximamos do confessionário, encontramos em Cristo a possibilidade de recomeço. Sua misericórdia é como um bálsamo que cura as feridas mais profundas da alma. Como diz o Salmo 51, \"cria em mim um coração puro, ó Deus\" (Salmo 51, 10). Esta súplica deve ser a nossa constante oração, pedindo ao Senhor que nos renove de dentro para fora.\nDevemos, portanto, encarar o pecado não com medo, mas com a esperança de que, ao reconhecê-lo, podemos experimentar a plenitude do amor de Deus. Ele nos oferece não apenas perdão, mas também a força para superar nossas quedas e viver em santidade. A cada dia, somos convidados a atravessar a porta da misericórdia, lembrando que \"onde abundou o pecado, superabundou a graça\" (Romanos 5, 20).\nQue esta meditação nos inspire a buscar a luz que vem de Deus, permitindo que Sua verdade nos transforme e ilumine nosso caminho. Que possamos nos afastar das trevas e caminhar com confiança para o abraço acolhedor do Pai, que sempre nos espera de braços abertos.",
+      "duration": "15 min",
+      "status": "pending",
+      "createdAt": "2025-07-28T00:58:20.984Z",
+      "lastUpdated": "2025-07-28T00:58:20.984Z",
+      "source": "chatgpt",
+      "type": "simple",
+      "userId": "user_1753663902298_j4cr1buq2",
+      "userName": "rodrigo silva goes",
+      "generatedAt": "2025-07-28T00:58:20.985Z",
+      "generationMethod": "dashboard"
+    },
+    {
+      "id": "meditation-1753664318898-sjuqaftsz",
+      "title": "A Luz da Fé em Deus",
+      "topic": "A fé em Deus",
+      "content": "Em meio às tempestades da vida, a fé em Deus se apresenta como um farol, iluminando nossos passos e guiando-nos em direção à paz. A fé não é uma simples crença, mas uma profunda confiança na providência divina. É a certeza de que, mesmo nas sombras, Ele está conosco, sustentando-nos em cada desafio. Como nos ensina o Catecismo, “a fé é uma resposta ao amor de Deus que nos precede” [Catecismo da Igreja Católica, n. 142]. \nAo contemplarmos as Escrituras, vemos que a fé é um dom que nos transforma e nos aproxima do coração de Deus. Quando olhamos para a vida de Abraão, um homem que confiou plenamente nas promessas do Senhor, somos convidados a refletir sobre a nossa própria caminhada. Assim como ele, somos chamados a deixar para trás nossas inseguranças e a nos lançar nas mãos do Criador. A fé nos convida a um abandono confiante, a crer que “todas as coisas cooperam para o bem daqueles que amam a Deus” [Romanos 8, 28].\nEm momentos de incerteza, é essencial recordarmos que “a fé é a certeza das coisas que se esperam, a convicção de fatos que se não veem” [Hebreus 11, 1]. Assim, ao meditarmos sobre a nossa vida, que possamos nos perguntar: estamos colocando nossa confiança em Deus? Estamos permitindo que a Sua luz penetre em nossos corações, dissipando as dúvidas e medos? \nAtravés da oração e da reflexão, podemos fortalecer nossa fé. Jesus nos convida: “vinde a mim, todos os que estais cansados e sobrecarregados, e eu vos aliviarei” [Mateus 11, 28]. Ele é o nosso refúgio, a nossa fortaleza. Que possamos, então, abrir nossos corações e nos entregar a esta confiança plena, permitindo que a fé em Deus nos conduza por caminhos de esperança e amor.\nAssim, ao vivermos cada dia com fé, tornamo-nos testemunhas do amor de Deus no mundo. Que a nossa vida seja um reflexo da luz que recebemos, inspirando outros a se aproximarem do Senhor. Que a nossa fé seja firme, como a rocha, e que, em todas as circunstâncias, possamos proclamar: “Eu confio em Ti, Senhor!”",
+      "duration": "15 min",
+      "status": "pending",
+      "createdAt": "2025-07-28T00:58:38.899Z",
+      "lastUpdated": "2025-07-28T00:58:38.899Z",
+      "source": "chatgpt",
+      "type": "simple",
+      "userId": "user_1753663902298_j4cr1buq2",
+      "userName": "rodrigo silva goes",
+      "generatedAt": "2025-07-28T00:58:38.900Z",
+      "generationMethod": "dashboard"
+    },
+    {
+      "category": "Minhas Meditações",
+      "meditations": [
+        {
+          "id": "meditation-1753739445247-t85ox6gcx",
+          "title": "A Luz da Esperança",
+          "topic": "esperança",
+          "content": "Na caminhada da vida, a esperança é como uma luz que brilha nas trevas, guiando-nos por caminhos incertos. É o dom que Deus nos oferece, sustentando nossas almas em meio às tempestades e desafios. Quando olhamos para a cruz, vemos a plenitude da esperança que brota do amor incondicional de Cristo por nós. Ele nos ensina que, mesmo nas horas mais sombrias, podemos confiar na promessa de Sua ressurreição e na vida eterna. \"A esperança não decepciona\" (Romanos 5,5), pois é um presente do Espírito Santo que habita em nossos corações, fortalecendo-nos e nos encorajando a prosseguir.\nMeditemos sobre as palavras do Senhor que nos dizem: \"Não temas, porque eu estou contigo\" (Isaías 41,10). Que essas palavras penetrem profundamente em nosso ser, lembrando-nos de que nunca estamos sozinhos. Ele nos convida a lançar sobre Ele todas as nossas ansiedades e preocupações, pois a esperança é a âncora de nossa alma, firme e segura (Hebreus 6,19). \nEm momentos de desilusão, quando o futuro parece incerto, voltemo-nos para a oração e a Palavra de Deus, que nos reanimam e renovam. A esperança é alimentada pela fé e pela confiança em Deus, que nunca falha em Suas promessas. Como está escrito: \"Porque eu sei os planos que tenho para vocês, diz o Senhor\" (Jeremias 29,11). Ele nos chama a confiar em Seu plano, mesmo quando não conseguimos ver o caminho à frente.\nQue a nossa esperança seja um testemunho vivo do amor de Cristo, refletindo Sua luz para aqueles que nos rodeiam. Ao enfrentarmos as adversidades, lembremo-nos de que a esperança é um ato de fé que nos leva a acreditar que, após a noite, sempre vem a luz do dia. Que a nossa vida seja um eco da esperança que encontramos em Jesus, e que, através de nós, muitos possam conhecer a alegria de viver na confiança em um Deus que é fiel. Assim, firmemos nossos corações na esperança, pois ela é a certeza de que o melhor ainda está por vir. Que a paz de Cristo nos envolva e nos guie sempre.",
+          "duration": "15 min",
+          "status": "pending",
+          "createdAt": "2025-07-28T21:50:45.247Z",
+          "lastUpdated": "2025-07-28T21:50:45.247Z",
+          "source": "chatgpt",
+          "type": "simple",
+          "userId": "user_1753739115816",
+          "userName": "rodrigo silva goes"
+        }
+      ],
+      "total": 1,
+      "createdAt": "2025-07-28T21:50:45.248Z",
+      "userId": "user_1753739115816",
+      "userName": "rodrigo silva goes",
+      "lastUpdated": "2025-07-28T21:50:45.249Z",
+      "totalGenerated": 3
+    }
+  ],
+  "userProgress": {},
+  "settings": {},
+  "user_schedules": [
+    {
+      "title": "Meditação Jaculatórias",
+      "time": "23:55",
+      "category": "Jaculatórias",
+      "days": [
+        "sab"
+      ],
+      "notifications": true,
+      "date": "2025-07-28",
+      "duration": 15,
+      "status": "agendado",
+      "createdAt": "2025-07-28T00:53:38.126Z",
+      "description": "Agendamento para Jaculatórias às 23:55",
+      "id": "1753664018126zji8wt1ql",
+      "userId": "user_1753663902298_j4cr1buq2",
+      "userName": "rodrigo silva goes",
+      "lastUpdated": "2025-07-28T00:53:38.128Z"
+    },
+    {
+      "title": "Meditação Os Fundamentos da Vida Espiritual",
+      "time": "00:56",
+      "category": "Os Fundamentos da Vida Espiritual",
+      "days": [
+        "sab",
+        "dom"
+      ],
+      "notifications": true,
+      "date": "2025-07-28",
+      "duration": 15,
+      "status": "agendado",
+      "createdAt": "2025-07-28T00:53:47.629Z",
+      "description": "Agendamento para Os Fundamentos da Vida Espiritual às 00:56",
+      "id": "1753664027629xrcon28rs",
+      "userId": "user_1753663902298_j4cr1buq2",
+      "userName": "rodrigo silva goes",
+      "lastUpdated": "2025-07-28T00:53:47.630Z"
+    },
+    {
+      "title": "Meditação Evangelho do dia",
+      "time": "23:01",
+      "category": "Evangelho do dia",
+      "days": [
+        "qua",
+        "dom"
+      ],
+      "notifications": true,
+      "date": "2025-07-28",
+      "duration": 15,
+      "status": "agendado",
+      "createdAt": "2025-07-28T00:59:05.365Z",
+      "description": "Agendamento para Evangelho do dia às 23:01",
+      "id": "1753664345365gbrk7ndvz",
+      "userId": "user_1753663902298_j4cr1buq2",
+      "userName": "rodrigo silva goes",
+      "lastUpdated": "2025-07-28T00:59:05.367Z"
+    },
+    {
+      "title": "Meditação Imitação de Cristo",
+      "time": "19:25",
+      "category": "Imitação de Cristo",
+      "days": [
+        "seg"
+      ],
+      "notifications": true,
+      "date": "2025-07-28",
+      "duration": 15,
+      "status": "agendado",
+      "createdAt": "2025-07-28T22:19:00.386Z",
+      "description": "Agendamento para Imitação de Cristo às 19:25",
+      "id": "1753740979923b02ista0w",
+      "lastUpdated": "2025-07-28T22:19:00.387Z",
+      "userId": "user_1753739115816",
+      "userName": "rodrigo silva goes"
+    }
+  ],
+  "user_meditation_stats": {
+    "totalCompleted": 4,
+    "totalInProgress": 3,
+    "personalizedCompleted": 2,
+    "adminCompleted": 2,
+    "lastUpdated": "2025-07-28T22:14:02.725Z"
+  },
+  "current_user": null
+}

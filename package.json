@@ -1,0 +1,23 @@
+{
+  "name": "ora-et-medita",
+  "version": "1.0.0",
+  "description": "Aplicação de meditações católicas com integração ChatGPT",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 3171 -c-1",
+    "start": "npx http-server -p 3171 -c-1",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:clean": "bash ./dev-clean.sh"
+  },
+  "keywords": [
+    "meditation",
+    "catholic",
+    "chatgpt",
+    "lectio-divina"
+  ],
+  "author": "Rodrigo",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+} 

@@ -1,0 +1,100 @@
+# Cursor Rules para Ora et Medita
+# Configuração para deploy automático para GitHub
+
+## 🚀 Deploy Automático para GitHub
+
+### Repositório: https://github.com/rsg384/oraetmedita.git
+
+### Regras de Deploy:
+
+1. **Sempre fazer commit após mudanças significativas**
+2. **Usar mensagens de commit descritivas**
+3. **Verificar se todos os arquivos estão incluídos**
+4. **Testar funcionalidades antes do deploy**
+5. **Manter sincronização com Supabase**
+
+### Comandos de Deploy:
+
+```bash
+# Adicionar mudanças
+git add .
+
+# Fazer commit com mensagem descritiva
+git commit -m "📝 [Tipo] Descrição da mudança
+
+✨ Funcionalidades:
+- Lista das funcionalidades adicionadas/modificadas
+
+🛠️ Tecnologias:
+- Tecnologias utilizadas
+
+👨‍💻 Autor: Rodrigo Silva Goes"
+
+# Enviar para GitHub
+git push origin main
+```
+
+### Tipos de Commit:
+
+- `📝 [FEAT]` - Nova funcionalidade
+- `🔧 [FIX]` - Correção de bug
+- `📚 [DOCS]` - Documentação
+- `🎨 [STYLE]` - Melhorias de interface
+- `⚡ [PERF]` - Melhorias de performance
+- `🧪 [TEST]` - Testes
+- `🔧 [CONFIG]` - Configurações
+
+### Arquivos Importantes:
+
+- `index.html` - Página principal
+- `dashboard.html` - Dashboard
+- `minhas-meditacoes.html` - Meditações personalizadas
+- `meditacao.html` - Visualização de meditação
+- `supabase-config.js` - Configuração Supabase
+- `chatgpt-api.js` - Integração ChatGPT
+- `api-config.js` - Configuração de APIs
+
+### Verificações Antes do Deploy:
+
+1. ✅ Todas as funcionalidades funcionando
+2. ✅ Sincronização com Supabase funcionando
+3. ✅ Interface responsiva
+4. ✅ Sem erros no console
+5. ✅ Documentação atualizada
+
+### Configuração do Git:
+
+```bash
+git config --global user.name "Rodrigo Silva Goes"
+git config --global user.email "seu@email.com"
+```
+
+### Script de Deploy Rápido:
+
+```bash
+#!/bin/bash
+echo "🚀 Deploy automático para GitHub..."
+git add .
+git commit -m "📝 [AUTO] Deploy automático - $(date)"
+git push origin main
+echo "✅ Deploy concluído!"
+```
+
+### Monitoramento:
+
+- Verificar se o deploy foi bem-sucedido
+- Testar funcionalidades após deploy
+- Verificar logs do Supabase
+- Confirmar sincronização de dados
+
+### Backup:
+
+- Manter backup local dos dados
+- Verificar integridade dos dados
+- Documentar mudanças importantes
+
+---
+
+**Repositório**: https://github.com/rsg384/oraetmedita.git  
+**Autor**: Rodrigo Silva Goes (@rsg384)  
+**Projeto**: Ora et Medita - Sistema de Meditações Católicas 

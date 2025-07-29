@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug localStorage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+        .debug-section h3 {
+            color: #7ee787;
+        }
+        pre {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            background: #7ee787;
+            color: #1a1a1a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #6dd676;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug localStorage</h1>
+    
+    <div class="debug-section">
+        <h3>📊 Dados Atuais</h3>
+        <button onclick="checkData()">Verificar Dados</button>
+        <button onclick="clearData()">Limpar Dados</button>
+        <button onclick="createExampleData()">Criar Dados de Exemplo</button>
+        <div id="data-output"></div>
+    </div>
+
+    <script>
+        function checkData() {
+            const output = document.getElementById('data-output');
+            const data = {
+                categories: JSON.parse(localStorage.getItem('categories') || '[]'),
+                meditations: JSON.parse(localStorage.getItem('meditations') || '[]'),
+                personalized_meditations: JSON.parse(localStorage.getItem('personalized_meditations') || '[]'),
+                meditacao_atual: localStorage.getItem('meditacao-atual'),
+                current_meditations: localStorage.getItem('current_meditations'),
+                current_category: localStorage.getItem('current_category')
+            };
+            
+            output.innerHTML = `
+                <h4>📁 Categorias (${data.categories.length})</h4>
+                <pre>${JSON.stringify(data.categories, null, 2)}</pre>
+                
+                <h4>📖 Meditações Admin (${data.meditations.length})</h4>
+                <pre>${JSON.stringify(data.meditations, null, 2)}</pre>
+                
+                <h4>🎯 Meditações Personalizadas (${data.personalized_meditations.length})</h4>
+                <pre>${JSON.stringify(data.personalized_meditations, null, 2)}</pre>
+                
+                <h4>🔄 Meditação Atual</h4>
+                <pre>${data.meditacao_atual || 'null'}</pre>
+                
+                <h4>📋 Current Meditations</h4>
+                <pre>${data.current_meditations || 'null'}</pre>
+                
+                <h4>🏷️ Current Category</h4>
+                <pre>${data.current_category || 'null'}</pre>
+            `;
+        }
+
+        function clearData() {
+            localStorage.removeItem('categories');
+            localStorage.removeItem('meditations');
+            localStorage.removeItem('personalized_meditations');
+            localStorage.removeItem('meditacao-atual');
+            localStorage.removeItem('current_meditations');
+            localStorage.removeItem('current_category');
+            alert('Dados limpos!');
+            checkData();
+        }
+
+        function createExampleData() {
+            const exampleCategories = [
+                {
+                    id: 'cat_1',
+                    name: 'Princípios da Vida Sobrenatural',
+                    icon: '✨',
+                    description: 'Meditações sobre os fundamentos da vida espiritual'
+                },
+                {
+                    id: 'cat_2',
+                    name: 'Imitação de Cristo',
+                    icon: '✝️',
+                    description: 'Meditações baseadas na obra clássica de Tomás de Kempis'
+                },
+                {
+                    id: 'cat_3',
+                    name: 'Evangelho do Dia',
+                    icon: '📖',
+                    description: 'Meditações sobre passagens do Evangelho'
+                },
+                {
+                    id: 'cat_4',
+                    name: 'Salmos',
+                    icon: '🎵',
+                    description: 'Meditações sobre os Salmos da Bíblia Sagrada'
+                }
+            ];
+            
+            const exampleMeditations = [
+                {
+                    id: 'med_1',
+                    title: 'Salmo 1 - O Homem Bem-Aventurado',
+                    categoryId: 'cat_4',
+                    category: 'Salmos',
+                    duration: 15,
+                    status: 'pending',
+                    lectio: 'Bem-aventurado o homem que não anda segundo o conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda dos escarnecedores. Antes tem o seu prazer na lei do Senhor, e na sua lei medita de dia e de noite.',
+                    meditatio: 'Reflita sobre o que significa "andar", "deter-se" e "assentar-se" na companhia dos ímpios. Como você pode cultivar o prazer na lei do Senhor?',
+                    oratio: 'Senhor, ensina-me a amar tua lei e a meditar nela constantemente. Que eu possa ser como a árvore plantada junto às correntes das águas.',
+                    contemplatio: 'Contemple a imagem da árvore frutífera plantada junto às águas, símbolo da vida espiritual abundante.'
+                },
+                {
+                    id: 'med_2',
+                    title: 'A Vida Interior',
+                    categoryId: 'cat_1',
+                    category: 'Princípios da Vida Sobrenatural',
+                    duration: 15,
+                    status: 'pending',
+                    lectio: 'A vida interior é o fundamento de toda vida espiritual autêntica.',
+                    meditatio: 'Como você pode cultivar sua vida interior? Que práticas te ajudam a crescer espiritualmente?',
+                    oratio: 'Senhor, ajuda-me a desenvolver uma vida interior rica e profunda.',
+                    contemplatio: 'Permaneça em silêncio na presença de Deus.'
+                }
+            ];
+            
+            localStorage.setItem('categories', JSON.stringify(exampleCategories));
+            localStorage.setItem('meditations', JSON.stringify(exampleMeditations));
+            
+            alert('Dados de exemplo criados!');
+            checkData();
+        }
+
+        // Verificar dados ao carregar a página
+        checkData();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,224 @@
+/* CSS para cards de categorias no dashboard */
+
+.categories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 1rem;
+}
+
+.category-card {
+    background: var(--background-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 280px;
+    flex-shrink: 0;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-blue);
+}
+
+.category-card.more-button {
+    border: 2px dashed var(--accent-blue);
+    opacity: 0.8;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+}
+
+.category-card.more-button:hover {
+    opacity: 1;
+    border-color: var(--accent-blue);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+}
+
+.category-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.category-info {
+    width: 100%;
+}
+
+.category-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.category-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.category-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    min-width: 60px;
+    flex: 1;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #7ee787;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.category-progress {
+    margin-bottom: 12px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #2a2d3e;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7ee787, #4ade80);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.category-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #7ee787;
+    color: #101223;
+}
+
+.btn-primary:hover {
+    background: #4ade80;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #23243a;
+    color: #f5f6fa;
+    border: 1px solid #3a3b5a;
+}
+
+.btn-secondary:hover {
+    background: #3a3b5a;
+    border-color: #7ee787;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-secondary);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .categories-grid {
+        gap: 16px;
+        justify-content: center;
+    }
+    
+    .category-card {
+        width: 280px;
+        height: 180px;
+    }
+    
+    .category-stats {
+        gap: 8px;
+    }
+    
+    .stat-item {
+        min-width: 50px;
+    }
+    
+    .stat-number {
+        font-size: 1.2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.6rem;
+    }
+} 

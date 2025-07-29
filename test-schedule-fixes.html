@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Correções Agendamento</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            --background-dark: #0F0F23;
+            --background-card: #1A1A2E;
+            --background-light: #2A2A3E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --accent-green: #10B981;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --border-color: #374151;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .test-section {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: var(--background-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .test-buttons {
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .test-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        /* Cards de agendamento simplificados */
+        .schedule-list {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        .schedule-card {
+            width: 280px;
+            height: 120px;
+            background: var(--background-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .schedule-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .schedule-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .schedule-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .schedule-card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .schedule-action-btn {
+            width: 28px;
+            height: 28px;
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-action-btn:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .schedule-action-btn.delete:hover {
+            background: #ef4444;
+        }
+
+        .schedule-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .schedule-card-time {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .time-icon {
+            font-size: 0.875rem;
+        }
+
+        .time-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .schedule-card-days {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .day-badge {
+            background: var(--accent-blue);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-select, .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .weekdays {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .weekday-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            background: var(--background-light);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .weekday-btn.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .log {
+            background: var(--background-light);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Teste das Correções de Agendamento</h1>
+        
+        <div class="test-section">
+            <h2>1. Teste dos Cards Simplificados</h2>
+            <div class="test-buttons">
+                <button class="test-btn" onclick="createTestCards()">Criar Cards de Teste</button>
+                <button class="test-btn" onclick="clearCards()">Limpar Cards</button>
+            </div>
+            
+            <div class="schedule-list" id="testScheduleList">
+                <!-- Cards serão inseridos aqui -->
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Teste do Modal de Agendamento</h2>
+            <div class="test-buttons">
+                <button class="test-btn" onclick="openScheduleModal()">Abrir Modal</button>
+                <button class="test-btn" onclick="testCategories()">Testar Categorias</button>
+            </div>
+            
+            <div class="log" id="log">
+                <strong>Log de eventos:</strong><br>
+            </div>
+        </div>
+        
+        <!-- Modal de teste -->
+        <div class="modal" id="scheduleModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Agendar Meditação</h3>
+                    <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+                </div>
+                <form id="scheduleForm">
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <!-- Opções serão carregadas dinamicamente -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Dias da Semana</label>
+                        <div class="weekdays">
+                            <button type="button" class="weekday-btn" data-day="seg">S</button>
+                            <button type="button" class="weekday-btn" data-day="ter">T</button>
+                            <button type="button" class="weekday-btn" data-day="qua">Q</button>
+                            <button type="button" class="weekday-btn" data-day="qui">Q</button>
+                            <button type="button" class="weekday-btn" data-day="sex">S</button>
+                            <button type="button" class="weekday-btn" data-day="sab">S</button>
+                            <button type="button" class="weekday-btn" data-day="dom">D</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Horário</label>
+                        <input name="time" type="time" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Notificações</label>
+                        <input name="notifications" type="checkbox" checked>
+                        <label>Ativar lembretes</label>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Salvar Agenda</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+        
+        function createTestCards() {
+            const testSchedules = [
+                {
+                    id: '1',
+                    category: 'Oração',
+                    time: '08:00',
+                    days: ['seg', 'qua', 'sex']
+                },
+                {
+                    id: '2',
+                    category: 'Contemplação',
+                    time: '12:00',
+                    days: ['ter', 'qui', 'sab']
+                },
+                {
+                    id: '3',
+                    category: 'Lectio Divina',
+                    time: '18:00',
+                    days: ['dom']
+                }
+            ];
+            
+            const scheduleList = document.getElementById('testScheduleList');
+            
+            const scheduleHTML = testSchedules.map(schedule => {
+                const dayNames = {
+                    'seg': 'Seg',
+                    'ter': 'Ter',
+                    'qua': 'Qua',
+                    'qui': 'Qui',
+                    'sex': 'Sex',
+                    'sab': 'Sáb',
+                    'dom': 'Dom'
+                };
+                
+                return `
+                    <div class="schedule-card" data-schedule-id="${schedule.id}">
+                        <div class="schedule-card-header">
+                            <h3 class="schedule-card-title">${schedule.category}</h3>
+                            <div class="schedule-card-actions">
+                                <button class="schedule-action-btn" title="Editar">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
+                                <button class="schedule-action-btn delete" title="Excluir">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3,6 5,6 21,6"/>
+                                        <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-card-content">
+                            <div class="schedule-card-time">
+                                <span class="time-icon">🕐</span>
+                                <span class="time-text">${schedule.time}</span>
+                            </div>
+                            
+                            <div class="schedule-card-days">
+                                ${schedule.days.map(day => `
+                                    <span class="day-badge">${dayNames[day]}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            scheduleList.innerHTML = scheduleHTML;
+            log('✅ Cards de teste criados com sucesso');
+        }
+        
+        function clearCards() {
+            document.getElementById('testScheduleList').innerHTML = '';
+            log('✅ Cards limpos');
+        }
+        
+        function openScheduleModal() {
+            log('🎯 Abrindo modal de agendamento...');
+            const modal = document.getElementById('scheduleModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Carregar categorias
+            setTimeout(() => {
+                forceUpdateCategorySelect();
+            }, 100);
+        }
+        
+        function closeScheduleModal() {
+            log('🎯 Fechando modal...');
+            const modal = document.getElementById('scheduleModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('scheduleForm').reset();
+            document.querySelectorAll('.weekday-btn').forEach(btn => btn.classList.remove('active'));
+        }
+        
+        function forceUpdateCategorySelect() {
+            log('🔄 Atualizando categorias no modal...');
+            
+            const categorySelect = document.querySelector('select[name="category"]');
+            if (!categorySelect) {
+                log('❌ Select de categoria não encontrado');
+                return;
+            }
+            
+            // Criar categorias de teste
+            const categories = [
+                { id: 'oracao', name: 'Oração' },
+                { id: 'contemplacao', name: 'Contemplação' },
+                { id: 'lectio', name: 'Lectio Divina' }
+            ];
+            
+            // Limpar e recriar options
+            categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.name;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+            
+            log('✅ Categorias adicionadas ao select:', categories.map(c => c.name));
+        }
+        
+        function testCategories() {
+            log('🧪 Testando categorias...');
+            const categorySelect = document.querySelector('select[name="category"]');
+            if (categorySelect) {
+                log(`📋 Total de opções: ${categorySelect.options.length}`);
+                for (let i = 0; i < categorySelect.options.length; i++) {
+                    log(`- ${i}: ${categorySelect.options[i].text}`);
+                }
+            } else {
+                log('❌ Select de categoria não encontrado');
+            }
+        }
+        
+        // Event listeners
+        document.querySelectorAll('.weekday-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                log(`📅 Dia clicado: ${this.dataset.day} (ativo: ${this.classList.contains('active')})`);
+            });
+        });
+        
+        document.getElementById('scheduleForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            log('📝 Formulário submetido');
+            
+            const formData = new FormData(this);
+            const selectedDays = Array.from(document.querySelectorAll('.weekday-btn.active'))
+                .map(btn => btn.dataset.day);
+            
+            log('📊 Dados do formulário:');
+            log(`- Categoria: ${formData.get('category')}`);
+            log(`- Horário: ${formData.get('time')}`);
+            log(`- Notificações: ${formData.get('notifications')}`);
+            log(`- Dias: ${selectedDays.join(', ')}`);
+            
+            alert('Agendamento salvo com sucesso!');
+            closeScheduleModal();
+        });
+        
+        // Fechar modal ao clicar fora
+        document.getElementById('scheduleModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeScheduleModal();
+            }
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Página de teste carregada');
+            setTimeout(createTestCards, 500);
+        });
+    </script>
+</body>
+</html> 

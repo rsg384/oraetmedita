@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Todas as Funcionalidades</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste - Todas as Funcionalidades</h1>
+    
+    <div class="test-section">
+        <h2>📝 Teste de Meditações</h2>
+        <button class="test-button" onclick="testMeditations()">Verificar Meditações</button>
+        <button class="test-button" onclick="createTestMeditation()">Criar Meditação de Teste</button>
+        <button class="test-button" onclick="clearMeditations()">Limpar Meditações</button>
+        <div id="meditation-output" class="test-output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📅 Teste de Agendamentos</h2>
+        <button class="test-button" onclick="testSchedules()">Verificar Agendamentos</button>
+        <button class="test-button" onclick="createTestSchedule()">Criar Agendamento de Teste</button>
+        <button class="test-button" onclick="clearSchedules()">Limpar Agendamentos</button>
+        <div id="schedule-output" class="test-output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔄 Teste de Sincronização</h2>
+        <button class="test-button" onclick="testSynchronization()">Testar Sincronização</button>
+        <button class="test-button" onclick="refreshAllData()">Recarregar Tudo</button>
+        <div id="sync-output" class="test-output"></div>
+    </div>
+
+    <script src="session-manager.js"></script>
+    <script src="sync-schedules-user.js"></script>
+    <script src="fix-meditations-accumulation.js"></script>
+    
+    <script>
+        function logToElement(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            element.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            element.scrollTop = element.scrollHeight;
+        }
+        
+        function testMeditations() {
+            const output = document.getElementById('meditation-output');
+            output.textContent = '';
+            
+            logToElement('meditation-output', '=== TESTE DE MEDITAÇÕES ===');
+            
+            try {
+                const meditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                logToElement('meditation-output', `Total de meditações: ${meditations.length}`, 'success');
+                
+                if (meditations.length > 0) {
+                    meditations.forEach((meditation, index) => {
+                        logToElement('meditation-output', `${index + 1}. ${meditation.title}`);
+                        logToElement('meditation-output', `   ID: ${meditation.id}`);
+                        logToElement('meditation-output', `   userId: ${meditation.userId || 'N/A'}`);
+                        logToElement('meditation-output', `   topic: ${meditation.topic}`);
+                        logToElement('meditation-output', '');
+                    });
+                } else {
+                    logToElement('meditation-output', 'Nenhuma meditação encontrada', 'warning');
+                }
+                
+            } catch (error) {
+                logToElement('meditation-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function createTestMeditation() {
+            const output = document.getElementById('meditation-output');
+            output.textContent = '';
+            
+            logToElement('meditation-output', '=== CRIANDO MEDITAÇÃO DE TESTE ===');
+            
+            try {
+                const testMeditation = {
+                    id: Date.now() + Math.random().toString(36).substr(2, 9),
+                    title: 'Meditação de Teste',
+                    topic: 'Teste',
+                    content: 'Conteúdo de teste da meditação...',
+                    duration: '15 min',
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString(),
+                    source: 'chatgpt',
+                    type: 'simple',
+                    userId: JSON.parse(localStorage.getItem('userData') || '{}').id || 'anonymous',
+                    userName: JSON.parse(localStorage.getItem('userData') || '{}').name || 'Usuário'
+                };
+                
+                const existingMeditations = JSON.parse(localStorage.getItem('personalized_meditations') || '[]');
+                const updatedMeditations = [...existingMeditations, testMeditation];
+                localStorage.setItem('personalized_meditations', JSON.stringify(updatedMeditations));
+                
+                logToElement('meditation-output', 'Meditação de teste criada com sucesso!', 'success');
+                logToElement('meditation-output', `ID: ${testMeditation.id}`);
+                logToElement('meditation-output', `userId: ${testMeditation.userId}`);
+                
+            } catch (error) {
+                logToElement('meditation-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearMeditations() {
+            if (confirm('Tem certeza que deseja limpar todas as meditações?')) {
+                localStorage.removeItem('personalized_meditations');
+                logToElement('meditation-output', 'Todas as meditações foram removidas', 'success');
+            }
+        }
+        
+        function testSchedules() {
+            const output = document.getElementById('schedule-output');
+            output.textContent = '';
+            
+            logToElement('schedule-output', '=== TESTE DE AGENDAMENTOS ===');
+            
+            try {
+                const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                logToElement('schedule-output', `Total de agendamentos: ${allSchedules.length}`, 'success');
+                
+                if (allSchedules.length > 0) {
+                    allSchedules.forEach((schedule, index) => {
+                        logToElement('schedule-output', `${index + 1}. ${schedule.title}`);
+                        logToElement('schedule-output', `   ID: ${schedule.id}`);
+                        logToElement('schedule-output', `   userId: ${schedule.userId || 'N/A'}`);
+                        logToElement('schedule-output', `   category: ${schedule.category}`);
+                        logToElement('schedule-output', `   time: ${schedule.time}`);
+                        logToElement('schedule-output', '');
+                    });
+                } else {
+                    logToElement('schedule-output', 'Nenhum agendamento encontrado', 'warning');
+                }
+                
+            } catch (error) {
+                logToElement('schedule-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function createTestSchedule() {
+            const output = document.getElementById('schedule-output');
+            output.textContent = '';
+            
+            logToElement('schedule-output', '=== CRIANDO AGENDAMENTO DE TESTE ===');
+            
+            try {
+                const testSchedule = {
+                    title: 'Agendamento de Teste',
+                    category: 'Evangelho',
+                    time: '08:00',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true,
+                    createdAt: new Date().toISOString()
+                };
+                
+                if (window.saveScheduleWithUser) {
+                    const savedSchedule = window.saveScheduleWithUser(testSchedule);
+                    logToElement('schedule-output', 'Agendamento de teste criado com sucesso!', 'success');
+                    logToElement('schedule-output', `ID: ${savedSchedule.id}`);
+                    logToElement('schedule-output', `userId: ${savedSchedule.userId}`);
+                } else {
+                    logToElement('schedule-output', 'Função saveScheduleWithUser não disponível', 'error');
+                }
+                
+            } catch (error) {
+                logToElement('schedule-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearSchedules() {
+            if (confirm('Tem certeza que deseja limpar todos os agendamentos?')) {
+                localStorage.removeItem('user_schedules');
+                logToElement('schedule-output', 'Todos os agendamentos foram removidos', 'success');
+            }
+        }
+        
+        function testSynchronization() {
+            const output = document.getElementById('sync-output');
+            output.textContent = '';
+            
+            logToElement('sync-output', '=== TESTE DE SINCRONIZAÇÃO ===');
+            
+            try {
+                // Testar carregamento de meditações
+                if (window.checkAndFixMeditations) {
+                    window.checkAndFixMeditations();
+                    logToElement('sync-output', 'Verificação de meditações executada', 'success');
+                }
+                
+                // Testar carregamento de agendamentos
+                if (window.checkAndFixDashboardSchedules) {
+                    window.checkAndFixDashboardSchedules();
+                    logToElement('sync-output', 'Verificação de agendamentos executada', 'success');
+                }
+                
+                // Testar atualização de cards
+                if (window.forceUpdateMeditationCards) {
+                    window.forceUpdateMeditationCards();
+                    logToElement('sync-output', 'Atualização de cards executada', 'success');
+                }
+                
+            } catch (error) {
+                logToElement('sync-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function refreshAllData() {
+            const output = document.getElementById('sync-output');
+            output.textContent = '';
+            
+            logToElement('sync-output', '=== RECARREGANDO TODOS OS DADOS ===');
+            
+            try {
+                if (window.refreshAllData) {
+                    window.refreshAllData();
+                    logToElement('sync-output', 'Recarregamento executado', 'success');
+                } else {
+                    logToElement('sync-output', 'Função refreshAllData não disponível', 'error');
+                }
+            } catch (error) {
+                logToElement('sync-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        // Executar verificação inicial
+        window.addEventListener('load', () => {
+            logToElement('meditation-output', '🚀 Página carregada');
+            setTimeout(() => {
+                testMeditations();
+                testSchedules();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

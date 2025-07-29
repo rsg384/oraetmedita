@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Sessões</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .user-details h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .user-details p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        .greeting {
+            font-size: 18px;
+            margin: 0;
+        }
+        .content {
+            padding: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .session-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .debug-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">--</div>
+                <div class="user-details">
+                    <h2 id="userName">Carregando...</h2>
+                    <p id="userEmail">carregando@email.com</p>
+                </div>
+            </div>
+            <p class="greeting" id="heroGreeting">Carregando...</p>
+        </div>
+        
+        <div class="content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Dias Consecutivos</h3>
+                    <div class="stat-value" id="consecutiveDays">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Meditações Completadas</h3>
+                    <div class="stat-value" id="completedMeditations">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Tempo Total</h3>
+                    <div class="stat-value" id="totalTime">0h 0min</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Em Andamento</h3>
+                    <div class="stat-value" id="inProgressMeditations">0</div>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <a href="index.html" class="btn btn-primary">Voltar ao Início</a>
+                <a href="minhas-meditacoes.html" class="btn btn-secondary">Minhas Meditações</a>
+                <a href="categorias.html" class="btn btn-secondary">Categorias</a>
+                <a href="progresso.html" class="btn btn-secondary">Progresso</a>
+                <a href="agendamentos.html" class="btn btn-secondary">Agendamentos</a>
+                <button onclick="logout()" class="btn btn-danger">Logout</button>
+            </div>
+            
+            <div class="session-info" id="sessionInfo">
+                <strong>Informações da Sessão:</strong><br>
+                Carregando...
+            </div>
+            
+            <div class="debug-info" id="debugInfo">
+                <strong>Debug Info:</strong><br>
+                Carregando...
+            </div>
+        </div>
+    </div>
+
+    <script src="session-manager.js"></script>
+    <script>
+        // Função para atualizar informações do usuário
+        function updateUserProfile() {
+            try {
+                console.log('🔄 Atualizando perfil do usuário...');
+                
+                // Obter dados do usuário via SessionManager
+                const userData = window.sessionManager.getCurrentUser();
+                console.log('📊 Dados do usuário:', userData);
+                
+                if (!userData) {
+                    console.log('⚠️ Nenhum usuário logado');
+                    document.getElementById('userName').textContent = 'Nenhum usuário logado';
+                    document.getElementById('userEmail').textContent = 'Faça login para continuar';
+                    document.getElementById('heroGreeting').textContent = 'Bem-vindo!';
+                    document.getElementById('userAvatar').textContent = '?';
+                    return;
+                }
+                
+                // Atualizar informações básicas
+                document.getElementById('userName').textContent = userData.name || 'Usuário';
+                document.getElementById('userEmail').textContent = userData.email || 'email@exemplo.com';
+                
+                // Gerar iniciais para o avatar
+                const nameParts = (userData.name || '').trim().split(' ');
+                const firstName = nameParts[0] || '';
+                const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+                let initials = firstName.charAt(0).toUpperCase();
+                if (lastName) {
+                    initials += lastName.charAt(0).toUpperCase();
+                }
+                document.getElementById('userAvatar').textContent = initials || '?';
+                
+                // Atualizar saudação
+                const now = new Date();
+                const hour = now.getHours();
+                let greeting = '🌅 Bom dia';
+                if (hour >= 12 && hour < 18) {
+                    greeting = '☀️ Boa tarde';
+                } else if (hour >= 18) {
+                    greeting = '🌙 Boa noite';
+                }
+                document.getElementById('heroGreeting').textContent = `${greeting}, ${firstName}!`;
+                
+                // Atualizar estatísticas
+                if (userData.stats) {
+                    document.getElementById('consecutiveDays').textContent = userData.stats.consecutiveDays || 0;
+                    document.getElementById('completedMeditations').textContent = userData.stats.completedMeditations || 0;
+                    document.getElementById('totalTime').textContent = userData.stats.totalTime || '0h 0min';
+                    document.getElementById('inProgressMeditations').textContent = userData.stats.inProgressMeditations || 0;
+                }
+                
+                // Atualizar informações da sessão
+                updateSessionInfo(userData);
+                
+                console.log('✅ Perfil atualizado com sucesso');
+                
+            } catch (error) {
+                console.error('❌ Erro ao atualizar perfil:', error);
+            }
+        }
+        
+        // Função para atualizar informações da sessão
+        function updateSessionInfo(userData) {
+            const sessionInfo = document.getElementById('sessionInfo');
+            sessionInfo.innerHTML = `
+                <strong>Informações da Sessão:</strong><br>
+                <strong>Session ID:</strong> ${userData.sessionId || 'N/A'}<br>
+                <strong>User ID:</strong> ${userData.id || 'N/A'}<br>
+                <strong>Login Time:</strong> ${userData.loginTime ? new Date(userData.loginTime).toLocaleString('pt-BR') : 'N/A'}<br>
+                <strong>Last Activity:</strong> ${userData.lastActivity ? new Date(userData.lastActivity).toLocaleString('pt-BR') : 'N/A'}<br>
+                <strong>User Number:</strong> ${userData.userNumber || 'N/A'}
+            `;
+        }
+        
+        // Função para atualizar informações de debug
+        function updateDebugInfo() {
+            const debugInfo = document.getElementById('debugInfo');
+            const activeSessions = window.sessionManager.getActiveSessions();
+            
+            debugInfo.innerHTML = `
+                <strong>Debug Info:</strong><br>
+                <strong>Total de sessões ativas:</strong> ${activeSessions.length}<br>
+                <strong>Sessões:</strong><br>
+                ${activeSessions.map((session, index) => 
+                    `${index + 1}. ${session.userName} (${session.sessionId}) - ${new Date(session.loginTime).toLocaleString('pt-BR')}`
+                ).join('<br>')}
+            `;
+        }
+        
+        // Função para logout
+        function logout() {
+            console.log('🚪 Fazendo logout...');
+            window.sessionManager.logoutUser();
+            alert('Logout realizado com sucesso!');
+            window.location.href = 'index.html';
+        }
+        
+        // Função para atualizar atividade
+        function updateActivity() {
+            if (window.sessionManager.isLoggedIn()) {
+                window.sessionManager.updateActivity();
+                console.log('✅ Atividade atualizada');
+            }
+        }
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Dashboard carregando...');
+            
+            // Aguardar um pouco para o SessionManager inicializar
+            setTimeout(() => {
+                updateUserProfile();
+                updateDebugInfo();
+                
+                // Atualizar periodicamente
+                setInterval(() => {
+                    updateActivity();
+                    updateDebugInfo();
+                }, 30000); // A cada 30 segundos
+                
+                console.log('✅ Dashboard inicializado');
+            }, 500);
+        });
+        
+        // Listener para mudanças no localStorage
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'activeSessions') {
+                console.log('🔄 Mudança detectada nas sessões ativas');
+                setTimeout(() => {
+                    updateDebugInfo();
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html> 

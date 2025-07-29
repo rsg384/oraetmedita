@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Cards Harmoniosos - Categorias</title>
+    <style>
+        :root {
+            --background-primary: #0d1117;
+            --background-card: #161b22;
+            --background-light: #21262d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+            --accent-blue: #58a6ff;
+            --accent-green: #7ee787;
+            --accent-purple: #8b5cf6;
+            --accent-orange: #f59e0b;
+            --accent-pink: #ec4899;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+        }
+
+        .header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .test-section {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* CSS para cards de categorias harmoniosos */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .category-card {
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-blue);
+            background: var(--background-card);
+        }
+
+        .category-card.more-button {
+            border: 2px dashed var(--accent-blue);
+            opacity: 0.8;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+
+        .category-card.more-button:hover {
+            opacity: 1;
+            border-color: var(--accent-blue);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .category-info {
+            width: 100%;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .category-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .category-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .category-progress {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--background-card);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #4a9eff;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background-card);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .category-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+            
+            .stat-number {
+                font-size: 1.1rem;
+            }
+            
+            .stat-label {
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Cards Harmoniosos - Categorias</h1>
+            <p>Teste das melhorias visuais nos cards de categorias</p>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">📊 Categorias de Meditação - Dashboard</h2>
+            <p>Cards aprimorados com números menores e organização harmônica</p>
+            
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Cards serão inseridos via JavaScript -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="section-title">🔧 Controles de Teste</h2>
+            <div class="controls">
+                <button class="btn" onclick="loadTestCategories()">Carregar Categorias</button>
+                <button class="btn btn-secondary" onclick="toggleAnimation()">Alternar Animação</button>
+                <button class="btn btn-secondary" onclick="testResponsive()">Testar Responsivo</button>
+                <button class="btn btn-secondary" onclick="checkHarmony()">Verificar Harmonia</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados de teste para categorias
+        const testCategories = [
+            {
+                id: 'cat_1',
+                name: 'Salmos',
+                description: 'Meditações baseadas nos Salmos da Bíblia',
+                color: '#7ee787',
+                completed: 2,
+                total: 5,
+                progress: 40
+            },
+            {
+                id: 'cat_2',
+                name: 'Evangelho',
+                description: 'Meditações dos Evangelhos de Jesus Cristo',
+                color: '#58a6ff',
+                completed: 1,
+                total: 3,
+                progress: 33
+            },
+            {
+                id: 'cat_3',
+                name: 'Imitação de Cristo',
+                description: 'Meditações baseadas na obra de Tomás de Kempis',
+                color: '#8b5cf6',
+                completed: 0,
+                total: 2,
+                progress: 0
+            },
+            {
+                id: 'cat_4',
+                name: 'Jaculatórias',
+                description: 'Orações curtas e fervorosas',
+                color: '#f59e0b',
+                completed: 3,
+                total: 4,
+                progress: 75
+            },
+            {
+                id: 'cat_5',
+                name: 'Princípios Espirituais',
+                description: 'Fundamentos da vida espiritual cristã',
+                color: '#ec4899',
+                completed: 1,
+                total: 6,
+                progress: 17
+            }
+        ];
+
+        function createCategoryCard(category) {
+            const card = document.createElement('div');
+            card.className = 'category-card';
+            card.setAttribute('data-category', category.id);
+            
+            card.innerHTML = `
+                <div class="category-header">
+                    <div class="category-info">
+                        <h4 class="category-title">${category.name}</h4>
+                        <p class="category-description">${category.description}</p>
+                    </div>
+                </div>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">${category.completed}</span>
+                        <span class="stat-label">Completadas</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${category.total}</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${category.progress}%</span>
+                        <span class="stat-label">Progresso</span>
+                    </div>
+                </div>
+                <div class="category-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${category.progress}%; background: ${category.color};"></div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function loadTestCategories() {
+            console.log('🔄 Carregando categorias de teste...');
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = '';
+            
+            // Adicionar cards principais (limitado a 3)
+            const limitedCategories = testCategories.slice(0, 3);
+            limitedCategories.forEach(category => {
+                grid.appendChild(createCategoryCard(category));
+            });
+            
+            // Adicionar card "Ver mais" se há mais de 3 categorias
+            if (testCategories.length > 3) {
+                const remainingCount = testCategories.length - 3;
+                const moreCard = document.createElement('div');
+                moreCard.className = 'category-card more-button';
+                moreCard.onclick = function() {
+                    alert(`Ver mais ${remainingCount} categorias`);
+                };
+                
+                moreCard.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-info">
+                            <h4 class="category-title">Ver mais categorias</h4>
+                            <p class="category-description">Clique para ver todas as categorias disponíveis</p>
+                        </div>
+                    </div>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">+${remainingCount}</span>
+                            <span class="stat-label">Categorias</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">→</span>
+                            <span class="stat-label">Ver</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">📚</span>
+                            <span class="stat-label">Todas</span>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(moreCard);
+            }
+            
+            console.log('✅ Categorias carregadas:', limitedCategories.length + (testCategories.length > 3 ? 1 : 0));
+        }
+
+        function toggleAnimation() {
+            const progressFills = document.querySelectorAll('.progress-fill');
+            progressFills.forEach(fill => {
+                if (fill.style.animation === 'none') {
+                    fill.style.animation = 'shimmer 2s infinite';
+                } else {
+                    fill.style.animation = 'none';
+                }
+            });
+            console.log('🎬 Animação alternada');
+        }
+
+        function testResponsive() {
+            const grid = document.querySelector('.categories-grid');
+            const currentColumns = getComputedStyle(grid).gridTemplateColumns;
+            console.log('📱 Colunas atuais:', currentColumns);
+            alert(`Teste responsivo: ${currentColumns} colunas ativas`);
+        }
+
+        function checkHarmony() {
+            const cards = document.querySelectorAll('.category-card');
+            const stats = document.querySelectorAll('.stat-number');
+            const labels = document.querySelectorAll('.stat-label');
+            
+            console.log('🎨 Verificando harmonia visual...');
+            console.log('📊 Cards encontrados:', cards.length);
+            console.log('🔢 Números encontrados:', stats.length);
+            console.log('🏷️ Labels encontrados:', labels.length);
+            
+            // Verificar tamanhos dos números
+            const numberSizes = Array.from(stats).map(num => 
+                getComputedStyle(num).fontSize
+            );
+            console.log('📏 Tamanhos dos números:', numberSizes);
+            
+            alert(`Harmonia verificada!\nCards: ${cards.length}\nNúmeros: ${stats.length}\nTamanho médio: ${numberSizes[0]}`);
+        }
+
+        // Carregar categorias automaticamente
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de teste de harmonia carregada');
+            setTimeout(loadTestCategories, 500);
+        });
+    </script>
+</body>
+</html> 

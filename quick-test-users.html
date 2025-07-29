@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Rápido - Tabela Users</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #8b5cf6;
+            margin-bottom: 2rem;
+        }
+
+        .test-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+            width: 100%;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .result.success {
+            background: rgba(126, 231, 135, 0.1);
+            border: 1px solid rgba(126, 231, 135, 0.3);
+            color: #7ee787;
+        }
+
+        .result.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 1rem 0;
+        }
+
+        .status.success {
+            background: rgba(126, 231, 135, 0.2);
+            color: #7ee787;
+        }
+
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .instructions {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .instructions h3 {
+            color: #3b82f6;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste Rápido - Tabela Users</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instruções:</h3>
+            <p>1. Execute o SQL <code>reset-users-table.sql</code> no Supabase</p>
+            <p>2. Clique em "Testar Tabela Users" abaixo</p>
+            <p>3. Se funcionar, a tabela foi recriada corretamente</p>
+        </div>
+
+        <button class="test-btn" onclick="testUsersTable()">
+            🧪 Testar Tabela Users
+        </button>
+
+        <div id="status" style="display: none;"></div>
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        async function testUsersTable() {
+            const statusDiv = document.getElementById('status');
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status';
+                statusDiv.textContent = '🔄 Testando...';
+                
+                // Testar GET users
+                const users = await window.supabaseManager.request('users?select=*');
+                
+                if (users && users.length > 0) {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = `✅ Sucesso! ${users.length} usuário(s) encontrado(s)`;
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = JSON.stringify(users, null, 2);
+                    resultDiv.style.display = 'block';
+                    
+                    console.log('✅ Tabela users funcionando:', users);
+                } else {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ Tabela users criada (sem dados)';
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = 'Tabela users existe mas está vazia. Execute o SQL de reset novamente.';
+                    resultDiv.style.display = 'block';
+                }
+                
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ Erro na tabela users';
+                
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `Erro: ${error.message}\n\nExecute o SQL reset-users-table.sql no Supabase primeiro.`;
+                resultDiv.style.display = 'block';
+                
+                console.error('❌ Erro na tabela users:', error);
+            }
+        }
+
+        // Testar automaticamente quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de teste carregada');
+            console.log('📦 Supabase Manager disponível:', !!window.supabaseManager);
+        });
+    </script>
+</body>
+</html> 

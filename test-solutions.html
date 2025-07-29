@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste das Soluções - Ora et Medita</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a2e; color: white; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .test-section { background: #2a2a3e; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        button { padding: 12px 24px; margin: 10px; background: #8B5CF6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #7C3AED; }
+        .success { background: #10B981; }
+        .warning { background: #F59E0B; }
+        .error { background: #EF4444; }
+        .log { background: #0F0F23; padding: 15px; margin: 10px 0; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
+        input { padding: 12px; width: 100%; margin: 10px 0; border-radius: 4px; border: 1px solid #374151; background: #1A1A2E; color: white; font-size: 16px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; font-weight: bold; }
+        .status.success { background: #10B981; color: white; }
+        .status.error { background: #EF4444; color: white; }
+        .status.warning { background: #F59E0B; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste das Soluções Implementadas</h1>
+        
+        <div class="test-section">
+            <h2>1. Teste de Geração e Redirecionamento Inteligente</h2>
+            <p>Este teste verifica se as meditações são geradas e salvas antes do redirecionamento.</p>
+            
+            <input type="text" id="test-topic" placeholder="Digite um tema (ex: Amor de Deus, Fé, Humildade)" value="Amor de Deus">
+            
+            <button onclick="testIntelligentRedirect()" class="success">🚀 Testar Geração + Redirecionamento</button>
+            <button onclick="clearTestData()" class="warning">🧹 Limpar Dados de Teste</button>
+            
+            <div id="test-status"></div>
+            <div id="test-log" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>2. Verificar Dados Salvos</h2>
+            <p>Verifica se os dados estão sendo salvos corretamente no localStorage.</p>
+            
+            <button onclick="checkSavedData()">📊 Verificar Dados Salvos</button>
+            <button onclick="showDataStructure()">🔍 Mostrar Estrutura dos Dados</button>
+            
+            <div id="data-status"></div>
+            <div id="data-log" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>3. Simular Fluxo Completo</h2>
+            <p>Simula o fluxo completo: geração → salvamento → verificação → redirecionamento.</p>
+            
+            <button onclick="simulateCompleteFlow()" class="success">🎭 Simular Fluxo Completo</button>
+            <button onclick="testWithTimeout()" class="warning">⏰ Testar com Timeout</button>
+            
+            <div id="flow-status"></div>
+            <div id="flow-log" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>4. Navegar para Minhas Meditações</h2>
+            <p>Navega diretamente para a página de meditações para verificar se os dados aparecem.</p>
+            
+            <button onclick="goToMeditations()" class="success">📱 Ir para Minhas Meditações</button>
+            <button onclick="goToMainPage()" class="warning">🏠 Ir para Página Principal</button>
+        </div>
+    </div>
+
+    <script src="api-config.js"></script>
+    <script src="chatgpt-api.js"></script>
+    <script>
+        function log(elementId, message, type = 'info') {
+            const logElement = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : type === 'warning' ? '#F59E0B' : '#3B82F6';
+            logElement.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function showStatus(elementId, message, type = 'info') {
+            const statusElement = document.getElementById(elementId);
+            statusElement.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // 1. Teste de Geração e Redirecionamento Inteligente
+        async function testIntelligentRedirect() {
+            const topic = document.getElementById('test-topic').value || 'Amor de Deus';
+            const logId = 'test-log';
+            
+            showStatus('test-status', '🚀 Iniciando teste de geração e redirecionamento...', 'warning');
+            log(logId, `🎯 Testando com tema: "${topic}"`, 'info');
+            
+            try {
+                // Limpar dados anteriores
+                localStorage.removeItem('personalized_meditations');
+                log(logId, '🧹 Dados anteriores removidos', 'info');
+                
+                // Gerar meditações
+                log(logId, '🤖 Chamando API do ChatGPT...', 'info');
+                const startTime = Date.now();
+                const result = await chatGPTAPI.generateMeditations(topic);
+                const endTime = Date.now();
+                
+                log(logId, `✅ Geração concluída em ${endTime - startTime}ms`, 'success');
+                log(logId, `📊 ${result.meditations.length} meditações geradas`, 'success');
+                
+                // Salvar no localStorage
+                log(logId, '💾 Salvando no localStorage...', 'info');
+                localStorage.setItem('personalized_meditations', JSON.stringify(result));
+                
+                // Verificar salvamento
+                const savedData = localStorage.getItem('personalized_meditations');
+                if (savedData) {
+                    const parsed = JSON.parse(savedData);
+                    log(logId, `✅ Dados salvos: ${parsed.meditations.length} meditações`, 'success');
+                    showStatus('test-status', '✅ Teste concluído com sucesso! Dados salvos e prontos para redirecionamento.', 'success');
+                } else {
+                    throw new Error('Falha ao salvar dados');
+                }
+                
+            } catch (error) {
+                log(logId, `❌ Erro no teste: ${error.message}`, 'error');
+                showStatus('test-status', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        function clearTestData() {
+            localStorage.removeItem('personalized_meditations');
+            localStorage.removeItem('current_topic');
+            localStorage.removeItem('generation_date');
+            showStatus('test-status', '🧹 Dados de teste removidos', 'warning');
+            log('test-log', '🧹 Dados de teste removidos', 'warning');
+        }
+
+        // 2. Verificar Dados Salvos
+        function checkSavedData() {
+            const logId = 'data-log';
+            log(logId, '📊 Verificando dados salvos...', 'info');
+            
+            const keys = ['personalized_meditations', 'current_topic', 'generation_date'];
+            let hasData = false;
+            
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                if (value) {
+                    log(logId, `✅ ${key}: encontrado`, 'success');
+                    hasData = true;
+                } else {
+                    log(logId, `⚠️ ${key}: não encontrado`, 'warning');
+                }
+            });
+            
+            if (hasData) {
+                showStatus('data-status', '✅ Dados encontrados no localStorage', 'success');
+            } else {
+                showStatus('data-status', '⚠️ Nenhum dado encontrado', 'warning');
+            }
+        }
+
+        function showDataStructure() {
+            const logId = 'data-log';
+            const data = localStorage.getItem('personalized_meditations');
+            
+            if (!data) {
+                log(logId, '❌ Nenhum dado encontrado', 'error');
+                return;
+            }
+            
+            try {
+                const parsed = JSON.parse(data);
+                log(logId, '📋 Estrutura dos dados:', 'info');
+                log(logId, `   Categoria: ${parsed.category}`, 'info');
+                log(logId, `   Total: ${parsed.total} meditações`, 'info');
+                log(logId, `   Criado em: ${parsed.createdAt}`, 'info');
+                
+                parsed.meditations.forEach((med, index) => {
+                    log(logId, `   ${index + 1}. ${med.title}`, 'info');
+                });
+                
+            } catch (error) {
+                log(logId, `❌ Erro ao analisar dados: ${error.message}`, 'error');
+            }
+        }
+
+        // 3. Simular Fluxo Completo
+        async function simulateCompleteFlow() {
+            const logId = 'flow-log';
+            const topic = document.getElementById('test-topic').value || 'Amor de Deus';
+            
+            showStatus('flow-status', '🎭 Simulando fluxo completo...', 'warning');
+            log(logId, '🎭 Iniciando simulação do fluxo completo', 'info');
+            
+            try {
+                // Etapa 1: Geração
+                log(logId, '1️⃣ Gerando meditações...', 'info');
+                const result = await chatGPTAPI.generateMeditations(topic);
+                log(logId, `✅ ${result.meditations.length} meditações geradas`, 'success');
+                
+                // Etapa 2: Salvamento
+                log(logId, '2️⃣ Salvando no localStorage...', 'info');
+                localStorage.setItem('personalized_meditations', JSON.stringify(result));
+                log(logId, '✅ Dados salvos', 'success');
+                
+                // Etapa 3: Verificação
+                log(logId, '3️⃣ Verificando salvamento...', 'info');
+                const savedData = localStorage.getItem('personalized_meditations');
+                if (savedData) {
+                    const parsed = JSON.parse(savedData);
+                    log(logId, `✅ Verificação OK: ${parsed.meditations.length} meditações`, 'success');
+                } else {
+                    throw new Error('Falha na verificação');
+                }
+                
+                // Etapa 4: Preparar redirecionamento
+                log(logId, '4️⃣ Preparando redirecionamento...', 'info');
+                showStatus('flow-status', '✅ Fluxo simulado com sucesso! Pronto para redirecionamento.', 'success');
+                
+                // Aguardar 2 segundos antes de redirecionar
+                setTimeout(() => {
+                    log(logId, '🚀 Redirecionando para minhas-meditacoes.html...', 'info');
+                    window.location.href = 'minhas-meditacoes.html';
+                }, 2000);
+                
+            } catch (error) {
+                log(logId, `❌ Erro na simulação: ${error.message}`, 'error');
+                showStatus('flow-status', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        function testWithTimeout() {
+            const logId = 'flow-log';
+            log(logId, '⏰ Testando timeout de segurança...', 'info');
+            
+            // Simular dados de teste
+            const testData = {
+                category: 'Teste Timeout',
+                total: 1,
+                meditations: [{
+                    id: 1,
+                    title: 'Meditação de Teste',
+                    duration: '20 min',
+                    status: 'completed',
+                    reading: 'Leitura de teste',
+                    meditation: 'Meditação de teste',
+                    prayer: 'Oração de teste',
+                    contemplation: 'Contemplação de teste',
+                    references: 'Referências de teste',
+                    createdAt: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString()
+                }],
+                createdAt: new Date().toISOString(),
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('personalized_meditations', JSON.stringify(testData));
+            log(logId, '💾 Dados de teste salvos', 'success');
+            
+            // Simular timeout de 5 segundos
+            setTimeout(() => {
+                log(logId, '⏰ Timeout atingido - redirecionando...', 'warning');
+                window.location.href = 'minhas-meditacoes.html';
+            }, 5000);
+        }
+
+        // 4. Navegação
+        function goToMeditations() {
+            window.location.href = 'minhas-meditacoes.html';
+        }
+
+        function goToMainPage() {
+            window.location.href = 'index.html';
+        }
+
+        // Auto-inicialização
+        window.addEventListener('load', () => {
+            log('test-log', '🚀 Página de teste carregada', 'success');
+            checkSavedData();
+        });
+    </script>
+</body>
+</html> 

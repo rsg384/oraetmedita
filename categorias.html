@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorias - Ora et Medita</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #101223;
+      color: #f5f6fa;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #2a2d3e;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f5f6fa;
+    }
+
+    .back-btn {
+      background: #23243a;
+      color: #f5f6fa;
+      border: 1px solid #3a3b5a;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #3a3b5a;
+      border-color: #7ee787;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .category-card {
+      background: #181a2a;
+      border: 1px solid #2a2d3e;
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .category-card:hover {
+      border-color: #7ee787;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(126, 231, 135, 0.1);
+    }
+
+    .category-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .category-info h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f5f6fa;
+    }
+
+    .category-info p {
+      color: #a3a8c9;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .category-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .stat-number {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #7ee787;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: #a3a8c9;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #2a2d3e;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7ee787, #4ade80);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .category-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #7ee787;
+      color: #101223;
+    }
+
+    .btn-primary:hover {
+      background: #4ade80;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #23243a;
+      color: #f5f6fa;
+      border: 1px solid #3a3b5a;
+    }
+
+    .btn-secondary:hover {
+      background: #3a3b5a;
+      border-color: #7ee787;
+    }
+
+
+
+
+
+    @media (max-width: 768px) {
+        .categories-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .category-stats {
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .category-actions {
+            justify-content: center;
+        }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Categorias de Meditação</h1>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <a href="dashboard.html" class="back-btn">← Voltar ao Dashboard</a>
+      </div>
+    </div>
+
+    <div class="categories-grid" id="categories-grid">
+      <!-- Categorias serão carregadas dinamicamente -->
+    </div>
+
+
+
+  </div>
+
+  <script>
+    // ========== DADOS CENTRALIZADOS DAS CATEGORIAS ==========
+    // Fonte única de verdade para todas as seções - SINCRONIZADO COM DASHBOARD
+    function getCategoriesData() {
+        try {
+            // 1. Buscar categorias admin do localStorage
+            const adminCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+            const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+            
+            if (adminCategories.length > 0) {
+                console.log('📊 Usando categorias do painel admin:', adminCategories.length);
+                
+                // Processar categorias admin e calcular estatísticas REAIS
+                return adminCategories.map(category => {
+                    // Buscar meditações desta categoria
+                    const categoryMeditations = adminMeditations.filter(med => 
+                        med.categoryId === category.id
+                    );
+                    
+                    // Calcular estatísticas REAIS (igual ao dashboard)
+                    const total = categoryMeditations.length;
+                    const completed = categoryMeditations.filter(m => m.status === 'completed').length;
+                    const inProgress = categoryMeditations.filter(m => 
+                        m.status === 'pending' || m.status === 'in_progress'
+                    ).length;
+                    const locked = categoryMeditations.filter(m => m.status === 'locked').length;
+                    
+                    return {
+                        id: category.id,
+                        name: category.name,
+                        description: category.description || 'Meditações espirituais para crescimento na fé',
+                        icon: category.icon || '📖',
+                        color: category.color || '#7ee787',
+                        total: total,
+                        completed: completed,
+                        inProgress: inProgress,
+                        locked: locked,
+                        status: 'active'
+                    };
+                });
+            }
+            
+            // 2. Fallback: usar dados padrão se não houver dados admin
+            console.log('⚠️ NENHUMA CATEGORIA ADMIN - Usando categorias padrão (fallback)');
+            return [
+                {
+                    id: 'principios',
+                    name: 'Princípios da Vida Sobrenatural',
+                    description: 'Fundamentos da espiritualidade cristã e vida interior',
+                    icon: '✨',
+                    color: '#8B5CF6',
+                    total: 24,
+                    completed: 19,
+                    inProgress: 3,
+                    locked: 2,
+                    status: 'active'
+                },
+                {
+                    id: 'imitacao',
+                    name: 'Imitação de Cristo',
+                    description: 'Reflexões baseadas na obra clássica de Tomás de Kempis',
+                    icon: '✝️',
+                    color: '#3B82F6',
+                    total: 20,
+                    completed: 8,
+                    inProgress: 2,
+                    locked: 10,
+                    status: 'active'
+                },
+                {
+                    id: 'evangelho',
+                    name: 'Evangelho do Dia',
+                    description: 'Meditações baseadas no Evangelho cotidiano',
+                    icon: '📖',
+                    color: '#10B981',
+                    total: 30,
+                    completed: 30,
+                    inProgress: 0,
+                    locked: 0,
+                    status: 'active'
+                },
+                {
+                    id: 'jaculatorias',
+                    name: 'Jaculatórias',
+                    description: 'Orações breves e fervorosas para momentos do dia',
+                    icon: '🙏',
+                    color: '#F59E0B',
+                    total: 15,
+                    completed: 5,
+                    inProgress: 1,
+                    locked: 9,
+                    status: 'active'
+                }
+            ];
+        } catch (error) {
+            console.error('❌ Erro ao carregar categorias:', error);
+            return [];
+        }
+    }
+
+
+
+    // Renderizar categorias
+    function renderCategories() {
+      console.log('🔄 renderCategories() chamada...');
+      const grid = document.getElementById('categories-grid');
+      if (!grid) {
+        console.error('❌ Elemento categories-grid não encontrado!');
+        return;
+      }
+      
+      grid.innerHTML = '';
+
+      const realCategories = getCategoriesData();
+      console.log('📊 Categorias obtidas:', realCategories.length, 'categorias');
+      console.log('📋 Categorias:', realCategories.map(c => c.name));
+
+      realCategories.forEach(category => {
+        const progress = (category.completed / category.total) * 100;
+        
+        const card = document.createElement('div');
+        card.className = 'category-card';
+        card.onclick = () => openCategory(category.id);
+        
+        card.innerHTML = `
+          <div class="category-header">
+            <div class="category-info">
+              <h3>${category.name}</h3>
+              <p>${category.description}</p>
+            </div>
+          </div>
+          
+          <div class="category-stats">
+            <div class="stat-item">
+              <div class="stat-number">${category.total}</div>
+              <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">${category.completed}</div>
+              <div class="stat-label">Concluídas</div>
+            </div>
+          </div>
+          
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${progress}%"></div>
+          </div>
+          
+          <div class="category-actions">
+            <a href="#" class="btn btn-primary" onclick="event.stopPropagation(); openCategory('${category.id}')">
+              Ver Meditações
+            </a>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+      
+      console.log('✅ CATEGORIAS RENDERIZADAS DINAMICAMENTE:', realCategories.length);
+      console.log('📋 HTML gerado:', grid.innerHTML.substring(0, 200) + '...');
+      
+      // Verificar se os cards foram criados
+      const cards = grid.querySelectorAll('.category-card');
+      console.log('🎯 Cards criados:', cards.length);
+      cards.forEach((card, index) => {
+        const title = card.querySelector('h3')?.textContent?.trim();
+        console.log(`  ${index + 1}. "${title}"`);
+      });
+    }
+
+    // Abrir página da categoria
+    function openCategory(categoryId) {
+      console.log('🔍 Abrindo página para categoria:', categoryId);
+      
+      // Salvar categoria selecionada no localStorage
+      localStorage.setItem('selected-category', categoryId);
+      
+      // Redirecionar para nova página de meditações da categoria
+      window.location.href = 'meditacoes-categoria.html?category=' + categoryId;
+    }
+
+
+
+    // Função para atualizar estatísticas em tempo real
+    function updateCategoryStats() {
+        console.log('🔄 Atualizando estatísticas das categorias...');
+        renderCategories();
+    }
+
+    // Detectar mudanças no localStorage para atualizar automaticamente
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'meditations' || e.key === 'categories' || e.key === 'user_meditation_stats') {
+            console.log('🔄 Mudança detectada no localStorage:', e.key);
+            updateCategoryStats();
+        }
+    });
+
+
+
+    // Função para testar dados admin
+    function testAdminData() {
+      console.log('🧪 TESTANDO DADOS ADMIN...');
+      const adminCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+      const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+      console.log('📊 Categorias admin:', adminCategories.length);
+      console.log('📊 Meditações admin:', adminMeditations.length);
+      console.log('📋 Categorias:', adminCategories);
+      console.log('📋 Meditações:', adminMeditations);
+    }
+
+            // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+          console.log('🚀 Página de categorias carregada');
+          renderCategories();
+          
+          // Atualizar a cada 5 segundos para sincronizar com dashboard
+          setInterval(updateCategoryStats, 5000);
+          
+
+        });
+  </script>
+</body>
+</html> 

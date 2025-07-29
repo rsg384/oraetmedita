@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Redirecionamento</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { margin: 10px; padding: 10px 20px; cursor: pointer; }
+        .log { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Debug Redirecionamento</h1>
+    
+    <div class="log" id="log"></div>
+    
+    <button onclick="testMethod1()">Método 1: window.location.href</button>
+    <button onclick="testMethod2()">Método 2: window.location.replace</button>
+    <button onclick="testMethod3()">Método 3: window.location.assign</button>
+    <button onclick="testMethod4()">Método 4: window.open</button>
+    <button onclick="testFetch()">Testar Fetch</button>
+    
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            console.log(message);
+        }
+        
+        function testMethod1() {
+            log('🧪 Testando Método 1: window.location.href');
+            log('📍 URL atual: ' + window.location.href);
+            log('🔗 URL destino: ' + window.location.origin + '/minhas-meditacoes.html');
+            
+            setTimeout(() => {
+                log('🚀 Executando redirecionamento...');
+                window.location.href = 'minhas-meditacoes.html';
+            }, 1000);
+        }
+        
+        function testMethod2() {
+            log('🧪 Testando Método 2: window.location.replace');
+            setTimeout(() => {
+                log('🚀 Executando replace...');
+                window.location.replace('minhas-meditacoes.html');
+            }, 1000);
+        }
+        
+        function testMethod3() {
+            log('🧪 Testando Método 3: window.location.assign');
+            setTimeout(() => {
+                log('🚀 Executando assign...');
+                window.location.assign('minhas-meditacoes.html');
+            }, 1000);
+        }
+        
+        function testMethod4() {
+            log('🧪 Testando Método 4: window.open');
+            setTimeout(() => {
+                log('🚀 Executando open...');
+                window.open('minhas-meditacoes.html', '_self');
+            }, 1000);
+        }
+        
+        function testFetch() {
+            log('🧪 Testando Fetch da página...');
+            
+            fetch('minhas-meditacoes.html')
+                .then(response => {
+                    log('✅ Fetch bem-sucedido: ' + response.status + ' ' + response.statusText);
+                    log('📄 Content-Type: ' + response.headers.get('content-type'));
+                    return response.text();
+                })
+                .then(text => {
+                    log('📏 Tamanho da resposta: ' + text.length + ' caracteres');
+                    log('📄 Primeiros 100 chars: ' + text.substring(0, 100));
+                })
+                .catch(error => {
+                    log('❌ Erro no fetch: ' + error.message);
+                });
+        }
+        
+        // Log inicial
+        log('🚀 Página de debug carregada');
+        log('📍 URL atual: ' + window.location.href);
+        log('🔗 URL base: ' + window.location.origin);
+    </script>
+</body>
+</html> 

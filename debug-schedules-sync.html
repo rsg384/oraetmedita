@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Sincronização de Agendamentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .debug-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .debug-button:hover {
+            background: #0056b3;
+        }
+        .debug-output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: #dc3545;
+        }
+        .success {
+            color: #28a745;
+        }
+        .warning {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug - Sincronização de Agendamentos</h1>
+    
+    <div class="debug-section">
+        <h2>📊 Status Atual</h2>
+        <button class="debug-button" onclick="checkCurrentStatus()">Verificar Status</button>
+        <div id="status-output" class="debug-output"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>➕ Teste de Criação</h2>
+        <button class="debug-button" onclick="createTestSchedule()">Criar Agendamento de Teste</button>
+        <div id="create-output" class="debug-output"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>🔄 Teste de Sincronização</h2>
+        <button class="debug-button" onclick="testSynchronization()">Testar Sincronização</button>
+        <div id="sync-output" class="debug-output"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>🧹 Limpeza</h2>
+        <button class="debug-button" onclick="clearTestData()">Limpar Dados de Teste</button>
+        <div id="clear-output" class="debug-output"></div>
+    </div>
+
+    <script src="session-manager.js"></script>
+    <script src="sync-schedules-user.js"></script>
+    
+    <script>
+        function logToElement(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            element.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+        }
+        
+        function checkCurrentStatus() {
+            const output = document.getElementById('status-output');
+            output.textContent = '';
+            
+            logToElement('status-output', '=== VERIFICAÇÃO DE STATUS ===');
+            
+            // Verificar SessionManager
+            if (window.sessionManager) {
+                const user = window.sessionManager.getCurrentUser();
+                logToElement('status-output', `SessionManager: ${user ? 'Disponível' : 'Não disponível'}`);
+                if (user) {
+                    logToElement('status-output', `Usuário: ${user.name} (${user.id})`, 'success');
+                }
+            } else {
+                logToElement('status-output', 'SessionManager: Não encontrado', 'error');
+            }
+            
+            // Verificar localStorage
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                const user = JSON.parse(userData);
+                logToElement('status-output', `localStorage userData: ${user.name} (${user.id})`, 'success');
+            } else {
+                logToElement('status-output', 'localStorage userData: Não encontrado', 'warning');
+            }
+            
+            // Verificar agendamentos
+            const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+            logToElement('status-output', `Total de agendamentos: ${allSchedules.length}`);
+            
+            if (allSchedules.length > 0) {
+                allSchedules.forEach((schedule, index) => {
+                    logToElement('status-output', `Agendamento ${index + 1}: ${schedule.title} (${schedule.userId || 'sem userId'})`);
+                });
+            }
+            
+            // Verificar funções de sincronização
+            logToElement('status-output', `saveScheduleWithUser: ${typeof window.saveScheduleWithUser === 'function' ? 'Disponível' : 'Não disponível'}`);
+            logToElement('status-output', `loadUserSchedules: ${typeof window.loadUserSchedules === 'function' ? 'Disponível' : 'Não disponível'}`);
+        }
+        
+        function createTestSchedule() {
+            const output = document.getElementById('create-output');
+            output.textContent = '';
+            
+            logToElement('create-output', '=== CRIANDO AGENDAMENTO DE TESTE ===');
+            
+            try {
+                const testSchedule = {
+                    title: 'Meditação de Teste',
+                    category: 'Evangelho',
+                    time: '08:00',
+                    days: ['seg', 'qua', 'sex'],
+                    notifications: true,
+                    createdAt: new Date().toISOString()
+                };
+                
+                if (window.saveScheduleWithUser) {
+                    const savedSchedule = window.saveScheduleWithUser(testSchedule);
+                    logToElement('create-output', 'Agendamento salvo com sucesso!', 'success');
+                    logToElement('create-output', `ID: ${savedSchedule.id}`);
+                    logToElement('create-output', `userId: ${savedSchedule.userId}`);
+                } else {
+                    logToElement('create-output', 'Função saveScheduleWithUser não disponível', 'error');
+                }
+            } catch (error) {
+                logToElement('create-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function testSynchronization() {
+            const output = document.getElementById('sync-output');
+            output.textContent = '';
+            
+            logToElement('sync-output', '=== TESTANDO SINCRONIZAÇÃO ===');
+            
+            try {
+                if (window.loadUserSchedules) {
+                    const userSchedules = window.loadUserSchedules();
+                    logToElement('sync-output', `Agendamentos carregados: ${userSchedules.length}`, 'success');
+                    
+                    userSchedules.forEach((schedule, index) => {
+                        logToElement('sync-output', `${index + 1}. ${schedule.title} - ${schedule.userId}`);
+                    });
+                } else {
+                    logToElement('sync-output', 'Função loadUserSchedules não disponível', 'error');
+                }
+            } catch (error) {
+                logToElement('sync-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearTestData() {
+            const output = document.getElementById('clear-output');
+            output.textContent = '';
+            
+            logToElement('clear-output', '=== LIMPANDO DADOS DE TESTE ===');
+            
+            try {
+                const allSchedules = JSON.parse(localStorage.getItem('user_schedules') || '[]');
+                const testSchedules = allSchedules.filter(schedule => 
+                    schedule.title === 'Meditação de Teste'
+                );
+                
+                if (testSchedules.length > 0) {
+                    const remainingSchedules = allSchedules.filter(schedule => 
+                        schedule.title !== 'Meditação de Teste'
+                    );
+                    localStorage.setItem('user_schedules', JSON.stringify(remainingSchedules));
+                    logToElement('clear-output', `${testSchedules.length} agendamentos de teste removidos`, 'success');
+                } else {
+                    logToElement('clear-output', 'Nenhum agendamento de teste encontrado', 'warning');
+                }
+            } catch (error) {
+                logToElement('clear-output', `Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        // Executar verificação inicial
+        window.addEventListener('load', () => {
+            setTimeout(checkCurrentStatus, 1000);
+        });
+    </script>
+</body>
+</html> 

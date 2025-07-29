@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Exclusão de Meditações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn.danger {
+            background: #dc3545;
+        }
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        .meditation-list {
+            margin: 10px 0;
+        }
+        .meditation-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .meditation-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .meditation-id {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Teste - Exclusão de Meditações</h1>
+        
+        <div class="test-section">
+            <h3>Ações Disponíveis</h3>
+            <button class="btn" onclick="loadMeditations()">Carregar Meditações</button>
+            <button class="btn" onclick="createTestMeditation()">Criar Meditação de Teste</button>
+            <button class="btn danger" onclick="testDeleteAll()">Testar Exclusão de Todas</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Meditações no Supabase</h3>
+            <div id="meditationsList" class="meditation-list"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Logs</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <!-- Supabase Manager -->
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        async function loadMeditations() {
+            log('📖 Carregando meditações do Supabase...');
+            
+            try {
+                const meditations = await window.supabaseManager.getMeditations();
+                log(`📊 Total de meditações: ${meditations.length}`);
+                
+                const listElement = document.getElementById('meditationsList');
+                listElement.innerHTML = '';
+                
+                if (meditations.length === 0) {
+                    listElement.innerHTML = '<p>Nenhuma meditação encontrada.</p>';
+                    return;
+                }
+                
+                meditations.forEach(meditation => {
+                    const item = document.createElement('div');
+                    item.className = 'meditation-item';
+                    item.innerHTML = `
+                        <div class="meditation-title">${meditation.title}</div>
+                        <div class="meditation-id">ID: ${meditation.id}</div>
+                        <div class="meditation-id">Categoria: ${meditation.category_id || 'N/A'}</div>
+                        <button class="btn danger" onclick="deleteMeditation('${meditation.id}', '${meditation.title}')">Excluir</button>
+                    `;
+                    listElement.appendChild(item);
+                });
+                
+                log('✅ Meditações carregadas com sucesso');
+            } catch (error) {
+                log(`❌ Erro ao carregar meditações: ${error.message}`);
+            }
+        }
+
+        async function createTestMeditation() {
+            log('🚀 Criando meditação de teste...');
+            
+            try {
+                const meditationData = {
+                    title: 'Meditação de Teste - ' + Date.now(),
+                    content: 'Esta é uma meditação de teste para verificar a exclusão.',
+                    category_id: null,
+                    duration_minutes: 10,
+                    difficulty_level: 'beginner',
+                    status: 'active'
+                };
+                
+                log('📝 Dados:', JSON.stringify(meditationData, null, 2));
+                
+                const result = await window.supabaseManager.createMeditation(meditationData);
+                log('📋 Resultado:', JSON.stringify(result, null, 2));
+                
+                if (result && result[0]) {
+                    log('✅ Meditação criada com sucesso!');
+                    log(`🆔 ID: ${result[0].id}`);
+                    
+                    // Recarregar lista
+                    setTimeout(loadMeditations, 1000);
+                } else {
+                    log('❌ Meditação não foi criada');
+                }
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        async function deleteMeditation(id, title) {
+            log(`🗑️ Tentando excluir meditação: ${title} (ID: ${id})`);
+            
+            if (!confirm(`Tem certeza que deseja excluir a meditação "${title}"?`)) {
+                log('❌ Exclusão cancelada pelo usuário');
+                return;
+            }
+            
+            try {
+                log('🔄 Chamando deleteMeditation no Supabase...');
+                const result = await window.supabaseManager.deleteMeditation(id);
+                log('📋 Resultado da exclusão:', JSON.stringify(result, null, 2));
+                
+                log('✅ Meditação excluída com sucesso!');
+                
+                // Recarregar lista
+                setTimeout(loadMeditations, 1000);
+                
+            } catch (error) {
+                log(`❌ Erro ao excluir meditação: ${error.message}`);
+            }
+        }
+
+        async function testDeleteAll() {
+            log('⚠️ Testando exclusão de todas as meditações...');
+            
+            try {
+                const meditations = await window.supabaseManager.getMeditations();
+                log(`📊 Encontradas ${meditations.length} meditações`);
+                
+                if (meditations.length === 0) {
+                    log('ℹ️ Nenhuma meditação para excluir');
+                    return;
+                }
+                
+                for (const meditation of meditations) {
+                    log(`🗑️ Excluindo: ${meditation.title} (${meditation.id})`);
+                    try {
+                        await window.supabaseManager.deleteMeditation(meditation.id);
+                        log(`✅ ${meditation.title} excluída`);
+                    } catch (error) {
+                        log(`❌ Erro ao excluir ${meditation.title}: ${error.message}`);
+                    }
+                }
+                
+                log('✅ Processo de exclusão concluído');
+                setTimeout(loadMeditations, 1000);
+                
+            } catch (error) {
+                log(`❌ Erro no teste de exclusão: ${error.message}`);
+            }
+        }
+
+        // Carregar meditações quando a página carregar
+        window.addEventListener('load', function() {
+            log('🚀 Página carregada. Carregando meditações...');
+            loadMeditations();
+        });
+    </script>
+</body>
+</html> 

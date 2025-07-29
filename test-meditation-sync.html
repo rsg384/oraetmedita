@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Sincronização de Meditações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Sincronização de Meditações</h1>
+        
+        <div class="test-section">
+            <h3>Criar Meditação de Teste</h3>
+            <form id="testForm">
+                <div class="form-group">
+                    <label for="title">Título:</label>
+                    <input type="text" id="title" name="title" value="Meditação de Teste" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="categoryId">Categoria:</label>
+                    <select id="categoryId" name="categoryId" required>
+                        <option value="">Selecione uma categoria</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Conteúdo:</label>
+                    <textarea id="content" name="content" rows="4" required>Esta é uma meditação de teste para verificar a sincronização com o Supabase.</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration">Duração (minutos):</label>
+                    <input type="number" id="duration" name="duration" value="12" min="1" max="60">
+                </div>
+                
+                <button type="submit" class="btn">Criar Meditação de Teste</button>
+            </form>
+        </div>
+        
+        <div class="test-section">
+            <h3>Testes Disponíveis</h3>
+            <button class="btn" onclick="testCategories()">Verificar Categorias</button>
+            <button class="btn" onclick="testCreateMeditation()">Testar Criação Manual</button>
+            <button class="btn" onclick="testGetMeditations()">Verificar Meditações</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Logs</h3>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <!-- Supabase Manager -->
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        async function loadCategories() {
+            log('🔄 Carregando categorias...');
+            
+            try {
+                const categories = await window.supabaseManager.getCategories();
+                const select = document.getElementById('categoryId');
+                select.innerHTML = '<option value="">Selecione uma categoria</option>';
+                
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    select.appendChild(option);
+                });
+                
+                log(`✅ ${categories.length} categorias carregadas`);
+            } catch (error) {
+                log(`❌ Erro ao carregar categorias: ${error.message}`);
+            }
+        }
+
+        async function testCategories() {
+            log('🔍 Testando categorias no Supabase...');
+            
+            try {
+                const categories = await window.supabaseManager.getCategories();
+                log(`📊 Total de categorias: ${categories.length}`);
+                categories.forEach(cat => {
+                    log(`  - ${cat.name} (ID: ${cat.id})`);
+                });
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        async function testCreateMeditation() {
+            log('🚀 Testando criação manual de meditação...');
+            
+            try {
+                const meditationData = {
+                    title: 'Teste Manual - ' + Date.now(),
+                    content: 'Conteúdo de teste para verificar a sincronização.',
+                    category_id: null, // Sem categoria para teste
+                    duration_minutes: 10,
+                    difficulty_level: 'beginner',
+                    status: 'active'
+                };
+                
+                log('📝 Dados:', JSON.stringify(meditationData, null, 2));
+                
+                const result = await window.supabaseManager.createMeditation(meditationData);
+                log('📋 Resultado:', JSON.stringify(result, null, 2));
+                
+                if (result && result[0]) {
+                    log('✅ Meditação criada com sucesso!');
+                    log(`🆔 ID: ${result[0].id}`);
+                } else {
+                    log('❌ Meditação não foi criada');
+                }
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        async function testGetMeditations() {
+            log('📖 Testando busca de meditações...');
+            
+            try {
+                const meditations = await window.supabaseManager.getMeditations();
+                log(`📊 Total de meditações: ${meditations.length}`);
+                meditations.forEach(med => {
+                    log(`  - ${med.title} (ID: ${med.id}, Categoria: ${med.category_id})`);
+                });
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            log('🚀 Iniciando criação de meditação de teste...');
+            
+            const formData = new FormData(this);
+            const meditationData = {
+                title: formData.get('title'),
+                content: formData.get('content'),
+                categoryId: formData.get('categoryId'),
+                duration: formData.get('duration'),
+                status: 'active'
+            };
+            
+            log('📝 Dados do formulário:', JSON.stringify(meditationData, null, 2));
+            
+            // Simular o processo do admin-panel
+            try {
+                // Buscar o UUID da categoria no Supabase
+                let supabaseCategoryId = null;
+                try {
+                    const categories = await window.supabaseManager.getCategories();
+                    const localCategory = categories.find(cat => cat.id === meditationData.categoryId);
+                    if (localCategory) {
+                        supabaseCategoryId = localCategory.id;
+                        log('✅ Categoria encontrada no Supabase:', localCategory.name, 'ID:', supabaseCategoryId);
+                    } else {
+                        log('⚠️ Categoria não encontrada no Supabase, usando null');
+                    }
+                } catch (categoryError) {
+                    log('⚠️ Erro ao buscar categoria:', categoryError.message);
+                }
+                
+                const supabaseMeditation = {
+                    title: meditationData.title,
+                    content: meditationData.content,
+                    category_id: supabaseCategoryId,
+                    duration_minutes: parseInt(meditationData.duration) || 12,
+                    difficulty_level: 'beginner',
+                    status: 'active',
+                    created_by: null
+                };
+                
+                log('📝 Dados para Supabase:', JSON.stringify(supabaseMeditation, null, 2));
+                
+                const createdMeditation = await window.supabaseManager.createMeditation(supabaseMeditation);
+                log('✅ Meditação criada no Supabase:', JSON.stringify(createdMeditation, null, 2));
+                
+            } catch (error) {
+                log(`❌ Erro ao criar meditação: ${error.message}`);
+            }
+        });
+
+        // Carregar categorias quando a página carregar
+        window.addEventListener('load', function() {
+            log('🚀 Página carregada. Carregando categorias...');
+            loadCategories();
+        });
+    </script>
+</body>
+</html> 
