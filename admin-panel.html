@@ -1792,38 +1792,18 @@
       }
       
       try {
-        // Sincronizar com Supabase se disponível
-        if (window.supabaseManager) {
+        // Sincronizar com Supabase usando o sistema automático
+        if (window.adminSupabaseSync) {
           try {
             console.log('🔄 Sincronizando exclusão de categoria com Supabase...');
-            console.log('📝 Categoria a ser excluída:', categoryToDelete);
-            
-            // Se o ID é um UUID do Supabase, deletar diretamente
-            if (id.includes('-') && id.length === 36) {
-              // É um UUID do Supabase
-              await window.supabaseManager.deleteCategory(id);
-              console.log('✅ Categoria excluída do Supabase com sucesso');
-            } else {
-              // É um ID local, tentar encontrar no Supabase pelo nome
-              console.log('🔍 Buscando categoria no Supabase pelo nome...');
-              const supabaseCategories = await window.supabaseManager.getCategories();
-              const supabaseCategory = supabaseCategories.find(cat => 
-                cat.name === categoryToDelete.name
-              );
-              
-              if (supabaseCategory) {
-                await window.supabaseManager.deleteCategory(supabaseCategory.id);
-                console.log('✅ Categoria encontrada e excluída do Supabase');
-              } else {
-                console.log('⚠️ Categoria não encontrada no Supabase, excluindo apenas localmente');
-              }
-            }
-          } catch (supabaseError) {
-            console.error('⚠️ Erro ao sincronizar exclusão com Supabase:', supabaseError);
+            await window.adminSupabaseSync.syncCategory(categoryToDelete, 'delete');
+            console.log('✅ Categoria excluída do Supabase');
+          } catch (syncError) {
+            console.error('⚠️ Erro ao sincronizar exclusão com Supabase:', syncError);
             console.log('ℹ️ Categoria excluída apenas localmente');
           }
         } else {
-          console.log('ℹ️ Supabase Manager não disponível - categoria excluída apenas localmente');
+          console.log('ℹ️ Sistema de sincronização não disponível - categoria excluída apenas localmente');
         }
         
         // Excluir localmente
@@ -1858,38 +1838,18 @@
       }
       
       try {
-        // Sincronizar com Supabase se disponível
-        if (window.supabaseManager) {
+        // Sincronizar com Supabase usando o sistema automático
+        if (window.adminSupabaseSync) {
           try {
             console.log('🔄 Sincronizando exclusão de meditação com Supabase...');
-            console.log('📝 Meditação a ser excluída:', meditationToDelete);
-            
-            // Se o ID é um UUID do Supabase, deletar diretamente
-            if (id.includes('-') && id.length === 36) {
-              // É um UUID do Supabase
-              await window.supabaseManager.deleteMeditation(id);
-              console.log('✅ Meditação excluída do Supabase com sucesso');
-            } else {
-              // É um ID local, tentar encontrar no Supabase pelo título
-              console.log('🔍 Buscando meditação no Supabase pelo título...');
-              const supabaseMeditations = await window.supabaseManager.getMeditations();
-              const supabaseMeditation = supabaseMeditations.find(med => 
-                med.title === meditationToDelete.title
-              );
-              
-              if (supabaseMeditation) {
-                await window.supabaseManager.deleteMeditation(supabaseMeditation.id);
-                console.log('✅ Meditação encontrada e excluída do Supabase');
-              } else {
-                console.log('⚠️ Meditação não encontrada no Supabase, excluindo apenas localmente');
-              }
-            }
-          } catch (supabaseError) {
-            console.error('⚠️ Erro ao sincronizar exclusão com Supabase:', supabaseError);
+            await window.adminSupabaseSync.syncMeditation(meditationToDelete, 'delete');
+            console.log('✅ Meditação excluída do Supabase');
+          } catch (syncError) {
+            console.error('⚠️ Erro ao sincronizar exclusão com Supabase:', syncError);
             console.log('ℹ️ Meditação excluída apenas localmente');
           }
         } else {
-          console.log('ℹ️ Supabase Manager não disponível - meditação excluída apenas localmente');
+          console.log('ℹ️ Sistema de sincronização não disponível - meditação excluída apenas localmente');
         }
         
         // Excluir localmente
@@ -2041,61 +2001,18 @@
             const originalCategory = categories[index];
             categories[index] = { ...categories[index], ...categoryData };
             
-            // Sincronizar com Supabase se disponível
-                    console.log('🔍 Verificando Supabase Manager...');
-        console.log('📝 window.supabaseManager:', window.supabaseManager);
-        console.log('📝 typeof window.supabaseManager:', typeof window.supabaseManager);
-        console.log('📝 window.supabaseManager.updateCategory:', typeof window.supabaseManager?.updateCategory);
-        if (window.supabaseManager) {
+            // Sincronizar com Supabase usando o sistema automático
+            if (window.adminSupabaseSync) {
               try {
                 console.log('🔄 Sincronizando edição de categoria com Supabase...');
-                console.log('📝 Categoria original:', originalCategory);
-                console.log('📝 Categoria atualizada:', categories[index]);
-                
-                // Se o ID é um UUID do Supabase, atualizar diretamente
-                if (editingId.includes('-') && editingId.length === 36) {
-                  // É um UUID do Supabase
-                  const supabaseCategoryData = {
-                    name: categoryData.name,
-                    description: categoryData.description,
-                    icon: categoryData.icon || '',
-                    color: categoryData.color || '#7ee787',
-                    is_active: categoryData.status === 'active',
-                    sort_order: index
-                  };
-                  
-                  await window.supabaseManager.updateCategory(editingId, supabaseCategoryData);
-                  console.log('✅ Categoria atualizada no Supabase com sucesso');
-                } else {
-                  // É um ID local, tentar encontrar no Supabase pelo nome original
-                  console.log('🔍 Buscando categoria no Supabase pelo nome original...');
-                  const supabaseCategories = await window.supabaseManager.getCategories();
-                  const supabaseCategory = supabaseCategories.find(cat => 
-                    cat.name === originalCategory.name
-                  );
-                  
-                  if (supabaseCategory) {
-                    const supabaseCategoryData = {
-                      name: categoryData.name,
-                      description: categoryData.description,
-                      icon: categoryData.icon || '',
-                      color: categoryData.color || '#7ee787',
-                      is_active: categoryData.status === 'active',
-                      sort_order: index
-                    };
-                    
-                    await window.supabaseManager.updateCategory(supabaseCategory.id, supabaseCategoryData);
-                    console.log('✅ Categoria encontrada e atualizada no Supabase');
-                  } else {
-                    console.log('⚠️ Categoria não encontrada no Supabase, atualizando apenas localmente');
-                  }
-                }
-              } catch (supabaseError) {
-                console.error('⚠️ Erro ao sincronizar edição com Supabase:', supabaseError);
+                await window.adminSupabaseSync.syncCategory(categories[index], 'update');
+                console.log('✅ Categoria sincronizada com Supabase');
+              } catch (syncError) {
+                console.error('⚠️ Erro ao sincronizar categoria:', syncError);
                 console.log('ℹ️ Categoria atualizada apenas localmente');
               }
             } else {
-              console.log('ℹ️ Supabase Manager não disponível - categoria atualizada apenas localmente');
+              console.log('ℹ️ Sistema de sincronização não disponível - categoria atualizada apenas localmente');
             }
           }
         } else {
@@ -2220,59 +2137,18 @@
               updatedAt: new Date().toISOString()
             };
             
-            // Sincronizar com Supabase se disponível
-            console.log('🔍 Verificando Supabase Manager para meditação...');
-            console.log('📝 window.supabaseManager:', window.supabaseManager);
-            console.log('📝 typeof window.supabaseManager:', typeof window.supabaseManager);
-            console.log('📝 window.supabaseManager.updateMeditation:', typeof window.supabaseManager?.updateMeditation);
-            if (window.supabaseManager) {
+            // Sincronizar com Supabase usando o sistema automático
+            if (window.adminSupabaseSync) {
               try {
                 console.log('🔄 Sincronizando edição de meditação com Supabase...');
-                console.log('📝 Meditação original:', originalMeditation);
-                console.log('📝 Meditação atualizada:', meditations[index]);
-                
-                // Se o ID é um UUID do Supabase, atualizar diretamente
-                if (editingId.includes('-') && editingId.length === 36) {
-                  // É um UUID do Supabase
-                  const supabaseMeditationData = {
-                    title: meditationData.title,
-                    content: meditationData.meditation || meditationData.meditatio || '',
-                    duration_minutes: parseInt(meditationData.duration) || 12,
-                    difficulty_level: 'beginner',
-                    status: meditationData.status || 'active'
-                  };
-                  
-                  await window.supabaseManager.updateMeditation(editingId, supabaseMeditationData);
-                  console.log('✅ Meditação atualizada no Supabase com sucesso');
-                } else {
-                  // É um ID local, tentar encontrar no Supabase pelo título original
-                  console.log('🔍 Buscando meditação no Supabase pelo título original...');
-                  const supabaseMeditations = await window.supabaseManager.getMeditations();
-                  const supabaseMeditation = supabaseMeditations.find(med => 
-                    med.title === originalMeditation.title
-                  );
-                  
-                  if (supabaseMeditation) {
-                    const supabaseMeditationData = {
-                      title: meditationData.title,
-                      content: meditationData.meditation || meditationData.meditatio || '',
-                      duration_minutes: parseInt(meditationData.duration) || 12,
-                      difficulty_level: 'beginner',
-                      status: meditationData.status || 'active'
-                    };
-                    
-                    await window.supabaseManager.updateMeditation(supabaseMeditation.id, supabaseMeditationData);
-                    console.log('✅ Meditação encontrada e atualizada no Supabase');
-                  } else {
-                    console.log('⚠️ Meditação não encontrada no Supabase, atualizando apenas localmente');
-                  }
-                }
-              } catch (supabaseError) {
-                console.error('⚠️ Erro ao sincronizar edição com Supabase:', supabaseError);
+                await window.adminSupabaseSync.syncMeditation(meditations[index], 'update');
+                console.log('✅ Meditação sincronizada com Supabase');
+              } catch (syncError) {
+                console.error('⚠️ Erro ao sincronizar meditação:', syncError);
                 console.log('ℹ️ Meditação atualizada apenas localmente');
               }
             } else {
-              console.log('ℹ️ Supabase Manager não disponível - meditação atualizada apenas localmente');
+              console.log('ℹ️ Sistema de sincronização não disponível - meditação atualizada apenas localmente');
             }
           }
         } else {
@@ -2289,53 +2165,18 @@
           };
           meditations.push(newMeditation);
           
-          // Sincronizar com Supabase se disponível
-          if (window.supabaseManager) {
+          // Sincronizar com Supabase usando o sistema automático
+          if (window.adminSupabaseSync) {
             try {
-              console.log('🔄 Sincronizando meditação com Supabase...');
-              
-              // Buscar o UUID da categoria no Supabase baseado no nome
-              let supabaseCategoryId = null;
-              try {
-                const categories = await window.supabaseManager.getCategories();
-                const localCategory = categories.find(cat => cat.id === newMeditation.categoryId || cat.name === newMeditation.categoryId);
-                if (localCategory) {
-                  supabaseCategoryId = localCategory.id;
-                  console.log('✅ Categoria encontrada no Supabase:', localCategory.name, 'ID:', supabaseCategoryId);
-                } else {
-                  console.log('⚠️ Categoria não encontrada no Supabase, usando null');
-                }
-              } catch (categoryError) {
-                console.error('⚠️ Erro ao buscar categoria:', categoryError);
-              }
-              
-              const supabaseMeditation = {
-                title: newMeditation.title,
-                content: newMeditation.meditation || newMeditation.meditatio || '',
-                category_id: supabaseCategoryId,
-                duration_minutes: parseInt(newMeditation.duration) || 12,
-                difficulty_level: 'beginner',
-                status: newMeditation.status || 'active',
-                created_by: null // Será preenchido quando tivermos autenticação
-              };
-              
-              console.log('📝 Dados da meditação para Supabase:', supabaseMeditation);
-              
-              const createdMeditation = await window.supabaseManager.createMeditation(supabaseMeditation);
-              console.log('✅ Meditação criada no Supabase:', createdMeditation);
-              
-              // Atualizar o ID local com o ID do Supabase
-              if (createdMeditation && createdMeditation[0]) {
-                newMeditation.id = createdMeditation[0].id;
-                localStorage.setItem('meditations', JSON.stringify(meditations));
-                console.log('🔄 ID da meditação atualizado com ID do Supabase:', newMeditation.id);
-              }
-            } catch (supabaseError) {
-              console.error('⚠️ Erro ao sincronizar meditação com Supabase:', supabaseError);
+              console.log('🔄 Sincronizando nova meditação com Supabase...');
+              await window.adminSupabaseSync.syncMeditation(newMeditation, 'create');
+              console.log('✅ Nova meditação sincronizada com Supabase');
+            } catch (syncError) {
+              console.error('⚠️ Erro ao sincronizar nova meditação:', syncError);
               console.log('ℹ️ Meditação salva apenas localmente');
             }
           } else {
-            console.log('ℹ️ Supabase Manager não disponível - meditação salva apenas localmente');
+            console.log('ℹ️ Sistema de sincronização não disponível - meditação salva apenas localmente');
           }
         }
 
@@ -4430,5 +4271,8 @@
   <!-- Supabase Manager -->
   <script src="supabase-config.js"></script>
   <script src="sync-categories-supabase.js"></script>
+  
+  <!-- Admin Supabase Sync -->
+  <script src="admin-supabase-sync.js"></script>
 </body>
 </html> 
