@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar Chave da API - Ora et Medita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .instructions ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+        
+        .test-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+        
+        .test-btn {
+            background: #28a745;
+            margin-right: 10px;
+        }
+        
+        .test-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔑 Configurar Chave da API</h1>
+            <p>Configure sua chave da API do ChatGPT para gerar meditações</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Como obter sua chave da API:</h3>
+            <ol>
+                <li>Acesse <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API Keys</a></li>
+                <li>Faça login na sua conta OpenAI</li>
+                <li>Clique em "Create new secret key"</li>
+                <li>Copie a chave (começa com "sk-")</li>
+                <li>Cole a chave no campo abaixo</li>
+            </ol>
+        </div>
+        
+        <form id="apiKeyForm">
+            <div class="form-group">
+                <label for="apiKey">Chave da API do ChatGPT:</label>
+                <input type="password" id="apiKey" name="apiKey" placeholder="sk-..." required>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn">
+                🔧 Configurar Chave da API
+            </button>
+        </form>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <div class="test-section">
+            <h3>🧪 Testar Configuração</h3>
+            <button class="btn test-btn" onclick="testCurrentAPIKey()">
+                🔍 Testar Chave Atual
+            </button>
+            <button class="btn test-btn" onclick="testSupabaseConnection()">
+                🗄️ Testar Conexão Supabase
+            </button>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="supabase-config.js"></script>
+    <script src="fix-supabase-variables.js"></script>
+    <script src="fix-api-key-setup.js"></script>
+    
+    <script>
+        document.getElementById('apiKeyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const status = document.getElementById('status');
+            
+            if (!apiKey) {
+                showStatus('Por favor, digite uma chave da API válida.', 'error');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = '🔧 Configurando...';
+            
+            try {
+                // 1. Testar a chave
+                showStatus('🧪 Testando chave da API...', 'info');
+                const isValid = await testAPIKey(apiKey);
+                
+                if (!isValid) {
+                    showStatus('❌ Chave da API inválida. Verifique se a chave está correta.', 'error');
+                    return;
+                }
+                
+                // 2. Inserir no Supabase
+                showStatus('📤 Salvando chave no Supabase...', 'info');
+                const inserted = await insertAPIKeyToSupabase(apiKey);
+                
+                if (inserted) {
+                    showStatus('✅ Chave da API configurada com sucesso!', 'success');
+                    document.getElementById('apiKey').value = '';
+                } else {
+                    showStatus('❌ Erro ao salvar chave no Supabase. Verifique a conexão.', 'error');
+                }
+                
+            } catch (error) {
+                showStatus('❌ Erro: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🔧 Configurar Chave da API';
+            }
+        });
+        
+        async function testCurrentAPIKey() {
+            const status = document.getElementById('status');
+            
+            try {
+                showStatus('🔍 Testando chave atual...', 'info');
+                
+                const apiKey = await getAPIKeyFromSupabase();
+                if (!apiKey) {
+                    showStatus('❌ Nenhuma chave configurada no Supabase.', 'error');
+                    return;
+                }
+                
+                const isValid = await testAPIKey(apiKey);
+                if (isValid) {
+                    showStatus('✅ Chave da API válida e funcionando!', 'success');
+                } else {
+                    showStatus('❌ Chave da API inválida ou expirada.', 'error');
+                }
+                
+            } catch (error) {
+                showStatus('❌ Erro ao testar: ' + error.message, 'error');
+            }
+        }
+        
+        async function testSupabaseConnection() {
+            const status = document.getElementById('status');
+            
+            try {
+                showStatus('🗄️ Testando conexão com Supabase...', 'info');
+                
+                const supabaseVars = getSupabaseVariables();
+                const response = await fetch(`${supabaseVars.url}/rest/v1/api_configs?select=count`, {
+                    method: 'GET',
+                    headers: {
+                        'apikey': supabaseVars.key,
+                        'Authorization': `Bearer ${supabaseVars.key}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    showStatus('✅ Conexão com Supabase funcionando!', 'success');
+                } else {
+                    showStatus('❌ Erro na conexão com Supabase.', 'error');
+                }
+                
+            } catch (error) {
+                showStatus('❌ Erro na conexão: ' + error.message, 'error');
+            }
+        }
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            // Auto-hide after 5 seconds for success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        // Auto-inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de configuração da API carregada');
+            
+            // Testar conexão inicial
+            setTimeout(async () => {
+                const apiKey = await getAPIKeyFromSupabase();
+                if (apiKey) {
+                    showStatus('✅ Chave da API já configurada. Você pode testar ou reconfigurar.', 'info');
+                } else {
+                    showStatus('⚠️ Nenhuma chave da API configurada. Configure uma chave válida.', 'info');
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 
