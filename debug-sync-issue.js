@@ -1,28 +1,21 @@
 // Script para debugar problemas de sincronização de meditações
-console.log('🔍 Iniciando debug de sincronização de meditações...');
+console.log('🔍 Script de debug de sincronização carregado');
 
-// Função para verificar estrutura dos dados
+// Função para validar dados da meditação
 function validateMeditationData(meditation) {
     console.log('🔍 Validando dados da meditação:', meditation);
     
-    const requiredFields = ['title', 'categoryId', 'duration', 'status', 'type'];
-    const missingFields = requiredFields.filter(field => !meditation[field]);
-    
-    if (missingFields.length > 0) {
-        console.error('❌ Campos obrigatórios ausentes:', missingFields);
-        return false;
-    }
-    
-    // Verificar se categoryId existe nas categorias
+    // Verificar se a categoria existe
     const categories = JSON.parse(localStorage.getItem('categories') || '[]');
     const categoryExists = categories.some(cat => cat.id === meditation.categoryId);
     
     if (!categoryExists) {
         console.error('❌ Categoria não encontrada:', meditation.categoryId);
+        console.log('📋 Categorias disponíveis:', categories.map(c => ({ id: c.id, name: c.name })));
         return false;
     }
     
-    console.log('✅ Dados da meditação válidos');
+    console.log('✅ Categoria encontrada:', meditation.categoryId);
     return true;
 }
 
@@ -31,166 +24,144 @@ async function testSyncStepByStep() {
     console.log('🧪 Testando sincronização passo a passo...');
     
     try {
-        // 1. Verificar se adminSupabaseSync está disponível
-        if (!window.adminSupabaseSync) {
-            console.error('❌ adminSupabaseSync não disponível');
+        // Usar uma categoria real existente
+        const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+        const realCategory = categories[0]; // Primeira categoria disponível
+        
+        if (!realCategory) {
+            console.error('❌ Nenhuma categoria encontrada');
             return false;
         }
         
-        // 2. Verificar se supabaseManager está disponível
-        if (!window.supabaseManager) {
-            console.error('❌ supabaseManager não disponível');
-            return false;
-        }
+        console.log('📋 Usando categoria real:', realCategory.name, realCategory.id);
         
-        // 3. Criar dados de teste
+        // Criar meditação de teste com categoria real
         const testMeditation = {
             title: 'Meditação Debug Test',
-            categoryId: 'cat_test',
+            content: 'Conteúdo de teste para debug',
+            categoryId: realCategory.id, // Usar categoria real
             duration: 15,
             status: 'available',
             type: 'free',
-            icon: '📖',
-            lectio: 'Conteúdo de teste',
-            meditatio: 'Meditação de teste',
-            oratio: 'Oração de teste',
-            contemplatio: 'Contemplação de teste'
+            difficulty: 'intermediate',
+            tags: ['debug', 'teste'],
+            is_active: true,
+            bible_verse: 'Salmo 1:1-2',
+            prayer: 'Oração de teste',
+            practical_application: 'Aplicação prática de teste'
         };
         
-        // 4. Validar dados
+        console.log('📋 Meditação de teste:', testMeditation);
+        
+        // Validar dados
         if (!validateMeditationData(testMeditation)) {
+            console.error('❌ Dados da meditação inválidos');
             return false;
         }
         
-        // 5. Testar criação local
-        console.log('📝 Criando meditação localmente...');
-        const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
-        const newMeditation = {
-            id: 'med_debug_' + Date.now(),
-            ...testMeditation,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            total: 0,
-            completed: 0,
-            inProgress: 0,
-            locked: 0
-        };
-        
-        meditations.push(newMeditation);
-        localStorage.setItem('meditations', JSON.stringify(meditations));
-        console.log('✅ Meditação criada localmente');
-        
-        // 6. Testar sincronização direta com Supabase
-        console.log('🔄 Testando sincronização direta...');
-        try {
-            const result = await window.supabaseManager.createMeditation({
-                title: newMeditation.title,
-                category_id: newMeditation.categoryId,
-                duration: newMeditation.duration,
-                status: newMeditation.status,
-                type: newMeditation.type,
-                icon: newMeditation.icon,
-                lectio: newMeditation.lectio,
-                meditatio: newMeditation.meditatio,
-                oratio: newMeditation.oratio,
-                contemplatio: newMeditation.contemplatio
-            });
+        // Testar criação no Supabase
+        if (window.supabaseManager && window.supabaseManager.createMeditation) {
+            console.log('🔄 Testando criação no Supabase...');
             
-            console.log('✅ Sincronização direta bem-sucedida:', result);
+            const result = await window.supabaseManager.createMeditation(testMeditation);
+            console.log('✅ Meditação criada no Supabase:', result);
             return true;
-            
-        } catch (directError) {
-            console.error('❌ Erro na sincronização direta:', directError);
-            
-            // 7. Testar sincronização via adminSupabaseSync
-            console.log('🔄 Testando sincronização via adminSupabaseSync...');
-            try {
-                await window.adminSupabaseSync.syncMeditation(newMeditation, 'create');
-                console.log('✅ Sincronização via adminSupabaseSync bem-sucedida');
-                return true;
-            } catch (syncError) {
-                console.error('❌ Erro na sincronização via adminSupabaseSync:', syncError);
-                return false;
-            }
+        } else {
+            console.error('❌ Função createMeditation não disponível');
+            return false;
         }
         
     } catch (error) {
-        console.error('❌ Erro geral no teste:', error);
+        console.error('❌ Erro no teste de sincronização:', error);
         return false;
     }
 }
 
-// Função para verificar conexão com Supabase
+// Função para verificar estrutura das tabelas
+async function checkTableStructure() {
+    console.log('📊 Verificando estrutura das tabelas...');
+    
+    try {
+        // Verificar tabela categories
+        const categoriesResponse = await fetch(`${SUPABASE_URL}/rest/v1/categories?select=*`, {
+            method: 'GET',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (categoriesResponse.ok) {
+            const categories = await categoriesResponse.json();
+            console.log('✅ Estrutura da tabela categories:', {
+                count: categories.length,
+                sample: categories[0] || 'Nenhuma categoria encontrada'
+            });
+        } else {
+            console.error('❌ Erro ao acessar tabela categories');
+        }
+        
+        // Verificar tabela meditations
+        console.log('📊 Verificando estrutura da tabela meditations...');
+        const meditationsResponse = await fetch(`${SUPABASE_URL}/rest/v1/meditations?select=*`, {
+            method: 'GET',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (meditationsResponse.ok) {
+            const meditations = await meditationsResponse.json();
+            console.log('✅ Estrutura da tabela meditations:', {
+                count: meditations.length,
+                sample: meditations[0] || 'Nenhuma meditação encontrada'
+            });
+        } else {
+            console.error('❌ Erro ao acessar tabela meditations');
+        }
+        
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Erro ao verificar estrutura das tabelas:', error);
+        return false;
+    }
+}
+
+// Função para testar conexão com Supabase
 async function testSupabaseConnection() {
     console.log('🌐 Testando conexão com Supabase...');
     
     try {
-        if (!window.supabaseManager) {
-            console.error('❌ supabaseManager não disponível');
-            return false;
-        }
-        
-        const testResult = await window.supabaseManager.testConnection();
-        console.log('✅ Conexão com Supabase:', testResult);
-        return true;
-        
-    } catch (error) {
-        console.error('❌ Erro na conexão com Supabase:', error);
-        return false;
-    }
-}
-
-// Função para verificar estrutura da tabela meditations
-async function checkMeditationsTable() {
-    console.log('📊 Verificando estrutura da tabela meditations...');
-    
-    try {
-        if (!window.supabaseManager) {
-            console.error('❌ supabaseManager não disponível');
-            return false;
-        }
-        
-        const meditations = await window.supabaseManager.getMeditations();
-        console.log('✅ Estrutura da tabela meditations:', {
-            count: meditations.length,
-            sample: meditations[0] || 'Nenhuma meditação encontrada'
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/categories?select=*&limit=1`, {
+            method: 'GET',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json'
+            }
         });
         
-        return true;
-        
-    } catch (error) {
-        console.error('❌ Erro ao verificar tabela meditations:', error);
-        return false;
-    }
-}
-
-// Função para verificar estrutura da tabela categories
-async function checkCategoriesTable() {
-    console.log('📋 Verificando estrutura da tabela categories...');
-    
-    try {
-        if (!window.supabaseManager) {
-            console.error('❌ supabaseManager não disponível');
+        if (response.ok) {
+            console.log('✅ Conexão com Supabase funcionando');
+            return true;
+        } else {
+            console.error('❌ Erro na conexão com Supabase:', response.status);
             return false;
         }
         
-        const categories = await window.supabaseManager.getCategories();
-        console.log('✅ Estrutura da tabela categories:', {
-            count: categories.length,
-            sample: categories[0] || 'Nenhuma categoria encontrada'
-        });
-        
-        return true;
-        
     } catch (error) {
-        console.error('❌ Erro ao verificar tabela categories:', error);
+        console.error('❌ Erro ao testar conexão:', error);
         return false;
     }
 }
 
 // Função principal de debug
 async function debugSyncIssue() {
-    console.log('🔍 Iniciando debug completo de sincronização...');
+    console.log('🔍 Iniciando debug de sincronização...');
     
     const results = {
         connection: false,
@@ -203,36 +174,30 @@ async function debugSyncIssue() {
         // 1. Testar conexão
         results.connection = await testSupabaseConnection();
         
-        // 2. Verificar tabela categories
-        results.categoriesTable = await checkCategoriesTable();
+        // 2. Verificar estrutura das tabelas
+        const tableStructure = await checkTableStructure();
+        results.categoriesTable = tableStructure;
+        results.meditationsTable = tableStructure;
         
-        // 3. Verificar tabela meditations
-        results.meditationsTable = await checkMeditationsTable();
-        
-        // 4. Testar sincronização
+        // 3. Testar sincronização
         results.syncTest = await testSyncStepByStep();
         
         console.log('📊 Resultado do debug:', results);
         
-        // Análise dos resultados
-        if (!results.connection) {
-            console.error('❌ Problema: Conexão com Supabase falhou');
-        }
-        
-        if (!results.categoriesTable) {
-            console.error('❌ Problema: Tabela categories não acessível');
-        }
-        
-        if (!results.meditationsTable) {
-            console.error('❌ Problema: Tabela meditations não acessível');
-        }
-        
-        if (!results.syncTest) {
-            console.error('❌ Problema: Sincronização falhou');
-        }
-        
-        if (results.connection && results.categoriesTable && results.meditationsTable && results.syncTest) {
-            console.log('✅ Todos os testes passaram - sistema funcionando corretamente');
+        if (results.syncTest) {
+            console.log('✅ Sincronização funcionando corretamente');
+        } else {
+            console.log('❌ Problema: Sincronização falhou');
+            
+            if (!results.connection) {
+                console.log('💡 Solução: Verificar configuração do Supabase');
+            } else if (!results.categoriesTable) {
+                console.log('💡 Solução: Verificar tabela categories');
+            } else if (!results.meditationsTable) {
+                console.log('💡 Solução: Verificar tabela meditations');
+            } else {
+                console.log('💡 Solução: Verificar função de sincronização');
+            }
         }
         
         return results;
@@ -243,28 +208,54 @@ async function debugSyncIssue() {
     }
 }
 
-// Função para limpar dados de debug
-function clearDebugData() {
-    console.log('🧹 Limpando dados de debug...');
+// Função para testar criação manual
+async function testManualCreation() {
+    console.log('🧪 Testando criação manual...');
     
-    const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
-    const filteredMeditations = meditations.filter(m => 
-        !m.title.includes('Debug') && !m.title.includes('Test')
-    );
-    
-    localStorage.setItem('meditations', JSON.stringify(filteredMeditations));
-    
-    console.log('✅ Dados de debug removidos');
+    try {
+        // Pegar primeira categoria disponível
+        const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+        const realCategory = categories[0];
+        
+        if (!realCategory) {
+            console.error('❌ Nenhuma categoria disponível');
+            return false;
+        }
+        
+        const testMeditation = {
+            title: 'Teste Manual de Criação',
+            content: 'Conteúdo de teste para criação manual',
+            category_id: realCategory.id,
+            duration: 20,
+            difficulty: 'beginner',
+            tags: ['manual', 'teste'],
+            is_active: true,
+            bible_verse: 'João 3:16',
+            prayer: 'Oração de teste manual',
+            practical_application: 'Aplicação prática manual'
+        };
+        
+        console.log('📋 Testando criação manual:', testMeditation);
+        
+        if (window.supabaseManager && window.supabaseManager.createMeditation) {
+            const result = await window.supabaseManager.createMeditation(testMeditation);
+            console.log('✅ Criação manual bem-sucedida:', result);
+            return true;
+        } else {
+            console.error('❌ Função createMeditation não disponível');
+            return false;
+        }
+        
+    } catch (error) {
+        console.error('❌ Erro na criação manual:', error);
+        return false;
+    }
 }
 
-// Exportar funções para uso global
+// Exportar funções
 window.debugSyncIssue = debugSyncIssue;
+window.testManualCreation = testManualCreation;
 window.testSyncStepByStep = testSyncStepByStep;
-window.testSupabaseConnection = testSupabaseConnection;
-window.checkMeditationsTable = checkMeditationsTable;
-window.checkCategoriesTable = checkCategoriesTable;
-window.validateMeditationData = validateMeditationData;
-window.clearDebugData = clearDebugData;
 
 // Auto-inicialização
 document.addEventListener('DOMContentLoaded', function() {
@@ -274,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(async () => {
         console.log('🔍 Executando debug automático...');
         await debugSyncIssue();
-    }, 3000);
+    }, 1000);
 });
 
 console.log('✅ Script de debug de sincronização carregado'); 
