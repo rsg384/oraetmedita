@@ -196,9 +196,9 @@ class DashboardProgressSync {
     }
 
     updateDashboardProgressCards() {
-        const progressGrid = document.getElementById('progressGrid');
+        const progressGrid = document.getElementById('dashboardProgressGrid');
         if (!progressGrid) {
-            console.log('⚠️ Elemento progressGrid não encontrado no dashboard');
+            console.log('⚠️ Elemento dashboardProgressGrid não encontrado no dashboard');
             return;
         }
         
