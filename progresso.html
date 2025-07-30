@@ -590,17 +590,48 @@
             }
         }
 
-        // Função para obter dados das categorias - APENAS CATEGORIAS DO ADMIN
-        function getCategoriesData() {
+        // Função para obter dados das categorias do Supabase
+        async function getCategoriesData() {
             try {
-                // Carregar categorias do admin
-                const adminCategories = JSON.parse(localStorage.getItem('categories') || '[]');
+                console.log('🔄 Carregando dados das categorias do Supabase para progresso...');
+                
+                // Usar o ProgressSyncManager se disponível
+                if (window.progressSyncManager && window.progressSyncManager.isInitialized) {
+                    const progressData = window.progressSyncManager.userProgress;
+                    const categories = Object.values(progressData).filter(cat => cat.total > 0);
+                    
+                    console.log('✅ Dados de progresso carregados do ProgressSyncManager:', categories.length);
+                    return categories;
+                }
+                
+                // Fallback: carregar diretamente do Supabase
+                let attempts = 0;
+                const maxAttempts = 10;
+                
+                while (!window.supabaseManager && attempts < maxAttempts) {
+                    console.log(`⏳ Aguardando SupabaseManager... (tentativa ${attempts + 1}/${maxAttempts})`);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    attempts++;
+                }
+
+                if (!window.supabaseManager) {
+                    console.error('❌ SupabaseManager não encontrado');
+                    return [];
+                }
+
+                // Carregar categorias do Supabase
+                const supabaseCategories = await window.supabaseManager.getCategories();
                 const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+                
+                if (!supabaseCategories || !Array.isArray(supabaseCategories)) {
+                    console.warn('⚠️ Nenhuma categoria encontrada no Supabase');
+                    return [];
+                }
                 
                 let allCategories = [];
                 
-                // Processar APENAS categorias do admin (excluir meditações ChatGPT)
-                adminCategories.forEach(category => {
+                // Processar categorias ativas do Supabase
+                supabaseCategories.filter(cat => cat.is_active !== false).forEach(category => {
                     const categoryMeditations = adminMeditations.filter(m => m.categoryId === category.id);
                     const completedMeditations = categoryMeditations.filter(m => m.status === 'completed').length;
                     const inProgressMeditations = categoryMeditations.filter(m => 
@@ -620,9 +651,8 @@
                     });
                 });
                 
-                // NÃO incluir meditações personalizadas (ChatGPT) nas estatísticas de progresso
-                // Elas são contabilizadas separadamente na página "Minhas meditações"
-                console.log('✅ Categorias processadas (EXCLUINDO meditações ChatGPT):', allCategories.length);
+                console.log('✅ Categorias do Supabase processadas para progresso:', allCategories.length);
+                console.log('📋 Categorias ativas:', allCategories.map(c => c.name));
                 
                 return allCategories;
             } catch (error) {
@@ -632,11 +662,11 @@
         }
 
         // Função para renderizar cards de progresso
-        function renderProgressCards() {
+        async function renderProgressCards() {
             const progressGrid = document.getElementById('progressGrid');
             if (!progressGrid) return;
 
-            const categories = getCategoriesData();
+            const categories = await getCategoriesData();
             
             // Limpar grid
             progressGrid.innerHTML = '';
@@ -741,10 +771,10 @@
         }
 
         // Função para atualizar tudo em tempo real
-        function updateAllProgress() {
+        async function updateAllProgress() {
             console.log('🔄 Atualizando progresso em tempo real...');
             updateStats();
-            renderProgressCards();
+            await renderProgressCards();
         }
 
         // Detectar mudanças no localStorage para atualizar automaticamente
@@ -756,14 +786,14 @@
         });
 
         // Carregar dados quando a página carrega
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             console.log('🚀 Página de progresso carregada');
             
             // Carregar dados do usuário
             loadUserData();
             
             // Renderizar cards de progresso
-            renderProgressCards();
+            await renderProgressCards();
             
             // Atualizar estatísticas
             updateStats();
@@ -775,7 +805,7 @@
         });
     </script>
     
-    <!-- Script de sincronização de progresso -->
-    <script src="progress-sync.js"></script>
+    <!-- Script de sincronização de progresso melhorado -->
+    <script src="progress-sync-enhanced.js"></script>
 </body>
 </html> 
