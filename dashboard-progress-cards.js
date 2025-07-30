@@ -38,12 +38,21 @@ function isValidCategory(topic) {
     return !NON_CATEGORY_TOPICS.includes(topic);
 }
 
-// Função para obter dados das categorias (igual à página de progresso)
-function getCategoriesDataForDashboard() {
+// Função para obter dados das categorias do Supabase
+async function getCategoriesDataForDashboard() {
     try {
-        console.log('🔄 Carregando dados das categorias para o dashboard...');
+        console.log('🔄 Carregando dados das categorias do Supabase para o dashboard...');
         
-        // Carregar categorias do admin
+        // Usar o DashboardProgressSync se disponível
+        if (window.dashboardProgressSync && window.dashboardProgressSync.isInitialized) {
+            const progressData = window.dashboardProgressSync.userProgress;
+            const categories = Object.values(progressData).filter(cat => cat.total > 0);
+            
+            console.log('✅ Dados de progresso carregados do DashboardProgressSync:', categories.length);
+            return categories;
+        }
+        
+        // Fallback: carregar do localStorage
         let adminCategories = JSON.parse(localStorage.getItem('categories') || '[]');
         const adminMeditations = JSON.parse(localStorage.getItem('meditations') || '[]');
         
@@ -179,14 +188,14 @@ function createDefaultCategories() {
 }
 
 // Função para renderizar cards de progresso por categoria no dashboard
-function renderDashboardProgressCards() {
+async function renderDashboardProgressCards() {
     const progressGrid = document.getElementById('dashboardProgressGrid');
     if (!progressGrid) {
         console.log('⚠️ Elemento dashboardProgressGrid não encontrado');
         return;
     }
 
-    const categories = getCategoriesDataForDashboard();
+    const categories = await getCategoriesDataForDashboard();
     
     // Limpar grid
     progressGrid.innerHTML = '';
@@ -268,9 +277,9 @@ function renderDashboardProgressCards() {
 }
 
 // Função para atualizar progresso por categoria (chamada junto com outras atualizações)
-function updateDashboardProgressCards() {
+async function updateDashboardProgressCards() {
     console.log('🔄 Atualizando cards de progresso por categoria...');
-    renderDashboardProgressCards();
+    await renderDashboardProgressCards();
 }
 
 // Interceptar chamadas para updateDashboardStats para incluir atualização dos cards de progresso
