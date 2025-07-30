@@ -45,17 +45,16 @@ async function createMeditationInSupabase(meditationData) {
         
         console.log('📤 Dados para enviar ao Supabase:', supabaseData);
         
-        // Verificar se as variáveis do Supabase estão disponíveis
-        if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_ANON_KEY === 'undefined') {
-            throw new Error('Variáveis do Supabase não encontradas');
-        }
+        // Obter variáveis do Supabase
+        const supabaseVars = getSupabaseVariables();
+        console.log('📋 Variáveis do Supabase obtidas:', supabaseVars.url);
         
         // Fazer requisição para criar meditação
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/meditations`, {
+        const response = await fetch(`${supabaseVars.url}/rest/v1/meditations`, {
             method: 'POST',
             headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'apikey': supabaseVars.key,
+                'Authorization': `Bearer ${supabaseVars.key}`,
                 'Content-Type': 'application/json',
                 'Prefer': 'return=representation'
             },
@@ -88,17 +87,16 @@ async function updateMeditationInSupabase(meditationId, meditationData) {
         
         console.log('📤 Dados para atualizar no Supabase:', supabaseData);
         
-        // Verificar se as variáveis do Supabase estão disponíveis
-        if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_ANON_KEY === 'undefined') {
-            throw new Error('Variáveis do Supabase não encontradas');
-        }
+        // Obter variáveis do Supabase
+        const supabaseVars = getSupabaseVariables();
+        console.log('📋 Variáveis do Supabase obtidas:', supabaseVars.url);
         
         // Fazer requisição para atualizar meditação
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/meditations?id=eq.${meditationId}`, {
+        const response = await fetch(`${supabaseVars.url}/rest/v1/meditations?id=eq.${meditationId}`, {
             method: 'PATCH',
             headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'apikey': supabaseVars.key,
+                'Authorization': `Bearer ${supabaseVars.key}`,
                 'Content-Type': 'application/json',
                 'Prefer': 'return=representation'
             },
@@ -126,17 +124,16 @@ async function deleteMeditationInSupabase(meditationId) {
     console.log('🔄 Deletando meditação no Supabase:', meditationId);
     
     try {
-        // Verificar se as variáveis do Supabase estão disponíveis
-        if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_ANON_KEY === 'undefined') {
-            throw new Error('Variáveis do Supabase não encontradas');
-        }
+        // Obter variáveis do Supabase
+        const supabaseVars = getSupabaseVariables();
+        console.log('📋 Variáveis do Supabase obtidas:', supabaseVars.url);
         
         // Fazer requisição para deletar meditação
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/meditations?id=eq.${meditationId}`, {
+        const response = await fetch(`${supabaseVars.url}/rest/v1/meditations?id=eq.${meditationId}`, {
             method: 'DELETE',
             headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'apikey': supabaseVars.key,
+                'Authorization': `Bearer ${supabaseVars.key}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -161,17 +158,16 @@ async function getMeditationsFromSupabase() {
     console.log('🔄 Buscando meditações do Supabase...');
     
     try {
-        // Verificar se as variáveis do Supabase estão disponíveis
-        if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_ANON_KEY === 'undefined') {
-            throw new Error('Variáveis do Supabase não encontradas');
-        }
+        // Obter variáveis do Supabase
+        const supabaseVars = getSupabaseVariables();
+        console.log('📋 Variáveis do Supabase obtidas:', supabaseVars.url);
         
         // Fazer requisição para buscar meditações
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/meditations?select=*&is_active=eq.true&order=created_at.desc`, {
+        const response = await fetch(`${supabaseVars.url}/rest/v1/meditations?select=*&is_active=eq.true&order=created_at.desc`, {
             method: 'GET',
             headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'apikey': supabaseVars.key,
+                'Authorization': `Bearer ${supabaseVars.key}`,
                 'Content-Type': 'application/json'
             }
         });

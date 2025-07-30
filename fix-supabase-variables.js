@@ -23,7 +23,25 @@ function getSupabaseVariables() {
         };
     }
     
-    // Tentar obter do supabase-config.js
+    // Tentar obter do SUPABASE_CONFIG
+    if (typeof SUPABASE_CONFIG !== 'undefined') {
+        console.log('✅ Variáveis do Supabase encontradas em SUPABASE_CONFIG');
+        return {
+            url: SUPABASE_CONFIG.url,
+            key: SUPABASE_CONFIG.anonKey
+        };
+    }
+    
+    // Verificar se existe uma instância do SupabaseManager
+    if (window.supabaseManager && window.supabaseManager.config) {
+        console.log('✅ Variáveis do Supabase encontradas em supabaseManager');
+        return {
+            url: window.supabaseManager.config.url,
+            key: window.supabaseManager.config.anonKey
+        };
+    }
+    
+    // Tentar obter do supabaseConfig
     if (typeof supabaseConfig !== 'undefined') {
         console.log('✅ Variáveis do Supabase encontradas em supabaseConfig');
         return {
@@ -42,8 +60,12 @@ function getSupabaseVariables() {
         };
     }
     
-    console.error('❌ Variáveis do Supabase não encontradas');
-    return null;
+    // Última tentativa: usar valores hardcoded do supabase-config.js
+    console.log('⚠️ Usando valores hardcoded do supabase-config.js');
+    return {
+        url: 'https://pmqxibhulaybvpjvdvyp.supabase.co',
+        key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc'
+    };
 }
 
 // Função para criar meditação usando as variáveis corretas
@@ -52,9 +74,7 @@ async function createMeditationWithCorrectVariables(meditationData) {
     
     try {
         const supabaseVars = getSupabaseVariables();
-        if (!supabaseVars) {
-            throw new Error('Não foi possível obter as variáveis do Supabase');
-        }
+        console.log('📋 Variáveis do Supabase obtidas:', supabaseVars.url);
         
         console.log('📤 Dados para enviar ao Supabase:', meditationData);
         
@@ -147,10 +167,7 @@ function replaceAdminCreationFunction() {
             
             try {
                 const supabaseVars = getSupabaseVariables();
-                if (!supabaseVars) {
-                    console.error('❌ Variáveis do Supabase não encontradas');
-                    return false;
-                }
+                console.log('📋 Variáveis do Supabase obtidas:', supabaseVars.url);
                 
                 // Mapear dados para estrutura do Supabase
                 const supabaseData = {
@@ -230,17 +247,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Verificar variáveis
         const vars = getSupabaseVariables();
-        if (vars) {
-            console.log('✅ Variáveis do Supabase obtidas:', vars.url);
-            
-            // Substituir função de criação
-            replaceAdminCreationFunction();
-            
-            // Testar criação
-            await testMeditationCreation();
-        } else {
-            console.error('❌ Não foi possível obter as variáveis do Supabase');
-        }
+        console.log('✅ Variáveis do Supabase obtidas:', vars.url);
+        
+        // Substituir função de criação
+        replaceAdminCreationFunction();
+        
+        // Testar criação
+        await testMeditationCreation();
     }, 2000);
 });
 
