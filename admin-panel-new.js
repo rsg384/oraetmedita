@@ -5,6 +5,12 @@ console.log('🚀 Novo painel administrativo carregado');
 const SUPABASE_URL = 'https://pmqxibhulaybvpjvdvyp.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcXhpYmh1bGF5YnZwanZkdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2NTg0MjUsImV4cCI6MjA2OTIzNDQyNX0.biPp1NLnfvjspZgDv7RLt9_Ymtayy68cHgnPKy_FAWc';
 
+// Variáveis globais para edição
+let editingUser = null;
+let editingCategory = null;
+let editingMeditation = null;
+let editingPersonalized = null;
+
 // Função para fazer requisições ao Supabase
 async function supabaseRequest(endpoint, options = {}) {
     const url = `${SUPABASE_URL}/rest/v1/${endpoint}`;
@@ -22,7 +28,8 @@ async function supabaseRequest(endpoint, options = {}) {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`HTTP ${response.status}: ${errorData.message || response.statusText}`);
         }
 
         return await response.json();
@@ -198,9 +205,6 @@ async function loadPersonalizedMeditations() {
             tbody.appendChild(row);
         });
 
-        // Atualizar select de usuários no modal
-        updateUserSelects(personalized);
-
         console.log(`✅ ${personalized.length} meditações personalizadas carregadas`);
     } catch (error) {
         console.error('❌ Erro ao carregar meditações personalizadas:', error);
@@ -226,21 +230,26 @@ function updateCategorySelects(categories) {
 }
 
 // Função para atualizar selects de usuário
-function updateUserSelects(users) {
-    const selects = ['personalized-user'];
-    
-    selects.forEach(selectId => {
-        const select = document.getElementById(selectId);
-        if (select) {
-            select.innerHTML = '<option value="">Selecione um usuário</option>';
-            users.forEach(user => {
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = user.name;
-                select.appendChild(option);
-            });
-        }
-    });
+async function updateUserSelects() {
+    try {
+        const users = await supabaseRequest('users?select=id,name&is_active=eq.true&order=name.asc');
+        const selects = ['personalized-user'];
+        
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            if (select) {
+                select.innerHTML = '<option value="">Selecione um usuário</option>';
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.name;
+                    select.appendChild(option);
+                });
+            }
+        });
+    } catch (error) {
+        console.error('❌ Erro ao carregar usuários para select:', error);
+    }
 }
 
 // Função para abrir modal
@@ -248,7 +257,29 @@ function openModal(type) {
     const modal = document.getElementById(`${type}-modal`);
     if (modal) {
         modal.style.display = 'block';
+        
+        // Atualizar título do modal baseado no modo (edição ou criação)
+        const header = modal.querySelector('.modal-header h3');
+        if (header) {
+            const isEditing = editingUser || editingCategory || editingMeditation || editingPersonalized;
+            if (isEditing) {
+                header.textContent = `Editar ${getEntityName(type)}`;
+            } else {
+                header.textContent = `Adicionar ${getEntityName(type)}`;
+            }
+        }
     }
+}
+
+// Função para obter nome da entidade
+function getEntityName(type) {
+    const names = {
+        'user': 'Usuário',
+        'category': 'Categoria',
+        'meditation': 'Meditação',
+        'personalized': 'Meditação Personalizada'
+    };
+    return names[type] || 'Item';
 }
 
 // Função para fechar modal
@@ -261,6 +292,11 @@ function closeModal(type) {
         if (form) {
             form.reset();
         }
+        // Limpar variáveis de edição
+        editingUser = null;
+        editingCategory = null;
+        editingMeditation = null;
+        editingPersonalized = null;
     }
 }
 
@@ -271,18 +307,30 @@ async function saveUser(formData) {
             name: formData.get('name'),
             email: formData.get('email'),
             is_active: formData.get('status') === 'active',
-            created_at: new Date().toISOString()
+            updated_at: new Date().toISOString()
         };
 
-        await supabaseRequest('users', {
-            method: 'POST',
-            body: JSON.stringify(userData)
-        });
+        if (editingUser) {
+            // Atualizar usuário existente
+            await supabaseRequest(`users?id=eq.${editingUser.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(userData)
+            });
+            console.log('✅ Usuário atualizado com sucesso');
+        } else {
+            // Criar novo usuário
+            userData.created_at = new Date().toISOString();
+            await supabaseRequest('users', {
+                method: 'POST',
+                body: JSON.stringify(userData)
+            });
+            console.log('✅ Usuário criado com sucesso');
+        }
 
-        console.log('✅ Usuário salvo com sucesso');
         closeModal('user');
         loadUsers();
         loadDashboardData();
+        updateUserSelects();
     } catch (error) {
         console.error('❌ Erro ao salvar usuário:', error);
         alert('Erro ao salvar usuário: ' + error.message);
@@ -298,16 +346,27 @@ async function saveCategory(formData) {
             icon: formData.get('icon') || '📖',
             color: formData.get('color') || '#7ee787',
             is_active: formData.get('status') === 'active',
-            sort_order: 0,
-            created_at: new Date().toISOString()
+            updated_at: new Date().toISOString()
         };
 
-        await supabaseRequest('categories', {
-            method: 'POST',
-            body: JSON.stringify(categoryData)
-        });
+        if (editingCategory) {
+            // Atualizar categoria existente
+            await supabaseRequest(`categories?id=eq.${editingCategory.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(categoryData)
+            });
+            console.log('✅ Categoria atualizada com sucesso');
+        } else {
+            // Criar nova categoria
+            categoryData.sort_order = 0;
+            categoryData.created_at = new Date().toISOString();
+            await supabaseRequest('categories', {
+                method: 'POST',
+                body: JSON.stringify(categoryData)
+            });
+            console.log('✅ Categoria criada com sucesso');
+        }
 
-        console.log('✅ Categoria salva com sucesso');
         closeModal('category');
         loadCategories();
         loadDashboardData();
@@ -328,18 +387,29 @@ async function saveMeditation(formData) {
             bible_verse: formData.get('bible_verse') || '',
             prayer: formData.get('prayer') || '',
             practical_application: formData.get('practical_application') || '',
-            is_active: true,
-            type: 'free',
-            difficulty: 'intermediate',
-            created_at: new Date().toISOString()
+            updated_at: new Date().toISOString()
         };
 
-        await supabaseRequest('meditations', {
-            method: 'POST',
-            body: JSON.stringify(meditationData)
-        });
+        if (editingMeditation) {
+            // Atualizar meditação existente
+            await supabaseRequest(`meditations?id=eq.${editingMeditation.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(meditationData)
+            });
+            console.log('✅ Meditação atualizada com sucesso');
+        } else {
+            // Criar nova meditação
+            meditationData.is_active = true;
+            meditationData.type = 'free';
+            meditationData.difficulty = 'intermediate';
+            meditationData.created_at = new Date().toISOString();
+            await supabaseRequest('meditations', {
+                method: 'POST',
+                body: JSON.stringify(meditationData)
+            });
+            console.log('✅ Meditação criada com sucesso');
+        }
 
-        console.log('✅ Meditação salva com sucesso');
         closeModal('meditation');
         loadMeditations();
         loadDashboardData();
@@ -368,18 +438,184 @@ async function generatePersonalizedMeditation(formData) {
             created_at: new Date().toISOString()
         };
 
-        await supabaseRequest('personalized_meditations', {
-            method: 'POST',
-            body: JSON.stringify(meditationData)
-        });
+        if (editingPersonalized) {
+            // Atualizar meditação personalizada existente
+            meditationData.updated_at = new Date().toISOString();
+            await supabaseRequest(`personalized_meditations?id=eq.${editingPersonalized.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(meditationData)
+            });
+            console.log('✅ Meditação personalizada atualizada com sucesso');
+        } else {
+            // Criar nova meditação personalizada
+            await supabaseRequest('personalized_meditations', {
+                method: 'POST',
+                body: JSON.stringify(meditationData)
+            });
+            console.log('✅ Meditação personalizada criada com sucesso');
+        }
 
-        console.log('✅ Meditação personalizada gerada com sucesso');
         closeModal('personalized');
         loadPersonalizedMeditations();
         loadDashboardData();
     } catch (error) {
         console.error('❌ Erro ao gerar meditação personalizada:', error);
         alert('Erro ao gerar meditação: ' + error.message);
+    }
+}
+
+// Função para editar usuário
+async function editUser(id) {
+    try {
+        const users = await supabaseRequest(`users?id=eq.${id}`);
+        if (users.length > 0) {
+            editingUser = users[0];
+            
+            // Preencher formulário
+            document.getElementById('user-name').value = editingUser.name || '';
+            document.getElementById('user-email').value = editingUser.email || '';
+            document.getElementById('user-status').value = editingUser.is_active ? 'active' : 'inactive';
+            
+            openModal('user');
+        }
+    } catch (error) {
+        console.error('❌ Erro ao carregar usuário para edição:', error);
+        alert('Erro ao carregar usuário: ' + error.message);
+    }
+}
+
+// Função para editar categoria
+async function editCategory(id) {
+    try {
+        const categories = await supabaseRequest(`categories?id=eq.${id}`);
+        if (categories.length > 0) {
+            editingCategory = categories[0];
+            
+            // Preencher formulário
+            document.getElementById('category-name').value = editingCategory.name || '';
+            document.getElementById('category-description').value = editingCategory.description || '';
+            document.getElementById('category-icon').value = editingCategory.icon || '📖';
+            document.getElementById('category-color').value = editingCategory.color || '#7ee787';
+            document.getElementById('category-status').value = editingCategory.is_active ? 'active' : 'inactive';
+            
+            openModal('category');
+        }
+    } catch (error) {
+        console.error('❌ Erro ao carregar categoria para edição:', error);
+        alert('Erro ao carregar categoria: ' + error.message);
+    }
+}
+
+// Função para editar meditação
+async function editMeditation(id) {
+    try {
+        const meditations = await supabaseRequest(`meditations?id=eq.${id}`);
+        if (meditations.length > 0) {
+            editingMeditation = meditations[0];
+            
+            // Preencher formulário
+            document.getElementById('meditation-title').value = editingMeditation.title || '';
+            document.getElementById('meditation-content').value = editingMeditation.content || '';
+            document.getElementById('meditation-category').value = editingMeditation.category_id || '';
+            document.getElementById('meditation-duration').value = editingMeditation.duration || 10;
+            document.getElementById('meditation-bible-verse').value = editingMeditation.bible_verse || '';
+            document.getElementById('meditation-prayer').value = editingMeditation.prayer || '';
+            document.getElementById('meditation-application').value = editingMeditation.practical_application || '';
+            
+            openModal('meditation');
+        }
+    } catch (error) {
+        console.error('❌ Erro ao carregar meditação para edição:', error);
+        alert('Erro ao carregar meditação: ' + error.message);
+    }
+}
+
+// Função para editar meditação personalizada
+async function editPersonalized(id) {
+    try {
+        const personalized = await supabaseRequest(`personalized_meditations?id=eq.${id}`);
+        if (personalized.length > 0) {
+            editingPersonalized = personalized[0];
+            
+            // Preencher formulário
+            document.getElementById('personalized-topic').value = editingPersonalized.topic || '';
+            document.getElementById('personalized-user').value = editingPersonalized.user_id || '';
+            document.getElementById('personalized-duration').value = editingPersonalized.duration || 15;
+            
+            openModal('personalized');
+        }
+    } catch (error) {
+        console.error('❌ Erro ao carregar meditação personalizada para edição:', error);
+        alert('Erro ao carregar meditação personalizada: ' + error.message);
+    }
+}
+
+// Função para excluir usuário
+async function deleteUser(id) {
+    if (confirm('Tem certeza que deseja excluir este usuário?')) {
+        try {
+            await supabaseRequest(`users?id=eq.${id}`, {
+                method: 'DELETE'
+            });
+            console.log('✅ Usuário excluído com sucesso');
+            loadUsers();
+            loadDashboardData();
+            updateUserSelects();
+        } catch (error) {
+            console.error('❌ Erro ao excluir usuário:', error);
+            alert('Erro ao excluir usuário: ' + error.message);
+        }
+    }
+}
+
+// Função para excluir categoria
+async function deleteCategory(id) {
+    if (confirm('Tem certeza que deseja excluir esta categoria?')) {
+        try {
+            await supabaseRequest(`categories?id=eq.${id}`, {
+                method: 'DELETE'
+            });
+            console.log('✅ Categoria excluída com sucesso');
+            loadCategories();
+            loadDashboardData();
+        } catch (error) {
+            console.error('❌ Erro ao excluir categoria:', error);
+            alert('Erro ao excluir categoria: ' + error.message);
+        }
+    }
+}
+
+// Função para excluir meditação
+async function deleteMeditation(id) {
+    if (confirm('Tem certeza que deseja excluir esta meditação?')) {
+        try {
+            await supabaseRequest(`meditations?id=eq.${id}`, {
+                method: 'DELETE'
+            });
+            console.log('✅ Meditação excluída com sucesso');
+            loadMeditations();
+            loadDashboardData();
+        } catch (error) {
+            console.error('❌ Erro ao excluir meditação:', error);
+            alert('Erro ao excluir meditação: ' + error.message);
+        }
+    }
+}
+
+// Função para excluir meditação personalizada
+async function deletePersonalized(id) {
+    if (confirm('Tem certeza que deseja excluir esta meditação personalizada?')) {
+        try {
+            await supabaseRequest(`personalized_meditations?id=eq.${id}`, {
+                method: 'DELETE'
+            });
+            console.log('✅ Meditação personalizada excluída com sucesso');
+            loadPersonalizedMeditations();
+            loadDashboardData();
+        } catch (error) {
+            console.error('❌ Erro ao excluir meditação personalizada:', error);
+            alert('Erro ao excluir meditação personalizada: ' + error.message);
+        }
     }
 }
 
@@ -435,6 +671,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadCategories();
     loadMeditations();
     loadPersonalizedMeditations();
+    updateUserSelects();
 });
 
 // Função para mostrar seção
@@ -451,53 +688,32 @@ function showSection(sectionName) {
     }
 }
 
-// Funções de edição e exclusão (placeholder)
-function editUser(id) {
-    console.log('Editar usuário:', id);
-    // Implementar edição
-}
-
-function deleteUser(id) {
-    if (confirm('Tem certeza que deseja excluir este usuário?')) {
-        console.log('Excluir usuário:', id);
-        // Implementar exclusão
-    }
-}
-
-function editCategory(id) {
-    console.log('Editar categoria:', id);
-    // Implementar edição
-}
-
-function deleteCategory(id) {
-    if (confirm('Tem certeza que deseja excluir esta categoria?')) {
-        console.log('Excluir categoria:', id);
-        // Implementar exclusão
-    }
-}
-
-function editMeditation(id) {
-    console.log('Editar meditação:', id);
-    // Implementar edição
-}
-
-function deleteMeditation(id) {
-    if (confirm('Tem certeza que deseja excluir esta meditação?')) {
-        console.log('Excluir meditação:', id);
-        // Implementar exclusão
-    }
-}
-
-function editPersonalized(id) {
-    console.log('Editar meditação personalizada:', id);
-    // Implementar edição
-}
-
-function deletePersonalized(id) {
-    if (confirm('Tem certeza que deseja excluir esta meditação personalizada?')) {
-        console.log('Excluir meditação personalizada:', id);
-        // Implementar exclusão
-    }
+// Função para mostrar notificação
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        z-index: 1000;
+        ${type === 'success' ? 'background-color: #4CAF50;' : ''}
+        ${type === 'error' ? 'background-color: #f44336;' : ''}
+        ${type === 'info' ? 'background-color: #2196F3;' : ''}
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 3000);
 }
 
 console.log('✅ Script do novo painel administrativo carregado'); 
