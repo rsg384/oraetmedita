@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Progresso Supabase - Ora et Medita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .data-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .progress-card {
+            background: #e9ecef;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Progresso Supabase</h1>
+        <p>Verificando se o progresso espiritual está sendo alimentado pelas categorias do Supabase</p>
+        
+        <div class="section">
+            <h2>📊 Status da Conexão</h2>
+            <div id="connectionStatus" class="status info">Verificando conexão...</div>
+            <button onclick="checkConnection()">Verificar Conexão</button>
+        </div>
+        
+        <div class="section">
+            <h2>📋 Categorias do Supabase</h2>
+            <div id="categoriesStatus" class="status info">Carregando categorias...</div>
+            <button onclick="loadCategories()">Carregar Categorias</button>
+            <div id="categoriesData" class="data-display"></div>
+        </div>
+        
+        <div class="section">
+            <h2>📈 Progresso do Usuário</h2>
+            <div id="progressStatus" class="status info">Carregando progresso...</div>
+            <button onclick="loadProgress()">Carregar Progresso</button>
+            <div id="progressData" class="data-display"></div>
+        </div>
+        
+        <div class="section">
+            <h2>🔄 Sincronização</h2>
+            <div id="syncStatus" class="status info">Verificando sincronização...</div>
+            <button onclick="forceSync()">Forçar Sincronização</button>
+            <button onclick="testProgressSync()">Testar ProgressSyncManager</button>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Cards de Progresso</h2>
+            <div id="cardsStatus" class="status info">Renderizando cards...</div>
+            <button onclick="renderCards()">Renderizar Cards</button>
+            <div id="progressCards"></div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Estatísticas</h2>
+            <div id="statsStatus" class="status info">Carregando estatísticas...</div>
+            <button onclick="loadStats()">Carregar Estatísticas</button>
+            <div id="statsData" class="data-display"></div>
+        </div>
+    </div>
+
+    <!-- Scripts necessários -->
+    <script src="supabase-config.js"></script>
+    <script src="progress-sync-enhanced.js"></script>
+    
+    <script>
+        // Função para verificar conexão
+        async function checkConnection() {
+            const statusDiv = document.getElementById('connectionStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Verificando conexão...';
+            
+            try {
+                if (window.supabaseManager) {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ SupabaseManager conectado com sucesso';
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ SupabaseManager não encontrado';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro na conexão: ${error.message}`;
+            }
+        }
+
+        // Função para carregar categorias
+        async function loadCategories() {
+            const statusDiv = document.getElementById('categoriesStatus');
+            const dataDiv = document.getElementById('categoriesData');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Carregando categorias do Supabase...';
+            
+            try {
+                if (!window.supabaseManager) {
+                    throw new Error('SupabaseManager não disponível');
+                }
+                
+                const categories = await window.supabaseManager.getCategories();
+                
+                if (categories && Array.isArray(categories)) {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = `✅ ${categories.length} categorias carregadas do Supabase`;
+                    
+                    dataDiv.textContent = JSON.stringify(categories, null, 2);
+                } else {
+                    statusDiv.className = 'status warning';
+                    statusDiv.textContent = '⚠️ Nenhuma categoria encontrada';
+                    dataDiv.textContent = '[]';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro ao carregar categorias: ${error.message}`;
+                dataDiv.textContent = error.stack;
+            }
+        }
+
+        // Função para carregar progresso
+        async function loadProgress() {
+            const statusDiv = document.getElementById('progressStatus');
+            const dataDiv = document.getElementById('progressData');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Carregando progresso do usuário...';
+            
+            try {
+                const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+                const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+                
+                const progress = {};
+                categories.forEach(category => {
+                    const categoryMeditations = meditations.filter(m => m.categoryId === category.id);
+                    const completed = categoryMeditations.filter(m => m.status === 'completed').length;
+                    const inProgress = categoryMeditations.filter(m => 
+                        m.status === 'in_progress' || m.status === 'pending'
+                    ).length;
+                    
+                    progress[category.name] = {
+                        total: categoryMeditations.length,
+                        completed,
+                        inProgress,
+                        percentage: categoryMeditations.length > 0 ? 
+                            Math.round((completed / categoryMeditations.length) * 100) : 0
+                    };
+                });
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = `✅ Progresso calculado para ${Object.keys(progress).length} categorias`;
+                
+                dataDiv.textContent = JSON.stringify(progress, null, 2);
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro ao carregar progresso: ${error.message}`;
+                dataDiv.textContent = error.stack;
+            }
+        }
+
+        // Função para forçar sincronização
+        async function forceSync() {
+            const statusDiv = document.getElementById('syncStatus');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Forçando sincronização...';
+            
+            try {
+                if (window.progressSyncManager) {
+                    await window.progressSyncManager.forceSync();
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ Sincronização forçada com sucesso';
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ ProgressSyncManager não disponível';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro na sincronização: ${error.message}`;
+            }
+        }
+
+        // Função para testar ProgressSyncManager
+        async function testProgressSync() {
+            const statusDiv = document.getElementById('syncStatus');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Testando ProgressSyncManager...';
+            
+            try {
+                if (window.progressSyncManager) {
+                    await window.progressSyncManager.initialize();
+                    
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = `✅ ProgressSyncManager inicializado. Categorias: ${window.progressSyncManager.categories.length}`;
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ ProgressSyncManager não encontrado';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro no ProgressSyncManager: ${error.message}`;
+            }
+        }
+
+        // Função para renderizar cards
+        async function renderCards() {
+            const statusDiv = document.getElementById('cardsStatus');
+            const cardsDiv = document.getElementById('progressCards');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Renderizando cards de progresso...';
+            
+            try {
+                const categories = await getCategoriesData();
+                
+                if (categories.length === 0) {
+                    statusDiv.className = 'status warning';
+                    statusDiv.textContent = '⚠️ Nenhuma categoria encontrada';
+                    cardsDiv.innerHTML = '<p>Nenhuma categoria disponível</p>';
+                    return;
+                }
+                
+                cardsDiv.innerHTML = '';
+                categories.forEach(category => {
+                    const card = document.createElement('div');
+                    card.className = 'progress-card';
+                    card.innerHTML = `
+                        <h3>${category.icon} ${category.name}</h3>
+                        <p><strong>Progresso:</strong> ${category.completed}/${category.total} (${category.percentage}%)</p>
+                        <p><strong>Em andamento:</strong> ${category.inProgress}</p>
+                    `;
+                    cardsDiv.appendChild(card);
+                });
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = `✅ ${categories.length} cards renderizados`;
+                
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro ao renderizar cards: ${error.message}`;
+            }
+        }
+
+        // Função para carregar estatísticas
+        async function loadStats() {
+            const statusDiv = document.getElementById('statsStatus');
+            const dataDiv = document.getElementById('statsData');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Carregando estatísticas...';
+            
+            try {
+                const stats = JSON.parse(localStorage.getItem('user_meditation_stats') || '{}');
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                
+                const allStats = {
+                    userData,
+                    meditationStats: stats,
+                    categories: JSON.parse(localStorage.getItem('categories') || '[]'),
+                    meditations: JSON.parse(localStorage.getItem('meditations') || '[]'),
+                    personalizedMeditations: JSON.parse(localStorage.getItem('personalized_meditations') || '[]')
+                };
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ Estatísticas carregadas';
+                
+                dataDiv.textContent = JSON.stringify(allStats, null, 2);
+                
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro ao carregar estatísticas: ${error.message}`;
+                dataDiv.textContent = error.stack;
+            }
+        }
+
+        // Função para obter dados das categorias (simulando a função da página de progresso)
+        async function getCategoriesData() {
+            try {
+                if (window.progressSyncManager && window.progressSyncManager.isInitialized) {
+                    const progressData = window.progressSyncManager.userProgress;
+                    return Object.values(progressData).filter(cat => cat.total > 0);
+                }
+                
+                const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+                const meditations = JSON.parse(localStorage.getItem('meditations') || '[]');
+                
+                return categories.map(category => {
+                    const categoryMeditations = meditations.filter(m => m.categoryId === category.id);
+                    const completed = categoryMeditations.filter(m => m.status === 'completed').length;
+                    const inProgress = categoryMeditations.filter(m => 
+                        m.status === 'in_progress' || m.status === 'pending'
+                    ).length;
+                    
+                    return {
+                        id: category.id,
+                        name: category.name,
+                        icon: category.icon || '📖',
+                        total: categoryMeditations.length,
+                        completed,
+                        inProgress,
+                        percentage: categoryMeditations.length > 0 ? 
+                            Math.round((completed / categoryMeditations.length) * 100) : 0
+                    };
+                });
+            } catch (error) {
+                console.error('Erro ao obter dados das categorias:', error);
+                return [];
+            }
+        }
+
+        // Executar testes automáticos quando a página carregar
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🧪 Iniciando testes de progresso Supabase...');
+            
+            // Aguardar um pouco para os scripts carregarem
+            setTimeout(async () => {
+                await checkConnection();
+                await loadCategories();
+                await loadProgress();
+                await testProgressSync();
+                await renderCards();
+                await loadStats();
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 
